@@ -1,0 +1,65 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/joshuamyers22/holocron/schemas/tolerance-policy.schema.json",
+  "title": "Holocron named tolerance policies",
+  "type": "object",
+  "properties": {
+    "schema_version": {"const": "holocron-tolerance-policy/v1"},
+    "profiles": {
+      "type": "object",
+      "minProperties": 1,
+      "propertyNames": {"pattern": "^[a-z0-9][a-z0-9-]*-v[0-9]+$"},
+      "additionalProperties": {"$ref": "#/$defs/profile"}
+    }
+  },
+  "required": ["schema_version", "profiles"],
+  "additionalProperties": false,
+  "$defs": {
+    "exactRule": {
+      "type": "object",
+      "properties": {
+        "mode": {"const": "exact"}
+      },
+      "required": ["mode"],
+      "additionalProperties": false
+    },
+    "numericRule": {
+      "type": "object",
+      "properties": {
+        "mode": {"const": "numeric"},
+        "absolute": {"type": "number", "minimum": 0},
+        "relative": {"type": "number", "minimum": 0}
+      },
+      "required": ["mode", "absolute", "relative"],
+      "additionalProperties": false
+    },
+    "rule": {
+      "oneOf": [
+        {"$ref": "#/$defs/exactRule"},
+        {"$ref": "#/$defs/numericRule"}
+      ]
+    },
+    "pathRule": {
+      "type": "object",
+      "properties": {
+        "path": {"type": "string", "pattern": "^/(?:[^/~]|~[01]|\\*)+(?:/(?:[^/~]|~[01]|\\*)+)*$"},
+        "rule": {"$ref": "#/$defs/rule"}
+      },
+      "required": ["path", "rule"],
+      "additionalProperties": false
+    },
+    "profile": {
+      "type": "object",
+      "properties": {
+        "description": {"type": "string", "minLength": 1},
+        "default": {"$ref": "#/$defs/rule"},
+        "rules": {
+          "type": "array",
+          "items": {"$ref": "#/$defs/pathRule"}
+        }
+      },
+      "required": ["description", "default", "rules"],
+      "additionalProperties": false
+    }
+  }
+}

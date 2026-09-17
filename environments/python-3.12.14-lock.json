@@ -14,7 +14,7 @@
   },
   "dependency_lock": {
     "path": "uv.lock",
-    "sha256": "bc5c6f21eaf29ef7e3913cde06592a50cebe17b31b8dab41153e9bb52ffe96e3"
+    "sha256": "c8aa896a8df4a711fb0cd8f0770fc86f053cd15239effe3b9f3beae8e1b5a107"
   },
   "build": {
     "backend": "hatchling.build",
@@ -22,15 +22,20 @@
     "isolation": false
   },
   "selected_packages": {
+    "attrs": "26.1.0",
     "editables": "0.5",
     "hatchling": "1.32.0",
     "holocron-rms": "0.1.0",
+    "jsonschema": "4.26.0",
+    "jsonschema-specifications": "2025.9.1",
     "nodeenv": "1.10.0",
     "numpy": "2.5.3",
     "packaging": "26.3",
     "pathspec": "1.1.1",
     "pluggy": "1.6.0",
     "pyright": "1.1.414",
+    "referencing": "0.37.0",
+    "rpds-py": "2026.6.3",
     "ruff": "0.16.7",
     "tomlkit": "0.15.1",
     "trove-classifiers": "2026.6.1.19",

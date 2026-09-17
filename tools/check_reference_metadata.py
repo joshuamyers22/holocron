@@ -7,6 +7,8 @@ import json
 from pathlib import Path
 from typing import cast
 
+from reference.contracts import validate_repository_contracts
+
 ROOT = Path(__file__).resolve().parents[1]
 INVENTORY_PATH = ROOT / "reference/manifests/rms-8.2-0-inventory.json"
 CHECKSUM_PATH = ROOT / "reference/manifests/rms-8.2-0-files.sha256"
@@ -28,6 +30,7 @@ def require_list(value: object, *, name: str) -> list[object]:
 
 
 def main() -> None:
+    parity_case_count = validate_repository_contracts()
     inventory = load_object(INVENTORY_PATH)
     compatibility = load_object(COMPATIBILITY_PATH)
     checksum_bytes = CHECKSUM_PATH.read_bytes()
@@ -86,7 +89,8 @@ def main() -> None:
                 raise ValueError(f"missing oracle cases for {identifier}")
             for case in cases:
                 case_name = str(case)
-                if not (ROOT / f"reference/cases/{case_name}.json").is_file():
+                case_path = ROOT / f"reference/cases/{case_name}.json"
+                if not case_path.is_file():
                     raise ValueError(
                         f"missing oracle input for {identifier}: {case_name}"
                     )
@@ -94,6 +98,12 @@ def main() -> None:
                     raise ValueError(
                         f"missing oracle output for {identifier}: {case_name}"
                     )
+                case_document = load_object(case_path)
+                if (
+                    case_document["comparison_profile"]
+                    != capability["tolerance_profile"]
+                ):
+                    raise ValueError(f"compatibility profile differs from {case_name}")
     if actual_ids != expected_ids:
         missing = sorted(expected_ids - actual_ids)
         extra = sorted(actual_ids - expected_ids)
@@ -106,7 +116,8 @@ def main() -> None:
     print(
         "reference metadata verified: "
         f"{len(checksum_lines)} files, {len(exports)} exports, "
-        f"{len(methods)} S3 methods, {len(registered_fortran_map)} Fortran routines"
+        f"{len(methods)} S3 methods, {len(registered_fortran_map)} Fortran routines, "
+        f"{parity_case_count} parity contracts"
     )
 
 

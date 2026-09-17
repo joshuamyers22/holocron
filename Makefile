@@ -19,7 +19,7 @@ frozen-environments:
 frozen-environments-live:
 	uv run --frozen python tools/check_frozen_environments.py --live-r-oracle
 reference-metadata:
-	uv run --frozen python tools/check_reference_metadata.py
+	uv run --frozen python -m tools.check_reference_metadata
 check: lock-check lint typecheck test frozen-environments reference-metadata
 audit:
 	uv audit --preview-features audit-command --locked --no-dev
@@ -36,7 +36,7 @@ oracle-health:
 	printf '%s\n' '{"operation":"health"}' | reference/r/run-oracle.sh
 
 oracle-check:
-	uv run --frozen python reference/check_oracle.py
+	uv run --frozen python -m reference.check_oracle
 
 reference-source-check:
 	@test -n "$(RMS_SOURCE)" || (echo "usage: make reference-source-check RMS_SOURCE=/absolute/path/to/rms-master"; exit 2)

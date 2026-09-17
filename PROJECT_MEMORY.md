@@ -35,6 +35,7 @@ Git history provides the audit trail.
 | `phase-0` | Phase 0 repository deliverables are complete for private development; vacant statistical, numerical, verification, and license-review roles block capability promotion and external distribution. | `PROJECT_PLAN.md`; `governance/GOVERNANCE.md` | 2026-09-17 |
 | `public-api` | The installed package has no CLI; its root exposes only version plus `design`, `models`, and `exceptions`, and domain `__all__` declarations define the supported public names. | `src/holocron/__init__.py`; `docs/architecture/PACKAGE_STRUCTURE.md`; `tests/test_public_api.py` | 2026-09-17 |
 | `frozen-environments` | The canonical Python evidence environment is CPython 3.12.14 with uv 0.12.7 and a hashed dependency/build lock; the separate R oracle is frozen by source/base/repository identities, full health evidence, Linux/arm64 platform, and image ID. Static checks run in CI; oracle rebuilds require live identity and behavior checks. | `governance/PHASE_1_FROZEN_ENVIRONMENTS.md`; `docs/adr/ADR-012-frozen-environment-contract.md`; `environments/` | 2026-09-17 |
+| `parity-lab-contract` | Oracle cases, expected outputs, named field-aware tolerances, and emitted parity evidence use versioned JSON schemas. Exact comparison is the default; approximate rules are allowlisted by field path and shared by Python and live-R checks. | `governance/PHASE_1_PARITY_LAB_CONTRACT.md`; `schemas/`; `reference/contracts.py` | 2026-09-17 |
 
 ## Verified traps and failed approaches
 

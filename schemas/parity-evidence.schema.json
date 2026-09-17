@@ -1,0 +1,118 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/joshuamyers22/holocron/schemas/parity-evidence.schema.json",
+  "title": "Holocron parity evidence",
+  "description": "An auditable record of one Python/R oracle comparison.",
+  "type": "object",
+  "properties": {
+    "schema_version": {"const": "holocron-parity-evidence/v1"},
+    "evidence_id": {"$ref": "#/$defs/sha256"},
+    "case_id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9-]*$"},
+    "evaluated_at_utc": {
+      "type": "string",
+      "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9:.]+Z$"
+    },
+    "source": {
+      "type": "object",
+      "properties": {
+        "code_revision": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{40}$|^unknown$"
+        },
+        "working_tree_dirty": {"type": "boolean"}
+      },
+      "required": ["code_revision", "working_tree_dirty"],
+      "additionalProperties": false
+    },
+    "oracle": {
+      "type": "object",
+      "properties": {
+        "package": {"const": "rms"},
+        "version": {"const": "8.2-0"},
+        "commit": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+        "protocol_version": {"const": "1"}
+      },
+      "required": ["package", "version", "commit", "protocol_version"],
+      "additionalProperties": false
+    },
+    "implementation": {
+      "type": "object",
+      "properties": {
+        "package": {"const": "holocron-rms"},
+        "version": {"type": "string", "minLength": 1},
+        "python_implementation": {"type": "string", "minLength": 1},
+        "python_version": {"type": "string", "minLength": 1},
+        "platform": {"type": "string", "minLength": 1}
+      },
+      "required": [
+        "package",
+        "version",
+        "python_implementation",
+        "python_version",
+        "platform"
+      ],
+      "additionalProperties": false
+    },
+    "artifacts": {
+      "type": "object",
+      "properties": {
+        "case_path": {"type": "string", "minLength": 1},
+        "case_sha256": {"$ref": "#/$defs/sha256"},
+        "expected_output_path": {"type": "string", "minLength": 1},
+        "expected_output_sha256": {"$ref": "#/$defs/sha256"},
+        "actual_output_sha256": {"$ref": "#/$defs/sha256"}
+      },
+      "required": [
+        "case_path",
+        "case_sha256",
+        "expected_output_path",
+        "expected_output_sha256",
+        "actual_output_sha256"
+      ],
+      "additionalProperties": false
+    },
+    "comparison": {
+      "type": "object",
+      "properties": {
+        "profile": {"type": "string", "minLength": 1},
+        "outcome": {"enum": ["passed", "failed"]},
+        "exact_comparisons": {"type": "integer", "minimum": 0},
+        "numeric_comparisons": {"type": "integer", "minimum": 0},
+        "maximum_absolute_error": {"type": "number", "minimum": 0},
+        "maximum_relative_error": {"type": "number", "minimum": 0},
+        "mismatches": {
+          "type": "array",
+          "items": {"type": "string", "minLength": 1}
+        }
+      },
+      "required": [
+        "profile",
+        "outcome",
+        "exact_comparisons",
+        "numeric_comparisons",
+        "maximum_absolute_error",
+        "maximum_relative_error",
+        "mismatches"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "required": [
+    "schema_version",
+    "evidence_id",
+    "case_id",
+    "evaluated_at_utc",
+    "source",
+    "oracle",
+    "implementation",
+    "artifacts",
+    "comparison"
+  ],
+  "additionalProperties": false,
+  "$defs": {
+    "sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    }
+  }
+}

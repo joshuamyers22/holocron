@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import json
 import unittest
 from pathlib import Path
 from typing import cast
@@ -9,6 +8,12 @@ import numpy as np
 
 from holocron.design import RestrictedCubicSplineSpec
 from holocron.exceptions import InputValidationError
+from reference.contracts import (
+    JsonValue,
+    compare_json,
+    output_payload,
+    validate_case_pair,
+)
 
 
 class RestrictedCubicSplineSpecTests(unittest.TestCase):
@@ -48,31 +53,26 @@ class RestrictedCubicSplineSpecTests(unittest.TestCase):
 
     def test_matches_rms_oracle_fixture(self) -> None:
         repository = Path(__file__).resolve().parents[1]
-        case_object: object = json.loads(
-            (repository / "reference/cases/rcs-explicit.json").read_text()
+        case, expected, policy = validate_case_pair(
+            repository / "reference/cases/rcs-explicit.json",
+            repository / "reference/expected/rcs-explicit.json",
         )
-        expected_object: object = json.loads(
-            (repository / "reference/expected/rcs-explicit.json").read_text()
-        )
-        case = cast(dict[str, object], case_object)
-        expected = cast(dict[str, object], expected_object)
         knots = tuple(cast(list[float], case["knots"]))
         spec = RestrictedCubicSplineSpec(knots)
-        basis = spec.transform(cast(list[float], case["x"]))
-        np.testing.assert_allclose(
-            basis,
-            cast(list[list[float]], expected["basis"]),
-            rtol=1e-14,
-            atol=1e-15,
-        )
-        self.assertEqual(
-            spec.nonlinear_columns,
-            tuple(cast(list[int], expected["nonlinear_columns"])),
-        )
-        self.assertEqual(
-            spec.nonlinear_mask,
-            tuple(cast(list[bool], expected["nonlinear_mask"])),
-        )
+        x = cast(list[float], case["x"])
+        basis = spec.transform(x)
+        actual: dict[str, JsonValue] = {
+            "ok": True,
+            "protocol_version": "1",
+            "operation": "rcs",
+            "x": cast(JsonValue, x),
+            "knots": cast(JsonValue, list(spec.knots)),
+            "nonlinear_mask": cast(JsonValue, list(spec.nonlinear_mask)),
+            "nonlinear_columns": cast(JsonValue, list(spec.nonlinear_columns)),
+            "column_names": ["x", "x'", "x''"],
+            "basis": cast(JsonValue, basis.tolist()),
+        }
+        compare_json(actual, output_payload(expected), policy).require_match()
 
 
 if __name__ == "__main__":

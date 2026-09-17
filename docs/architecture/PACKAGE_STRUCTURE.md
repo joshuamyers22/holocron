@@ -44,8 +44,9 @@ dependencies are therefore not installed preemptively.
 - R, Docker, and the oracle are development/test assets only.
 - Oracle cases and expected outputs live under `reference/` and are excluded
   from wheels and source distributions.
-- No supported CLI exists. Reproducible evidence and comparison commands will
-  be added only with their Phase 1 schemas and end-to-end contract.
+- No installed CLI exists. The development-only parity laboratory validates
+  versioned case, output, policy, and evidence schemas under `reference/` and
+  `schemas/`; it is excluded from distributions and never called at runtime.
 - Unsupported statistical combinations raise a typed error; they do not select
   a different method silently.
 

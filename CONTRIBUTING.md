@@ -5,7 +5,9 @@ must state outcome, risk, verification evidence, and rollback considerations.
 
 Statistical implementation changes must also identify the mathematical/public
 specification, R documentation and source files consulted, oracle case IDs, and
-the applicable tolerance profile. Do not mechanically translate or copy `rms`
+the applicable named profile from `reference/tolerances.json`. New or widened
+approximate rules require numerical justification and review; unlisted fields
+remain exact. Do not mechanically translate or copy `rms`
 or Hmisc source, prose, or tests. Stop for license review before adapting any
 upstream material.
 

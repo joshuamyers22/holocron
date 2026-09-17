@@ -1,0 +1,50 @@
+{
+  "schema_version": "holocron-tolerance-policy/v1",
+  "profiles": {
+    "oracle-health-v1": {
+      "description": "Exact identity comparison for the frozen oracle environment.",
+      "default": {"mode": "exact"},
+      "rules": []
+    },
+    "deterministic-transform-v1": {
+      "description": "Exact metadata with float64 tolerance only for transformed design values.",
+      "default": {"mode": "exact"},
+      "rules": [
+        {
+          "path": "/basis/*/*",
+          "rule": {"mode": "numeric", "absolute": 1e-12, "relative": 1e-12}
+        }
+      ]
+    },
+    "well-conditioned-ols-v1": {
+      "description": "Field-aware pilot tolerances for well-conditioned OLS fixtures.",
+      "default": {"mode": "exact"},
+      "rules": [
+        {
+          "path": "/design/*/*",
+          "rule": {"mode": "numeric", "absolute": 1e-12, "relative": 1e-12}
+        },
+        {
+          "path": "/coefficients/*",
+          "rule": {"mode": "numeric", "absolute": 1e-8, "relative": 1e-7}
+        },
+        {
+          "path": "/covariance/*/*",
+          "rule": {"mode": "numeric", "absolute": 1e-7, "relative": 1e-6}
+        },
+        {
+          "path": "/fitted/*",
+          "rule": {"mode": "numeric", "absolute": 1e-8, "relative": 1e-7}
+        },
+        {
+          "path": "/residuals/*",
+          "rule": {"mode": "numeric", "absolute": 1e-8, "relative": 1e-7}
+        },
+        {
+          "path": "/sigma",
+          "rule": {"mode": "numeric", "absolute": 1e-8, "relative": 1e-7}
+        }
+      ]
+    }
+  }
+}

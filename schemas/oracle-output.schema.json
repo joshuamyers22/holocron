@@ -1,0 +1,206 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/joshuamyers22/holocron/schemas/oracle-output.schema.json",
+  "title": "Holocron committed oracle output",
+  "description": "A versioned expected response from the pinned R rms oracle.",
+  "type": "object",
+  "properties": {
+    "schema_version": {"const": "holocron-oracle-output/v1"},
+    "case_id": {"$ref": "#/$defs/identifier"},
+    "reference": {"$ref": "#/$defs/reference"}
+  },
+  "required": ["schema_version", "case_id", "reference"],
+  "oneOf": [
+    {
+      "title": "Oracle environment health output",
+      "properties": {
+        "oracle_image": {"type": "string", "minLength": 1},
+        "oracle_image_digest": {"$ref": "#/$defs/sha256"},
+        "rms_commit": {"$ref": "#/$defs/gitCommit"},
+        "rms_file_manifest_sha256": {"$ref": "#/$defs/sha256"},
+        "rms_description_sha256": {"$ref": "#/$defs/sha256"},
+        "hmisc_commit": {"$ref": "#/$defs/gitCommit"},
+        "response": {"$ref": "#/$defs/healthResponse"}
+      },
+      "required": [
+        "oracle_image",
+        "oracle_image_digest",
+        "rms_commit",
+        "rms_file_manifest_sha256",
+        "rms_description_sha256",
+        "hmisc_commit",
+        "response"
+      ]
+    },
+    {
+      "title": "Restricted cubic spline design output",
+      "properties": {
+        "ok": {"const": true},
+        "protocol_version": {"const": "1"},
+        "operation": {"const": "rcs"},
+        "x": {"$ref": "#/$defs/numericVector"},
+        "knots": {"$ref": "#/$defs/numericVector"},
+        "nonlinear_mask": {
+          "type": "array",
+          "items": {"type": "boolean"}
+        },
+        "nonlinear_columns": {
+          "type": "array",
+          "items": {"type": "integer", "minimum": 0}
+        },
+        "column_names": {"$ref": "#/$defs/nameVector"},
+        "basis": {"$ref": "#/$defs/numericMatrix"}
+      },
+      "required": [
+        "ok",
+        "protocol_version",
+        "operation",
+        "x",
+        "knots",
+        "nonlinear_mask",
+        "nonlinear_columns",
+        "column_names",
+        "basis"
+      ]
+    },
+    {
+      "title": "OLS with restricted cubic splines output",
+      "properties": {
+        "ok": {"const": true},
+        "protocol_version": {"const": "1"},
+        "operation": {"const": "ols_rcs"},
+        "knots": {"$ref": "#/$defs/numericVector"},
+        "coefficient_names": {"$ref": "#/$defs/nameVector"},
+        "coefficients": {
+          "type": "object",
+          "minProperties": 1,
+          "additionalProperties": {"type": "number"}
+        },
+        "covariance_names": {"$ref": "#/$defs/nameVector"},
+        "covariance": {"$ref": "#/$defs/numericMatrix"},
+        "design_names": {"$ref": "#/$defs/nameVector"},
+        "design": {"$ref": "#/$defs/numericMatrix"},
+        "fitted": {"$ref": "#/$defs/numericVector"},
+        "residuals": {"$ref": "#/$defs/numericVector"},
+        "degrees_of_freedom": {"type": "integer", "minimum": 1},
+        "sigma": {"type": "number", "exclusiveMinimum": 0}
+      },
+      "required": [
+        "ok",
+        "protocol_version",
+        "operation",
+        "knots",
+        "coefficient_names",
+        "coefficients",
+        "covariance_names",
+        "covariance",
+        "design_names",
+        "design",
+        "fitted",
+        "residuals",
+        "degrees_of_freedom",
+        "sigma"
+      ]
+    }
+  ],
+  "unevaluatedProperties": false,
+  "$defs": {
+    "identifier": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9-]*$"
+    },
+    "sha256": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$|^[0-9a-f]{64}$"
+    },
+    "gitCommit": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{40}$"
+    },
+    "reference": {
+      "type": "object",
+      "properties": {
+        "package": {"const": "rms"},
+        "version": {"const": "8.2-0"},
+        "commit": {"$ref": "#/$defs/gitCommit"},
+        "protocol_version": {"const": "1"}
+      },
+      "required": ["package", "version", "commit", "protocol_version"],
+      "additionalProperties": false
+    },
+    "healthResponse": {
+      "type": "object",
+      "properties": {
+        "ok": {"const": true},
+        "protocol_version": {"const": "1"},
+        "operation": {"const": "health"},
+        "r_version": {"type": "string", "minLength": 1},
+        "platform": {"type": "string", "minLength": 1},
+        "packages": {
+          "type": "object",
+          "minProperties": 1,
+          "additionalProperties": {"type": "string", "minLength": 1}
+        },
+        "package_repository": {"type": "string", "minLength": 1},
+        "repositories": {
+          "type": "object",
+          "minProperties": 1,
+          "additionalProperties": {"type": "string"}
+        },
+        "external_libraries": {
+          "type": "array",
+          "items": {"type": "string", "minLength": 1}
+        },
+        "external_library_names": {
+          "type": "array",
+          "items": {"type": "string", "minLength": 1}
+        },
+        "rng_kind": {
+          "type": "array",
+          "minItems": 3,
+          "maxItems": 3,
+          "items": {"type": "string", "minLength": 1}
+        },
+        "registered_fortran": {
+          "type": "object",
+          "minProperties": 1,
+          "additionalProperties": {"type": "integer", "minimum": 1}
+        },
+        "locale": {"type": "string", "minLength": 1},
+        "timezone": {"type": "string", "minLength": 1}
+      },
+      "required": [
+        "ok",
+        "protocol_version",
+        "operation",
+        "r_version",
+        "platform",
+        "packages",
+        "package_repository",
+        "repositories",
+        "external_libraries",
+        "external_library_names",
+        "rng_kind",
+        "registered_fortran",
+        "locale",
+        "timezone"
+      ],
+      "additionalProperties": false
+    },
+    "numericVector": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"type": "number"}
+    },
+    "numericMatrix": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"$ref": "#/$defs/numericVector"}
+    },
+    "nameVector": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"type": "string", "minLength": 1}
+    }
+  }
+}

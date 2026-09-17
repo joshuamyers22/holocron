@@ -1,3 +1,8 @@
 {
+  "schema_version": "holocron-oracle-case/v1",
+  "case_id": "health",
+  "description": "Verify the complete identity of the frozen R oracle.",
+  "expected_output": "oracle-environment.json",
+  "comparison_profile": "oracle-health-v1",
   "operation": "health"
 }

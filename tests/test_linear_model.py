@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import json
 import unittest
 from pathlib import Path
 from typing import cast
@@ -10,6 +9,12 @@ import numpy as np
 from holocron.design import RestrictedCubicSplineSpec
 from holocron.exceptions import RankDeficiencyError
 from holocron.models import fit_ols
+from reference.contracts import (
+    JsonValue,
+    compare_json,
+    output_payload,
+    validate_case_pair,
+)
 
 
 class OlsTests(unittest.TestCase):
@@ -31,14 +36,10 @@ class OlsTests(unittest.TestCase):
 
     def test_matches_rms_ols_rcs_oracle_fixture(self) -> None:
         repository = Path(__file__).resolve().parents[1]
-        case_object: object = json.loads(
-            (repository / "reference/cases/ols-rcs-explicit.json").read_text()
+        case, expected, policy = validate_case_pair(
+            repository / "reference/cases/ols-rcs-explicit.json",
+            repository / "reference/expected/ols-rcs-explicit.json",
         )
-        expected_object: object = json.loads(
-            (repository / "reference/expected/ols-rcs-explicit.json").read_text()
-        )
-        case = cast(dict[str, object], case_object)
-        expected = cast(dict[str, object], expected_object)
         x = cast(list[float], case["x"])
         y = cast(list[float], case["y"])
         knots = tuple(cast(list[float], case["knots"]))
@@ -48,36 +49,25 @@ class OlsTests(unittest.TestCase):
             basis,
             feature_names=("x", "x'", "x''"),
         )
-
-        expected_coefficients = cast(dict[str, float], expected["coefficients"])
-        coefficient_values = tuple(
-            expected_coefficients[name] for name in result.coefficient_names
-        )
-        np.testing.assert_allclose(
-            result.coefficients, coefficient_values, rtol=1e-13, atol=1e-14
-        )
-        np.testing.assert_allclose(
-            result.covariance,
-            cast(list[list[float]], expected["covariance"]),
-            rtol=1e-13,
-            atol=1e-14,
-        )
-        np.testing.assert_allclose(
-            result.fitted_values,
-            cast(list[float], expected["fitted"]),
-            rtol=1e-13,
-            atol=1e-14,
-        )
-        np.testing.assert_allclose(
-            result.residuals,
-            cast(list[float], expected["residuals"]),
-            rtol=1e-13,
-            atol=1e-14,
-        )
-        self.assertEqual(
-            result.residual_degrees_of_freedom,
-            cast(int, expected["degrees_of_freedom"]),
-        )
-        self.assertAlmostEqual(
-            result.residual_scale, cast(float, expected["sigma"]), places=14
-        )
+        actual: dict[str, JsonValue] = {
+            "ok": True,
+            "protocol_version": "1",
+            "operation": "ols_rcs",
+            "knots": cast(JsonValue, list(knots)),
+            "coefficient_names": cast(JsonValue, list(result.coefficient_names)),
+            "coefficients": {
+                name: value
+                for name, value in zip(
+                    result.coefficient_names, result.coefficients, strict=True
+                )
+            },
+            "covariance_names": cast(JsonValue, list(result.coefficient_names)),
+            "covariance": cast(JsonValue, [list(row) for row in result.covariance]),
+            "design_names": ["x", "x'", "x''"],
+            "design": cast(JsonValue, basis.tolist()),
+            "fitted": cast(JsonValue, list(result.fitted_values)),
+            "residuals": cast(JsonValue, list(result.residuals)),
+            "degrees_of_freedom": result.residual_degrees_of_freedom,
+            "sigma": result.residual_scale,
+        }
+        compare_json(actual, output_payload(expected), policy).require_match()

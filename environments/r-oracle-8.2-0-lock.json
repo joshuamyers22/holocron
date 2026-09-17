@@ -29,7 +29,7 @@
     "commit": "778bd69d83961577be1f73fa1e36781bd3fd099f"
   },
   "files": {
-    "reference/expected/oracle-environment.json": "d311d48cc24407e10b3cef91ecbf5d36bede94a13706ae3d8311ab5d61fcd17d",
+    "reference/expected/oracle-environment.json": "744b0589e6ceeb4342f1756300defdafa0eaa031f68e9f83370b7136d998f757",
     "reference/manifests/rms-8.2-0-files.sha256": "40a3805d92ecd6bd1318db842c8c78e05595e48345b46c5e9e21ef01cd7a0bce",
     "reference/r/Dockerfile": "6f72f5864280ed8da130c14f465aa456f1d37967a4c184c0ed18caa679d52078",
     "reference/r/build-oracle.sh": "c9800d6b2a541cb8315cda1b55720a073721c7491ba430e877b2d898400f6ce4",

@@ -1,4 +1,12 @@
 {
+  "schema_version": "holocron-oracle-output/v1",
+  "case_id": "rcs-explicit",
+  "reference": {
+    "package": "rms",
+    "version": "8.2-0",
+    "commit": "a4e4a305a029090e737562fb4d35bdb705db7d63",
+    "protocol_version": "1"
+  },
   "ok": true,
   "protocol_version": "1",
   "operation": "rcs",

@@ -925,7 +925,7 @@
       "oracle_cases": [
         "ols-rcs-explicit"
       ],
-      "tolerance_profile": "well-conditioned-ols-v0",
+      "tolerance_profile": "well-conditioned-ols-v1",
       "known_differences": "Initial narrow API; full rms contract remains deferred."
     },
     {
@@ -1278,7 +1278,7 @@
       "oracle_cases": [
         "rcs-explicit"
       ],
-      "tolerance_profile": "deterministic-transform-v0",
+      "tolerance_profile": "deterministic-transform-v1",
       "known_differences": "Initial narrow API; full rms contract remains deferred."
     },
     {

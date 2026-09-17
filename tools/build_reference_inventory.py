@@ -262,11 +262,11 @@ def compatibility_entry(name: str, kind: str) -> dict[str, object]:
     if name == "rcs" and kind == "export":
         python_entry = "holocron.design.RestrictedCubicSplineSpec"
         cases = ["rcs-explicit"]
-        tolerance_profile = "deterministic-transform-v0"
+        tolerance_profile = "deterministic-transform-v1"
     elif name == "ols" and kind == "export":
         python_entry = "holocron.models.fit_ols"
         cases = ["ols-rcs-explicit"]
-        tolerance_profile = "well-conditioned-ols-v0"
+        tolerance_profile = "well-conditioned-ols-v1"
     return {
         "id": f"{kind}:{name}",
         "r_symbol": name,

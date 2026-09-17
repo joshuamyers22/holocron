@@ -1,4 +1,12 @@
 {
+  "schema_version": "holocron-oracle-output/v1",
+  "case_id": "health",
+  "reference": {
+    "package": "rms",
+    "version": "8.2-0",
+    "commit": "a4e4a305a029090e737562fb4d35bdb705db7d63",
+    "protocol_version": "1"
+  },
   "oracle_image": "holocron-rms-oracle:8.2-0",
   "oracle_image_digest": "sha256:67a496a40101a3e400e95342e491bcd82be5c811cc402d5731cb0649328fa84e",
   "rms_commit": "a4e4a305a029090e737562fb4d35bdb705db7d63",

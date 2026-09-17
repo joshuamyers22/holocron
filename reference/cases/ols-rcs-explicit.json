@@ -1,4 +1,9 @@
 {
+  "schema_version": "holocron-oracle-case/v1",
+  "case_id": "ols-rcs-explicit",
+  "description": "Full-rank OLS fit using an explicit-knot spline design.",
+  "expected_output": "ols-rcs-explicit.json",
+  "comparison_profile": "well-conditioned-ols-v1",
   "operation": "ols_rcs",
   "x": [-3, -2, -1, 0, 1, 2, 3, 4, 5, 6, 7],
   "y": [-2.1, -1.2, -0.2, 1.1, 2.4, 3.2, 4.0, 4.3, 4.9, 5.8, 7.1],

@@ -27,3 +27,6 @@ Notable changes are recorded here using semantic versioning.
   0.12.7, including the complete development and non-isolated build toolchain.
 - Added machine-checked Python and R environment manifests plus live validation
   of the accepted Docker oracle image identity and platform.
+- Formalized versioned oracle case, output, tolerance-policy, and parity-evidence
+  schemas; the Python and live R checks now share named field-aware comparison
+  profiles and emit hashed evidence records.

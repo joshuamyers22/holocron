@@ -1,88 +1,94 @@
-"""Check the live Docker oracle against the committed reference fixtures."""
+"""Run every declared case against the live oracle and emit parity evidence."""
 
 from __future__ import annotations
 
+import argparse
 import json
-import math
 import subprocess
 from pathlib import Path
-from typing import TypeAlias, cast
+from typing import cast
 
-JsonValue: TypeAlias = (
-    None | bool | int | float | str | list["JsonValue"] | dict[str, "JsonValue"]
+from reference.contracts import (
+    ROOT,
+    JsonValue,
+    build_evidence,
+    compare_json,
+    current_revision,
+    discover_case_pairs,
+    load_policies,
+    output_payload,
+    require_object,
+    validate_actual_output,
+    validate_case_pair,
+    working_tree_dirty,
+    write_evidence,
 )
 
-ROOT = Path(__file__).resolve().parents[1]
 RUNNER = ROOT / "reference/r/run-oracle.sh"
-CASES = ROOT / "reference/cases"
-EXPECTED = ROOT / "reference/expected"
 
 
-def compare(actual: JsonValue, expected: JsonValue, path: str = "response") -> None:
-    """Recursively compare JSON values with a tight numeric tolerance."""
-    if isinstance(actual, bool) or isinstance(expected, bool):
-        if actual is not expected:
-            raise AssertionError(f"{path}: {actual!r} != {expected!r}")
-        return
-    if isinstance(actual, (int, float)) and isinstance(expected, (int, float)):
-        if not math.isclose(
-            float(actual), float(expected), rel_tol=1e-13, abs_tol=1e-14
-        ):
-            raise AssertionError(f"{path}: {actual!r} != {expected!r}")
-        return
-    if isinstance(actual, dict) and isinstance(expected, dict):
-        if actual.keys() != expected.keys():
-            raise AssertionError(f"{path}: keys {sorted(actual)} != {sorted(expected)}")
-        for key in actual:
-            compare(actual[key], expected[key], f"{path}.{key}")
-        return
-    if isinstance(actual, list) and isinstance(expected, list):
-        if len(actual) != len(expected):
-            raise AssertionError(f"{path}: length {len(actual)} != {len(expected)}")
-        for index, (actual_item, expected_item) in enumerate(
-            zip(actual, expected, strict=True)
-        ):
-            compare(actual_item, expected_item, f"{path}[{index}]")
-        return
-    if actual != expected:
-        raise AssertionError(f"{path}: {actual!r} != {expected!r}")
-
-
-def load_json(path: Path) -> JsonValue:
-    """Load one JSON document without weakening its dynamic boundary."""
-    parsed: object = json.loads(path.read_text())
-    return cast(JsonValue, parsed)
-
-
-def run_case(case_name: str) -> JsonValue:
-    """Execute one case through the constrained oracle runner."""
+def run_case(case: dict[str, JsonValue]) -> dict[str, JsonValue]:
+    """Execute one validated data-only case through the constrained R runner."""
     completed = subprocess.run(
         [str(RUNNER)],
-        input=(CASES / case_name).read_text(),
+        input=json.dumps(case, allow_nan=False),
         capture_output=True,
         check=False,
         text=True,
     )
     if completed.returncode != 0:
         raise RuntimeError(
-            f"oracle failed for {case_name} with status {completed.returncode}: "
-            f"{completed.stderr.strip()}"
+            f"oracle failed for {case['case_id']} with status "
+            f"{completed.returncode}: {completed.stderr.strip()}"
         )
-    parsed: object = json.loads(completed.stdout)
-    return cast(JsonValue, parsed)
+    parsed = cast(JsonValue, json.loads(completed.stdout))
+    return require_object(parsed, name=f"oracle output for {case['case_id']}")
+
+
+def parse_args() -> argparse.Namespace:
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        "--evidence-dir",
+        type=Path,
+        default=ROOT / ".work/oracle-evidence",
+        help="directory for validated comparison evidence",
+    )
+    return parser.parse_args()
 
 
 def main() -> None:
-    """Verify environment identity and deterministic method fixtures."""
-    health_expected = load_json(EXPECTED / "oracle-environment.json")
-    if not isinstance(health_expected, dict):
-        raise TypeError("oracle environment fixture must be an object")
-    compare(run_case("health.json"), health_expected["response"])
-
-    for case_name in ("rcs-explicit.json", "ols-rcs-explicit.json"):
-        compare(run_case(case_name), load_json(EXPECTED / case_name))
-        print(f"oracle fixture verified: {case_name}")
-    print("oracle environment verified")
+    """Validate, execute, compare, and record every committed oracle case."""
+    args = parse_args()
+    evidence_dir = args.evidence_dir
+    if not evidence_dir.is_absolute():
+        evidence_dir = ROOT / evidence_dir
+    policies = load_policies()
+    revision = current_revision()
+    source_is_dirty = working_tree_dirty()
+    pairs = discover_case_pairs()
+    for case_path, expected_path in pairs:
+        case, expected, policy = validate_case_pair(case_path, expected_path, policies)
+        actual = run_case(case)
+        validate_actual_output(actual, expected)
+        report = compare_json(actual, output_payload(expected), policy)
+        evidence = build_evidence(
+            case_path=case_path,
+            expected_path=expected_path,
+            case=case,
+            expected=expected,
+            actual=actual,
+            report=report,
+            code_revision=revision,
+            source_is_dirty=source_is_dirty,
+        )
+        evidence_path = evidence_dir / f"{case['case_id']}.json"
+        digest = write_evidence(evidence_path, evidence)
+        report.require_match()
+        print(
+            f"oracle fixture verified: {case['case_id']} "
+            f"({policy.name}, evidence sha256:{digest})"
+        )
+    print(f"oracle contract verified: {len(pairs)} cases")
 
 
 if __name__ == "__main__":

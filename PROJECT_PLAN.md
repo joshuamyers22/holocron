@@ -615,7 +615,8 @@ evidence deliverables remain open.
 - [x] generated and adapted production repository;
 - [x] frozen Python and R environments
   ([acceptance record](governance/PHASE_1_FROZEN_ENVIRONMENTS.md));
-- [ ] case schema, oracle runner, artifact schema, and comparator;
+- [x] case schema, oracle runner, artifact schema, and field-aware comparator
+  ([acceptance record](governance/PHASE_1_PARITY_LAB_CONTRACT.md));
 - [ ] 20–30 vertical parity cases covering design, OLS, logistic, ordinal, and survival examples;
 - [ ] tolerance ADR based on a cross-platform pilot;
 - [ ] initial docs site and generated compatibility page;
