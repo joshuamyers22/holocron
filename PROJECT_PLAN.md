@@ -607,13 +607,14 @@ Independent-development and license/provenance policy is approved; the reference
 ### Phase 1 — Repository and parity laboratory (6–10 weeks)
 
 **Status:** In progress. The production-repository adaptation is complete; the
-remaining laboratory, parity-case, tolerance, documentation-site, and
-end-to-end evidence deliverables remain open.
+remaining parity-laboratory, tolerance, documentation-site, and end-to-end
+evidence deliverables remain open.
 
 **Deliverables**
 
 - [x] generated and adapted production repository;
-- [ ] frozen Python and R environments;
+- [x] frozen Python and R environments
+  ([acceptance record](governance/PHASE_1_FROZEN_ENVIRONMENTS.md));
 - [ ] case schema, oracle runner, artifact schema, and comparator;
 - [ ] 20–30 vertical parity cases covering design, OLS, logistic, ordinal, and survival examples;
 - [ ] tolerance ADR based on a cross-platform pilot;

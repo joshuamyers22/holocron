@@ -34,12 +34,14 @@ Git history provides the audit trail.
 | `first-slice` | Explicit-knot restricted cubic spline design and classical full-rank OLS pass deterministic parity fixtures from the live rms 8.2-0 oracle. | `src/holocron/design/splines.py`; `src/holocron/models/linear.py`; `reference/expected/` | 2026-09-17 |
 | `phase-0` | Phase 0 repository deliverables are complete for private development; vacant statistical, numerical, verification, and license-review roles block capability promotion and external distribution. | `PROJECT_PLAN.md`; `governance/GOVERNANCE.md` | 2026-09-17 |
 | `public-api` | The installed package has no CLI; its root exposes only version plus `design`, `models`, and `exceptions`, and domain `__all__` declarations define the supported public names. | `src/holocron/__init__.py`; `docs/architecture/PACKAGE_STRUCTURE.md`; `tests/test_public_api.py` | 2026-09-17 |
+| `frozen-environments` | The canonical Python evidence environment is CPython 3.12.14 with uv 0.12.5 and a hashed dependency/build lock; the separate R oracle is frozen by source/base/repository identities, full health evidence, Linux/arm64 platform, and image ID. Static checks run in CI; oracle rebuilds require live identity and behavior checks. | `governance/PHASE_1_FROZEN_ENVIRONMENTS.md`; `docs/adr/ADR-012-frozen-environment-contract.md`; `environments/` | 2026-09-17 |
 
 ## Verified traps and failed approaches
 
 | Key | Symptom and cause | Evidence or reproducer | Last verified |
 |---|---|---|---|
 | `hmisc-version` | Rocker's R 4.5.3 repository snapshot contains Hmisc 5.2-5, but rms 8.2-0 requires >=5.3-0; the oracle installs Hmisc 5.3-0 from pinned commit `778bd69d83961577be1f73fa1e36781bd3fd099f`. | `reference/r/Dockerfile`; `reference/expected/oracle-environment.json` | 2026-09-17 |
+| `hatch-editable` | Hatchling's non-isolated editable build additionally requires `editables`; both are explicit exact development dependencies so no hidden build resolution occurs. | `pyproject.toml`; `uv.lock`; `Makefile` | 2026-09-17 |
 
 ## Open threads
 

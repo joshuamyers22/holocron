@@ -7,11 +7,13 @@ statistical case and result.
 ## Python environment
 
 `pyproject.toml` declares supported runtime ranges and `uv.lock` is the sole
-exact development lock. Install with `uv sync --frozen --dev`; CI uses the same
-frozen operation. The installed package currently depends only on NumPy. The
-canonical table boundary and broader estimator-backend policy await ADR-006 and
-ADR-007, so dataframe and model libraries are not implicit parts of the runtime
-contract.
+exact development lock. The canonical environment is CPython 3.12.14 with uv
+0.12.5. Install it with `make setup`; CI uses the same two-stage frozen operation
+and locked, non-isolated build backend. The installed package currently depends
+only on NumPy. The canonical table boundary and broader estimator-backend policy
+await ADR-006 and ADR-007, so dataframe and model libraries are not implicit
+parts of the runtime contract. See
+`docs/reproducibility/FROZEN_ENVIRONMENTS.md` and ADR-012.
 
 Record the Holocron version, Python version, NumPy version, platform, and BLAS or
 LAPACK identity with consequential numerical results. A release candidate must
@@ -30,6 +32,9 @@ capabilities, or writable root filesystem.
 Reference upgrades create a new compatibility line with reviewed side-by-side
 evidence. Existing fixtures are never silently regenerated. R and Docker are
 test tools and are absent from Holocron distributions and production runtime.
+The accepted oracle has a platform-specific image ID recorded in
+`environments/r-oracle-8.2-0-lock.json`; static and live verification commands
+are defined in the frozen-environment documentation.
 
 ## Statistical cases and results
 

@@ -1,24 +1,32 @@
-.PHONY: setup format lint typecheck test reference-metadata check audit build oracle-build oracle-health oracle-check reference-source-check
+.PHONY: setup lock-check format lint typecheck test frozen-environments frozen-environments-live reference-metadata check audit build oracle-build oracle-health oracle-check reference-source-check
 setup:
-	uv sync --frozen --dev
+	uv lock --check
+	uv sync --frozen --dev --no-install-project
+	uv sync --frozen --dev --no-build-isolation
+lock-check:
+	uv lock --check
 format:
-	uv run ruff format .
+	uv run --frozen ruff format .
 lint:
-	uv run ruff check .
-	uv run ruff format --check .
+	uv run --frozen ruff check .
+	uv run --frozen ruff format --check .
 typecheck:
-	uv run pyright
+	uv run --frozen pyright
 test:
-	uv run python -m unittest discover -s tests
+	uv run --frozen python -m unittest discover -s tests
+frozen-environments:
+	uv run --frozen python tools/check_frozen_environments.py
+frozen-environments-live:
+	uv run --frozen python tools/check_frozen_environments.py --live-r-oracle
 reference-metadata:
-	uv run python tools/check_reference_metadata.py
-check: lint typecheck test reference-metadata
+	uv run --frozen python tools/check_reference_metadata.py
+check: lock-check lint typecheck test frozen-environments reference-metadata
 audit:
 	uv audit --preview-features audit-command --locked --no-dev
-	uv run python tools/check_licenses.py
+	uv run --frozen python tools/check_licenses.py
 build:
-	uv build
-	uv run python tools/check_build_artifacts.py
+	uv build --no-build-isolation
+	uv run --frozen python tools/check_build_artifacts.py
 
 oracle-build:
 	@test -n "$(RMS_SOURCE)" || (echo "usage: make oracle-build RMS_SOURCE=/absolute/path/to/rms-master"; exit 2)
@@ -28,8 +36,8 @@ oracle-health:
 	printf '%s\n' '{"operation":"health"}' | reference/r/run-oracle.sh
 
 oracle-check:
-	uv run python reference/check_oracle.py
+	uv run --frozen python reference/check_oracle.py
 
 reference-source-check:
 	@test -n "$(RMS_SOURCE)" || (echo "usage: make reference-source-check RMS_SOURCE=/absolute/path/to/rms-master"; exit 2)
-	uv run python tools/build_reference_inventory.py "$(RMS_SOURCE)" --check
+	uv run --frozen python tools/build_reference_inventory.py "$(RMS_SOURCE)" --check

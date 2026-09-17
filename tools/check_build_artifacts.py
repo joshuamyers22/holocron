@@ -12,6 +12,7 @@ ROOT = Path(__file__).resolve().parents[1]
 FORBIDDEN_PARTS = {
     "compatibility",
     "docs",
+    "environments",
     "governance",
     "reference",
     "templates",

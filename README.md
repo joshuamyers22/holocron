@@ -69,7 +69,10 @@ blocked pending qualified license and provenance review.
 
 ## Development
 
-Python 3.11 or later and `uv` are required for the development environment.
+The canonical development environment uses CPython 3.12.14 and uv 0.12.5;
+package metadata permits Python 3.11 or later. Both tool versions and the full
+dependency/build graph are frozen and checked as described in the
+[environment contract](https://github.com/joshuamyers22/holocron/blob/main/docs/reproducibility/FROZEN_ENVIRONMENTS.md).
 
 ```sh
 make setup
@@ -79,7 +82,8 @@ make audit
 ```
 
 `make check` runs formatting, linting, strict type checking, unit and parity
-fixture tests, and reference-metadata validation. `make build` creates and
+fixture tests, frozen-environment checks, and reference-metadata validation.
+`make build` uses the locked build backend without isolation, then creates and
 inspects both wheel and source distribution, including checks that reference
 source and retired template application modules are absent.
 

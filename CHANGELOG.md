@@ -23,3 +23,7 @@ Notable changes are recorded here using semantic versioning.
 - Removed template-only CLIs, market-data publication, generic regression and
   walk-forward examples, demo datasets, and their unused Polars/Statsmodels
   dependencies.
+- Froze the canonical Python evidence environment to CPython 3.12.14 and uv
+  0.12.5, including the complete development and non-isolated build toolchain.
+- Added machine-checked Python and R environment manifests plus live validation
+  of the accepted Docker oracle image identity and platform.

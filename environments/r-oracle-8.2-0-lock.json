@@ -1,0 +1,39 @@
+{
+  "schema_version": "holocron-r-oracle-environment/v1",
+  "accepted_at": "2026-09-17",
+  "scope": "test-only rms parity oracle",
+  "image": {
+    "tag": "holocron-rms-oracle:8.2-0",
+    "id": "sha256:67a496a40101a3e400e95342e491bcd82be5c811cc402d5731cb0649328fa84e",
+    "platform": "linux/arm64"
+  },
+  "base_image": {
+    "name": "rocker/r-ver:4.5.3",
+    "digest": "sha256:c3f39b365d1077fe24f8e9ab2742e352b6d3950897f51af1624a5bb5550c21c0"
+  },
+  "r": {
+    "version": "R version 4.5.3 (2026-03-11)",
+    "platform": "aarch64-unknown-linux-gnu",
+    "repository_snapshot": "https://p3m.dev/cran/__linux__/noble/2026-04-23",
+    "package_count": 93,
+    "external_library_count": 10,
+    "timezone": "UTC"
+  },
+  "rms": {
+    "version": "8.2-0",
+    "commit": "a4e4a305a029090e737562fb4d35bdb705db7d63",
+    "source_file_manifest_sha256": "40a3805d92ecd6bd1318db842c8c78e05595e48345b46c5e9e21ef01cd7a0bce"
+  },
+  "hmisc": {
+    "version": "5.3-0",
+    "commit": "778bd69d83961577be1f73fa1e36781bd3fd099f"
+  },
+  "files": {
+    "reference/expected/oracle-environment.json": "d311d48cc24407e10b3cef91ecbf5d36bede94a13706ae3d8311ab5d61fcd17d",
+    "reference/manifests/rms-8.2-0-files.sha256": "40a3805d92ecd6bd1318db842c8c78e05595e48345b46c5e9e21ef01cd7a0bce",
+    "reference/r/Dockerfile": "6f72f5864280ed8da130c14f465aa456f1d37967a4c184c0ed18caa679d52078",
+    "reference/r/build-oracle.sh": "c9800d6b2a541cb8315cda1b55720a073721c7491ba430e877b2d898400f6ce4",
+    "reference/r/oracle.R": "9dc65804e933572d394fb8bebfe7220157438079717e8c5233a640a122e716fb",
+    "reference/r/run-oracle.sh": "f9af288bdfb335a497017994bf679302f8faaca21eed4de4eedac29bc4396551"
+  }
+}
