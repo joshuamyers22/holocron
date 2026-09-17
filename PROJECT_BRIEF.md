@@ -1,0 +1,27 @@
+# Project Brief
+
+- Problem and affected users: Python lacks an integrated equivalent of R's `rms`; biostatisticians, epidemiologists, statistical programmers, and scientific-library authors must assemble incomplete workflows across packages.
+- Measurable success criteria: Every claimed compatible capability is linked to a pinned R 8.2-0 oracle case, method-specific numerical tolerances, statistical simulation evidence, typed public results, executable documentation, and a reproducible release artifact.
+- Explicit non-goals: Runtime delegation to R; a thin `rpy2` wrapper; initial implementation of the separate `rmsb` package; silent method substitutions; claiming drop-in or full parity without manifest-backed evidence.
+- Runtime/deployment environment: Python 3.11+
+- Tabular engine: Polars; document any pandas interoperability exception in an ADR
+- Statistical engine: Owned Holocron contracts over NumPy/SciPy/Statsmodels or independently implemented numerical backends, selected only after parity qualification
+- Statistical-learning point-of-view departures and supporting evidence: TODO
+- Decision objective, action, horizon, utility, guardrails, and proxy gaps: TODO
+- Heuristic and interpretable statistical baselines: TODO
+- Data classification and retention: Source code and synthetic/public fixtures only in the repository; no patient, client, credential, or restricted production data
+- Dataset contract/schema owner, versioning, partitioning, and migration policy: TODO
+- Published dataset immutability, access control, integrity, backup, and deletion: TODO
+- Availability and recovery objectives: TODO
+- Research/batch and live-path latency distribution, throughput, and jitter: TODO
+- Queue, capacity, stale-data, and overload behavior: TODO
+- Top failure or abuse scenarios: Statistically plausible but non-equivalent results; arbitrary code execution through formulas/serialization; unbounded design expansion or resampling; convergence reported as success; GPL/provenance violations
+- Units, precision, timezone, and market calendar: TODO
+- Missing-data, outlier, adjustment, and censoring rules: Explicit and model-specific; fail closed until the behavior is specified and parity-tested
+- Point-in-time and look-ahead-bias controls: TODO
+- Regression sample construction, leakage controls, standard errors, and multiple-testing policy: Stored in model/evidence specifications; resampling must repeat the entire learned procedure
+- Development/selection/final-assessment separation and fold-local learned steps: TODO
+- Research-to-production parity, skew monitoring, fallback, and retirement: TODO
+- Reconciliation source and tolerances: Pinned R `rms` 8.2-0 oracle plus mathematical/simulation evidence; use method-specific named tolerance profiles
+- Feed sequence, gap, duplicate, reordering, and replay policy: TODO
+- Owner: joshuamyers22

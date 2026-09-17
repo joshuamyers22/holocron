@@ -1,0 +1,14 @@
+.venv/
+.ruff_cache/
+__pycache__/
+*.py[cod]
+build/
+dist/
+*.egg-info/
+.env
+.env.*
+!.env.example
+data/raw/
+data/private/
+notebooks/.ipynb_checkpoints/
+.work/

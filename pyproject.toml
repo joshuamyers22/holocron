@@ -1,0 +1,42 @@
+[project]
+name = "holocron"
+version = "0.1.0"
+description = "Independent Python implementation of the R rms package"
+readme = "README.md"
+requires-python = ">=3.11"
+license = "LicenseRef-Proprietary"
+dependencies = [
+    "numpy>=2,<3",
+    "polars>=1.44.1,<2",
+    "statsmodels>=0.15,<0.16",
+]
+
+[project.urls]
+Repository = "https://github.com/joshuamyers22/holocron"
+Issues = "https://github.com/joshuamyers22/holocron/issues"
+Changelog = "https://github.com/joshuamyers22/holocron/blob/main/CHANGELOG.md"
+
+[project.scripts]
+"holocron" = "holocron.cli:main"
+"holocron-regression" = "holocron.analysis_cli:main"
+"holocron-validate" = "holocron.time_validation_cli:main"
+"holocron-dataset" = "holocron.dataset_cli:main"
+
+[build-system]
+requires = ["hatchling==1.32.0"]
+build-backend = "hatchling.build"
+
+[dependency-groups]
+dev = ["pyright==1.1.411", "ruff==0.16.5"]
+
+[tool.ruff]
+target-version = "py311"
+line-length = 88
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP", "SIM"]
+
+[tool.pyright]
+pythonVersion = "3.11"
+typeCheckingMode = "strict"
+include = ["src", "tests"]
