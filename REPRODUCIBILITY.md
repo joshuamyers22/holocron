@@ -9,6 +9,13 @@ rebuildable from authorized inputs and committed code. Random procedures require
 an explicit seed and documented generator. Benchmarks record hardware and data
 shape. Reconciliation tests define tolerances and explain why they are safe.
 
+The initial R compatibility line is `rms` 8.2-0 at commit
+`a4e4a305a029090e737562fb4d35bdb705db7d63`. The complete source-file manifest,
+namespace inventory, container inputs, installed R packages, external libraries,
+and fixture-producing image digest live under `reference/`. Rebuilds verify the
+entire source tree before installation. Reference upgrades create a new
+compatibility line; committed fixtures are never silently refreshed.
+
 Polars is the default tabular engine. Record its locked version and relevant
 streaming/lazy execution settings with evidence. Do not cross a pandas boundary
 implicitly; document required interoperability, conversion ownership, null and

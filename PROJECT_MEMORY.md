@@ -15,7 +15,7 @@ Git history provides the audit trail.
 |---|---|---|---|
 | `independent-python` | Holocron is an independent Python implementation of `rms`, not a runtime R bridge or thin wrapper. | `README.md`; `PROJECT_PLAN.md` | 2026-09-17 |
 | `distribution-gate` | Holocron remains private and may not be distributed until its final license and provenance review is approved. | `docs/adr/ADR-001-independent-oracle.md` | 2026-09-17 |
-| `reference-snapshot` | The initial statistical source is local `rms-master` 8.2-0 dated 2026-09-11; identity hashes are recorded in `REFERENCE_SOURCE.md`. | `REFERENCE_SOURCE.md` | 2026-09-17 |
+| `reference-snapshot` | Local `rms-master` 8.2-0 is byte-identical to upstream commit `a4e4a305a029090e737562fb4d35bdb705db7d63`; all 363 files are covered by a deterministic manifest. | `REFERENCE_SOURCE.md`; `reference/manifests/` | 2026-09-17 |
 
 ## Accepted decisions
 
@@ -23,12 +23,16 @@ Git history provides the audit trail.
 |---|---|---|---|
 | `production-template` | The repository is generated from the production template's `python-data-quant` archetype and will be adapted into a scientific library. | `README.md`; `PROJECT_PLAN.md` | 2026-09-17 |
 | `docker-oracle` | R `rms` runs only in a pinned Docker oracle with JSON I/O; Python implementation code is original and R is not a runtime dependency. | `docs/adr/ADR-001-independent-oracle.md`; `reference/r/` | 2026-09-17 |
+| `package-identity` | Holocron uses repository/project name `holocron`, import name `holocron`, and prospective distribution name `holocron-rms` because `holocron` is occupied on PyPI. | `docs/adr/ADR-002-project-and-package-identity.md`; `pyproject.toml` | 2026-09-17 |
+| `compatibility-contract` | Compatibility is claimed per manifest entry; all 121 exports and 160 S3 methods have an owner/status, and only evidence-backed entries may advance beyond experimental. | `docs/adr/ADR-004-compatibility-contract.md`; `compatibility/rms-8.2.0.yaml` | 2026-09-17 |
+| `release-gate` | Tag-triggered release jobs fail closed unless the repository variable `EXTERNAL_DISTRIBUTION_APPROVED` is exactly `true`; setting it requires the distribution review recorded by governance. | `.github/workflows/release.yml`; `governance/GOVERNANCE.md` | 2026-09-17 |
 
 ## Non-obvious current state
 
 | Key | State worth retrieving later | Evidence | Last verified |
 |---|---|---|---|
 | `first-slice` | Explicit-knot restricted cubic spline design and classical full-rank OLS pass deterministic parity fixtures from the live rms 8.2-0 oracle. | `src/holocron/design/splines.py`; `src/holocron/models/linear.py`; `reference/expected/` | 2026-09-17 |
+| `phase-0` | Phase 0 repository deliverables are complete for private development; vacant statistical, numerical, verification, and license-review roles block capability promotion and external distribution. | `PROJECT_PLAN.md`; `governance/GOVERNANCE.md` | 2026-09-17 |
 
 ## Verified traps and failed approaches
 
@@ -41,3 +45,4 @@ Git history provides the audit trail.
 | Key | Unresolved question or next evidence | Owner | Review by |
 |---|---|---|---|
 | `distribution-license` | Approve the final distribution license and provenance review before making Holocron public or publishing artifacts. | joshuamyers22 | Before external distribution |
+| `specialist-reviewers` | Appoint statistical, numerical, independent verification, and license reviewers before promoting a capability from experimental or distributing artifacts. | joshuamyers22 | Before capability promotion |

@@ -6,6 +6,11 @@ import json
 import math
 import subprocess
 from pathlib import Path
+from typing import TypeAlias, cast
+
+JsonValue: TypeAlias = (
+    None | bool | int | float | str | list["JsonValue"] | dict[str, "JsonValue"]
+)
 
 ROOT = Path(__file__).resolve().parents[1]
 RUNNER = ROOT / "reference/r/run-oracle.sh"
@@ -13,7 +18,7 @@ CASES = ROOT / "reference/cases"
 EXPECTED = ROOT / "reference/expected"
 
 
-def compare(actual: object, expected: object, path: str = "response") -> None:
+def compare(actual: JsonValue, expected: JsonValue, path: str = "response") -> None:
     """Recursively compare JSON values with a tight numeric tolerance."""
     if isinstance(actual, bool) or isinstance(expected, bool):
         if actual is not expected:
@@ -43,12 +48,13 @@ def compare(actual: object, expected: object, path: str = "response") -> None:
         raise AssertionError(f"{path}: {actual!r} != {expected!r}")
 
 
-def load_json(path: Path) -> object:
+def load_json(path: Path) -> JsonValue:
     """Load one JSON document without weakening its dynamic boundary."""
-    return json.loads(path.read_text())
+    parsed: object = json.loads(path.read_text())
+    return cast(JsonValue, parsed)
 
 
-def run_case(case_name: str) -> object:
+def run_case(case_name: str) -> JsonValue:
     """Execute one case through the constrained oracle runner."""
     completed = subprocess.run(
         [str(RUNNER)],
@@ -62,7 +68,8 @@ def run_case(case_name: str) -> object:
             f"oracle failed for {case_name} with status {completed.returncode}: "
             f"{completed.stderr.strip()}"
         )
-    return json.loads(completed.stdout)
+    parsed: object = json.loads(completed.stdout)
+    return cast(JsonValue, parsed)
 
 
 def main() -> None:

@@ -31,13 +31,18 @@ require_numeric_vector <- function(request, name, minimum_length = 1L) {
 }
 
 run_health <- function() {
-  packages <- c(
-    "rms", "Hmisc", "survival", "Matrix", "SparseM", "quantreg",
-    "ggplot2", "polspline", "multcomp", "jsonlite"
-  )
+  installed <- utils::installed.packages()
+  packages <- sort(rownames(installed))
   versions <- stats::setNames(
-    lapply(packages, function(package) as.character(utils::packageVersion(package))),
+    lapply(packages, function(package) as.character(installed[package, "Version"])),
     packages
+  )
+  external <- base::extSoftVersion()
+  loadNamespace("rms")
+  fortran <- getDLLRegisteredRoutines("rms")[[".Fortran"]]
+  registered_fortran <- stats::setNames(
+    lapply(fortran, function(routine) as.integer(routine$numParameters)),
+    names(fortran)
   )
   list(
     protocol_version = protocol_version,
@@ -45,6 +50,12 @@ run_health <- function() {
     r_version = R.version.string,
     platform = R.version$platform,
     packages = versions,
+    package_repository = Sys.getenv("RSPM"),
+    repositories = as.list(getOption("repos")),
+    external_libraries = as.list(unname(external)),
+    external_library_names = names(external),
+    rng_kind = unname(as.list(RNGkind())),
+    registered_fortran = registered_fortran,
     locale = Sys.getlocale(),
     timezone = Sys.timezone()
   )

@@ -10,7 +10,8 @@
 Holocron needs statistical fidelity to R `rms` 8.2-0 without becoming an R
 wrapper or mechanically translating GPL-licensed R, C, or Fortran source. The R
 reference must be reproducible, isolated from the Python runtime, and usable for
-differential tests. The eventual distribution license still requires review.
+differential tests. Private proprietary development is approved; the eventual
+external distribution license still requires qualified review.
 
 ## Options considered
 

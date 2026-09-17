@@ -1,27 +1,29 @@
 # Project Brief
 
+- Status and scope: Approved for private Phase 0/1 development on 2026-09-17; external distribution and non-experimental statistical claims remain blocked
 - Problem and affected users: Python lacks an integrated equivalent of R's `rms`; biostatisticians, epidemiologists, statistical programmers, and scientific-library authors must assemble incomplete workflows across packages.
 - Measurable success criteria: Every claimed compatible capability is linked to a pinned R 8.2-0 oracle case, method-specific numerical tolerances, statistical simulation evidence, typed public results, executable documentation, and a reproducible release artifact.
 - Explicit non-goals: Runtime delegation to R; a thin `rpy2` wrapper; initial implementation of the separate `rmsb` package; silent method substitutions; claiming drop-in or full parity without manifest-backed evidence.
 - Runtime/deployment environment: Python 3.11+
 - Tabular engine: Polars; document any pandas interoperability exception in an ADR
 - Statistical engine: Owned Holocron contracts over NumPy/SciPy/Statsmodels or independently implemented numerical backends, selected only after parity qualification
-- Statistical-learning point-of-view departures and supporting evidence: TODO
-- Decision objective, action, horizon, utility, guardrails, and proxy gaps: TODO
-- Heuristic and interpretable statistical baselines: TODO
+- Statistical-learning point-of-view departures and supporting evidence: Preserve Regression Modeling Strategies principles—pre-specification, flexible effects, shrinkage where justified, honest validation, and calibration—while replacing R-specific state and syntax with explicit immutable Python contracts
+- Decision objective, action, horizon, utility, guardrails, and proxy gaps: Enable reproducible model development, inference, and prediction; Holocron reports estimates and evidence but does not authorize clinical, regulatory, financial, or automated actions; each application owns its estimand, action policy, horizon, utility, and external-validity review
+- Heuristic and interpretable statistical baselines: Intercept-only, untransformed linear/logistic, and model-family null fits as applicable; each validation workflow must declare its baseline before evaluation
 - Data classification and retention: Source code and synthetic/public fixtures only in the repository; no patient, client, credential, or restricted production data
-- Dataset contract/schema owner, versioning, partitioning, and migration policy: TODO
-- Published dataset immutability, access control, integrity, backup, and deletion: TODO
-- Availability and recovery objectives: TODO
-- Research/batch and live-path latency distribution, throughput, and jitter: TODO
-- Queue, capacity, stale-data, and overload behavior: TODO
+- Dataset contract/schema owner, versioning, partitioning, and migration policy: Holocron is a library and owns no production dataset; project-authored oracle cases are versioned JSON with hashes and schema versions under maintainer ownership
+- Published dataset immutability, access control, integrity, backup, and deletion: Oracle inputs/outputs are immutable Git artifacts; corrections create reviewed replacements or new case IDs; no restricted datasets are accepted
+- Availability and recovery objectives: No hosted service exists; source and evidence recover from the private GitHub repository, locks, and immutable upstream/source identities
+- Research/batch and live-path latency distribution, throughput, and jitter: Batch scientific library only during the current phases; no latency SLA or live serving path
+- Queue, capacity, stale-data, and overload behavior: Not applicable until a service is proposed; local computations must gain explicit shape and resource limits before public support
 - Top failure or abuse scenarios: Statistically plausible but non-equivalent results; arbitrary code execution through formulas/serialization; unbounded design expansion or resampling; convergence reported as success; GPL/provenance violations
-- Units, precision, timezone, and market calendar: TODO
+- Units, precision, timezone, and market calendar: Float64 initial numerical contract; units and labels are explicit design metadata; oracle timezone UTC and numeric locale C; market calendars are out of scope
 - Missing-data, outlier, adjustment, and censoring rules: Explicit and model-specific; fail closed until the behavior is specified and parity-tested
-- Point-in-time and look-ahead-bias controls: TODO
+- Point-in-time and look-ahead-bias controls: Library callers own source truth; Holocron validation APIs must retain row identity, accept explicit resample plans, repeat learned steps inside folds, and reject declared availability violations
 - Regression sample construction, leakage controls, standard errors, and multiple-testing policy: Stored in model/evidence specifications; resampling must repeat the entire learned procedure
-- Development/selection/final-assessment separation and fold-local learned steps: TODO
-- Research-to-production parity, skew monitoring, fallback, and retirement: TODO
+- Development/selection/final-assessment separation and fold-local learned steps: Required in analysis/evidence specifications; transformations, knot selection, imputation, and fitting are repeated within each resample unless explicitly fixed by the estimand
+- Research-to-production parity, skew monitoring, fallback, and retirement: No production serving path exists; future adapters require an ADR, replay evidence, structured drift/skew signals, failure-closed fallback, and a retirement owner
 - Reconciliation source and tolerances: Pinned R `rms` 8.2-0 oracle plus mathematical/simulation evidence; use method-specific named tolerance profiles
-- Feed sequence, gap, duplicate, reordering, and replay policy: TODO
+- Feed sequence, gap, duplicate, reordering, and replay policy: Not applicable to the library baseline; row ordering and duplicate semantics remain explicit in each model/data contract
 - Owner: joshuamyers22
+- Distribution license: Private proprietary development only; no external publication until the distribution gate in ADR-001 is approved by a qualified reviewer

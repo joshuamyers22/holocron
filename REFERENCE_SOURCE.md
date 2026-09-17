@@ -11,8 +11,12 @@ snapshot `/Users/josh/Downloads/rms-master`.
 - License declared by the source: `GPL (>= 2)`
 - Required R version: `>= 4.4.0`
 - Required Hmisc version: `>= 5.3-0`
+- Matching upstream commit: `a4e4a305a029090e737562fb4d35bdb705db7d63`
 - Inventory: 102 files under `R/`, 108 files under `man/`, 129 files under
-  `inst/tests/`, and 8 files under `src/`
+  `inst/tests/`, eight top-level native files and one Ratfor file under `src/`;
+  363 files and 2,505,213 bytes total
+- File-manifest SHA-256:
+  `40a3805d92ecd6bd1318db842c8c78e05595e48345b46c5e9e21ef01cd7a0bce`
 
 | File | SHA-256 |
 |---|---|
@@ -21,10 +25,12 @@ snapshot `/Users/josh/Downloads/rms-master`.
 | `NEWS` | `84cd6605bee5ec3c7314533e89f6a5bfb0429038140438462389ea1566f5c912` |
 | `copyright` | `c12bef243759f6ce1078c448535eeaa26e2889fa8456c5ff43b43202f5af8e75` |
 
-Verified locally on 2026-09-17. The snapshot is not a Git checkout, so no commit
-identifier is asserted. Phase 0 must produce and review a deterministic hash
-manifest covering every reference file and match the snapshot to an immutable R
-package artifact.
+Verified locally on 2026-09-17. Although the snapshot is not a Git checkout, a
+recursive comparison excluding Git metadata found it byte-identical to upstream
+commit `a4e4a305a029090e737562fb4d35bdb705db7d63`, committed 2026-09-14. Upstream
+had no `8.2-0` tag at verification time, so the commit and complete file manifest
+jointly define the immutable source. See
+`reference/manifests/rms-8.2-0-inventory.json` and ADR-003.
 
 ## Use policy
 

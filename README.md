@@ -6,6 +6,9 @@ Strategies workflow—design metadata, estimation, inference, prediction,
 validation, calibration, and graphics—with statistical fidelity and a
 Python-native API.
 
+The project is distributed internally as `holocron-rms` and imported as
+`holocron`. No external package has been published.
+
 The repository is in early implementation. The first qualified vertical slice
 covers explicit-knot restricted cubic spline design and classical ordinary
 least squares. Both are checked against committed outputs from a Dockerized R

@@ -1,6 +1,6 @@
 # Independent Python Implementation of `rms`: Production Project Plan
 
-**Status:** Proposed  
+**Status:** Active — Phase 0 complete for private development
 **Plan date:** 2026-09-17  
 **Reference implementation:** Frank Harrell's R package `rms`  
 **Project name:** `holocron`  
@@ -18,12 +18,20 @@ The project will create an **independent Python implementation of `rms`** that r
 
 This is a multi-year scientific-software program, not an ordinary package port. The local `rms-master` snapshot exports more than one hundred symbols and has a large S3 method surface spanning linear, binary, ordinal, random-effects ordinal, survival, generalized least-squares, quantile, censored-response, validation, calibration, and graphics workflows. A credible full-fidelity effort requires statistical methodologists, numerical software engineers, independent verification, and a staged release strategy.
 
-The first blocking decision is licensing and implementation provenance. `rms` is licensed GPL (version 2 or later), while the production project template defaults to proprietary licensing and rejects GPL dependencies. The local `rms-master` tree will be used to inventory behavior, public interfaces, test scenarios, native numerical components, known defects, and edge cases. It must not be mechanically translated or copied into the Python implementation by default. Before implementation, legal/license review must approve the intended distribution license and one of these independent-development controls:
+Phase 0 selected an isolated, independently authored implementation path. `rms`
+is licensed GPL (version 2 or later), while Holocron currently remains private
+and proprietary. The local `rms-master` tree is used to inventory observable
+behavior, public interfaces, test scenarios, native numerical components, known
+defects, and edge cases. It must not be mechanically translated or copied into
+the Python implementation. ADR-001 approves private implementation work while
+external distribution remains blocked pending qualified license/provenance
+review. The longer-term distribution decision may select one of these controls:
 
 1. **Source-informed, GPL-compatible implementation:** engineers may study the GPL source in detail, but Python code remains independently designed and written; any adapted material is identified, attributed, and handled under compatible terms; or
 2. **Separated specification/implementation workflow:** source reviewers use `rms-master` to produce behavioral specifications and oracle cases, while implementers work from those specifications, public method literature, and black-box outputs rather than translating R or Fortran code.
 
-No code scaffolding, package naming, or public repository creation should precede approval of that policy. In either path, the product remains an independent Python implementation rather than an R bridge.
+In either path, the product remains an independent Python implementation rather
+than an R bridge.
 
 ## 2. Source baseline and authority
 
@@ -40,7 +48,11 @@ This plan applies the repository and scientific-Python practices from the local 
 - [Release readiness checklist](../production-project-template/checklists/RELEASE_READINESS.md)
 - [Agent working agreement](../production-project-template/AGENTS.md)
 
-The new repository should start from the template's `python-data-quant` archetype because it already contains reproducibility, numerical-boundary, evidence-artifact, and statistical-review controls. An ADR must document the changes required to make it a reusable scientific library rather than a single analysis application. Application-only dataset and CLI components should be removed unless they serve a supported library workflow.
+The repository was generated from the template's `python-data-quant` archetype
+because it already contains reproducibility, numerical-boundary,
+evidence-artifact, and statistical-review controls. Phase 1 will continue
+adapting it into a reusable scientific library. Application-only dataset and CLI
+components will be removed unless they serve a supported library workflow.
 
 ### 2.2 Local `rms-master` statistical source baseline
 
@@ -58,12 +70,18 @@ Snapshot facts verified on 2026-09-17:
 
 - package version `8.2-0`, dated 2026-09-11;
 - R 4.4 or later and Hmisc 5.3-0 or later;
-- 102 R source files, 108 manual files, 129 files under `inst/tests`, and 8 native source files;
+- 102 R source files, 108 manual files, 129 files under `inst/tests`, eight
+  top-level native source files, and one Ratfor source file;
 - `DESCRIPTION` SHA-256 `0528cd8378601f0b05a6e6fb3daa89e8dfc6211adb82246c2f4eb7dec12ae23b`;
 - `NAMESPACE` SHA-256 `db1cc94792cceaca300e00e38229580349b3d93ee18493f6097d7ae91f63ef6b`;
 - `NEWS` SHA-256 `84cd6605bee5ec3c7314533e89f6a5bfb0429038140438462389ea1566f5c912`.
 
-The snapshot is not a Git checkout, so these file hashes—not an inferred commit—identify the initial reference. Phase 0 must generate a complete, deterministic manifest of all reference files and retain it with the project evidence. The snapshot's `CLAUDE.md` still names version 8.1-1; `DESCRIPTION` and `NEWS` take precedence and establish version 8.2-0.
+The snapshot is not a Git checkout, but it is byte-identical outside Git metadata
+to upstream commit `a4e4a305a029090e737562fb4d35bdb705db7d63`. The deterministic
+363-file manifest has digest
+`40a3805d92ecd6bd1318db842c8c78e05595e48345b46c5e9e21ef01cd7a0bce`.
+The snapshot's `CLAUDE.md` still names version 8.1-1; `DESCRIPTION` and `NEWS`
+take precedence and establish version 8.2-0.
 
 The random-effects implementation notes also warn that native `.f90`/`init.c` copies may become stale across development machines. Therefore, source inspection alone cannot establish executable behavior: the snapshot must be built, its routine registrations checked, and its `inst/tests` cases run in the pinned oracle environment. Upstream test scripts may identify scenarios and expected behavior, but they must not be copied into the Python suite unless the approved license/provenance policy permits it; project-authored cases should otherwise be written from the specification and observed outputs.
 
@@ -75,7 +93,11 @@ Supplement the local snapshot with these primary sources:
 - *Regression Modeling Strategies*, second edition, and the maintained course notes
 - primary papers cited for the implemented estimators, diagnostics, calibration methods, and performance measures
 
-The local version 8.2-0 snapshot is the initial specification baseline. A moving upstream branch is not an acceptable release oracle. Phase 0 must determine whether the local snapshot corresponds to a released artifact, acquire that immutable artifact when available, record its digest, and pin every R dependency used by the oracle. Upstream `master` may be exercised separately as a non-blocking compatibility canary.
+The local version 8.2-0 snapshot and matching immutable commit are the initial
+specification baseline. No `8.2-0` upstream tag existed at Phase 0 verification,
+so commit plus file manifest define the artifact. A moving upstream branch is not
+an acceptable release oracle. Upstream `master` may be exercised separately as a
+non-blocking compatibility canary.
 
 ### 2.3 Source-of-truth precedence
 
@@ -152,11 +174,15 @@ The following ADRs are required before their dependent work begins.
 
 The licensing ADR must also decide how the template's GPL-denying dependency check is adapted. Test-only R oracle components must be isolated from Python runtime distributions, and their licenses and notices must remain visible in the reference environment.
 
+ADRs 001–004 are accepted for private development. The distribution gate in
+ADR-001 remains binding; acceptance is not legal clearance for publication.
+
 ## 5. Scope and compatibility tiers
 
 ### 5.1 Compatibility manifest
 
-Create `compatibility/rms-<version>.yaml` as the authoritative, machine-readable mapping. Each entry should include:
+Maintain `compatibility/rms-<version>.yaml` as the authoritative,
+machine-readable mapping. Each entry includes:
 
 - R symbol or S3 method;
 - Python public entry point;
@@ -559,6 +585,10 @@ Effort estimates are planning ranges, not commitments. They assume a core team o
 
 ### Phase 0 — Charter, legal path, and reference freeze (4–6 weeks)
 
+**Status:** Complete for private development on 2026-09-17. External
+distribution remains blocked, and vacant specialist-review roles prevent any
+capability from advancing beyond `experimental`.
+
 **Deliverables**
 
 - approved project brief and governance model;
@@ -816,13 +846,19 @@ Every epic should be decomposed into vertical, reviewable capabilities rather th
 
 ## 17. Approval record
 
-- Product owner:
-- Statistical lead:
-- Numerical lead:
-- Python/API lead:
-- Verification owner:
-- License reviewer:
-- Approved reference release and digest:
-- Selected implementation/license path:
-- Approved repository and package names:
-- Decision date:
+- Product owner: joshuamyers22
+- Statistical lead: vacant; required before capability promotion
+- Numerical lead: vacant; required before capability promotion
+- Python/API lead: joshuamyers22 (acting)
+- Verification owner: vacant; must be independent before capability promotion
+- License reviewer: vacant; required before external distribution
+- Approved reference release and digest: `rms` 8.2-0 at
+  `a4e4a305a029090e737562fb4d35bdb705db7d63`, file-manifest SHA-256
+  `40a3805d92ecd6bd1318db842c8c78e05595e48345b46c5e9e21ef01cd7a0bce`
+- Selected implementation/license path: independently authored Python with an
+  isolated test-only R oracle; private proprietary development; external
+  distribution blocked pending qualified review
+- Approved repository and package names: Holocron project,
+  `joshuamyers22/holocron` repository, `holocron` import, `holocron-rms`
+  prospective distribution
+- Decision date: 2026-09-17

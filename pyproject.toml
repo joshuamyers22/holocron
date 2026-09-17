@@ -1,5 +1,5 @@
 [project]
-name = "holocron"
+name = "holocron-rms"
 version = "0.1.0"
 description = "Independent Python implementation of the R rms package"
 readme = "README.md"
@@ -26,6 +26,29 @@ Changelog = "https://github.com/joshuamyers22/holocron/blob/main/CHANGELOG.md"
 requires = ["hatchling==1.32.0"]
 build-backend = "hatchling.build"
 
+[tool.hatch.build.targets.wheel]
+packages = ["src/holocron"]
+
+[tool.hatch.build.targets.sdist]
+include = [
+    "src/holocron",
+    "CHANGELOG.md",
+    "LICENSE",
+    "README.md",
+    "pyproject.toml",
+]
+exclude = [
+    "/data",
+    "/docs",
+    "/governance",
+    "/notebooks",
+    "/notes",
+    "/reference",
+    "/templates",
+    "/tests",
+    "/tools",
+]
+
 [dependency-groups]
 dev = ["pyright==1.1.411", "ruff==0.16.5"]
 
@@ -39,4 +62,4 @@ select = ["E", "F", "I", "B", "UP", "SIM"]
 [tool.pyright]
 pythonVersion = "3.11"
 typeCheckingMode = "strict"
-include = ["src", "tests"]
+include = ["src", "tests", "tools", "reference"]
