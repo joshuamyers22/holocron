@@ -30,9 +30,8 @@ ownership are separate controls; verify all three.
 
 ## GitHub account and repository
 
-- [ ] Confirm the intended account is authenticated. The configured
-      `joshuamyers22` account currently has an invalid GitHub CLI token. Repair
-      authentication before creating or pushing the remote. If more than one account is
+- [x] Confirm the intended account is authenticated. The repository was created
+      with the authenticated `joshuamyers22` account. If more than one account is
       available, select the correct one before creating or connecting the
       repository:
 
@@ -42,7 +41,7 @@ ownership are separate controls; verify all three.
   gh auth setup-git
   ```
 
-- [ ] Create the GitHub repository under that account or an explicitly approved
+- [x] Create the GitHub repository under that account or an explicitly approved
       organization, or connect the existing repository as `origin`. Choose
       visibility deliberately; private is the safe default for new work:
 
@@ -54,7 +53,7 @@ ownership are separate controls; verify all three.
   `git remote add origin URL`. Do not replace an existing remote until its owner
   and purpose have been verified.
 
-- [ ] Verify that the authenticated account can access the same canonical
+- [x] Verify that the authenticated account can access the same canonical
       repository named by `origin`:
 
   ```sh

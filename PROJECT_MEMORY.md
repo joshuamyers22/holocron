@@ -40,4 +40,3 @@ No verified trap is recorded.
 | Key | Unresolved question or next evidence | Owner | Review by |
 |---|---|---|---|
 | `license-provenance` | Approve ADR-001 before statistical implementation or external distribution. | joshuamyers22 | Before Phase 1 implementation |
-| `github-remote` | Create and push the GitHub repository after `gh` authentication is repaired. | joshuamyers22 | 2026-09-17 |
