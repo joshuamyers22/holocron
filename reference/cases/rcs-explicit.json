@@ -4,6 +4,7 @@
   "description": "Explicit-knot restricted cubic spline design matrix.",
   "expected_output": "rcs-explicit.json",
   "comparison_profile": "deterministic-transform-v1",
+  "qualification_stage": "python-parity",
   "operation": "rcs",
   "x": [-3, -2, -1, 0, 1, 2, 3, 4, 5, 6, 7],
   "knots": [-2, 0, 3, 6]

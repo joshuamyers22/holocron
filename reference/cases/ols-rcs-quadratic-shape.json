@@ -1,0 +1,12 @@
+{
+  "schema_version": "holocron-oracle-case/v1",
+  "case_id": "ols-rcs-quadratic-shape",
+  "description": "Spline OLS fit to a curved U-shaped response.",
+  "expected_output": "ols-rcs-quadratic-shape.json",
+  "comparison_profile": "well-conditioned-ols-v1",
+  "qualification_stage": "python-parity",
+  "operation": "ols_rcs",
+  "x": [-4, -3.2, -2.5, -1.8, -1, -0.2, 0.6, 1.4, 2.2, 3, 3.8, 4.6],
+  "y": [8.4, 5.5, 3.5, 1.9, 0.8, 0.2, 0.5, 1.3, 2.8, 4.9, 7.6, 11.0],
+  "knots": [-3.2, -1, 1.4, 3.8]
+}

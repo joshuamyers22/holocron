@@ -1,0 +1,13 @@
+{
+  "schema_version": "holocron-oracle-case/v1",
+  "case_id": "lrm-rcs-asymmetric",
+  "description": "Binary logistic spline fit with asymmetric covariate spacing.",
+  "expected_output": "lrm-rcs-asymmetric.json",
+  "comparison_profile": "binary-logistic-v1",
+  "qualification_stage": "oracle-baseline",
+  "operation": "lrm",
+  "basis": "rcs",
+  "x": [-2, -1.5, -1, -0.5, 0, 0.4, 0.8, 1.3, 2, 3, 4.5, 6, 8, 11, -1.8, 0.2, 1.7, 5, 9, 13],
+  "y": [0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 1, 1, 1, 1, 0, 0, 1, 0, 1, 1],
+  "knots": [-1, 0.4, 3, 9]
+}

@@ -4,5 +4,6 @@
   "description": "Verify the complete identity of the frozen R oracle.",
   "expected_output": "oracle-environment.json",
   "comparison_profile": "oracle-health-v1",
+  "qualification_stage": "environment",
   "operation": "health"
 }

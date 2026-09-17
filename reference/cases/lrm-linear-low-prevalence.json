@@ -1,0 +1,12 @@
+{
+  "schema_version": "holocron-oracle-case/v1",
+  "case_id": "lrm-linear-low-prevalence",
+  "description": "Binary logistic fit with low event prevalence and overlap.",
+  "expected_output": "lrm-linear-low-prevalence.json",
+  "comparison_profile": "binary-logistic-v1",
+  "qualification_stage": "oracle-baseline",
+  "operation": "lrm",
+  "basis": "linear",
+  "x": [-4, -3, -2, -1, 0, 1, 2, 3, 4, -3.5, -2.5, -1.5, -0.5, 0.5, 1.5, 2.5, 3.5, 4.5],
+  "y": [0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 1, 0, 0, 1, 0, 1]
+}

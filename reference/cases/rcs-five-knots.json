@@ -1,0 +1,11 @@
+{
+  "schema_version": "holocron-oracle-case/v1",
+  "case_id": "rcs-five-knots",
+  "description": "Five-knot restricted cubic spline with interior observations.",
+  "expected_output": "rcs-five-knots.json",
+  "comparison_profile": "deterministic-transform-v1",
+  "qualification_stage": "python-parity",
+  "operation": "rcs",
+  "x": [-6, -4, -3, -2, -1, 0, 1, 2, 3, 4, 6],
+  "knots": [-4, -2, 0, 2, 4]
+}

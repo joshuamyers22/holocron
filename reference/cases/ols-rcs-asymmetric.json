@@ -1,0 +1,12 @@
+{
+  "schema_version": "holocron-oracle-case/v1",
+  "case_id": "ols-rcs-asymmetric",
+  "description": "Spline OLS fit using asymmetric covariate spacing.",
+  "expected_output": "ols-rcs-asymmetric.json",
+  "comparison_profile": "well-conditioned-ols-v1",
+  "qualification_stage": "python-parity",
+  "operation": "ols_rcs",
+  "x": [-2, -1, -0.5, 0, 0.4, 1, 2, 3.5, 5, 7, 10, 14],
+  "y": [-1.2, -0.5, 0.1, 0.6, 0.9, 1.8, 2.9, 4.1, 5.0, 5.9, 7.2, 9.1],
+  "knots": [-1, 0.4, 3.5, 10]
+}

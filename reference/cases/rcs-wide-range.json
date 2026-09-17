@@ -1,0 +1,11 @@
+{
+  "schema_version": "holocron-oracle-case/v1",
+  "case_id": "rcs-wide-range",
+  "description": "Restricted cubic spline spanning a wide numeric range.",
+  "expected_output": "rcs-wide-range.json",
+  "comparison_profile": "deterministic-transform-v1",
+  "qualification_stage": "python-parity",
+  "operation": "rcs",
+  "x": [-100, -50, -20, 0, 10, 30, 60, 100, 150],
+  "knots": [-50, 0, 30, 100]
+}

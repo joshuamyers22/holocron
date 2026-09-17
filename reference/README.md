@@ -19,7 +19,9 @@ is never called at runtime by the `holocron` package.
 Every file under `cases/` validates against
 `../schemas/oracle-case.schema.json`. A case declares a stable ID, description,
 expected-output file, named comparison profile, and one allowlisted data-only
-oracle operation. Every committed fixture under `expected/` validates against
+oracle operation. It also labels whether the case is environment evidence,
+independent Python parity, or a frozen oracle baseline for a deferred model
+family. Every committed fixture under `expected/` validates against
 `../schemas/oracle-output.schema.json` and records the pinned `rms` version,
 commit, and protocol version that produced it. Cross-document validation also
 requires case IDs, operations, protocol versions, filenames, vector lengths,
@@ -29,8 +31,8 @@ Named field-aware policies live in `tolerances.json` and validate against
 `../schemas/tolerance-policy.schema.json`. Structure, metadata, names, indices,
 and unlisted values compare exactly. Approximate comparison is enabled only for
 explicit JSON Pointer-like paths, where `*` matches one object key or array
-index. The initial profiles distinguish deterministic design values,
-coefficients and predictions, covariance matrices, and exact oracle identity.
+index. The profiles distinguish deterministic design values, model coefficients
+and predictions, covariance matrices, survival estimates, and exact oracle identity.
 They remain Phase 1 pilot tolerances pending the cross-platform tolerance ADR.
 
 `contracts.py` is the shared implementation used by both the independent Python
@@ -60,9 +62,11 @@ make reference-source-check RMS_SOURCE=/absolute/path/to/rms-master
 `make oracle-check` discovers every committed case, validates its case and output
 schemas, executes it through the live container, applies its named comparison
 profile, and emits validated evidence. Normal Python tests independently compute
-the same results and use the same profiles against those outputs; they do not
-invoke Docker or R. `make reference-metadata` validates every schema, policy,
-fixture, and cross-document link without Docker and runs in ordinary CI.
+the 12 implemented spline-design and spline-OLS results and use the same
+profiles against those outputs; they do not invoke Docker or R. The remaining
+13 statistical cases are oracle baselines for deferred logistic, ordinal, and
+survival implementations. `make reference-metadata` validates every schema,
+policy, fixture, and cross-document link without Docker and runs in ordinary CI.
 
 `make frozen-environments` is the Docker-free CI gate for the committed Python
 and R environment contracts. `make frozen-environments-live` additionally fails
@@ -85,3 +89,8 @@ To add a case:
 3. add an independent Python test that uses the shared comparator;
 4. link the case and profile from the compatibility manifest; and
 5. run `make check` and `make oracle-check` before review.
+
+Candidate fixtures can be generated into `.work/candidate-expected/` with
+`uv run --frozen python -m reference.generate_expected`. The explicit
+`--accept` flag writes them to `reference/expected/`; all generated fixtures
+still require review and the full live-oracle gate.

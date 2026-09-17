@@ -101,6 +101,83 @@
         "degrees_of_freedom",
         "sigma"
       ]
+    },
+    {
+      "title": "Binary logistic regression output",
+      "allOf": [
+        {"$ref": "#/$defs/modelFitOutput"},
+        {
+          "properties": {
+            "operation": {"const": "lrm"},
+            "response": {"$ref": "#/$defs/integerVector"},
+            "fitted_probability": {"$ref": "#/$defs/numericVector"}
+          },
+          "required": ["operation", "response", "fitted_probability"]
+        }
+      ]
+    },
+    {
+      "title": "Ordinal regression output",
+      "allOf": [
+        {"$ref": "#/$defs/modelFitOutput"},
+        {
+          "properties": {
+            "operation": {"const": "orm"},
+            "family": {"enum": ["logistic", "probit", "loglog", "cloglog", "cauchit"]},
+            "response": {"$ref": "#/$defs/numericVector"},
+            "response_levels": {"$ref": "#/$defs/numericVector"},
+            "probability_names": {"$ref": "#/$defs/nameVector"},
+            "fitted_probabilities": {"$ref": "#/$defs/numericMatrix"}
+          },
+          "required": ["operation", "family", "response", "response_levels", "probability_names", "fitted_probabilities"]
+        }
+      ]
+    },
+    {
+      "title": "Cox proportional hazards output",
+      "allOf": [
+        {"$ref": "#/$defs/survivalFitOutput"},
+        {
+          "properties": {
+            "operation": {"const": "cph"},
+            "method": {"enum": ["efron", "breslow"]}
+          },
+          "required": ["operation", "method"]
+        }
+      ]
+    },
+    {
+      "title": "Parametric survival output",
+      "allOf": [
+        {"$ref": "#/$defs/survivalFitOutput"},
+        {
+          "properties": {
+            "operation": {"const": "psm"},
+            "distribution": {"enum": ["weibull", "exponential"]},
+            "scale": {"type": "number", "exclusiveMinimum": 0}
+          },
+          "required": ["operation", "distribution", "scale"]
+        }
+      ]
+    },
+    {
+      "title": "Nonparametric survival output",
+      "properties": {
+        "ok": {"const": true},
+        "protocol_version": {"const": "1"},
+        "operation": {"const": "npsurv"},
+        "estimator": {"const": "kaplan-meier"},
+        "observations": {"type": "number", "minimum": 1},
+        "time": {"$ref": "#/$defs/numericVector"},
+        "n_risk": {"$ref": "#/$defs/numericVector"},
+        "n_event": {"$ref": "#/$defs/numericVector"},
+        "n_censor": {"$ref": "#/$defs/numericVector"},
+        "survival": {"$ref": "#/$defs/numericVector"},
+        "standard_error": {"$ref": "#/$defs/numericVector"},
+        "lower": {"$ref": "#/$defs/numericVector"},
+        "upper": {"$ref": "#/$defs/numericVector"}
+      },
+      "required": ["ok", "protocol_version", "operation", "estimator", "observations", "time", "n_risk", "n_event", "n_censor", "survival", "standard_error", "lower", "upper"]
     }
   ],
   "unevaluatedProperties": false,
@@ -201,6 +278,59 @@
       "type": "array",
       "minItems": 1,
       "items": {"type": "string", "minLength": 1}
+    },
+    "integerVector": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"type": "integer"}
+    },
+    "modelFitOutput": {
+      "type": "object",
+      "properties": {
+        "ok": {"const": true},
+        "protocol_version": {"const": "1"},
+        "basis": {"enum": ["linear", "rcs"]},
+        "knots": {"type": "array", "items": {"type": "number"}},
+        "coefficient_names": {"$ref": "#/$defs/nameVector"},
+        "coefficients": {
+          "type": "object",
+          "minProperties": 1,
+          "additionalProperties": {"type": "number"}
+        },
+        "covariance_names": {"$ref": "#/$defs/nameVector"},
+        "covariance": {"$ref": "#/$defs/numericMatrix"},
+        "design_names": {"$ref": "#/$defs/nameVector"},
+        "design": {"$ref": "#/$defs/numericMatrix"},
+        "linear_predictors": {"$ref": "#/$defs/numericVector"},
+        "deviance": {"$ref": "#/$defs/numericVector"}
+      },
+      "required": ["ok", "protocol_version", "basis", "knots", "coefficient_names", "coefficients", "covariance_names", "covariance", "design_names", "design", "linear_predictors", "deviance"]
+    },
+    "survivalFitOutput": {
+      "type": "object",
+      "properties": {
+        "ok": {"const": true},
+        "protocol_version": {"const": "1"},
+        "basis": {"enum": ["linear", "rcs"]},
+        "knots": {"type": "array", "items": {"type": "number"}},
+        "coefficient_names": {"$ref": "#/$defs/nameVector"},
+        "coefficients": {
+          "type": "object",
+          "minProperties": 1,
+          "additionalProperties": {"type": "number"}
+        },
+        "covariance_names": {"$ref": "#/$defs/nameVector"},
+        "covariance": {"$ref": "#/$defs/numericMatrix"},
+        "design_names": {"$ref": "#/$defs/nameVector"},
+        "design": {"$ref": "#/$defs/numericMatrix"},
+        "linear_predictors": {"$ref": "#/$defs/numericVector"},
+        "log_likelihood": {"$ref": "#/$defs/numericVector"},
+        "evaluation_x": {"$ref": "#/$defs/numericVector"},
+        "evaluation_linear_predictors": {"$ref": "#/$defs/numericVector"},
+        "evaluation_times": {"$ref": "#/$defs/numericVector"},
+        "predicted_survival": {"$ref": "#/$defs/numericMatrix"}
+      },
+      "required": ["ok", "protocol_version", "basis", "knots", "coefficient_names", "coefficients", "covariance_names", "covariance", "design_names", "design", "linear_predictors", "log_likelihood", "evaluation_x", "evaluation_linear_predictors", "evaluation_times", "predicted_survival"]
     }
   }
 }

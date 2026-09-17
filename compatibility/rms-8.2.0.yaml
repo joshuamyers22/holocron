@@ -519,9 +519,12 @@
       "milestone": "Phase 4-5",
       "status": "deferred",
       "owner": "joshuamyers22",
-      "oracle_cases": [],
-      "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "oracle_cases": [
+        "cph-breslow-rcs",
+        "cph-efron-linear"
+      ],
+      "tolerance_profile": "cox-model-v1",
+      "known_differences": "Oracle baselines captured; independent Python implementation and parity qualification remain deferred."
     },
     {
       "id": "export:cr.setup",
@@ -792,9 +795,14 @@
       "milestone": "Phase 2-3",
       "status": "deferred",
       "owner": "joshuamyers22",
-      "oracle_cases": [],
-      "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "oracle_cases": [
+        "lrm-linear-balanced",
+        "lrm-linear-low-prevalence",
+        "lrm-rcs-asymmetric",
+        "lrm-rcs-nonlinear"
+      ],
+      "tolerance_profile": "binary-logistic-v1",
+      "known_differences": "Oracle baselines captured; independent Python implementation and parity qualification remain deferred."
     },
     {
       "id": "export:lrm.fit",
@@ -909,9 +917,12 @@
       "milestone": "Phase 4-5",
       "status": "deferred",
       "owner": "joshuamyers22",
-      "oracle_cases": [],
-      "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "oracle_cases": [
+        "npsurv-delayed-censoring",
+        "npsurv-kaplan-meier"
+      ],
+      "tolerance_profile": "nonparametric-survival-v1",
+      "known_differences": "Oracle baselines captured; independent Python implementation and parity qualification remain deferred."
     },
     {
       "id": "export:ols",
@@ -923,7 +934,12 @@
       "status": "experimental",
       "owner": "joshuamyers22",
       "oracle_cases": [
-        "ols-rcs-explicit"
+        "ols-rcs-asymmetric",
+        "ols-rcs-explicit",
+        "ols-rcs-five-knots",
+        "ols-rcs-fractional",
+        "ols-rcs-linear-signal",
+        "ols-rcs-quadratic-shape"
       ],
       "tolerance_profile": "well-conditioned-ols-v1",
       "known_differences": "Initial narrow API; full rms contract remains deferred."
@@ -989,9 +1005,13 @@
       "milestone": "Phase 4-5",
       "status": "deferred",
       "owner": "joshuamyers22",
-      "oracle_cases": [],
-      "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "oracle_cases": [
+        "orm-cloglog-rcs",
+        "orm-logistic-three-level",
+        "orm-probit-four-level"
+      ],
+      "tolerance_profile": "ordinal-model-v1",
+      "known_differences": "Oracle baselines captured; independent Python implementation and parity qualification remain deferred."
     },
     {
       "id": "export:orm.fit",
@@ -1262,9 +1282,12 @@
       "milestone": "Phase 4-5",
       "status": "deferred",
       "owner": "joshuamyers22",
-      "oracle_cases": [],
-      "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "oracle_cases": [
+        "psm-exponential-rcs",
+        "psm-weibull-linear"
+      ],
+      "tolerance_profile": "parametric-survival-v1",
+      "known_differences": "Oracle baselines captured; independent Python implementation and parity qualification remain deferred."
     },
     {
       "id": "export:rcs",
@@ -1276,7 +1299,12 @@
       "status": "experimental",
       "owner": "joshuamyers22",
       "oracle_cases": [
-        "rcs-explicit"
+        "rcs-asymmetric",
+        "rcs-explicit",
+        "rcs-five-knots",
+        "rcs-fractional",
+        "rcs-three-knots",
+        "rcs-wide-range"
       ],
       "tolerance_profile": "deterministic-transform-v1",
       "known_differences": "Initial narrow API; full rms contract remains deferred."

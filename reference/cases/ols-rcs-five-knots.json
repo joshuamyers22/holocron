@@ -1,0 +1,12 @@
+{
+  "schema_version": "holocron-oracle-case/v1",
+  "case_id": "ols-rcs-five-knots",
+  "description": "Full-rank OLS fit with a five-knot spline basis.",
+  "expected_output": "ols-rcs-five-knots.json",
+  "comparison_profile": "well-conditioned-ols-v1",
+  "qualification_stage": "python-parity",
+  "operation": "ols_rcs",
+  "x": [-6, -5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5, 6, 7],
+  "y": [-2.5, -1.4, -0.8, 0.0, 1.2, 2.0, 2.7, 3.1, 3.4, 3.8, 4.6, 5.8, 7.5, 9.3],
+  "knots": [-5, -2, 0, 3, 6]
+}

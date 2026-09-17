@@ -1,0 +1,11 @@
+{
+  "schema_version": "holocron-oracle-case/v1",
+  "case_id": "rcs-asymmetric",
+  "description": "Restricted cubic spline with unevenly spaced positive knots.",
+  "expected_output": "rcs-asymmetric.json",
+  "comparison_profile": "deterministic-transform-v1",
+  "qualification_stage": "python-parity",
+  "operation": "rcs",
+  "x": [-1, 0, 0.5, 1, 2, 4, 7, 9, 12],
+  "knots": [0, 1, 4, 10]
+}

@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import unittest
-from pathlib import Path
 from typing import cast
 
 import numpy as np
@@ -9,9 +8,13 @@ import numpy as np
 from holocron.design import RestrictedCubicSplineSpec
 from holocron.exceptions import InputValidationError
 from reference.contracts import (
+    CASES,
+    EXPECTED,
     JsonValue,
     compare_json,
+    load_json,
     output_payload,
+    require_object,
     validate_case_pair,
 )
 
@@ -51,28 +54,37 @@ class RestrictedCubicSplineSpecTests(unittest.TestCase):
         self.assertEqual(basis.shape, (3, 3))
         np.testing.assert_array_equal(basis[:, 0], values)
 
-    def test_matches_rms_oracle_fixture(self) -> None:
-        repository = Path(__file__).resolve().parents[1]
-        case, expected, policy = validate_case_pair(
-            repository / "reference/cases/rcs-explicit.json",
-            repository / "reference/expected/rcs-explicit.json",
-        )
-        knots = tuple(cast(list[float], case["knots"]))
-        spec = RestrictedCubicSplineSpec(knots)
-        x = cast(list[float], case["x"])
-        basis = spec.transform(x)
-        actual: dict[str, JsonValue] = {
-            "ok": True,
-            "protocol_version": "1",
-            "operation": "rcs",
-            "x": cast(JsonValue, x),
-            "knots": cast(JsonValue, list(spec.knots)),
-            "nonlinear_mask": cast(JsonValue, list(spec.nonlinear_mask)),
-            "nonlinear_columns": cast(JsonValue, list(spec.nonlinear_columns)),
-            "column_names": ["x", "x'", "x''"],
-            "basis": cast(JsonValue, basis.tolist()),
-        }
-        compare_json(actual, output_payload(expected), policy).require_match()
+    def test_matches_all_rms_oracle_fixtures(self) -> None:
+        case_paths = [
+            path
+            for path in sorted(CASES.glob("*.json"))
+            if require_object(load_json(path), name=str(path)).get("operation") == "rcs"
+        ]
+        self.assertEqual(len(case_paths), 6)
+        for case_path in case_paths:
+            raw_case = require_object(load_json(case_path), name=str(case_path))
+            with self.subTest(case_id=raw_case["case_id"]):
+                case, expected, policy = validate_case_pair(
+                    case_path, EXPECTED / str(raw_case["expected_output"])
+                )
+                knots = tuple(cast(list[float], case["knots"]))
+                spec = RestrictedCubicSplineSpec(knots)
+                x = cast(list[float], case["x"])
+                basis = spec.transform(x)
+                actual: dict[str, JsonValue] = {
+                    "ok": True,
+                    "protocol_version": "1",
+                    "operation": "rcs",
+                    "x": cast(JsonValue, x),
+                    "knots": cast(JsonValue, list(spec.knots)),
+                    "nonlinear_mask": cast(JsonValue, list(spec.nonlinear_mask)),
+                    "nonlinear_columns": cast(JsonValue, list(spec.nonlinear_columns)),
+                    "column_names": cast(
+                        JsonValue, list(cast(list[str], expected["column_names"]))
+                    ),
+                    "basis": cast(JsonValue, basis.tolist()),
+                }
+                compare_json(actual, output_payload(expected), policy).require_match()
 
 
 if __name__ == "__main__":

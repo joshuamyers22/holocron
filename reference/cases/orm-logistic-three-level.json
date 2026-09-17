@@ -1,0 +1,13 @@
+{
+  "schema_version": "holocron-oracle-case/v1",
+  "case_id": "orm-logistic-three-level",
+  "description": "Three-level proportional-odds ordinal logistic fit.",
+  "expected_output": "orm-logistic-three-level.json",
+  "comparison_profile": "ordinal-model-v1",
+  "qualification_stage": "oracle-baseline",
+  "operation": "orm",
+  "basis": "linear",
+  "family": "logistic",
+  "x": [-3, -2, -1, 0, 1, 2, 3, -2.5, -1.5, -0.5, 0.5, 1.5, 2.5, 3.5, -3.5, 0.2, 2.2, 4],
+  "y": [1, 1, 1, 2, 2, 3, 3, 1, 2, 1, 2, 2, 3, 3, 2, 1, 2, 3]
+}

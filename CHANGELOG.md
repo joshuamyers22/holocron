@@ -30,3 +30,7 @@ Notable changes are recorded here using semantic versioning.
 - Formalized versioned oracle case, output, tolerance-policy, and parity-evidence
   schemas; the Python and live R checks now share named field-aware comparison
   profiles and emit hashed evidence records.
+- Expanded the Phase 1 oracle corpus to 25 statistical cases spanning spline
+  design, OLS, binary logistic, ordinal, Cox, parametric survival, and
+  Kaplan–Meier workflows; 12 design/OLS cases run independent Python parity and
+  13 later-family cases are labeled frozen oracle baselines.

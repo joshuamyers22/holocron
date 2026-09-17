@@ -3,12 +3,14 @@ from __future__ import annotations
 import copy
 import tempfile
 import unittest
+from collections import Counter
 from datetime import UTC, datetime
 from pathlib import Path
 from typing import cast
 
 from reference.contracts import (
     CASE_SCHEMA,
+    CASES,
     ROOT,
     ContractValidationError,
     JsonValue,
@@ -33,7 +35,32 @@ class ParityContractTests(unittest.TestCase):
         self.payload = output_payload(self.expected)
 
     def test_all_schemas_policies_and_fixtures_are_valid(self) -> None:
-        self.assertEqual(validate_repository_contracts(), 3)
+        self.assertEqual(validate_repository_contracts(), 26)
+
+    def test_phase_one_corpus_has_declared_breadth_and_qualification(self) -> None:
+        cases = [
+            cast(dict[str, JsonValue], load_json(path)) for path in CASES.glob("*.json")
+        ]
+        operations = Counter(str(case["operation"]) for case in cases)
+        stages = Counter(str(case["qualification_stage"]) for case in cases)
+
+        self.assertEqual(
+            operations,
+            {
+                "health": 1,
+                "rcs": 6,
+                "ols_rcs": 6,
+                "lrm": 4,
+                "orm": 3,
+                "cph": 2,
+                "psm": 2,
+                "npsurv": 2,
+            },
+        )
+        self.assertEqual(
+            stages,
+            {"environment": 1, "python-parity": 12, "oracle-baseline": 13},
+        )
 
     def test_policy_applies_field_specific_numeric_tolerances(self) -> None:
         actual = copy.deepcopy(self.payload)

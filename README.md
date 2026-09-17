@@ -15,7 +15,10 @@ analysis, inference, prediction, or clinical decisions.
 
 The first qualified vertical slice implements explicit-knot restricted cubic
 spline design and classical full-rank ordinary least squares. Both are checked
-against committed outputs from a Dockerized R oracle. Compatibility is claimed
+across 12 independent parity cases against committed outputs from a Dockerized
+R oracle. Another 13 versioned logistic, ordinal, and survival cases are frozen
+as oracle baselines for later implementation and are not current parity claims.
+Compatibility is claimed
 only for capabilities and support envelopes backed by the
 [compatibility manifest](https://github.com/joshuamyers22/holocron/blob/main/compatibility/rms-8.2.0.yaml).
 

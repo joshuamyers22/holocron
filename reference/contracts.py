@@ -380,7 +380,7 @@ def _leaf_paths(value: JsonValue, path: tuple[str, ...] = ()) -> list[tuple[str,
 def output_payload(output: dict[str, JsonValue]) -> dict[str, JsonValue]:
     """Return the raw oracle response represented by a committed fixture."""
     response = output.get("response")
-    if response is not None:
+    if isinstance(response, dict):
         return require_object(response, name="output.response")
     return {key: value for key, value in output.items() if key not in FIXTURE_METADATA}
 
@@ -389,7 +389,7 @@ def validate_actual_output(
     actual: dict[str, JsonValue], expected: dict[str, JsonValue]
 ) -> None:
     """Validate a raw oracle response by attaching its committed fixture metadata."""
-    if expected.get("operation") == "health" or "response" in expected:
+    if isinstance(expected.get("response"), dict):
         fixture = {key: value for key, value in expected.items() if key != "response"}
         fixture["response"] = actual
     else:
@@ -419,14 +419,58 @@ def validate_case_pair(
     payload = output_payload(output)
     if case["operation"] != payload.get("operation"):
         raise ContractValidationError(f"{case_path}: operation does not match output")
+    for field in (
+        "basis",
+        "knots",
+        "family",
+        "method",
+        "distribution",
+        "estimator",
+        "evaluation_x",
+        "evaluation_times",
+    ):
+        if field in case and case[field] != payload.get(field):
+            raise ContractValidationError(f"{case_path}: {field} does not match output")
+    if case["operation"] == "rcs" and case["x"] != payload.get("x"):
+        raise ContractValidationError(f"{case_path}: x does not match output")
+    if case["operation"] in {"lrm", "orm"} and case["y"] != payload.get("response"):
+        raise ContractValidationError(f"{case_path}: response does not match output")
     reference = require_object(output["reference"], name="output.reference")
     if reference["protocol_version"] != payload.get("protocol_version"):
         raise ContractValidationError(f"{case_path}: protocol versions do not match")
-    if case["operation"] == "ols_rcs":
+    operation = case["operation"]
+    if operation in {"ols_rcs", "lrm", "orm"}:
         x = require_array(case["x"], name="case.x")
         y = require_array(case["y"], name="case.y")
         if len(x) != len(y):
             raise ContractValidationError(f"{case_path}: x and y lengths differ")
+    if operation in {"cph", "psm"}:
+        lengths = {
+            name: len(require_array(case[name], name=f"case.{name}"))
+            for name in ("x", "time", "event")
+        }
+        if len(set(lengths.values())) != 1:
+            raise ContractValidationError(
+                f"{case_path}: x, time, and event lengths differ"
+            )
+    if operation == "npsurv":
+        time = require_array(case["time"], name="case.time")
+        event = require_array(case["event"], name="case.event")
+        if len(time) != len(event):
+            raise ContractValidationError(f"{case_path}: time and event lengths differ")
+    basis = case.get("basis")
+    if basis == "rcs" and "knots" not in case:
+        raise ContractValidationError(f"{case_path}: rcs basis requires knots")
+    if basis == "linear" and "knots" in case:
+        raise ContractValidationError(
+            f"{case_path}: linear basis must not declare knots"
+        )
+    if operation == "orm":
+        levels = set(cast(list[int | float], case["y"]))
+        if len(levels) < 3:
+            raise ContractValidationError(
+                f"{case_path}: ordinal response requires at least three levels"
+            )
     if "knots" in case:
         knots = require_array(case["knots"], name="case.knots")
         numeric_knots = [float(cast(int | float, knot)) for knot in knots]

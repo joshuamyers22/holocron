@@ -1,0 +1,12 @@
+{
+  "schema_version": "holocron-oracle-case/v1",
+  "case_id": "lrm-linear-balanced",
+  "description": "Balanced binary logistic fit with a linear predictor.",
+  "expected_output": "lrm-linear-balanced.json",
+  "comparison_profile": "binary-logistic-v1",
+  "qualification_stage": "oracle-baseline",
+  "operation": "lrm",
+  "basis": "linear",
+  "x": [-3, -2, -1, 0, 1, 2, 3, -3, -2, -1, 0, 1, 2, 3],
+  "y": [0, 0, 0, 0, 1, 1, 1, 0, 1, 0, 1, 0, 1, 1]
+}

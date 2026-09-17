@@ -34,14 +34,22 @@ provided.
 - `make oracle-check` executes every case against the pinned isolated R image,
   validates the live response shape, applies the shared named profile, and emits
   evidence before enforcing the result.
-- The accepted initial corpus contains oracle health, explicit-knot restricted
-  cubic spline design, and full-rank OLS with spline design and prediction.
+- The accepted corpus contains one environment-health case and 25 statistical
+  cases: six restricted-cubic-spline designs, six full-rank spline OLS fits,
+  four binary logistic fits, three ordinal fits, two Cox fits, two parametric
+  survival fits, and two Kaplan–Meier estimates.
+- The 12 design and OLS cases are recomputed by the independent Python
+  implementation in ordinary tests. The 13 logistic, ordinal, and survival
+  cases are explicitly labeled `oracle-baseline`; they define versioned inputs
+  and frozen reference behavior without claiming Python parity before those
+  model families exist.
 
 ## Boundaries
 
-This accepts the parity-laboratory infrastructure, not the final numerical
-tolerances or Phase 1 case breadth. The current numeric rules are named pilot
-profiles. Cross-platform and conditioning evidence plus an approved tolerance
-ADR remain required before those thresholds become capability acceptance
-criteria. The R oracle and contract code are development assets and are excluded
-from Holocron distributions and runtime behavior.
+This accepts the parity-laboratory infrastructure and Phase 1 corpus breadth,
+not final numerical tolerances or parity for unimplemented model families. The
+current numeric rules are named pilot profiles. Cross-platform and conditioning
+evidence plus an approved tolerance ADR remain required before those thresholds
+become capability acceptance criteria. The R oracle and contract code are
+development assets and are excluded from Holocron distributions and runtime
+behavior.

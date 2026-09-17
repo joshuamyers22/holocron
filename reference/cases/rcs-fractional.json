@@ -1,0 +1,11 @@
+{
+  "schema_version": "holocron-oracle-case/v1",
+  "case_id": "rcs-fractional",
+  "description": "Restricted cubic spline with fractional values and knots.",
+  "expected_output": "rcs-fractional.json",
+  "comparison_profile": "deterministic-transform-v1",
+  "qualification_stage": "python-parity",
+  "operation": "rcs",
+  "x": [-1.25, -0.75, -0.1, 0.25, 0.8, 1.4, 2.1, 2.8, 3.5],
+  "knots": [-0.75, 0.25, 1.4, 2.8]
+}

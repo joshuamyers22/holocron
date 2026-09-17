@@ -261,12 +261,50 @@ def compatibility_entry(name: str, kind: str) -> dict[str, object]:
     tolerance_profile = None
     if name == "rcs" and kind == "export":
         python_entry = "holocron.design.RestrictedCubicSplineSpec"
-        cases = ["rcs-explicit"]
+        cases = [
+            "rcs-asymmetric",
+            "rcs-explicit",
+            "rcs-five-knots",
+            "rcs-fractional",
+            "rcs-three-knots",
+            "rcs-wide-range",
+        ]
         tolerance_profile = "deterministic-transform-v1"
     elif name == "ols" and kind == "export":
         python_entry = "holocron.models.fit_ols"
-        cases = ["ols-rcs-explicit"]
+        cases = [
+            "ols-rcs-asymmetric",
+            "ols-rcs-explicit",
+            "ols-rcs-five-knots",
+            "ols-rcs-fractional",
+            "ols-rcs-linear-signal",
+            "ols-rcs-quadratic-shape",
+        ]
         tolerance_profile = "well-conditioned-ols-v1"
+    elif kind == "export" and name == "lrm":
+        cases = [
+            "lrm-linear-balanced",
+            "lrm-linear-low-prevalence",
+            "lrm-rcs-asymmetric",
+            "lrm-rcs-nonlinear",
+        ]
+        tolerance_profile = "binary-logistic-v1"
+    elif kind == "export" and name == "orm":
+        cases = [
+            "orm-cloglog-rcs",
+            "orm-logistic-three-level",
+            "orm-probit-four-level",
+        ]
+        tolerance_profile = "ordinal-model-v1"
+    elif kind == "export" and name == "cph":
+        cases = ["cph-breslow-rcs", "cph-efron-linear"]
+        tolerance_profile = "cox-model-v1"
+    elif kind == "export" and name == "psm":
+        cases = ["psm-exponential-rcs", "psm-weibull-linear"]
+        tolerance_profile = "parametric-survival-v1"
+    elif kind == "export" and name == "npsurv":
+        cases = ["npsurv-delayed-censoring", "npsurv-kaplan-meier"]
+        tolerance_profile = "nonparametric-survival-v1"
     return {
         "id": f"{kind}:{name}",
         "r_symbol": name,
@@ -281,7 +319,12 @@ def compatibility_entry(name: str, kind: str) -> dict[str, object]:
         "known_differences": (
             "Initial narrow API; full rms contract remains deferred."
             if implemented
-            else "Not yet implemented."
+            else (
+                "Oracle baselines captured; independent Python implementation "
+                "and parity qualification remain deferred."
+                if cases
+                else "Not yet implemented."
+            )
         ),
     }
 

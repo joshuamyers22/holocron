@@ -12,25 +12,33 @@
       "type": "string",
       "pattern": "^[a-z0-9][a-z0-9-]*\\.json$"
     },
-    "comparison_profile": {"$ref": "#/$defs/identifier"}
+    "comparison_profile": {"$ref": "#/$defs/identifier"},
+    "qualification_stage": {
+      "enum": ["environment", "python-parity", "oracle-baseline"]
+    }
   },
   "required": [
     "schema_version",
     "case_id",
     "description",
     "expected_output",
-    "comparison_profile"
+    "comparison_profile",
+    "qualification_stage"
   ],
   "oneOf": [
     {
       "title": "Oracle environment health case",
-      "properties": {"operation": {"const": "health"}},
+      "properties": {
+        "operation": {"const": "health"},
+        "qualification_stage": {"const": "environment"}
+      },
       "required": ["operation"]
     },
     {
       "title": "Restricted cubic spline design case",
       "properties": {
         "operation": {"const": "rcs"},
+        "qualification_stage": {"const": "python-parity"},
         "x": {"$ref": "#/$defs/nonemptyNumericVector"},
         "knots": {"$ref": "#/$defs/knotVector"}
       },
@@ -40,11 +48,80 @@
       "title": "OLS with restricted cubic splines case",
       "properties": {
         "operation": {"const": "ols_rcs"},
+        "qualification_stage": {"const": "python-parity"},
         "x": {"$ref": "#/$defs/fitNumericVector"},
         "y": {"$ref": "#/$defs/fitNumericVector"},
         "knots": {"$ref": "#/$defs/knotVector"}
       },
       "required": ["operation", "x", "y", "knots"]
+    },
+    {
+      "title": "Binary logistic regression case",
+      "properties": {
+        "operation": {"const": "lrm"},
+        "qualification_stage": {"const": "oracle-baseline"},
+        "basis": {"$ref": "#/$defs/modelBasis"},
+        "x": {"$ref": "#/$defs/fitNumericVector"},
+        "y": {"$ref": "#/$defs/binaryVector"},
+        "knots": {"$ref": "#/$defs/knotVector"}
+      },
+      "required": ["operation", "basis", "x", "y"]
+    },
+    {
+      "title": "Ordinal regression case",
+      "properties": {
+        "operation": {"const": "orm"},
+        "qualification_stage": {"const": "oracle-baseline"},
+        "basis": {"$ref": "#/$defs/modelBasis"},
+        "family": {"enum": ["logistic", "probit", "loglog", "cloglog", "cauchit"]},
+        "x": {"$ref": "#/$defs/fitNumericVector"},
+        "y": {"$ref": "#/$defs/fitNumericVector"},
+        "knots": {"$ref": "#/$defs/knotVector"}
+      },
+      "required": ["operation", "basis", "family", "x", "y"]
+    },
+    {
+      "title": "Cox proportional hazards case",
+      "properties": {
+        "operation": {"const": "cph"},
+        "qualification_stage": {"const": "oracle-baseline"},
+        "basis": {"$ref": "#/$defs/modelBasis"},
+        "method": {"enum": ["efron", "breslow"]},
+        "x": {"$ref": "#/$defs/fitNumericVector"},
+        "time": {"$ref": "#/$defs/positiveNumericVector"},
+        "event": {"$ref": "#/$defs/binaryVector"},
+        "knots": {"$ref": "#/$defs/knotVector"},
+        "evaluation_x": {"$ref": "#/$defs/nonemptyNumericVector"},
+        "evaluation_times": {"$ref": "#/$defs/positiveNumericVector"}
+      },
+      "required": ["operation", "basis", "method", "x", "time", "event", "evaluation_x", "evaluation_times"]
+    },
+    {
+      "title": "Parametric survival case",
+      "properties": {
+        "operation": {"const": "psm"},
+        "qualification_stage": {"const": "oracle-baseline"},
+        "basis": {"$ref": "#/$defs/modelBasis"},
+        "distribution": {"enum": ["weibull", "exponential"]},
+        "x": {"$ref": "#/$defs/fitNumericVector"},
+        "time": {"$ref": "#/$defs/positiveNumericVector"},
+        "event": {"$ref": "#/$defs/binaryVector"},
+        "knots": {"$ref": "#/$defs/knotVector"},
+        "evaluation_x": {"$ref": "#/$defs/nonemptyNumericVector"},
+        "evaluation_times": {"$ref": "#/$defs/positiveNumericVector"}
+      },
+      "required": ["operation", "basis", "distribution", "x", "time", "event", "evaluation_x", "evaluation_times"]
+    },
+    {
+      "title": "Nonparametric survival case",
+      "properties": {
+        "operation": {"const": "npsurv"},
+        "qualification_stage": {"const": "oracle-baseline"},
+        "estimator": {"const": "kaplan-meier"},
+        "time": {"$ref": "#/$defs/positiveNumericVector"},
+        "event": {"$ref": "#/$defs/binaryVector"}
+      },
+      "required": ["operation", "estimator", "time", "event"]
     }
   ],
   "unevaluatedProperties": false,
@@ -63,6 +140,21 @@
       "minItems": 3,
       "items": {"type": "number"}
     },
+    "positiveNumericVector": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"type": "number", "exclusiveMinimum": 0}
+    },
+    "binaryVector": {
+      "type": "array",
+      "minItems": 3,
+      "items": {"enum": [0, 1]},
+      "allOf": [
+        {"contains": {"const": 0}},
+        {"contains": {"const": 1}}
+      ]
+    },
+    "modelBasis": {"enum": ["linear", "rcs"]},
     "knotVector": {
       "type": "array",
       "minItems": 3,

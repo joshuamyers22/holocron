@@ -1,0 +1,12 @@
+{
+  "schema_version": "holocron-oracle-case/v1",
+  "case_id": "npsurv-delayed-censoring",
+  "description": "Kaplan-Meier estimate with censoring concentrated after early events.",
+  "expected_output": "npsurv-delayed-censoring.json",
+  "comparison_profile": "nonparametric-survival-v1",
+  "qualification_stage": "oracle-baseline",
+  "operation": "npsurv",
+  "estimator": "kaplan-meier",
+  "time": [1, 2, 3, 3, 4, 5, 6, 7, 8, 8, 9, 10, 11, 12, 14, 15],
+  "event": [1, 1, 1, 0, 1, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 0]
+}

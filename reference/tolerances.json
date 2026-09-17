@@ -45,6 +45,67 @@
           "rule": {"mode": "numeric", "absolute": 1e-8, "relative": 1e-7}
         }
       ]
+    },
+    "binary-logistic-v1": {
+      "description": "Field-aware tolerances for binary logistic coefficients, covariance, predictors, and probabilities.",
+      "default": {"mode": "exact"},
+      "rules": [
+        {"path": "/design/*/*", "rule": {"mode": "numeric", "absolute": 1e-12, "relative": 1e-12}},
+        {"path": "/coefficients/*", "rule": {"mode": "numeric", "absolute": 1e-8, "relative": 1e-7}},
+        {"path": "/covariance/*/*", "rule": {"mode": "numeric", "absolute": 1e-7, "relative": 1e-6}},
+        {"path": "/linear_predictors/*", "rule": {"mode": "numeric", "absolute": 1e-8, "relative": 1e-7}},
+        {"path": "/deviance/*", "rule": {"mode": "numeric", "absolute": 1e-8, "relative": 1e-7}},
+        {"path": "/fitted_probability/*", "rule": {"mode": "numeric", "absolute": 1e-8, "relative": 1e-7}}
+      ]
+    },
+    "ordinal-model-v1": {
+      "description": "Field-aware tolerances for ordinal coefficients, covariance, predictors, deviance, and fitted probabilities.",
+      "default": {"mode": "exact"},
+      "rules": [
+        {"path": "/design/*/*", "rule": {"mode": "numeric", "absolute": 1e-12, "relative": 1e-12}},
+        {"path": "/coefficients/*", "rule": {"mode": "numeric", "absolute": 1e-8, "relative": 1e-7}},
+        {"path": "/covariance/*/*", "rule": {"mode": "numeric", "absolute": 1e-7, "relative": 1e-6}},
+        {"path": "/linear_predictors/*", "rule": {"mode": "numeric", "absolute": 1e-8, "relative": 1e-7}},
+        {"path": "/deviance/*", "rule": {"mode": "numeric", "absolute": 1e-8, "relative": 1e-7}},
+        {"path": "/fitted_probabilities/*/*", "rule": {"mode": "numeric", "absolute": 1e-8, "relative": 1e-7}}
+      ]
+    },
+    "cox-model-v1": {
+      "description": "Field-aware tolerances for Cox fits and normalized survival predictions.",
+      "default": {"mode": "exact"},
+      "rules": [
+        {"path": "/design/*/*", "rule": {"mode": "numeric", "absolute": 1e-12, "relative": 1e-12}},
+        {"path": "/coefficients/*", "rule": {"mode": "numeric", "absolute": 1e-8, "relative": 1e-7}},
+        {"path": "/covariance/*/*", "rule": {"mode": "numeric", "absolute": 1e-7, "relative": 1e-6}},
+        {"path": "/linear_predictors/*", "rule": {"mode": "numeric", "absolute": 1e-8, "relative": 1e-7}},
+        {"path": "/log_likelihood/*", "rule": {"mode": "numeric", "absolute": 1e-8, "relative": 1e-7}},
+        {"path": "/evaluation_linear_predictors/*", "rule": {"mode": "numeric", "absolute": 1e-8, "relative": 1e-7}},
+        {"path": "/predicted_survival/*/*", "rule": {"mode": "numeric", "absolute": 1e-8, "relative": 1e-7}}
+      ]
+    },
+    "parametric-survival-v1": {
+      "description": "Field-aware tolerances for parametric survival fits and normalized survival predictions.",
+      "default": {"mode": "exact"},
+      "rules": [
+        {"path": "/design/*/*", "rule": {"mode": "numeric", "absolute": 1e-12, "relative": 1e-12}},
+        {"path": "/coefficients/*", "rule": {"mode": "numeric", "absolute": 1e-8, "relative": 1e-7}},
+        {"path": "/covariance/*/*", "rule": {"mode": "numeric", "absolute": 1e-7, "relative": 1e-6}},
+        {"path": "/linear_predictors/*", "rule": {"mode": "numeric", "absolute": 1e-8, "relative": 1e-7}},
+        {"path": "/log_likelihood/*", "rule": {"mode": "numeric", "absolute": 1e-8, "relative": 1e-7}},
+        {"path": "/scale", "rule": {"mode": "numeric", "absolute": 1e-8, "relative": 1e-7}},
+        {"path": "/evaluation_linear_predictors/*", "rule": {"mode": "numeric", "absolute": 1e-8, "relative": 1e-7}},
+        {"path": "/predicted_survival/*/*", "rule": {"mode": "numeric", "absolute": 1e-8, "relative": 1e-7}}
+      ]
+    },
+    "nonparametric-survival-v1": {
+      "description": "Exact risk-set counts and times with numeric tolerance for estimated survival uncertainty.",
+      "default": {"mode": "exact"},
+      "rules": [
+        {"path": "/survival/*", "rule": {"mode": "numeric", "absolute": 1e-10, "relative": 1e-9}},
+        {"path": "/standard_error/*", "rule": {"mode": "numeric", "absolute": 1e-10, "relative": 1e-9}},
+        {"path": "/lower/*", "rule": {"mode": "numeric", "absolute": 1e-10, "relative": 1e-9}},
+        {"path": "/upper/*", "rule": {"mode": "numeric", "absolute": 1e-10, "relative": 1e-9}}
+      ]
     }
   }
 }

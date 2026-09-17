@@ -1,0 +1,11 @@
+{
+  "schema_version": "holocron-oracle-case/v1",
+  "case_id": "rcs-three-knots",
+  "description": "Three-knot restricted cubic spline across both linear tails.",
+  "expected_output": "rcs-three-knots.json",
+  "comparison_profile": "deterministic-transform-v1",
+  "qualification_stage": "python-parity",
+  "operation": "rcs",
+  "x": [-5, -3, -2, -1, 0, 1, 2, 3, 5],
+  "knots": [-2, 0, 2]
+}

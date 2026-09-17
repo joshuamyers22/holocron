@@ -36,12 +36,14 @@ Git history provides the audit trail.
 | `public-api` | The installed package has no CLI; its root exposes only version plus `design`, `models`, and `exceptions`, and domain `__all__` declarations define the supported public names. | `src/holocron/__init__.py`; `docs/architecture/PACKAGE_STRUCTURE.md`; `tests/test_public_api.py` | 2026-09-17 |
 | `frozen-environments` | The canonical Python evidence environment is CPython 3.12.14 with uv 0.12.7 and a hashed dependency/build lock; the separate R oracle is frozen by source/base/repository identities, full health evidence, Linux/arm64 platform, and image ID. Static checks run in CI; oracle rebuilds require live identity and behavior checks. | `governance/PHASE_1_FROZEN_ENVIRONMENTS.md`; `docs/adr/ADR-012-frozen-environment-contract.md`; `environments/` | 2026-09-17 |
 | `parity-lab-contract` | Oracle cases, expected outputs, named field-aware tolerances, and emitted parity evidence use versioned JSON schemas. Exact comparison is the default; approximate rules are allowlisted by field path and shared by Python and live-R checks. | `governance/PHASE_1_PARITY_LAB_CONTRACT.md`; `schemas/`; `reference/contracts.py` | 2026-09-17 |
+| `phase-1-corpus` | The oracle corpus has 25 statistical cases across RCS design, OLS, binary logistic, ordinal, Cox, parametric survival, and Kaplan–Meier workflows, plus environment health. Twelve design/OLS cases have independent Python parity; 13 later-family cases are explicitly frozen oracle baselines, not parity claims. | `reference/cases/`; `reference/expected/`; `governance/PHASE_1_PARITY_LAB_CONTRACT.md` | 2026-09-17 |
 
 ## Verified traps and failed approaches
 
 | Key | Symptom and cause | Evidence or reproducer | Last verified |
 |---|---|---|---|
 | `hmisc-version` | Rocker's R 4.5.3 repository snapshot contains Hmisc 5.2-5, but rms 8.2-0 requires >=5.3-0; the oracle installs Hmisc 5.3-0 from pinned commit `778bd69d83961577be1f73fa1e36781bd3fd099f`. | `reference/r/Dockerfile`; `reference/expected/oracle-environment.json` | 2026-09-17 |
+| `npsurv-estimator-forwarding` | `rms::npsurv` 8.2-0 does not forward `...` to `survival::survfit`, so a requested alternate estimator would silently remain Kaplan–Meier; the Phase 1 oracle exposes Kaplan–Meier only. | `reference/r/oracle.R`; `reference/cases/npsurv-*.json` | 2026-09-17 |
 | `hatch-editable` | Hatchling's non-isolated editable build additionally requires `editables`; both are explicit exact development dependencies so no hidden build resolution occurs. | `pyproject.toml`; `uv.lock`; `Makefile` | 2026-09-17 |
 
 ## Open threads

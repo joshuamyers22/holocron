@@ -1,0 +1,12 @@
+{
+  "schema_version": "holocron-oracle-case/v1",
+  "case_id": "ols-rcs-fractional",
+  "description": "Spline OLS fit with fractional inputs and responses.",
+  "expected_output": "ols-rcs-fractional.json",
+  "comparison_profile": "well-conditioned-ols-v1",
+  "qualification_stage": "python-parity",
+  "operation": "ols_rcs",
+  "x": [-1.5, -1.1, -0.7, -0.2, 0.2, 0.7, 1.1, 1.6, 2.2, 2.9, 3.7, 4.5],
+  "y": [0.2, 0.5, 0.7, 1.0, 1.4, 2.0, 2.3, 2.7, 3.0, 3.2, 3.8, 4.6],
+  "knots": [-1.1, 0.2, 1.6, 3.7]
+}

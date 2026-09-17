@@ -7,7 +7,7 @@ import json
 from pathlib import Path
 from typing import cast
 
-from reference.contracts import validate_repository_contracts
+from reference.contracts import CASES, validate_repository_contracts
 
 ROOT = Path(__file__).resolve().parents[1]
 INVENTORY_PATH = ROOT / "reference/manifests/rms-8.2-0-inventory.json"
@@ -66,6 +66,7 @@ def main() -> None:
     }
     capabilities = require_list(compatibility["capabilities"], name="capabilities")
     actual_ids: set[str] = set()
+    linked_cases: set[str] = set()
     for index, raw_capability in enumerate(capabilities):
         if not isinstance(raw_capability, dict):
             raise TypeError(f"capabilities[{index}] must be an object")
@@ -78,17 +79,23 @@ def main() -> None:
             raise ValueError(f"invalid status for {identifier}")
         if not capability["owner"]:
             raise ValueError(f"missing owner for {identifier}")
+        cases = require_list(capability["oracle_cases"], name=f"{identifier}.cases")
         if capability["status"] in {"experimental", "implemented"}:
             if (
                 not capability["python_entry_point"]
                 or not capability["tolerance_profile"]
             ):
                 raise ValueError(f"incomplete evidence metadata for {identifier}")
-            cases = require_list(capability["oracle_cases"], name=f"{identifier}.cases")
             if not cases:
                 raise ValueError(f"missing oracle cases for {identifier}")
+        if cases:
+            if not capability["tolerance_profile"]:
+                raise ValueError(f"missing oracle profile for {identifier}")
             for case in cases:
                 case_name = str(case)
+                if case_name in linked_cases:
+                    raise ValueError(f"oracle case linked more than once: {case_name}")
+                linked_cases.add(case_name)
                 case_path = ROOT / f"reference/cases/{case_name}.json"
                 if not case_path.is_file():
                     raise ValueError(
@@ -109,6 +116,13 @@ def main() -> None:
         extra = sorted(actual_ids - expected_ids)
         raise ValueError(
             f"compatibility coverage mismatch; missing={missing}, extra={extra}"
+        )
+    statistical_cases = {path.stem for path in CASES.glob("*.json")} - {"health"}
+    if linked_cases != statistical_cases:
+        missing = sorted(statistical_cases - linked_cases)
+        extra = sorted(linked_cases - statistical_cases)
+        raise ValueError(
+            f"compatibility case coverage mismatch; missing={missing}, extra={extra}"
         )
     if compatibility["capability_count"] != len(capabilities):
         raise ValueError("capability count does not match entries")
