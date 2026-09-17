@@ -69,7 +69,7 @@ blocked pending qualified license and provenance review.
 
 ## Development
 
-The canonical development environment uses CPython 3.12.14 and uv 0.12.5;
+The canonical development environment uses CPython 3.12.14 and uv 0.12.7;
 package metadata permits Python 3.11 or later. Both tool versions and the full
 dependency/build graph are frozen and checked as described in the
 [environment contract](https://github.com/joshuamyers22/holocron/blob/main/docs/reproducibility/FROZEN_ENVIRONMENTS.md).

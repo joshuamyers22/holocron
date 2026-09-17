@@ -131,7 +131,7 @@ def check_python_environment() -> None:
         ".github/workflows/release.yml",
     ):
         workflow = (ROOT / relative_workflow).read_text()
-        if 'version: "0.12.5"' not in workflow or "run: make setup" not in workflow:
+        if 'version: "0.12.7"' not in workflow or "run: make setup" not in workflow:
             raise ValueError(f"{relative_workflow} does not use the frozen setup")
 
     lock_path = ROOT / str(lock["path"])

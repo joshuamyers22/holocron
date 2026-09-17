@@ -8,7 +8,7 @@ statistical case and result.
 
 `pyproject.toml` declares supported runtime ranges and `uv.lock` is the sole
 exact development lock. The canonical environment is CPython 3.12.14 with uv
-0.12.5. Install it with `make setup`; CI uses the same two-stage frozen operation
+0.12.7. Install it with `make setup`; CI uses the same two-stage frozen operation
 and locked, non-isolated build backend. The installed package currently depends
 only on NumPy. The canonical table boundary and broader estimator-backend policy
 await ADR-006 and ADR-007, so dataframe and model libraries are not implicit

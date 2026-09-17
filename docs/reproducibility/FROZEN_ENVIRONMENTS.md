@@ -42,7 +42,7 @@ matrix.
 The canonical Python contract is:
 
 - CPython 3.12.14, selected exactly by `.python-version`;
-- uv 0.12.5, enforced by `[tool.uv].required-version` and pinned in GitHub
+- uv 0.12.7, enforced by `[tool.uv].required-version` and pinned in GitHub
   Actions;
 - exact runtime, development, editable-build, and build-backend packages in
   `uv.lock` and the Python environment manifest;

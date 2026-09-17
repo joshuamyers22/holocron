@@ -19,7 +19,7 @@ to generate current evidence.
 
 ## Decision
 
-- Freeze the canonical environment to CPython 3.12.14 and uv 0.12.5.
+- Freeze the canonical environment to CPython 3.12.14 and uv 0.12.7.
 - Enforce the uv version through project configuration and use its hashed lock as
   the complete Python resolution.
 - Include Hatchling and its editable-build dependency in the development lock.

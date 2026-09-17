@@ -9,12 +9,12 @@
     "version_file_sha256": "f50159fad3f4319868eb38717b91d55843c41e9803014c8de05e116a6d0bcfdc"
   },
   "uv": {
-    "version": "0.12.5",
-    "required_version": "==0.12.5"
+    "version": "0.12.7",
+    "required_version": "==0.12.7"
   },
   "dependency_lock": {
     "path": "uv.lock",
-    "sha256": "a0bf5b756274bbb634ef91ac572eaa71738695b51c41cc95d315031088afe024"
+    "sha256": "bc5c6f21eaf29ef7e3913cde06592a50cebe17b31b8dab41153e9bb52ffe96e3"
   },
   "build": {
     "backend": "hatchling.build",
@@ -30,8 +30,8 @@
     "packaging": "26.3",
     "pathspec": "1.1.1",
     "pluggy": "1.6.0",
-    "pyright": "1.1.411",
-    "ruff": "0.16.5",
+    "pyright": "1.1.414",
+    "ruff": "0.16.7",
     "tomlkit": "0.15.1",
     "trove-classifiers": "2026.6.1.19",
     "typing-extensions": "4.16.0"

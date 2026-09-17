@@ -11,7 +11,7 @@ The Phase 1 “frozen Python and R environments” deliverable is complete for t
 current private-development compatibility line. The accepted contracts are
 defined by ADR-012 and the two machine-readable manifests under `environments/`.
 
-The canonical Python evidence environment is CPython 3.12.14 with uv 0.12.5 and
+The canonical Python evidence environment is CPython 3.12.14 with uv 0.12.7 and
 the exact hashed `uv.lock` resolution. Runtime, development, editable-install,
 and package-build dependencies are closed over the lock. Project builds are
 non-isolated so the build frontend cannot create an unrecorded second resolution.
