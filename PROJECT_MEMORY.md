@@ -21,7 +21,7 @@ Git history provides the audit trail.
 
 | Key | Decision and rationale | Evidence | Last verified |
 |---|---|---|---|
-| `production-template` | The repository is generated from the production template's `python-data-quant` archetype and will be adapted into a scientific library. | `README.md`; `PROJECT_PLAN.md` | 2026-09-17 |
+| `production-template` | The repository was generated from the production template's `python-data-quant` archetype, then adapted into a typed scientific library; reusable controls remain while the template CLIs, market-data publisher, generic analysis/validation flows, and demo data were removed. | `docs/adr/ADR-011-production-scaffold-adaptation.md`; `docs/architecture/PACKAGE_STRUCTURE.md` | 2026-09-17 |
 | `docker-oracle` | R `rms` runs only in a pinned Docker oracle with JSON I/O; Python implementation code is original and R is not a runtime dependency. | `docs/adr/ADR-001-independent-oracle.md`; `reference/r/` | 2026-09-17 |
 | `package-identity` | Holocron uses repository/project name `holocron`, import name `holocron`, and prospective distribution name `holocron-rms` because `holocron` is occupied on PyPI. | `docs/adr/ADR-002-project-and-package-identity.md`; `pyproject.toml` | 2026-09-17 |
 | `compatibility-contract` | Compatibility is claimed per manifest entry; all 121 exports and 160 S3 methods have an owner/status, and only evidence-backed entries may advance beyond experimental. | `docs/adr/ADR-004-compatibility-contract.md`; `compatibility/rms-8.2.0.yaml` | 2026-09-17 |
@@ -33,6 +33,7 @@ Git history provides the audit trail.
 |---|---|---|---|
 | `first-slice` | Explicit-knot restricted cubic spline design and classical full-rank OLS pass deterministic parity fixtures from the live rms 8.2-0 oracle. | `src/holocron/design/splines.py`; `src/holocron/models/linear.py`; `reference/expected/` | 2026-09-17 |
 | `phase-0` | Phase 0 repository deliverables are complete for private development; vacant statistical, numerical, verification, and license-review roles block capability promotion and external distribution. | `PROJECT_PLAN.md`; `governance/GOVERNANCE.md` | 2026-09-17 |
+| `public-api` | The installed package has no CLI; its root exposes only version plus `design`, `models`, and `exceptions`, and domain `__all__` declarations define the supported public names. | `src/holocron/__init__.py`; `docs/architecture/PACKAGE_STRUCTURE.md`; `tests/test_public_api.py` | 2026-09-17 |
 
 ## Verified traps and failed approaches
 

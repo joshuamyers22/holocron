@@ -50,9 +50,10 @@ This plan applies the repository and scientific-Python practices from the local 
 
 The repository was generated from the template's `python-data-quant` archetype
 because it already contains reproducibility, numerical-boundary,
-evidence-artifact, and statistical-review controls. Phase 1 will continue
-adapting it into a reusable scientific library. Application-only dataset and CLI
-components will be removed unless they serve a supported library workflow.
+evidence-artifact, and statistical-review controls. The Phase 1 repository
+adaptation removed application-only dataset and CLI examples, established a
+typed scientific-library surface, and retained the applicable production
+controls. See ADR-011.
 
 ### 2.2 Local `rms-master` statistical source baseline
 
@@ -605,15 +606,19 @@ Independent-development and license/provenance policy is approved; the reference
 
 ### Phase 1 — Repository and parity laboratory (6–10 weeks)
 
+**Status:** In progress. The production-repository adaptation is complete; the
+remaining laboratory, parity-case, tolerance, documentation-site, and
+end-to-end evidence deliverables remain open.
+
 **Deliverables**
 
-- generated and adapted production repository;
-- frozen Python and R environments;
-- case schema, oracle runner, artifact schema, and comparator;
-- 20–30 vertical parity cases covering design, OLS, logistic, ordinal, and survival examples;
-- tolerance ADR based on a cross-platform pilot;
-- initial docs site and generated compatibility page;
-- clean artifact build and smoke tests.
+- [x] generated and adapted production repository;
+- [ ] frozen Python and R environments;
+- [ ] case schema, oracle runner, artifact schema, and comparator;
+- [ ] 20–30 vertical parity cases covering design, OLS, logistic, ordinal, and survival examples;
+- [ ] tolerance ADR based on a cross-platform pilot;
+- [ ] initial docs site and generated compatibility page;
+- [ ] clean artifact build and smoke tests.
 
 **Exit gate**
 

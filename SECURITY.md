@@ -14,7 +14,7 @@ escalation, supported-version, and disclosure timelines require review.
 Treat statistical model risk as a correctness and governance concern: preserve
 the approved sample and specification, restrict sensitive outputs, test leakage
 and unstable assumptions, and require review before a result affects capital,
-risk limits, client reporting, or automated decisions.
+clinical or regulatory decisions, client reporting, or automated actions.
 
 See `governance/THREAT_MODEL.md` for the current trust boundaries and abuse
 cases. Suspected GPL/provenance contamination is handled privately as a

@@ -8,17 +8,18 @@ from typing import cast
 import numpy as np
 
 from holocron.design import RestrictedCubicSplineSpec
+from holocron.exceptions import InputValidationError
 
 
 class RestrictedCubicSplineSpecTests(unittest.TestCase):
     def test_rejects_invalid_knots(self) -> None:
         for knots in ((0.0, 1.0), (0.0, 1.0, 1.0), (0.0, np.nan, 2.0)):
-            with self.subTest(knots=knots), self.assertRaises(ValueError):
+            with self.subTest(knots=knots), self.assertRaises(InputValidationError):
                 RestrictedCubicSplineSpec(knots)
 
     def test_rejects_nonfinite_values(self) -> None:
         spec = RestrictedCubicSplineSpec((-2.0, 0.0, 3.0, 6.0))
-        with self.assertRaises(ValueError):
+        with self.assertRaises(InputValidationError):
             spec.transform((0.0, np.inf))
 
     def test_linear_tails_have_constant_slope(self) -> None:

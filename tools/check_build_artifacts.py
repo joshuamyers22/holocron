@@ -18,6 +18,19 @@ FORBIDDEN_PARTS = {
     "tests",
     "tools",
 }
+REMOVED_TEMPLATE_MODULES = {
+    "analysis_cli.py",
+    "cli.py",
+    "dataset.py",
+    "dataset_cli.py",
+    "evidence.py",
+    "ingest.py",
+    "model.py",
+    "regression.py",
+    "time_validation_cli.py",
+    "validation.py",
+    "validation_evidence.py",
+}
 
 
 def project_identity() -> tuple[str, str]:
@@ -36,6 +49,8 @@ def reject_forbidden(names: list[str], *, artifact: str) -> None:
         parts = set(Path(name).parts)
         if parts & FORBIDDEN_PARTS or "rms-master" in name or name.endswith(".R"):
             raise ValueError(f"{artifact} contains forbidden reference content: {name}")
+        if Path(name).name in REMOVED_TEMPLATE_MODULES:
+            raise ValueError(f"{artifact} contains removed template module: {name}")
 
 
 def main() -> None:
@@ -59,8 +74,17 @@ def main() -> None:
     reject_forbidden(wheel_names, artifact=wheel.name)
     if "holocron/__init__.py" not in wheel_names:
         raise ValueError("wheel does not contain the holocron import package")
+    if "holocron/py.typed" not in wheel_names:
+        raise ValueError("wheel does not contain the PEP 561 marker")
+    if any(name.endswith(".dist-info/entry_points.txt") for name in wheel_names):
+        raise ValueError("library wheel unexpectedly declares console entry points")
     if f"Name: {distribution}\n" not in metadata:
         raise ValueError("wheel metadata has the wrong distribution name")
+    for removed_dependency in ("polars", "statsmodels"):
+        if f"requires-dist: {removed_dependency}" in metadata.lower():
+            raise ValueError(
+                f"wheel retains removed runtime dependency: {removed_dependency}"
+            )
     print(f"build artifacts verified: {sdist.name}, {wheel.name}")
 
 

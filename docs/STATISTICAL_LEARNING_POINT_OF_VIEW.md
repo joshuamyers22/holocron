@@ -2,7 +2,7 @@
 
 ## Status and intent
 
-This is an opinionated starting position for empirical quantitative work. It is
+This is an opinionated starting position for empirical scientific work. It is
 not a deterministic rulebook or a claim that one method is always correct. Make
 the project's prior beliefs visible, then challenge them with a clearer
 hypothesis, stronger evidence, or a real operating constraint.
@@ -20,8 +20,8 @@ independently.
 - Prefer an observable, attributable first objective with guardrail metrics.
   State where it is only a proxy; keep risk appetite and policy outside the model.
 - Start with a naive or domain heuristic and an interpretable statistical
-  baseline. Polars is the default tabular engine and Statsmodels is the default
-  statistical engine, but neither default chooses the appropriate model.
+  baseline. Select table and numerical backends only after their semantics and
+  support envelope are explicit; a software default cannot choose the model.
 - Earn complexity through repeated out-of-sample improvement after uncertainty,
   costs, impact, capacity, latency, failure behavior, and maintenance burden.
   Simplicity is a baseline and operating advantage, not an ideology.
@@ -35,10 +35,9 @@ independently.
 - Separate development and selection from final assessment. Once an evaluation
   influences the procedure, it is development evidence rather than an untouched
   final test.
-- For ordered financial data, generally prefer expanding, rolling, or blocked
-  time-forward evaluation with point-in-time inputs and label purging or embargo
-  where information sets overlap. Random folds remain possible when the estimand
-  and sampling mechanism make exchangeability defensible.
+- For longitudinal, clustered, or otherwise dependent data, use resampling units
+  and time ordering that preserve the estimand and information available at each
+  prediction point. Random folds require a defensible exchangeability argument.
 - Treat dependence, nonstationarity, feedback, crowding, and changing costs as
   risks to investigate, not universal axioms. Examine decision-relevant slices
   and report uncertainty and dispersion rather than only a pooled mean.
@@ -61,7 +60,7 @@ and operational review.
 For correct statistical implementation, use
 [the Bayesian regression guide](BAYESIAN_REGRESSION_IMPLEMENTATION.md).
 It emphasizes regression specification, priors, numerical computation, and
-verification, without drawing conclusions about applications to finance.
+verification without authorizing an application domain.
 
 1. What decision changes, and what is the cost of a wrong answer?
 2. Is the objective observable and aligned with net value after costs?

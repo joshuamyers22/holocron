@@ -58,10 +58,10 @@ copied into this repository; their hashes identify the reviewed inputs.
    domain authority is required. Report unresolved findings rather than looping until
    they disappear from the narrative.
 
-For safety, security, governance, financial logic, or release approval, an agent's own
-review is never the sole approval. Fresh context can reduce anchoring but does not prove
-independence or correctness. Executable evidence and accountable human/domain review
-remain authoritative.
+For safety, security, governance, consequential statistical logic, or release
+approval, an agent's own review is never the sole approval. Fresh context can
+reduce anchoring but does not prove independence or correctness. Executable
+evidence and accountable human/domain review remain authoritative.
 
 ## Budget by risk and uncertainty
 

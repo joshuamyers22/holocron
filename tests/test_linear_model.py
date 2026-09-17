@@ -8,12 +8,13 @@ from typing import cast
 import numpy as np
 
 from holocron.design import RestrictedCubicSplineSpec
+from holocron.exceptions import RankDeficiencyError
 from holocron.models import fit_ols
 
 
 class OlsTests(unittest.TestCase):
     def test_rejects_rank_deficient_design(self) -> None:
-        with self.assertRaisesRegex(ValueError, "full column rank"):
+        with self.assertRaisesRegex(RankDeficiencyError, "full column rank"):
             fit_ols(
                 (1.0, 2.0, 3.0, 4.0),
                 ((1.0, 2.0), (2.0, 4.0), (3.0, 6.0), (4.0, 8.0)),

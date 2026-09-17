@@ -9,14 +9,16 @@ from dataclasses import dataclass
 import numpy as np
 import numpy.typing as npt
 
+from holocron.exceptions import InputValidationError
+
 
 def _validated_vector(values: Iterable[float]) -> npt.NDArray[np.float64]:
     items = tuple(float(value) for value in values)
     array = np.asarray(items, dtype=np.float64)
     if array.ndim != 1:
-        raise ValueError("values must be one-dimensional")
+        raise InputValidationError("values must be one-dimensional")
     if not all(math.isfinite(value) for value in items):
-        raise ValueError("values must contain only finite numbers")
+        raise InputValidationError("values must contain only finite numbers")
     return array
 
 
@@ -38,13 +40,15 @@ class RestrictedCubicSplineSpec:
     def __post_init__(self) -> None:
         knots = _validated_vector(self.knots)
         if knots.size < 3:
-            raise ValueError("restricted cubic splines require at least three knots")
+            raise InputValidationError(
+                "restricted cubic splines require at least three knots"
+            )
         knot_values = tuple(float(value) for value in knots)
         if any(
             right <= left
             for left, right in zip(knot_values[:-1], knot_values[1:], strict=True)
         ):
-            raise ValueError("knots must be strictly increasing")
+            raise InputValidationError("knots must be strictly increasing")
         object.__setattr__(self, "knots", knot_values)
 
     @property

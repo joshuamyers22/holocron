@@ -9,6 +9,8 @@ from dataclasses import dataclass
 import numpy as np
 import numpy.typing as npt
 
+from holocron.exceptions import InputValidationError, RankDeficiencyError
+
 FloatMatrix = npt.NDArray[np.float64]
 FloatVector = npt.NDArray[np.float64]
 
@@ -16,23 +18,23 @@ FloatVector = npt.NDArray[np.float64]
 def _as_vector(values: Iterable[float], *, name: str) -> FloatVector:
     items = tuple(float(value) for value in values)
     if not items:
-        raise ValueError(f"{name} must not be empty")
+        raise InputValidationError(f"{name} must not be empty")
     if not all(math.isfinite(value) for value in items):
-        raise ValueError(f"{name} must contain only finite values")
+        raise InputValidationError(f"{name} must contain only finite values")
     return np.asarray(items, dtype=np.float64)
 
 
 def _as_matrix(values: Iterable[Iterable[float]], *, name: str) -> FloatMatrix:
     rows = tuple(tuple(float(value) for value in row) for row in values)
     if not rows:
-        raise ValueError(f"{name} must contain at least one row")
+        raise InputValidationError(f"{name} must contain at least one row")
     width = len(rows[0])
     if width == 0:
-        raise ValueError(f"{name} must contain at least one column")
+        raise InputValidationError(f"{name} must contain at least one column")
     if any(len(row) != width for row in rows):
-        raise ValueError(f"{name} rows must have equal lengths")
+        raise InputValidationError(f"{name} rows must have equal lengths")
     if not all(math.isfinite(value) for row in rows for value in row):
-        raise ValueError(f"{name} must contain only finite values")
+        raise InputValidationError(f"{name} must contain only finite values")
     return np.asarray(rows, dtype=np.float64)
 
 
@@ -69,7 +71,7 @@ class OlsResult:
         """Predict from feature columns in the original fitted order."""
         feature_matrix = _as_matrix(features, name="features")
         if feature_matrix.shape[1] != self.n_features:
-            raise ValueError(
+            raise InputValidationError(
                 f"features has {feature_matrix.shape[1]} columns; "
                 f"expected {self.n_features}"
             )
@@ -100,7 +102,9 @@ def fit_ols(
     y = _as_vector(response, name="response")
     feature_matrix = _as_matrix(features, name="features")
     if feature_matrix.shape[0] != y.size:
-        raise ValueError("response and features must have the same number of rows")
+        raise InputValidationError(
+            "response and features must have the same number of rows"
+        )
 
     names = (
         tuple(feature_names)
@@ -108,20 +112,22 @@ def fit_ols(
         else tuple(f"x{index + 1}" for index in range(feature_matrix.shape[1]))
     )
     if len(names) != feature_matrix.shape[1]:
-        raise ValueError("feature_names must match the number of feature columns")
+        raise InputValidationError(
+            "feature_names must match the number of feature columns"
+        )
     if any(not name for name in names):
-        raise ValueError("feature_names must not contain empty names")
+        raise InputValidationError("feature_names must not contain empty names")
     if len(set(names)) != len(names):
-        raise ValueError("feature_names must be unique")
+        raise InputValidationError("feature_names must be unique")
 
     design = _with_intercept(feature_matrix) if include_intercept else feature_matrix
     parameter_count = design.shape[1]
     if y.size <= parameter_count:
-        raise ValueError("OLS requires positive residual degrees of freedom")
+        raise InputValidationError("OLS requires positive residual degrees of freedom")
 
     rank = int(np.linalg.matrix_rank(design))
     if rank != parameter_count:
-        raise ValueError("OLS design matrix must have full column rank")
+        raise RankDeficiencyError("OLS design matrix must have full column rank")
 
     q_matrix, r_matrix = np.linalg.qr(design, mode="reduced")
     coefficients = np.linalg.solve(r_matrix, q_matrix.T @ y)

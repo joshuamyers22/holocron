@@ -7,20 +7,20 @@ requires-python = ">=3.11"
 license = "LicenseRef-Proprietary"
 dependencies = [
     "numpy>=2,<3",
-    "polars>=1.44.1,<2",
-    "statsmodels>=0.15,<0.16",
+]
+classifiers = [
+    "Development Status :: 2 - Pre-Alpha",
+    "Intended Audience :: Science/Research",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Typing :: Typed",
 ]
 
 [project.urls]
 Repository = "https://github.com/joshuamyers22/holocron"
 Issues = "https://github.com/joshuamyers22/holocron/issues"
 Changelog = "https://github.com/joshuamyers22/holocron/blob/main/CHANGELOG.md"
-
-[project.scripts]
-"holocron" = "holocron.cli:main"
-"holocron-regression" = "holocron.analysis_cli:main"
-"holocron-validate" = "holocron.time_validation_cli:main"
-"holocron-dataset" = "holocron.dataset_cli:main"
 
 [build-system]
 requires = ["hatchling==1.32.0"]

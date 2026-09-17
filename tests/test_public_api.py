@@ -1,0 +1,61 @@
+from __future__ import annotations
+
+import importlib.util
+import tomllib
+import unittest
+from importlib.resources import files
+from pathlib import Path
+from typing import cast
+
+import holocron
+from holocron import exceptions
+
+
+class PublicApiTests(unittest.TestCase):
+    def test_top_level_api_is_deliberately_small(self) -> None:
+        self.assertEqual(
+            holocron.__all__, ("__version__", "design", "exceptions", "models")
+        )
+        self.assertRegex(holocron.__version__, r"^\d+(?:\.\d+)+(?:[A-Za-z0-9.+-]*)$")
+
+    def test_import_and_distribution_versions_match(self) -> None:
+        repository = Path(__file__).resolve().parents[1]
+        document = cast(
+            dict[str, object],
+            tomllib.loads((repository / "pyproject.toml").read_text()),
+        )
+        project = cast(dict[str, object], document["project"])
+        self.assertEqual(holocron.__version__, project["version"])
+
+    def test_distribution_is_marked_as_typed(self) -> None:
+        self.assertTrue(files("holocron").joinpath("py.typed").is_file())
+
+    def test_public_errors_preserve_builtin_catch_categories(self) -> None:
+        with self.assertRaises(ValueError):
+            raise exceptions.InputValidationError("invalid input")
+        with self.assertRaises(ArithmeticError):
+            raise exceptions.NumericalError("numerical failure")
+        with self.assertRaises(NotImplementedError):
+            raise exceptions.UnsupportedFeatureError("unsupported")
+
+    def test_template_application_modules_are_not_shipped(self) -> None:
+        removed = (
+            "analysis_cli",
+            "cli",
+            "dataset",
+            "dataset_cli",
+            "evidence",
+            "ingest",
+            "model",
+            "regression",
+            "time_validation_cli",
+            "validation",
+            "validation_evidence",
+        )
+        for module in removed:
+            with self.subTest(module=module):
+                self.assertIsNone(importlib.util.find_spec(f"holocron.{module}"))
+
+
+if __name__ == "__main__":
+    unittest.main()

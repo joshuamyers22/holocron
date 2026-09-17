@@ -140,13 +140,10 @@ the evaluation split and all fitted preprocessing, and evaluate predictions
 against the declared target. BDA Chapters 6–7, with regression examples in
 Chapters 14–16.
 
-## Template integration
+## Holocron integration
 
 Complete the applicable fields in `templates/STATISTICAL_ANALYSIS_PLAN.md`.
-The generated quant starter currently implements Statsmodels OLS evidence and
-time validation. This guide does not add a Bayesian estimator or make those
-artifacts represent posterior inference. Any Bayesian implementation needs an
-explicit engine choice, result schema, and verification appropriate to the model.
-
-The template repository's `docs/NUMERICAL_SOURCE_REVIEW.md` records source hashes,
-reading maps, extraction limitations, and the separate Hull reference inventory.
+Holocron currently has no Bayesian estimator. This guide does not create one or
+make frequentist result contracts represent posterior inference. Any Bayesian
+implementation needs an explicit engine choice, result schema, and verification
+appropriate to the model, and it remains outside the initial `rms` scope.

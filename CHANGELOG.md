@@ -17,3 +17,9 @@ Notable changes are recorded here using semantic versioning.
   `holocron` as the import package.
 - Added complete oracle package/runtime metadata and whole-tree build
   verification.
+- Adapted the generated quantitative application scaffold into a typed
+  scientific library with explicit `design`, `models`, and `exceptions` public
+  namespaces.
+- Removed template-only CLIs, market-data publication, generic regression and
+  walk-forward examples, demo datasets, and their unused Polars/Statsmodels
+  dependencies.

@@ -27,8 +27,8 @@ selection. Link the approved version from the result, report, or model card.
 
 ## Model specification
 
-- Statsmodels class and locked version:
-- Polars feature pipeline and exact Polars-to-model boundary:
+- Estimator backend/solver and locked version:
+- Table-to-design boundary, dtype/null/order semantics, and adapter version:
 - Formula or ordered design-matrix columns:
 - Intercept, weights, offsets/exposure, fixed effects, and interactions:
 - Distribution/link, lag structure, seasonality, and stationarity assumptions:
@@ -42,9 +42,9 @@ selection. Link the approved version from the result, report, or model card.
 ## Bayesian regression implementation, when applicable
 
 Use `docs/BAYESIAN_REGRESSION_IMPLEMENTATION.md` for implementation details in
-the template repository or a generated quant project. Mark this section not
-applicable for a non-Bayesian analysis. These fields specify statistical
-implementation; they do not select financial applications.
+Holocron-related analysis. Mark this section not applicable for a non-Bayesian
+analysis. These fields specify statistical implementation; they do not select
+or authorize a consequential application.
 
 - Inference engine and locked version; exact model code and parameterization:
 - Likelihood, response support, link, offsets/exposures, and error covariance:

@@ -1,12 +1,12 @@
 # Project Brief
 
-- Status and scope: Approved for private Phase 0/1 development on 2026-09-17; external distribution and non-experimental statistical claims remain blocked
+- Status and scope: Phase 0 complete and Phase 1 active for private development as of 2026-09-17; external distribution and non-experimental statistical claims remain blocked
 - Problem and affected users: Python lacks an integrated equivalent of R's `rms`; biostatisticians, epidemiologists, statistical programmers, and scientific-library authors must assemble incomplete workflows across packages.
 - Measurable success criteria: Every claimed compatible capability is linked to a pinned R 8.2-0 oracle case, method-specific numerical tolerances, statistical simulation evidence, typed public results, executable documentation, and a reproducible release artifact.
 - Explicit non-goals: Runtime delegation to R; a thin `rpy2` wrapper; initial implementation of the separate `rmsb` package; silent method substitutions; claiming drop-in or full parity without manifest-backed evidence.
 - Runtime/deployment environment: Python 3.11+
-- Tabular engine: Polars; document any pandas interoperability exception in an ADR
-- Statistical engine: Owned Holocron contracts over NumPy/SciPy/Statsmodels or independently implemented numerical backends, selected only after parity qualification
+- Tabular engine: No canonical dataframe dependency until ADR-006; current public APIs accept typed iterables and NumPy arrays, with future adapters required to preserve dtype, missingness, order, and ownership explicitly
+- Statistical engine: Owned Holocron contracts; the experimental OLS slice uses NumPy QR, while broader NumPy/SciPy/Statsmodels or owned-backend policy remains subject to ADR-007 and parity qualification
 - Statistical-learning point-of-view departures and supporting evidence: Preserve Regression Modeling Strategies principles—pre-specification, flexible effects, shrinkage where justified, honest validation, and calibration—while replacing R-specific state and syntax with explicit immutable Python contracts
 - Decision objective, action, horizon, utility, guardrails, and proxy gaps: Enable reproducible model development, inference, and prediction; Holocron reports estimates and evidence but does not authorize clinical, regulatory, financial, or automated actions; each application owns its estimand, action policy, horizon, utility, and external-validity review
 - Heuristic and interpretable statistical baselines: Intercept-only, untransformed linear/logistic, and model-family null fits as applicable; each validation workflow must declare its baseline before evaluation
