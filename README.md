@@ -1,15 +1,17 @@
 # Holocron
 
-Holocron is a planned independent Python implementation of Frank Harrell's R
+Holocron is an independent Python implementation of Frank Harrell's R
 `rms` package. It aims to reproduce the integrated Regression Modeling
 Strategies workflow—design metadata, estimation, inference, prediction,
 validation, calibration, and graphics—with statistical fidelity and a
 Python-native API.
 
-The repository is currently a production scaffold and planning artifact. No
-`rms`-compatible estimator has been implemented or validated yet. The approved
-scope, milestones, parity program, and blocking license/provenance decision are
-defined in [PROJECT_PLAN.md](PROJECT_PLAN.md).
+The repository is in early implementation. The first qualified vertical slice
+covers explicit-knot restricted cubic spline design and classical ordinary
+least squares. Both are checked against committed outputs from a Dockerized R
+oracle. These APIs remain experimental and are not yet production-ready. The
+scope, milestones, and parity program are defined in
+[PROJECT_PLAN.md](PROJECT_PLAN.md).
 
 ## Reference sources
 
@@ -17,8 +19,25 @@ defined in [PROJECT_PLAN.md](PROJECT_PLAN.md).
 - Engineering source: `/Users/josh/Projects/production-project-template`
 
 The R source is GPL-licensed reference material. It is not copied into this
-repository. Implementation work must wait for the independent-development and
-distribution-license decision described in the project plan.
+repository. It enters a local, isolated Docker oracle as an external build
+context. Holocron code is independently written in Python under
+[ADR-001](docs/adr/ADR-001-independent-oracle.md). External distribution remains
+blocked pending final license and provenance review.
+
+## R oracle
+
+Build the oracle from the local source snapshot and inspect its environment:
+
+```sh
+make oracle-build RMS_SOURCE=/Users/josh/Downloads/rms-master
+make oracle-health
+make oracle-check
+```
+
+At runtime the oracle has no network, capabilities, or writable root filesystem.
+It accepts only versioned JSON operations; Holocron never calls R in production.
+See [reference/README.md](reference/README.md) for pinned identities and the
+two-stage oracle/independent-test workflow.
 
 ## Development
 
@@ -34,8 +53,8 @@ Holocron API is established.
 
 ## Current maturity
 
-Pre-implementation. Do not use this package for analysis, inference, prediction,
-or clinical decisions.
+Experimental and incomplete. Do not use this package for analysis, inference,
+prediction, or clinical decisions.
 
 <!-- The remaining generated-archetype documentation is retained temporarily. -->
 

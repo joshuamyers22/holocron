@@ -1,0 +1,27 @@
+{
+  "oracle_image": "holocron-rms-oracle:8.2-0",
+  "oracle_image_digest": "sha256:12e4fca5f76246ddffbb6d7e7f503a5756b93065126a7d66bfce8ac349a3387d",
+  "rms_description_sha256": "0528cd8378601f0b05a6e6fb3daa89e8dfc6211adb82246c2f4eb7dec12ae23b",
+  "hmisc_commit": "778bd69d83961577be1f73fa1e36781bd3fd099f",
+  "response": {
+    "ok": true,
+    "protocol_version": "1",
+    "operation": "health",
+    "r_version": "R version 4.5.3 (2026-03-11)",
+    "platform": "aarch64-unknown-linux-gnu",
+    "packages": {
+      "rms": "8.2.0",
+      "Hmisc": "5.3.0",
+      "survival": "3.8.6",
+      "Matrix": "1.7.4",
+      "SparseM": "1.84.2",
+      "quantreg": "6.1",
+      "ggplot2": "4.0.3",
+      "polspline": "1.1.25",
+      "multcomp": "1.4.30",
+      "jsonlite": "2.0.0"
+    },
+    "locale": "LC_CTYPE=en_US.UTF-8;LC_NUMERIC=C;LC_TIME=en_US.UTF-8;LC_COLLATE=en_US.UTF-8;LC_MONETARY=en_US.UTF-8;LC_MESSAGES=en_US.UTF-8;LC_PAPER=en_US.UTF-8;LC_NAME=C;LC_ADDRESS=C;LC_TELEPHONE=C;LC_MEASUREMENT=en_US.UTF-8;LC_IDENTIFICATION=C",
+    "timezone": "UTC"
+  }
+}
