@@ -208,27 +208,27 @@
       "id": "export:Penalty.matrix",
       "r_symbol": "Penalty.matrix",
       "kind": "export",
-      "python_entry_point": null,
+      "python_entry_point": "holocron.models.fit_penalized_ols",
       "tier": "D",
       "milestone": "Phase 8",
-      "status": "deferred",
+      "status": "experimental",
       "owner": "joshuamyers22",
-      "oracle_cases": [],
-      "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "oracle_cases": ["regularization-ols-linear", "regularization-lrm-linear"],
+      "tolerance_profile": "regularization-covariance-v1",
+      "known_differences": "Python accepts a non-negative scalar or named diagonal slope penalties directly in fit_penalized_ols and fit_penalized_lrm; categorical off-diagonal matrices and arbitrary dense penalty matrices remain deferred."
     },
     {
       "id": "export:Penalty.setup",
       "r_symbol": "Penalty.setup",
       "kind": "export",
-      "python_entry_point": null,
+      "python_entry_point": "holocron.models.fit_penalized_lrm",
       "tier": "D",
       "milestone": "Phase 8",
-      "status": "deferred",
+      "status": "experimental",
       "owner": "joshuamyers22",
-      "oracle_cases": [],
-      "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "oracle_cases": ["regularization-ols-linear", "regularization-lrm-linear"],
+      "tolerance_profile": "regularization-covariance-v1",
+      "known_differences": "Penalty setup is explicit by generated coefficient name rather than inferred from rms assume codes; only diagonal slope penalties are supported."
     },
     {
       "id": "export:Predict",
@@ -379,14 +379,14 @@
       "id": "export:bootcov",
       "r_symbol": "bootcov",
       "kind": "export",
-      "python_entry_point": null,
+      "python_entry_point": "holocron.models.bootstrap_covariance",
       "tier": "C",
       "milestone": "Phase 6",
-      "status": "deferred",
+      "status": "experimental",
       "owner": "joshuamyers22",
-      "oracle_cases": [],
-      "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "oracle_cases": ["regularization-glm-binomial-linear"],
+      "tolerance_profile": "covariance-resampling-v1",
+      "known_differences": "Supports iid row bootstrap covariance for current OLS, binomial Glm, and binary lrm fits, with a fixed NumPy seed or an auditable declared schedule; cluster bootstrap, failed-replicate skipping, coefficient persistence, intervals, and out-of-sample likelihood remain deferred."
     },
     {
       "id": "export:bootplot",
@@ -1378,14 +1378,14 @@
       "id": "export:robcov",
       "r_symbol": "robcov",
       "kind": "export",
-      "python_entry_point": null,
+      "python_entry_point": "holocron.models.robust_covariance",
       "tier": "C",
       "milestone": "Phase 6",
-      "status": "deferred",
+      "status": "experimental",
       "owner": "joshuamyers22",
-      "oracle_cases": [],
-      "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "oracle_cases": ["regularization-glm-binomial-linear"],
+      "tolerance_profile": "covariance-resampling-v1",
+      "known_differences": "Supports the uncorrected Huber cluster sandwich for current unpenalized OLS, binomial Glm, and binary lrm fits; Efron OLS covariance, finite-sample corrections, and penalized fits remain deferred."
     },
     {
       "id": "export:sascode",
@@ -3660,7 +3660,7 @@
       "owner": "joshuamyers22",
       "oracle_cases": ["postfit-ols-linear"],
       "tolerance_profile": "postfit-inference-v1",
-      "known_differences": "Returns the classical full-rank covariance matrix or a named principal submatrix; robust and bootstrap covariance are later deliverables."
+      "known_differences": "Returns the classical full-rank covariance matrix or a named principal submatrix; robust and bootstrap estimates use the separate explicit covariance APIs."
     },
     {
       "id": "s3_method:vcov.orm",

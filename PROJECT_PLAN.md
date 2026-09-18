@@ -1,6 +1,6 @@
 # Independent Python Implementation of `rms`: Production Project Plan
 
-**Status:** Active — Phases 0–2 complete; Phase 3 core estimators and result operations accepted for private development
+**Status:** Active — Phases 0–2 complete; the first three Phase 3 deliverables are accepted for private development
 **Plan date:** 2026-09-17  
 **Reference implementation:** Frank Harrell's R package `rms`  
 **Project name:** `holocron`  
@@ -671,8 +671,9 @@ design fingerprint, and confirms that no estimator was promoted. See the
 
 ### Phase 3 — Linear, generalized, and binary logistic core (16–24 weeks)
 
-**Status:** In progress. The first two deliverables are complete for the private
-experimental envelope; penalties and robust/bootstrap covariance are next.
+**Status:** In progress. The first three deliverables are complete for the
+private experimental envelope; simulation reports and the numerical edge-case
+corpus are next.
 
 **Deliverables**
 
@@ -681,7 +682,8 @@ experimental envelope; penalties and robust/bootstrap covariance are next.
 - [x] covariance, likelihood, residual, prediction, summary, ANOVA, and contrast
   operations
   ([acceptance record](governance/PHASE_3_RESULT_OPERATIONS.md));
-- penalties and robust/bootstrap covariance for supported models;
+- [x] penalties and robust/bootstrap covariance for supported models
+  ([acceptance record](governance/PHASE_3_REGULARIZATION_COVARIANCE.md));
 - simulation reports and numerical edge-case corpus;
 - complete getting-started workflow.
 

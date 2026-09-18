@@ -10,6 +10,7 @@ matrix_rows <- function(value) {
 }
 
 name_vector <- function(value) unname(as.list(as.character(value)))
+numeric_vector <- function(value) unname(as.list(as.numeric(value)))
 
 covariance_names <- function(fit, covariance) {
   value <- colnames(covariance)
@@ -771,6 +772,124 @@ run_model_operations <- function(request) {
   )
 }
 
+run_regularization_covariance <- function(request) {
+  x <- require_numeric_vector(request, "x", 3L)
+  y <- require_numeric_vector(request, "y", 3L)
+  require_equal_lengths(list(x, y), c("x", "y"))
+  estimator <- require_choice(
+    request, "estimator", c("ols", "glm-binomial", "lrm-binary")
+  )
+  if (estimator != "ols") y <- require_binary_vector(request, "y")
+  clusters <- request$clusters
+  if (is.null(clusters) || !is.numeric(clusters) || length(clusters) != length(y) ||
+      any(!is.finite(clusters))) stop("clusters must match the analysis rows")
+  seed <- request$bootstrap_seed
+  if (is.null(seed) || length(seed) != 1L || !is.numeric(seed) || seed < 0) {
+    stop("bootstrap_seed must be a non-negative scalar")
+  }
+  schedule <- request$resample_indices
+  if (is.matrix(schedule)) {
+    schedule <- lapply(seq_len(nrow(schedule)), function(index) schedule[index, ])
+  }
+  if (!is.list(schedule) || length(schedule) < 2L ||
+      any(vapply(schedule, length, integer(1)) != length(y))) {
+    stop("resample_indices must be a bootstrap schedule")
+  }
+  if (any(unlist(schedule) < 0) || any(unlist(schedule) >= length(y))) {
+    stop("resample index is outside the analysis rows")
+  }
+  data <- data.frame(x = x, y = y)
+  fit_model <- function(x_values, y_values) {
+    sample_data <- data.frame(x = x_values, y = y_values)
+    switch(
+      estimator,
+      ols = rms::ols(y ~ x, data = sample_data, x = TRUE, y = TRUE),
+      `glm-binomial` = rms::Glm(
+        y ~ x, data = sample_data, family = stats::binomial(), x = TRUE, y = TRUE
+      ),
+      `lrm-binary` = rms::lrm(y ~ x, data = sample_data, x = TRUE, y = TRUE)
+    )
+  }
+  fit <- fit_model(x, y)
+  coefficient_names <- name_vector(names(stats::coef(fit)))
+
+  penalty_weights <- request$penalty_weights
+  penalized_output <- NULL
+  if (estimator != "glm-binomial") {
+    if (is.null(penalty_weights) || !is.numeric(penalty_weights) ||
+        length(penalty_weights) != 1L || any(penalty_weights <= 0)) {
+      stop("penalty_weights must contain one positive slope penalty")
+    }
+    penalty_matrix <- matrix(penalty_weights, nrow = 1L, ncol = 1L)
+    penalized_fit <- if (estimator == "ols") {
+      rms::ols(
+        y ~ x, data = data, x = TRUE, y = TRUE, penalty = 1,
+        penalty.matrix = penalty_matrix, var.penalty = "simple"
+      )
+    } else {
+      rms::lrm(
+        y ~ x, data = data, x = TRUE, y = TRUE, penalty = 1,
+        penalty.matrix = penalty_matrix
+      )
+    }
+    penalized_linear <- unname(as.numeric(penalized_fit$linear.predictors))
+    penalized_fitted <- if (estimator == "ols") {
+      penalized_linear
+    } else stats::plogis(penalized_linear)
+    penalized_residuals <- if (estimator == "ols") {
+      unname(as.numeric(penalized_fit$residuals))
+    } else y - penalized_fitted
+    penalized_output <- list(
+      coefficients = unname(as.numeric(stats::coef(penalized_fit))),
+      covariance = matrix_rows(stats::vcov(penalized_fit)),
+      linear_predictors = penalized_linear,
+      fitted_values = unname(as.numeric(penalized_fitted)),
+      residuals = unname(as.numeric(penalized_residuals)),
+      penalty_weights = numeric_vector(penalty_weights),
+      effective_degrees_of_freedom = unname(as.numeric(
+        sum(penalized_fit$effective.df.diagonal)
+      )),
+      residual_degrees_of_freedom = if (estimator == "ols") {
+        unname(as.numeric(penalized_fit$df.residual))
+      } else NULL,
+      residual_scale = if (estimator == "ols") {
+        unname(as.numeric(penalized_fit$stats["Sigma"]))
+      } else NULL
+    )
+  }
+
+  robust_fit <- rms::robcov(fit, cluster = clusters)
+  robust_output <- list(
+    matrix = matrix_rows(stats::vcov(robust_fit)),
+    cluster_count = length(unique(clusters)),
+    replicate_count = NULL,
+    seed = NULL,
+    coefficient_mean = NULL
+  )
+
+  bootstrap_coefficients <- t(vapply(schedule, function(indices) {
+    positions <- as.integer(unlist(indices)) + 1L
+    unname(as.numeric(stats::coef(fit_model(x[positions], y[positions]))))
+  }, numeric(length(stats::coef(fit)))))
+  bootstrap_output <- list(
+    matrix = matrix_rows(stats::cov(bootstrap_coefficients)),
+    cluster_count = NULL,
+    replicate_count = length(schedule),
+    seed = as.integer(seed),
+    coefficient_mean = unname(as.numeric(colMeans(bootstrap_coefficients)))
+  )
+
+  list(
+    protocol_version = protocol_version,
+    operation = "regularization_covariance",
+    estimator = estimator,
+    coefficient_names = coefficient_names,
+    penalized = penalized_output,
+    robust = robust_output,
+    bootstrap = bootstrap_output
+  )
+}
+
 run_orm <- function(request) {
   x <- require_numeric_vector(request, "x", 3L)
   y <- require_numeric_vector(request, "y", 3L)
@@ -938,6 +1057,7 @@ dispatch <- function(request) {
     lrm = run_lrm(request),
     glm = run_glm(request),
     model_operations = run_model_operations(request),
+    regularization_covariance = run_regularization_covariance(request),
     orm = run_orm(request),
     cph = run_cph(request),
     psm = run_psm(request),

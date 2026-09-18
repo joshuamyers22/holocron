@@ -61,8 +61,10 @@ returns a plausible-looking fitted result.
 
 Only Gaussian/identity and binomial/logit `Glm` are supported. Poisson, Gamma,
 inverse-Gaussian and quasi families; alternate links; weights; offsets;
-penalties; aliased columns; robust covariance; and formula-level fitting fail
-closed or remain absent. The supported covariance, likelihood, residual,
+penalized `Glm`; aliased columns; and formula-level fitting fail closed or
+remain absent. Diagonal OLS/lrm penalties and alternative covariance estimates
+are documented in the [regularization and covariance guide](regularization-and-covariance.md).
+The supported covariance, likelihood, residual,
 prediction, coefficient-summary, ANOVA, and contrast surface is documented in
 the [post-estimation guide](post-estimation.md). Its narrow parity evidence does
 not establish calibration, coverage, or production suitability.

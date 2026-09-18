@@ -459,11 +459,34 @@ def validate_case_pair(
     if reference["protocol_version"] != payload.get("protocol_version"):
         raise ContractValidationError(f"{case_path}: protocol versions do not match")
     operation = case["operation"]
-    if operation in {"ols_rcs", "glm", "lrm", "orm", "model_operations"}:
+    if operation in {
+        "ols_rcs",
+        "glm",
+        "lrm",
+        "orm",
+        "model_operations",
+        "regularization_covariance",
+    }:
         x = require_array(case["x"], name="case.x")
         y = require_array(case["y"], name="case.y")
         if len(x) != len(y):
             raise ContractValidationError(f"{case_path}: x and y lengths differ")
+    if operation == "regularization_covariance":
+        observation_count = len(require_array(case["x"], name="case.x"))
+        clusters = require_array(case["clusters"], name="case.clusters")
+        if len(clusters) != observation_count:
+            raise ContractValidationError(
+                f"{case_path}: cluster and observation lengths differ"
+            )
+        schedule = require_array(case["resample_indices"], name="case.resample_indices")
+        if any(
+            len(require_array(row, name="case.resample_indices row"))
+            != observation_count
+            for row in schedule
+        ):
+            raise ContractValidationError(
+                f"{case_path}: bootstrap rows must match observation count"
+            )
     if operation in {"cph", "psm"}:
         lengths = {
             name: len(require_array(case[name], name=f"case.{name}"))

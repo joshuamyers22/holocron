@@ -95,6 +95,26 @@ Return the versioned binary-logistic result document.
 
 Serialize this result as canonical non-executable JSON.
 
+## `CovarianceEstimate`
+
+```python
+class holocron.models.regularization.CovarianceEstimate(method: Literal['robust', 'bootstrap'], coefficient_names: tuple[str, ...], matrix: tuple[tuple[float, ...], ...], cluster_count: int | None, replicate_count: int | None, seed: int | None, coefficient_mean: tuple[float, ...] | None) -> None
+```
+
+A named robust or bootstrap covariance estimate.
+
+### Attributes
+
+| Name | Type |
+| --- | --- |
+| `method` | `Literal['robust', 'bootstrap']` |
+| `coefficient_names` | `tuple[str, ...]` |
+| `matrix` | `tuple[tuple[float, ...], ...]` |
+| `cluster_count` | `int | None` |
+| `replicate_count` | `int | None` |
+| `seed` | `int | None` |
+| `coefficient_mean` | `tuple[float, ...] | None` |
+
 ## `CovarianceResult`
 
 ```python
@@ -223,6 +243,43 @@ Return the versioned fitted-result document.
 
 Serialize the fitted result as canonical non-executable JSON.
 
+## `PenalizedResult`
+
+```python
+class holocron.models.regularization.PenalizedResult(model_type: Literal['ols', 'lrm-binary'], coefficient_names: tuple[str, ...], coefficients: tuple[float, ...], covariance: tuple[tuple[float, ...], ...], linear_predictors: tuple[float, ...], fitted_values: tuple[float, ...], residuals: tuple[float, ...], penalty_weights: tuple[float, ...], effective_degrees_of_freedom: float, residual_degrees_of_freedom: float | None, residual_scale: float | None, iterations: int | None, n_observations: int, n_features: int, includes_intercept: bool, design_fingerprint: str | None) -> None
+```
+
+A quadratic-penalty fit with explicit effective degrees of freedom.
+
+### Attributes
+
+| Name | Type |
+| --- | --- |
+| `model_type` | `Literal['ols', 'lrm-binary']` |
+| `coefficient_names` | `tuple[str, ...]` |
+| `coefficients` | `tuple[float, ...]` |
+| `covariance` | `tuple[tuple[float, ...], ...]` |
+| `linear_predictors` | `tuple[float, ...]` |
+| `fitted_values` | `tuple[float, ...]` |
+| `residuals` | `tuple[float, ...]` |
+| `penalty_weights` | `tuple[float, ...]` |
+| `effective_degrees_of_freedom` | `float` |
+| `residual_degrees_of_freedom` | `float | None` |
+| `residual_scale` | `float | None` |
+| `iterations` | `int | None` |
+| `n_observations` | `int` |
+| `n_features` | `int` |
+| `includes_intercept` | `bool` |
+| `design_fingerprint` | `str | None` |
+
+### `predict_linear(self, features: collections.abc.Iterable[collections.abc.Iterable[float]] | holocron.design.formula.DesignMatrix) -> tuple[float, ...]`
+
+Predict on the linear scale while enforcing design identity.
+
+### `predict_response(self, features: collections.abc.Iterable[collections.abc.Iterable[float]] | holocron.design.formula.DesignMatrix) -> tuple[float, ...]`
+
+Predict fitted means: Gaussian means or binary probabilities.
+
 ## `PredictionResult`
 
 ```python
@@ -262,6 +319,10 @@ A named residual vector in original training-row order.
 
 Compute joint Wald tests from a design specification or explicit groups.
 
+## `bootstrap_covariance(result: holocron.models.linear.OlsResult | holocron.models.logistic.BinaryLogisticResult, response: collections.abc.Iterable[int | float], features: collections.abc.Iterable[collections.abc.Iterable[float]] | holocron.design.formula.DesignMatrix, *, replicates: int = 200, seed: int = 1, resample_indices: collections.abc.Iterable[collections.abc.Iterable[int]] | None = None) -> holocron.models.regularization.CovarianceEstimate`
+
+Compute iid nonparametric bootstrap covariance by refitting every sample.
+
 ## `contrast(result: holocron.models.linear.OlsResult | holocron.models.logistic.BinaryLogisticResult, weights: collections.abc.Mapping[str, float] | collections.abc.Iterable[float], *, name: str = 'contrast', confidence_level: float = 0.95) -> holocron.models.postfit.InferenceEstimate`
 
 Evaluate one linear coefficient contrast with model-based uncertainty.
@@ -287,6 +348,14 @@ matrix. Rank-deficient fits are rejected instead of silently dropping
 columns; an explicit alias policy will be added before formula-level OLS is
 declared complete.
 
+## `fit_penalized_lrm(response: collections.abc.Iterable[int | float], features: collections.abc.Iterable[collections.abc.Iterable[float]] | holocron.design.formula.DesignMatrix, *, penalty: float | collections.abc.Mapping[str, float], feature_names: collections.abc.Iterable[str] | None = None, include_intercept: bool | None = None, design_fingerprint: str | None = None, max_iterations: int = 100, tolerance: float = 1e-10) -> holocron.models.regularization.PenalizedResult`
+
+Fit binary lrm with a diagonal quadratic penalty on slopes.
+
+## `fit_penalized_ols(response: collections.abc.Iterable[float], features: collections.abc.Iterable[collections.abc.Iterable[float]] | holocron.design.formula.DesignMatrix, *, penalty: float | collections.abc.Mapping[str, float], variance: Literal['simple', 'sandwich'] = 'simple', feature_names: collections.abc.Iterable[str] | None = None, include_intercept: bool | None = None, design_fingerprint: str | None = None) -> holocron.models.regularization.PenalizedResult`
+
+Fit diagonal quadratic-penalty OLS with the rms variance choices.
+
 ## `likelihood(result: holocron.models.linear.OlsResult | holocron.models.logistic.BinaryLogisticResult) -> holocron.models.postfit.LikelihoodResult`
 
 Return maximized/null log likelihood, AIC, and the model LR test.
@@ -302,6 +371,10 @@ Compute supported training residuals without reconstructing hidden inputs.
 Binary results deliberately do not persist the training response, so callers
 must provide it explicitly. OLS supports ordinary and standardized residuals;
 binary models support ordinary, Pearson, and deviance residuals.
+
+## `robust_covariance(result: holocron.models.linear.OlsResult | holocron.models.logistic.BinaryLogisticResult, response: collections.abc.Iterable[int | float], features: collections.abc.Iterable[collections.abc.Iterable[float]] | holocron.design.formula.DesignMatrix, *, clusters: collections.abc.Iterable[collections.abc.Hashable] | None = None) -> holocron.models.regularization.CovarianceEstimate`
+
+Compute the uncorrected Huber cluster-sandwich covariance.
 
 ## `summarize(result: holocron.models.linear.OlsResult | holocron.models.logistic.BinaryLogisticResult, *, confidence_level: float = 0.95) -> holocron.models.postfit.ModelSummary`
 

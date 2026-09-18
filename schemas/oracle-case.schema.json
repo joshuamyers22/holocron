@@ -176,6 +176,47 @@
       ]
     },
     {
+      "title": "Penalty and alternative covariance case",
+      "properties": {
+        "operation": {"const": "regularization_covariance"},
+        "qualification_stage": {"const": "python-parity"},
+        "estimator": {"enum": ["ols", "glm-binomial", "lrm-binary"]},
+        "x": {"$ref": "#/$defs/fitNumericVector"},
+        "y": {"$ref": "#/$defs/fitNumericVector"},
+        "penalty_weights": {
+          "oneOf": [
+            {"type": "null"},
+            {"type": "array", "minItems": 1, "maxItems": 256, "items": {"type": "number", "minimum": 0}}
+          ]
+        },
+        "clusters": {"type": "array", "minItems": 3, "maxItems": 1000000, "items": {"type": "integer"}},
+        "bootstrap_seed": {"type": "integer", "minimum": 0},
+        "resample_indices": {
+          "type": "array",
+          "minItems": 2,
+          "maxItems": 10000,
+          "items": {
+            "type": "array",
+            "minItems": 3,
+            "maxItems": 1000000,
+            "items": {"type": "integer", "minimum": 0}
+          }
+        }
+      },
+      "required": ["operation", "estimator", "x", "y", "penalty_weights", "clusters", "bootstrap_seed", "resample_indices"],
+      "allOf": [
+        {
+          "if": {"properties": {"estimator": {"enum": ["glm-binomial", "lrm-binary"]}}},
+          "then": {"properties": {"y": {"$ref": "#/$defs/binaryVector"}}}
+        },
+        {
+          "if": {"properties": {"estimator": {"const": "glm-binomial"}}},
+          "then": {"properties": {"penalty_weights": {"type": "null"}}},
+          "else": {"properties": {"penalty_weights": {"type": "array", "minItems": 1}}}
+        }
+      ]
+    },
+    {
       "title": "Ordinal regression case",
       "properties": {
         "operation": {"const": "orm"},

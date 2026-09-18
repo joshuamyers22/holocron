@@ -1,0 +1,54 @@
+{
+  "schema_version": "holocron-oracle-output/v1",
+  "case_id": "regularization-glm-binomial-linear",
+  "reference": {
+    "package": "rms",
+    "version": "8.2-0",
+    "commit": "a4e4a305a029090e737562fb4d35bdb705db7d63",
+    "protocol_version": "1"
+  },
+  "ok": true,
+  "protocol_version": "1",
+  "operation": "regularization_covariance",
+  "estimator": "glm-binomial",
+  "coefficient_names": [
+    "Intercept",
+    "x"
+  ],
+  "penalized": null,
+  "robust": {
+    "matrix": [
+      [
+        0.3051481568410604,
+        -0.06709520918485552
+      ],
+      [
+        -0.06709520918485551,
+        0.15255042748488581
+      ]
+    ],
+    "cluster_count": 7,
+    "replicate_count": null,
+    "seed": null,
+    "coefficient_mean": null
+  },
+  "bootstrap": {
+    "matrix": [
+      [
+        0.4328219772416676,
+        -0.13884307695555861
+      ],
+      [
+        -0.13884307695555861,
+        0.14819102731729378
+      ]
+    ],
+    "cluster_count": null,
+    "replicate_count": 6,
+    "seed": 1702,
+    "coefficient_mean": [
+      -0.36364986469266525,
+      1.118797215764227
+    ]
+  }
+}

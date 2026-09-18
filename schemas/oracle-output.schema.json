@@ -243,6 +243,25 @@
       "required": ["ok", "protocol_version", "operation", "estimator", "evaluation_x", "contrast_weights", "confidence_level", "coefficient_names", "covariance", "likelihood", "residuals", "prediction", "summary", "anova", "contrast"]
     },
     {
+      "title": "Penalty and alternative covariance output",
+      "properties": {
+        "ok": {"const": true},
+        "protocol_version": {"const": "1"},
+        "operation": {"const": "regularization_covariance"},
+        "estimator": {"enum": ["ols", "glm-binomial", "lrm-binary"]},
+        "coefficient_names": {"$ref": "#/$defs/nameVector"},
+        "penalized": {
+          "oneOf": [
+            {"type": "null"},
+            {"$ref": "#/$defs/penalizedResult"}
+          ]
+        },
+        "robust": {"$ref": "#/$defs/covarianceEstimate"},
+        "bootstrap": {"$ref": "#/$defs/covarianceEstimate"}
+      },
+      "required": ["ok", "protocol_version", "operation", "estimator", "coefficient_names", "penalized", "robust", "bootstrap"]
+    },
+    {
       "title": "Ordinal regression output",
       "allOf": [
         {"$ref": "#/$defs/modelFitOutput"},
@@ -597,6 +616,34 @@
         "p_value": {"type": "number", "minimum": 0, "maximum": 1}
       },
       "required": ["term", "coefficient_names", "statistic", "distribution", "degrees_of_freedom", "denominator_degrees_of_freedom", "p_value"],
+      "additionalProperties": false
+    },
+    "penalizedResult": {
+      "type": "object",
+      "properties": {
+        "coefficients": {"$ref": "#/$defs/numericVector"},
+        "covariance": {"$ref": "#/$defs/numericMatrix"},
+        "linear_predictors": {"$ref": "#/$defs/numericVector"},
+        "fitted_values": {"$ref": "#/$defs/numericVector"},
+        "residuals": {"$ref": "#/$defs/numericVector"},
+        "penalty_weights": {"$ref": "#/$defs/numericVector"},
+        "effective_degrees_of_freedom": {"type": "number", "exclusiveMinimum": 0},
+        "residual_degrees_of_freedom": {"oneOf": [{"type": "null"}, {"type": "number", "exclusiveMinimum": 0}]},
+        "residual_scale": {"oneOf": [{"type": "null"}, {"type": "number", "exclusiveMinimum": 0}]}
+      },
+      "required": ["coefficients", "covariance", "linear_predictors", "fitted_values", "residuals", "penalty_weights", "effective_degrees_of_freedom", "residual_degrees_of_freedom", "residual_scale"],
+      "additionalProperties": false
+    },
+    "covarianceEstimate": {
+      "type": "object",
+      "properties": {
+        "matrix": {"$ref": "#/$defs/numericMatrix"},
+        "cluster_count": {"$ref": "#/$defs/nullableInteger"},
+        "replicate_count": {"$ref": "#/$defs/nullableInteger"},
+        "seed": {"$ref": "#/$defs/nullableInteger"},
+        "coefficient_mean": {"oneOf": [{"type": "null"}, {"$ref": "#/$defs/numericVector"}]}
+      },
+      "required": ["matrix", "cluster_count", "replicate_count", "seed", "coefficient_mean"],
       "additionalProperties": false
     },
     "distributionValue": {

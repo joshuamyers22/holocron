@@ -33,13 +33,17 @@ from holocron.models import (
     BinaryLogisticResult,
     OlsResult,
     anova,
+    bootstrap_covariance,
     contrast,
     covariance,
     fit_lrm,
     fit_ols,
+    fit_penalized_lrm,
+    fit_penalized_ols,
     likelihood,
     predict,
     residuals,
+    robust_covariance,
     summarize,
 )
 
@@ -88,11 +92,37 @@ assert len(anova(fit, formula_spec).tests) == 1
 assert contrast(fit, {"rcs(x,linear)": 1.0}).estimate == fit.coefficients[1]
 assert len(predict(fit, formula_design).values) == len(y)
 
+linear_spec = DesignSpec.from_formula("y ~ x")
+linear_design = linear_spec.transform({"x": x})
+linear_fit = fit_ols(y, linear_design)
+penalized_linear = fit_penalized_ols(y, linear_design, penalty=1.0)
+robust = robust_covariance(
+    linear_fit, y, linear_design, clusters=("a", "a", "b", "b", "c", "c")
+)
+schedule = (
+    (0, 1, 2, 3, 4, 5),
+    (5, 4, 3, 2, 1, 0),
+    (0, 1, 1, 3, 4, 5),
+    (0, 1, 2, 3, 4, 4),
+)
+bootstrapped = bootstrap_covariance(
+    linear_fit,
+    y,
+    linear_design,
+    replicates=4,
+    seed=7,
+    resample_indices=schedule,
+)
+assert penalized_linear.penalty_weights == (1.0,)
+assert robust.cluster_count == 3
+assert bootstrapped.replicate_count == 4
+
 binary_x = (-3.0, -2.0, -1.0, 0.0, 1.0, 2.0, 3.0) * 2
 binary_y = (0, 0, 0, 0, 1, 1, 1, 0, 1, 0, 1, 0, 1, 1)
 binary_spec = DesignSpec.from_formula("event ~ x")
 binary_design = binary_spec.transform({"x": binary_x})
 binary_fit = fit_lrm(binary_y, binary_design)
+penalized_binary = fit_penalized_lrm(binary_y, binary_design, penalty=1.0)
 binary_restored = BinaryLogisticResult.from_json(binary_fit.to_json())
 assert binary_fit.design_fingerprint == binary_spec.fingerprint
 assert (
@@ -102,6 +132,7 @@ assert (
 assert len(residuals(binary_fit, response=binary_y).values) == len(binary_y)
 assert predict(binary_fit, binary_design).scale == "response"
 assert likelihood(binary_fit).parameter_count == binary_fit.rank
+assert penalized_binary.penalty_weights == (1.0,)
 schema_root = importlib.resources.files("holocron").joinpath("schemas")
 assert schema_root.joinpath("serialization-manifest.json").is_file()
 assert schema_root.joinpath("ols-result.schema.json").is_file()

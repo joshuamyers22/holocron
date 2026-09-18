@@ -14,10 +14,11 @@ Holocron is experimental and incomplete. Do not use it for consequential
 analysis, inference, prediction, or clinical decisions.
 
 Phases 0–2 are complete for private experimental development, and Phase 3 is
-active. Its first two deliverables—experimental `ols`, Gaussian/identity and
+active. Its first three deliverables—experimental `ols`, Gaussian/identity and
 binomial/logit `Glm`, and binary `lrm` estimators plus their covariance,
 likelihood, residual, prediction, coefficient-summary, ANOVA, and linear-
-contrast operations—are complete. The Phase 1 exit
+contrast operations, diagonal OLS/lrm quadratic penalties, and robust and
+bootstrap covariance—are complete. The Phase 1 exit
 gate is recorded in the
 [completion record](https://github.com/joshuamyers22/holocron/blob/main/governance/PHASE_1_COMPLETION.md);
 the evidence-backed Phase 2 disposition is recorded in its
@@ -35,8 +36,9 @@ there.
 The evidence-backed experimental surface implements predictor-distribution
 metadata, safe formulas, numeric and factor transformations, restricted
 interactions, classical full-rank ordinary least squares, bounded generalized
-linear models, unpenalized binary logistic regression, and the accepted post-
-estimation operations. These are checked across 34 independent parity cases
+linear models, binary logistic regression, the accepted post-estimation
+operations, diagonal OLS/lrm penalties, and robust/bootstrap covariance. These
+are checked across 37 independent parity cases
 against committed outputs from a Dockerized
 R oracle. Another nine ordinal and survival cases are frozen as oracle baselines
 for later implementation and are not current parity claims.
@@ -84,8 +86,9 @@ pickle interchange is not supported.
 Explicit categorical and scored-ordered terms plus hierarchical two-way
 restricted interactions are supported by the design compiler. Automatic knot
 or level selection, unrestricted or higher-order interactions, missing-data
-policies, aliased-fit handling, other GLM families/links, penalties, robust
-covariance, and broader model families are not supported by this slice.
+policies, aliased-fit handling, other GLM families/links, off-diagonal
+penalties, penalty tracing, weights/offsets, bootstrap confidence intervals,
+and broader model families are not supported by this slice.
 Unsupported behavior must fail explicitly
 rather than silently substitute a different method. See the
 [package architecture](https://github.com/joshuamyers22/holocron/blob/main/docs/architecture/PACKAGE_STRUCTURE.md) for API and

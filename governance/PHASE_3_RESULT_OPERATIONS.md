@@ -53,8 +53,8 @@ combinations; simultaneous, nonlinear, grid-based, and expression-driven
 contrasts remain absent. Derived operation records are runtime values and do
 not add a persistence format.
 
-Robust, clustered, sandwich, and bootstrap covariance, penalized inference,
-simulation and numerical edge-case evidence, specialist review, the Phase 3
+Penalties and alternative covariance are now accepted separately in the
+[regularization/covariance record](PHASE_3_REGULARIZATION_COVARIANCE.md).
+Simulation and numerical edge-case evidence, specialist review, the Phase 3
 exit gate, capability promotion beyond experimental, consequential use, and
-external distribution all remain open. The penalties and robust/bootstrap
-covariance deliverable is next.
+external distribution all remain open.

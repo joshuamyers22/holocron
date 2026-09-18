@@ -48,6 +48,6 @@ jobs:
         with:
           version: "0.12.7"
       - run: make setup
-      - name: Exercise Phase 3 estimators and result operations on the platform matrix
-        run: uv run --frozen python -m unittest tests.test_generalized_models tests.test_postfit_operations
+      - name: Exercise Phase 3 estimators and operations on the platform matrix
+        run: uv run --frozen python -m unittest tests.test_generalized_models tests.test_postfit_operations tests.test_regularization_covariance
       - run: uv run --frozen python -m tools.run_tolerance_pilot --output ".work/tolerance-${{ runner.os }}-${{ runner.arch }}.json"

@@ -31,6 +31,7 @@ nav:
       - Ordinary least squares: guides/ordinary-least-squares.md
       - Generalized and logistic models: guides/generalized-models.md
       - Post-estimation operations: guides/post-estimation.md
+      - Penalties and alternative covariance: guides/regularization-and-covariance.md
       - Serialization and reconstruction: guides/serialization.md
       - R migration: guides/r-migration.md
   - Examples:

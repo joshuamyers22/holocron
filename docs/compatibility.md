@@ -22,10 +22,10 @@ an implementation claim, and an experimental capability is not production-ready.
 | Status | Count | Meaning |
 | --- | ---: | --- |
 | implemented | 0 | Implemented and accepted under the capability contract. |
-| experimental | 28 | Implemented narrowly with parity evidence; not production-ready. |
+| experimental | 32 | Implemented narrowly with parity evidence; not production-ready. |
 | mapped | 0 | Mapped to a Python design, without an accepted implementation claim. |
 | unsupported | 0 | Intentionally excluded from the compatibility target. |
-| deferred | 253 | Catalogued for a later phase; no current implementation claim. |
+| deferred | 249 | Catalogued for a later phase; no current implementation claim. |
 
 ## Evidence-backed experimental surface
 
@@ -37,7 +37,10 @@ oracle-linked parity evidence. Their documented support envelopes remain narrow.
 | `%ia%` | export | `holocron.formula.RestrictedInteractionTerm` | experimental | Phase 2-3 | 1 | `formula-design-v1` | Explicit two-way interactions only; both component main effects are required, doubly nonlinear products are omitted, and nested, self, unrestricted, matrix, and stratification interactions are rejected. |
 | `Design` | export | `holocron.design.DesignSpec` | experimental | Phase 2-3 | 1 | `formula-design-v1` | Owned allowlisted AST with explicit numeric, categorical, scored-ordered, and restricted-interaction terms; automatic parameters, offsets, strata, matrices, and R formula evaluation remain deferred. |
 | `Glm` | export | `holocron.models.fit_glm` | experimental | Phase 2-3 | 3 | `generalized-linear-v1` | Initial envelope supports Gaussian/identity and binomial/logit only; weights, offsets, other families/links, penalties, dispersion options, formula-level fitting, and the broader R Glm method surface remain deferred. |
+| `Penalty.matrix` | export | `holocron.models.fit_penalized_ols` | experimental | Phase 8 | 2 | `regularization-covariance-v1` | Python accepts a non-negative scalar or named diagonal slope penalties directly in fit_penalized_ols and fit_penalized_lrm; categorical off-diagonal matrices and arbitrary dense penalty matrices remain deferred. |
+| `Penalty.setup` | export | `holocron.models.fit_penalized_lrm` | experimental | Phase 8 | 2 | `regularization-covariance-v1` | Penalty setup is explicit by generated coefficient name rather than inferred from rms assume codes; only diagonal slope penalties are supported. |
 | `asis` | export | `holocron.formula.IdentityTerm` | experimental | Phase 2-3 | 1 | `formula-design-v1` | Numeric one-dimensional predictors only; labels and units are retained separately by DataDistribution. |
+| `bootcov` | export | `holocron.models.bootstrap_covariance` | experimental | Phase 6 | 1 | `covariance-resampling-v1` | Supports iid row bootstrap covariance for current OLS, binomial Glm, and binary lrm fits, with a fixed NumPy seed or an auditable declared schedule; cluster bootstrap, failed-replicate skipping, coefficient persistence, intervals, and out-of-sample likelihood remain deferred. |
 | `catg` | export | `holocron.formula.CategoricalTerm` | experimental | Phase 2-3 | 1 | `formula-design-v1` | Levels and their reference order must be explicit; missing and unseen levels fail closed instead of using ambient factor metadata. |
 | `contrast` | export | `holocron.models.contrast` | experimental | Phase 2-3 | 3 | `postfit-inference-v1` | Supports one declared linear coefficient contrast with model-based uncertainty; rms design-setting expansion, simultaneous intervals, joint contrasts, profile intervals, and Bayesian paths remain deferred. |
 | `datadist` | export | `holocron.design.DataDistribution` | experimental | Phase 2-3 | 4 | `data-distribution-v1` | Python uses immutable explicit metadata instead of R global options; categorical levels must be declared; dataframe/date-time adapters are deferred; ordered factors use the lower middle declared level when the level count is even; and default display probabilities are computed per variable when missingness differs. |
@@ -47,6 +50,7 @@ oracle-linked parity evidence. Their documented support envelopes remain narrow.
 | `ols` | export | `holocron.models.fit_ols` | experimental | Phase 2-3 | 6 | `well-conditioned-ols-v1` | Initial narrow API; full rms contract remains deferred. |
 | `pol` | export | `holocron.formula.PolynomialTerm` | experimental | Phase 2-3 | 1 | `formula-design-v1` | Raw powers of explicit degree 2 through 10 only; no ambient option supplies a default degree. |
 | `rcs` | export | `holocron.design.RestrictedCubicSplineSpec` | experimental | Phase 2-3 | 6 | `deterministic-transform-v1` | Initial narrow API; full rms contract remains deferred. |
+| `robcov` | export | `holocron.models.robust_covariance` | experimental | Phase 6 | 1 | `covariance-resampling-v1` | Supports the uncorrected Huber cluster sandwich for current unpenalized OLS, binomial Glm, and binary lrm fits; Efron OLS covariance, finite-sample corrections, and penalized fits remain deferred. |
 | `scored` | export | `holocron.formula.OrderedTerm` | experimental | Phase 2-3 | 1 | `formula-design-v1` | Three or more strictly increasing numeric levels must be explicit; missing and unseen levels fail closed. |
 | `anova.rms` | s3_method | `holocron.models.anova` | experimental | Phase 8 | 3 | `postfit-inference-v1` | Supports formula-term or explicitly grouped joint Wald F/chi-square tests; rms nonlinear/main-effect decomposition, interaction pooling, LR tests, and presentation methods remain deferred. |
 | `contrast.rms` | s3_method | `holocron.models.contrast` | experimental | Phase 2-3 | 3 | `postfit-inference-v1` | Python accepts explicit coefficient weights rather than rms data-setting lists; multirow, joint, simultaneous, profile, and Bayesian contrasts remain deferred. |
@@ -60,7 +64,7 @@ oracle-linked parity evidence. Their documented support envelopes remain narrow.
 | `residuals.ols` | s3_method | `holocron.models.residuals` | experimental | Phase 8 | 1 | `postfit-inference-v1` | Supports ordinary and residual-scale-standardized values; leverage-adjusted studentized, score, influence, DFBETA, DFFIT, and hat diagnostics remain deferred. |
 | `vcov.Glm` | s3_method | `holocron.models.covariance` | experimental | Phase 8 | 1 | `postfit-inference-v1` | Returns the full named covariance matrix or a named principal submatrix for the supported Glm envelope. |
 | `vcov.lrm` | s3_method | `holocron.models.covariance` | experimental | Phase 8 | 1 | `postfit-inference-v1` | Returns the full named covariance matrix or a named principal submatrix for binary lrm; ordinal intercept selection remains deferred. |
-| `vcov.ols` | s3_method | `holocron.models.covariance` | experimental | Phase 8 | 1 | `postfit-inference-v1` | Returns the classical full-rank covariance matrix or a named principal submatrix; robust and bootstrap covariance are later deliverables. |
+| `vcov.ols` | s3_method | `holocron.models.covariance` | experimental | Phase 8 | 1 | `postfit-inference-v1` | Returns the classical full-rank covariance matrix or a named principal submatrix; robust and bootstrap estimates use the separate explicit covariance APIs. |
 | `vcov.rms` | s3_method | `holocron.models.covariance` | experimental | Phase 8 | 3 | `postfit-inference-v1` | Mapped only for the currently supported OLS, Gaussian Glm, binomial Glm, and binary lrm result types. |
 
 ## Complete inventory
@@ -148,14 +152,14 @@ in the pinned namespace. Counts by tier are A: 32, B: 33, C: 26, D: 190.
 | R symbol | Kind | Python entry point | Status | Milestone | Oracle cases | Tolerance profile | Known differences |
 | --- | --- | --- | --- | --- | ---: | --- | --- |
 | `bootBCa` | export | — | deferred | Phase 6 | 0 | — | Not yet implemented. |
-| `bootcov` | export | — | deferred | Phase 6 | 0 | — | Not yet implemented. |
+| `bootcov` | export | `holocron.models.bootstrap_covariance` | experimental | Phase 6 | 1 | `covariance-resampling-v1` | Supports iid row bootstrap covariance for current OLS, binomial Glm, and binary lrm fits, with a fixed NumPy seed or an auditable declared schedule; cluster bootstrap, failed-replicate skipping, coefficient persistence, intervals, and out-of-sample likelihood remain deferred. |
 | `calibrate` | export | — | deferred | Phase 6 | 0 | — | Not yet implemented. |
 | `effective.df` | export | — | deferred | Phase 6 | 0 | — | Not yet implemented. |
 | `fastbw` | export | — | deferred | Phase 6 | 0 | — | Not yet implemented. |
 | `oos.loglik` | export | — | deferred | Phase 6 | 0 | — | Not yet implemented. |
 | `pentrace` | export | — | deferred | Phase 6 | 0 | — | Not yet implemented. |
 | `predab.resample` | export | — | deferred | Phase 6 | 0 | — | Not yet implemented. |
-| `robcov` | export | — | deferred | Phase 6 | 0 | — | Not yet implemented. |
+| `robcov` | export | `holocron.models.robust_covariance` | experimental | Phase 6 | 1 | `covariance-resampling-v1` | Supports the uncorrected Huber cluster sandwich for current unpenalized OLS, binomial Glm, and binary lrm fits; Efron OLS covariance, finite-sample corrections, and penalized fits remain deferred. |
 | `val.prob` | export | — | deferred | Phase 6 | 0 | — | Not yet implemented. |
 | `val.probg` | export | — | deferred | Phase 6 | 0 | — | Not yet implemented. |
 | `val.surv` | export | — | deferred | Phase 6 | 0 | — | Not yet implemented. |
@@ -180,8 +184,8 @@ in the pinned namespace. Counts by tier are A: 32, B: 33, C: 26, D: 190.
 | --- | --- | --- | --- | --- | ---: | --- | --- |
 | `Gls` | export | — | deferred | Phase 8 | 0 | — | Not yet implemented. |
 | `LRupdate` | export | — | deferred | Phase 8 | 0 | — | Not yet implemented. |
-| `Penalty.matrix` | export | — | deferred | Phase 8 | 0 | — | Not yet implemented. |
-| `Penalty.setup` | export | — | deferred | Phase 8 | 0 | — | Not yet implemented. |
+| `Penalty.matrix` | export | `holocron.models.fit_penalized_ols` | experimental | Phase 8 | 2 | `regularization-covariance-v1` | Python accepts a non-negative scalar or named diagonal slope penalties directly in fit_penalized_ols and fit_penalized_lrm; categorical off-diagonal matrices and arbitrary dense penalty matrices remain deferred. |
+| `Penalty.setup` | export | `holocron.models.fit_penalized_lrm` | experimental | Phase 8 | 2 | `regularization-covariance-v1` | Penalty setup is explicit by generated coefficient name rather than inferred from rms assume codes; only diagonal slope penalties are supported. |
 | `Rq` | export | — | deferred | Phase 8 | 0 | — | Not yet implemented. |
 | `Surv` | export | — | deferred | Phase 8 | 0 | — | Not yet implemented. |
 | `annotateAnova` | export | — | deferred | Phase 7 | 0 | — | Not yet implemented. |
@@ -363,7 +367,7 @@ in the pinned namespace. Counts by tier are A: 32, B: 33, C: 26, D: 190.
 | `vcov.Gls` | s3_method | — | deferred | Phase 8 | 0 | — | Not yet implemented. |
 | `vcov.cph` | s3_method | — | deferred | Phase 8 | 0 | — | Not yet implemented. |
 | `vcov.lrm` | s3_method | `holocron.models.covariance` | experimental | Phase 8 | 1 | `postfit-inference-v1` | Returns the full named covariance matrix or a named principal submatrix for binary lrm; ordinal intercept selection remains deferred. |
-| `vcov.ols` | s3_method | `holocron.models.covariance` | experimental | Phase 8 | 1 | `postfit-inference-v1` | Returns the classical full-rank covariance matrix or a named principal submatrix; robust and bootstrap covariance are later deliverables. |
+| `vcov.ols` | s3_method | `holocron.models.covariance` | experimental | Phase 8 | 1 | `postfit-inference-v1` | Returns the classical full-rank covariance matrix or a named principal submatrix; robust and bootstrap estimates use the separate explicit covariance APIs. |
 | `vcov.orm` | s3_method | — | deferred | Phase 8 | 0 | — | Not yet implemented. |
 | `vcov.pphsm` | s3_method | — | deferred | Phase 8 | 0 | — | Not yet implemented. |
 | `vcov.psm` | s3_method | — | deferred | Phase 8 | 0 | — | Not yet implemented. |

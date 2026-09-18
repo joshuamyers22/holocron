@@ -50,12 +50,15 @@ converged information matrix. These are separate numerical contracts.
 Both capabilities remain `experimental`. `Glm` does not yet support other
 families or links, weights, offsets, quasi-likelihood, custom dispersion,
 penalties, alias handling, or formula-level fitting. Binary `lrm` does not yet
-support ordinal outcomes, penalties, weights, offsets, or its broader method
-surface. `lrm.fit` remains deferred.
+support ordinal outcomes, weights, offsets, or its broader method surface.
+Diagonal binary-lrm penalties are accepted through the separate
+`fit_penalized_lrm` API; `lrm.fit` remains deferred.
 
 The broader covariance, likelihood, residual, prediction, coefficient-summary,
 ANOVA, and contrast operations are now accepted in the separate
-[result-operations record](PHASE_3_RESULT_OPERATIONS.md). Simulation and
-numerical edge-case evidence, specialist review, the Phase 3 exit gate,
-capability promotion beyond experimental, consequential use, and external
-distribution all remain open.
+[result-operations record](PHASE_3_RESULT_OPERATIONS.md). The diagonal-penalty
+and alternative-covariance surface is accepted in the
+[regularization/covariance record](PHASE_3_REGULARIZATION_COVARIANCE.md).
+Simulation and numerical edge-case evidence, specialist review, the Phase 3
+exit gate, capability promotion beyond experimental, consequential use, and
+external distribution all remain open.

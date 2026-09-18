@@ -8,7 +8,8 @@ generated-column order, and the rows used by the model.
 
 This guide covers the current experimental design envelope and classical
 full-rank OLS and the supported Gaussian/binomial `Glm` and binary `lrm`
-envelopes. It is not a migration path for an arbitrary `rms` fit.
+envelopes, including the accepted diagonal-penalty and alternative-covariance
+subset. It is not a migration path for an arbitrary `rms` fit.
 
 ## End-to-end example
 
@@ -98,6 +99,10 @@ for later effect or display operations.
 | `Glm(..., family=gaussian())` | `fit_glm(response, design, family="gaussian")` | Identity link only; returns `OlsResult`. |
 | `Glm(..., family=binomial())` | `fit_glm(response, design, family="binomial")` | Logit link and binary response only. |
 | binary `lrm(...)` | `fit_lrm(response, design)` | Unpenalized full-rank binary response only. |
+| penalized `ols(...)` | `fit_penalized_ols(response, design, penalty=...)` | Diagonal, non-negative slope weights only; the intercept is unpenalized. |
+| penalized binary `lrm(...)` | `fit_penalized_lrm(response, design, penalty=...)` | Diagonal, non-negative slope weights only. |
+| `robcov(fit, cluster=...)` | `robust_covariance(fit, response, design, clusters=...)` | Uncorrected Huber cluster sandwich; omitted clusters make rows independent clusters. |
+| `bootcov(fit, B=...)` | `bootstrap_covariance(fit, response, design, replicates=..., seed=...)` | Iid row resampling only; pass `resample_indices` for cross-language replay. |
 | `predict(fit, newdata=...)` | `fit.predict(specification.transform(data))` | Transform with the original specification; unseen or missing values fail closed. |
 | `vcov(fit)` | `covariance(fit)` | Full named covariance or a named principal submatrix. |
 | `logLik(fit)` | `likelihood(fit)` | Includes maximized/null likelihood, AIC, and the overall LR test. |
@@ -256,12 +261,13 @@ following:
   semantics;
 - complete R `DesignAssign`, `modelData`, `Newlevels`, `Newlabels`, or `specs`
   behavior;
-- aliased OLS columns, weights, penalties, robust/clustered covariance,
-  adjusted-effect summaries, complete `anova.rms` partitions, or nonlinear,
-  simultaneous, grid-based, or expression-driven contrasts; or
-- logistic behavior outside the supported unpenalized binary/logit envelope, or
-  ordinal, Cox, parametric-survival, Kaplan–Meier, validation, calibration, or
-  nomogram execution in Python.
+- aliased OLS columns, weights, offsets, dense penalties, `pentrace`,
+  finite-sample robust corrections, cluster/stratified bootstrap, bootstrap
+  intervals, adjusted-effect summaries, complete `anova.rms` partitions, or
+  nonlinear, simultaneous, grid-based, or expression-driven contrasts; or
+- logistic behavior outside the supported binary/logit and diagonal-penalty
+  envelope, or ordinal, Cox, parametric-survival, Kaplan–Meier, validation,
+  calibration, or nomogram execution in Python.
 
 Ordinal and survival model families have frozen R oracle baselines. Those are
 future comparison targets, not working Python migration paths. Holocron must

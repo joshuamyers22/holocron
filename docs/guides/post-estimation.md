@@ -98,6 +98,9 @@ interaction, or total-effect partitions beyond the declared formula term
 blocks. `contrast` accepts a single linear coefficient contrast, not R
 expressions, design grids, simultaneous intervals, or nonlinear transformations.
 
-Robust, clustered, sandwich, and bootstrap covariance; penalized inference;
-multiple-comparison adjustments; profile likelihood; offsets and weights; and
-other GLM families remain unsupported. Unsupported combinations fail explicitly.
+Robust, clustered, sandwich, and bootstrap covariance and diagonal OLS/lrm
+penalties are separate, accepted APIs described in the
+[regularization and covariance guide](regularization-and-covariance.md).
+Multiple-comparison adjustments, profile likelihood, offsets and weights,
+bootstrap confidence intervals, and other GLM families remain unsupported.
+Unsupported combinations fail explicitly.

@@ -9,14 +9,18 @@ from holocron.models import (
     BinaryLogisticResult,
     InferenceEstimate,
     anova,
+    bootstrap_covariance,
     contrast,
     covariance,
     fit_glm,
     fit_lrm,
     fit_ols,
+    fit_penalized_lrm,
+    fit_penalized_ols,
     likelihood,
     predict,
     residuals,
+    robust_covariance,
     summarize,
 )
 from reference.contracts import JsonValue
@@ -212,6 +216,87 @@ def build_python_output(case: dict[str, JsonValue]) -> dict[str, JsonValue]:
                 ],
             ),
             "contrast": _inference_output(fit_contrast),
+        }
+
+    if operation == "regularization_covariance":
+        x = cast(list[float], case["x"])
+        y = cast(list[float], case["y"])
+        features = tuple((value,) for value in x)
+        estimator = cast(str, case["estimator"])
+        if estimator == "ols":
+            result = fit_ols(y, features, feature_names=("x",))
+            penalized = fit_penalized_ols(
+                y,
+                features,
+                feature_names=("x",),
+                penalty=cast(list[float], case["penalty_weights"])[0],
+            )
+        elif estimator == "glm-binomial":
+            result = fit_glm(y, features, family="binomial", feature_names=("x",))
+            penalized = None
+        else:
+            result = fit_lrm(y, features, feature_names=("x",))
+            penalized = fit_penalized_lrm(
+                y,
+                features,
+                feature_names=("x",),
+                penalty=cast(list[float], case["penalty_weights"])[0],
+            )
+        robust = robust_covariance(
+            result,
+            y,
+            features,
+            clusters=cast(list[int], case["clusters"]),
+        )
+        schedule = cast(list[list[int]], case["resample_indices"])
+        bootstrap = bootstrap_covariance(
+            result,
+            y,
+            features,
+            replicates=len(schedule),
+            seed=cast(int, case["bootstrap_seed"]),
+            resample_indices=schedule,
+        )
+        penalized_output: JsonValue = None
+        if penalized is not None:
+            penalized_output = {
+                "coefficients": list(penalized.coefficients),
+                "covariance": [list(row) for row in penalized.covariance],
+                "linear_predictors": list(penalized.linear_predictors),
+                "fitted_values": list(penalized.fitted_values),
+                "residuals": list(penalized.residuals),
+                "penalty_weights": list(penalized.penalty_weights),
+                "effective_degrees_of_freedom": (
+                    penalized.effective_degrees_of_freedom
+                ),
+                "residual_degrees_of_freedom": (penalized.residual_degrees_of_freedom),
+                "residual_scale": penalized.residual_scale,
+            }
+        return {
+            "ok": True,
+            "protocol_version": "1",
+            "operation": "regularization_covariance",
+            "estimator": estimator,
+            "coefficient_names": list(result.coefficient_names),
+            "penalized": penalized_output,
+            "robust": {
+                "matrix": [list(row) for row in robust.matrix],
+                "cluster_count": robust.cluster_count,
+                "replicate_count": robust.replicate_count,
+                "seed": robust.seed,
+                "coefficient_mean": (
+                    None
+                    if robust.coefficient_mean is None
+                    else list(robust.coefficient_mean)
+                ),
+            },
+            "bootstrap": {
+                "matrix": [list(row) for row in bootstrap.matrix],
+                "cluster_count": bootstrap.cluster_count,
+                "replicate_count": bootstrap.replicate_count,
+                "seed": bootstrap.seed,
+                "coefficient_mean": list(bootstrap.coefficient_mean or ()),
+            },
         }
 
     x = cast(list[float], case["x"])

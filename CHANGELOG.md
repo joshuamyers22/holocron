@@ -85,3 +85,8 @@ Notable changes are recorded here using semantic versioning.
   contrast operations; added three vertical OLS/Glm/lrm oracle cases, a named
   field-aware inference policy, installed-artifact smoke coverage, and explicit
   compatibility boundaries for broader `rms` behavior.
+- Completed the third Phase 3 deliverable with diagonal quadratic penalties for
+  OLS and binary `lrm`, named simple/sandwich penalty covariance, robust and
+  clustered covariance, deterministic or seeded iid bootstrap covariance, three
+  vertical pinned-R cases, installed-artifact coverage, and explicit fail-closed
+  regularization and resampling boundaries.

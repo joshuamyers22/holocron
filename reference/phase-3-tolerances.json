@@ -44,6 +44,33 @@
         {"path": "/contrast/lower", "rule": {"mode": "numeric", "absolute": 1e-8, "relative": 1e-7}},
         {"path": "/contrast/upper", "rule": {"mode": "numeric", "absolute": 1e-8, "relative": 1e-7}}
       ]
+    },
+    "covariance-resampling-v1": {
+      "description": "Field-aware tolerances for cluster-sandwich and declared-schedule bootstrap covariance.",
+      "default": {"mode": "exact"},
+      "rules": [
+        {"path": "/robust/matrix/*/*", "rule": {"mode": "numeric", "absolute": 1e-7, "relative": 1e-6}},
+        {"path": "/bootstrap/matrix/*/*", "rule": {"mode": "numeric", "absolute": 1e-7, "relative": 1e-6}},
+        {"path": "/bootstrap/coefficient_mean/*", "rule": {"mode": "numeric", "absolute": 1e-8, "relative": 1e-7}}
+      ]
+    },
+    "regularization-covariance-v1": {
+      "description": "Field-aware tolerances for diagonal quadratic penalties, cluster-sandwich covariance, and declared-schedule bootstrap covariance.",
+      "default": {"mode": "exact"},
+      "rules": [
+        {"path": "/penalized/coefficients/*", "rule": {"mode": "numeric", "absolute": 1e-8, "relative": 1e-7}},
+        {"path": "/penalized/covariance/*/*", "rule": {"mode": "numeric", "absolute": 1e-7, "relative": 1e-6}},
+        {"path": "/penalized/linear_predictors/*", "rule": {"mode": "numeric", "absolute": 1e-8, "relative": 1e-7}},
+        {"path": "/penalized/fitted_values/*", "rule": {"mode": "numeric", "absolute": 1e-8, "relative": 1e-7}},
+        {"path": "/penalized/residuals/*", "rule": {"mode": "numeric", "absolute": 1e-8, "relative": 1e-7}},
+        {"path": "/penalized/penalty_weights/*", "rule": {"mode": "numeric", "absolute": 0, "relative": 0}},
+        {"path": "/penalized/effective_degrees_of_freedom", "rule": {"mode": "numeric", "absolute": 1e-8, "relative": 1e-7}},
+        {"path": "/penalized/residual_degrees_of_freedom", "rule": {"mode": "numeric", "absolute": 1e-8, "relative": 1e-7}},
+        {"path": "/penalized/residual_scale", "rule": {"mode": "numeric", "absolute": 1e-8, "relative": 1e-7}},
+        {"path": "/robust/matrix/*/*", "rule": {"mode": "numeric", "absolute": 1e-7, "relative": 1e-6}},
+        {"path": "/bootstrap/matrix/*/*", "rule": {"mode": "numeric", "absolute": 1e-7, "relative": 1e-6}},
+        {"path": "/bootstrap/coefficient_mean/*", "rule": {"mode": "numeric", "absolute": 1e-8, "relative": 1e-7}}
+      ]
     }
   }
 }
