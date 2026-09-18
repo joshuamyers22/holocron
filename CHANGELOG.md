@@ -104,3 +104,11 @@ Notable changes are recorded here using semantic versioning.
   passed 422 exact and 1,452 numeric pinned-R comparisons, all seven registered
   simulation scenarios and 16 numerical-edge cases passed, and independent
   statistical reviewer Ron Mexico approved the experimental alpha scope.
+- Implemented the Phase 4 ordinal/censoring functional surface: five-link
+  cumulative models, multi-intercept `lrm`, exact-grid Turnbull conversion,
+  mixed-censoring likelihoods, bordered-tridiagonal information updates,
+  escalating adaptive quadrature, single and dual-scale cluster effects,
+  boundary inference, prediction/test diagnostics, strict result JSON, a
+  64-level stress case, and installed-artifact smoke coverage. The Phase 4
+  parity, simulation, cross-platform, and independent-review exit gate remains
+  open.

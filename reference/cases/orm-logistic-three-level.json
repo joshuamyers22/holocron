@@ -4,7 +4,7 @@
   "description": "Three-level proportional-odds ordinal logistic fit.",
   "expected_output": "orm-logistic-three-level.json",
   "comparison_profile": "ordinal-model-v1",
-  "qualification_stage": "oracle-baseline",
+  "qualification_stage": "python-parity",
   "operation": "orm",
   "basis": "linear",
   "family": "logistic",

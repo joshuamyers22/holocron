@@ -21,16 +21,21 @@ The current experimental surface supports only:
   summary, declared-term ANOVA, and single linear-contrast operations; and
 - diagonal quadratic penalties for OLS and binary `lrm`, plus robust/clustered
   and iid bootstrap covariance for every currently supported estimator path.
+- experimental cumulative-link ordinal regression, exact-grid mixed-censoring
+  conversion, and single-cluster random-intercept models.
 
 The core estimator envelope is also checked by seven seeded simulation
 scenarios totaling 2,620 outer replications and a 16-case numerical edge corpus.
 Phase 3 is complete for private experimental development following independent
-statistical review of its alpha scope; Phase 4 is next. Capability promotion,
+statistical review of its alpha scope. The Phase 4 ordinal/censoring functional
+surface is implemented, while its parity, simulation, platform, and review exit
+gate remains open. Capability promotion,
 consequential use, and external distribution remain separately blocked.
 
-These APIs are checked against 37 cases from the pinned R `rms` 8.2-0 oracle.
-The remaining nine frozen ordinal and survival cases are future baselines, not
-compatibility claims.
+The design, Phase 3, and exact-response ordinal APIs are checked against 40
+cases from the pinned R `rms` 8.2-0 oracle. The remaining six frozen survival
+cases are future baselines, not compatibility claims; censored and clustered
+ordinal paths still await registered oracle cases.
 See the generated [compatibility inventory](compatibility.md) for the exact
 surface and evidence links.
 
@@ -41,6 +46,7 @@ surface and evidence links.
 - [Build safe formulas and reconstructible numeric designs](guides/formulas-and-designs.md).
 - [Run the complete Phase 3 getting-started workflow](getting-started.md).
 - [Fit the supported generalized and logistic models](guides/generalized-models.md).
+- [Fit ordinal and censored-response models](guides/ordinal-censoring.md).
 - [Use the supported post-estimation operations](guides/post-estimation.md).
 - [Use penalties and alternative covariance estimators](guides/regularization-and-covariance.md).
 - [Inspect and reproduce simulation and numerical-edge evidence](guides/simulation-and-edge-evidence.md).

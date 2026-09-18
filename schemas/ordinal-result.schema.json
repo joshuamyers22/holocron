@@ -1,0 +1,107 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/joshuamyers22/holocron/schemas/ordinal-result.schema.json",
+  "title": "Holocron ordinal result",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "result_type",
+    "estimator",
+    "family",
+    "response_levels",
+    "threshold_names",
+    "feature_names",
+    "thresholds",
+    "coefficients",
+    "covariance",
+    "linear_predictors",
+    "fitted_probabilities",
+    "deviance",
+    "iterations",
+    "n_observations",
+    "design_fingerprint",
+    "censored"
+  ],
+  "properties": {
+    "schema_version": {"const": "holocron-ordinal-result/v1"},
+    "result_type": {"const": "ordinal"},
+    "estimator": {"enum": ["orm", "lrm"]},
+    "family": {"enum": ["logistic", "probit", "loglog", "cloglog", "cauchit"]},
+    "response_levels": {
+      "type": "array",
+      "minItems": 3,
+      "maxItems": 1024,
+      "items": {"type": "number"}
+    },
+    "threshold_names": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 1023,
+      "items": {"type": "string", "minLength": 1}
+    },
+    "feature_names": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 1023,
+      "items": {"type": "string", "minLength": 1}
+    },
+    "thresholds": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 1023,
+      "items": {"type": "number"}
+    },
+    "coefficients": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 1023,
+      "items": {"type": "number"}
+    },
+    "covariance": {
+      "type": "array",
+      "minItems": 3,
+      "maxItems": 1024,
+      "items": {
+        "type": "array",
+        "minItems": 3,
+        "maxItems": 1024,
+        "items": {"type": "number"}
+      }
+    },
+    "linear_predictors": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 1000000,
+      "items": {"type": "number"}
+    },
+    "fitted_probabilities": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 1000000,
+      "items": {
+        "type": "array",
+        "minItems": 3,
+        "maxItems": 1024,
+        "items": {"type": "number", "minimum": 0, "maximum": 1}
+      }
+    },
+    "deviance": {
+      "type": "array",
+      "prefixItems": [
+        {"type": "number", "minimum": 0},
+        {"type": "number", "minimum": 0}
+      ],
+      "items": false
+    },
+    "iterations": {"type": "integer", "minimum": 1, "maximum": 10000},
+    "n_observations": {"type": "integer", "minimum": 1, "maximum": 1000000},
+    "design_fingerprint": {
+      "oneOf": [
+        {"type": "null"},
+        {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+      ]
+    },
+    "censored": {"type": "boolean"}
+  }
+}

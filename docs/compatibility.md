@@ -22,10 +22,10 @@ an implementation claim, and an experimental capability is not production-ready.
 | Status | Count | Meaning |
 | --- | ---: | --- |
 | implemented | 0 | Implemented and accepted under the capability contract. |
-| experimental | 32 | Implemented narrowly with parity evidence; not production-ready. |
-| mapped | 0 | Mapped to a Python design, without an accepted implementation claim. |
+| experimental | 33 | Implemented narrowly with parity evidence; not production-ready. |
+| mapped | 3 | Mapped to a Python design, without an accepted implementation claim. |
 | unsupported | 0 | Intentionally excluded from the compatibility target. |
-| deferred | 249 | Catalogued for a later phase; no current implementation claim. |
+| deferred | 245 | Catalogued for a later phase; no current implementation claim. |
 
 ## Evidence-backed experimental surface
 
@@ -45,9 +45,10 @@ oracle-linked parity evidence. Their documented support envelopes remain narrow.
 | `contrast` | export | `holocron.models.contrast` | experimental | Phase 2-3 | 3 | `postfit-inference-v1` | Supports one declared linear coefficient contrast with model-based uncertainty; rms design-setting expansion, simultaneous intervals, joint contrasts, profile intervals, and Bayesian paths remain deferred. |
 | `datadist` | export | `holocron.design.DataDistribution` | experimental | Phase 2-3 | 4 | `data-distribution-v1` | Python uses immutable explicit metadata instead of R global options; categorical levels must be declared; dataframe/date-time adapters are deferred; ordered factors use the lower middle declared level when the level count is even; and default display probabilities are computed per variable when missingness differs. |
 | `interactions.containing` | export | `holocron.design.DesignSpec.interactions_containing` | experimental | Phase 2-3 | 1 | `formula-design-v1` | Returns zero-based term indices from an immutable DesignSpec; it does not inspect an R Design attribute. |
-| `lrm` | export | `holocron.models.fit_lrm` | experimental | Phase 2-3 | 4 | `binary-logistic-v1` | Binary, unpenalized, full-rank logit fits only; ordinal responses, weights, offsets, penalties, formula-level fitting, and the broader R lrm method surface remain deferred. |
+| `lrm` | export | `holocron.models.fit_lrm` | experimental | Phase 2-3 | 4 | `binary-logistic-v1` | fit_lrm is binary; the companion fit_ordinal_lrm implements unpenalized full-rank multi-intercept proportional odds. Weights, offsets, ordinal penalties, formula-level fitting, partial proportional odds, and the broader R lrm method surface remain deferred. |
 | `lsp` | export | `holocron.formula.LinearSplineTerm` | experimental | Phase 2-3 | 1 | `formula-design-v1` | Explicit finite knots only; automatic parameters remain deferred. |
 | `ols` | export | `holocron.models.fit_ols` | experimental | Phase 2-3 | 6 | `well-conditioned-ols-v1` | Initial narrow API; full rms contract remains deferred. |
+| `orm` | export | `holocron.models.fit_orm` | experimental | Phase 4-5 | 3 | `ordinal-model-v1` | Exact-response logistic, probit, loglog, cloglog, and cauchit cumulative links plus numeric mixed censoring are implemented. Three exact-response fixtures pass pinned-R parity. Single random intercept and mix_re use fit_random_intercept_orm; weights, offsets, penalties, y-dependent effects, and formula-level fitting remain deferred. |
 | `pol` | export | `holocron.formula.PolynomialTerm` | experimental | Phase 2-3 | 1 | `formula-design-v1` | Raw powers of explicit degree 2 through 10 only; no ambient option supplies a default degree. |
 | `rcs` | export | `holocron.design.RestrictedCubicSplineSpec` | experimental | Phase 2-3 | 6 | `deterministic-transform-v1` | Initial narrow API; full rms contract remains deferred. |
 | `robcov` | export | `holocron.models.robust_covariance` | experimental | Phase 6 | 1 | `covariance-resampling-v1` | Supports the uncorrected Huber cluster sandwich for current unpenalized OLS, binomial Glm, and binary lrm fits; Efron OLS covariance, finite-sample corrections, and penalized fits remain deferred. |
@@ -90,7 +91,7 @@ in the pinned namespace. Counts by tier are A: 32, B: 33, C: 26, D: 190.
 | `datadist` | export | `holocron.design.DataDistribution` | experimental | Phase 2-3 | 4 | `data-distribution-v1` | Python uses immutable explicit metadata instead of R global options; categorical levels must be declared; dataframe/date-time adapters are deferred; ordered factors use the lower middle declared level when the level count is even; and default display probabilities are computed per variable when missingness differs. |
 | `gTrans` | export | — | deferred | Phase 2-3 | 0 | — | Not yet implemented. |
 | `interactions.containing` | export | `holocron.design.DesignSpec.interactions_containing` | experimental | Phase 2-3 | 1 | `formula-design-v1` | Returns zero-based term indices from an immutable DesignSpec; it does not inspect an R Design attribute. |
-| `lrm` | export | `holocron.models.fit_lrm` | experimental | Phase 2-3 | 4 | `binary-logistic-v1` | Binary, unpenalized, full-rank logit fits only; ordinal responses, weights, offsets, penalties, formula-level fitting, and the broader R lrm method surface remain deferred. |
+| `lrm` | export | `holocron.models.fit_lrm` | experimental | Phase 2-3 | 4 | `binary-logistic-v1` | fit_lrm is binary; the companion fit_ordinal_lrm implements unpenalized full-rank multi-intercept proportional odds. Weights, offsets, ordinal penalties, formula-level fitting, partial proportional odds, and the broader R lrm method surface remain deferred. |
 | `lrm.fit` | export | — | deferred | Phase 2-3 | 0 | — | Not yet implemented. |
 | `lsp` | export | `holocron.formula.LinearSplineTerm` | experimental | Phase 2-3 | 1 | `formula-design-v1` | Explicit finite knots only; automatic parameters remain deferred. |
 | `matrx` | export | — | deferred | Phase 2-3 | 0 | — | Not yet implemented. |
@@ -113,11 +114,11 @@ in the pinned namespace. Counts by tier are A: 32, B: 33, C: 26, D: 190.
 
 | R symbol | Kind | Python entry point | Status | Milestone | Oracle cases | Tolerance profile | Known differences |
 | --- | --- | --- | --- | --- | ---: | --- | --- |
-| `ExProb` | export | — | deferred | Phase 4-5 | 0 | — | Not yet implemented. |
+| `ExProb` | export | `holocron.models.OrdinalResult.predict_exceedance` | mapped | Phase 4-5 | 0 | — | Returns exceedance probabilities at an observed ordinal response level; rms function factories, interpolation, and survival-model dispatch remain deferred. |
 | `Hazard` | export | — | deferred | Phase 4-5 | 0 | — | Not yet implemented. |
-| `Ocens` | export | — | deferred | Phase 4-5 | 0 | — | Not yet implemented. |
+| `Ocens` | export | `holocron.models.CensoredResponse` | mapped | Phase 4-5 | 0 | — | Numeric exact, left-, right-, interval-, and mixed-censoring endpoints are supported. Factor/character inputs, labels, units, missing rows, weights, and Surv conversion remain deferred. |
 | `Ocens2Surv` | export | — | deferred | Phase 4-5 | 0 | — | Not yet implemented. |
-| `Ocens2ord` | export | — | deferred | Phase 4-5 | 0 | — | Not yet implemented. |
+| `Ocens2ord` | export | `holocron.models.CensoredResponse.turnbull` | mapped | Phase 4-5 | 0 | — | Implements rounded exact-grid open one-sided endpoints, maximal intersections, self-consistency, support consolidation, and a right-tail category. Rich R attributes, the deprecated data-changing consolidation mode, weights, and missing-row reinsertion remain deferred. |
 | `Olinks` | export | — | deferred | Phase 4-5 | 0 | — | Not yet implemented. |
 | `Survival` | export | — | deferred | Phase 4-5 | 0 | — | Not yet implemented. |
 | `adapt_orm` | export | — | deferred | Phase 4-5 | 0 | — | Not yet implemented. |
@@ -126,7 +127,7 @@ in the pinned namespace. Counts by tier are A: 32, B: 33, C: 26, D: 190.
 | `npsurv` | export | — | deferred | Phase 4-5 | 2 | `nonparametric-survival-v1` | Oracle baselines captured; independent Python implementation and parity qualification remain deferred. |
 | `ordESS` | export | — | deferred | Phase 4-5 | 0 | — | Not yet implemented. |
 | `ordParallel` | export | — | deferred | Phase 4-5 | 0 | — | Not yet implemented. |
-| `orm` | export | — | deferred | Phase 4-5 | 3 | `ordinal-model-v1` | Oracle baselines captured; independent Python implementation and parity qualification remain deferred. |
+| `orm` | export | `holocron.models.fit_orm` | experimental | Phase 4-5 | 3 | `ordinal-model-v1` | Exact-response logistic, probit, loglog, cloglog, and cauchit cumulative links plus numeric mixed censoring are implemented. Three exact-response fixtures pass pinned-R parity. Single random intercept and mix_re use fit_random_intercept_orm; weights, offsets, penalties, y-dependent effects, and formula-level fitting remain deferred. |
 | `orm.fit` | export | — | deferred | Phase 4-5 | 0 | — | Not yet implemented. |
 | `psm` | export | — | deferred | Phase 4-5 | 2 | `parametric-survival-v1` | Oracle baselines captured; independent Python implementation and parity qualification remain deferred. |
 | `survest` | export | — | deferred | Phase 4-5 | 0 | — | Not yet implemented. |

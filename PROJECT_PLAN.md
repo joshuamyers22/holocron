@@ -1,6 +1,6 @@
 # Independent Python Implementation of `rms`: Production Project Plan
 
-**Status:** Active — Phases 0–3 complete for private experimental development; Phase 4 is next
+**Status:** Active — Phases 0–3 complete; Phase 4 implementation complete with exit evidence/review open
 **Plan date:** 2026-09-17  
 **Reference implementation:** Frank Harrell's R package `rms`  
 **Project name:** `holocron`  
@@ -715,6 +715,16 @@ independent-verification, license, and distribution gates remain separate.
 **Exit gate**
 
 Ordinal, clustered random-effects, and censored cases pass parity, operating-characteristic, quadrature, sparsity, and failure-mode gates. Memory growth, conditioning limits, and unsupported random-effects/y-dependent-effect combinations are published.
+
+**Implementation disposition:** Complete for the private experimental surface.
+Five cumulative links, multi-intercept `lrm`, exact-grid mixed censoring,
+bordered-tridiagonal exact-response updates, single and dual-scale clustered
+effects with escalating adaptive quadrature, boundary inference, predictions,
+tests, diagnostics, strict result serialization, and a 64-level stress case are
+implemented. Three exact-response cases pass the pinned R oracle. The exit gate
+remains open pending registered censored/clustered oracle cases, simulation and
+cross-platform performance evidence, tolerance calibration, and independent
+statistical review; see `governance/PHASE_4_ORDINAL_CENSORING.md`.
 
 ### Phase 5 — Survival models (24–36 weeks)
 

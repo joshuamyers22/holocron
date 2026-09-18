@@ -4,7 +4,7 @@
   "description": "Four-level ordinal probit fit with overlapping outcomes.",
   "expected_output": "orm-probit-four-level.json",
   "comparison_profile": "ordinal-model-v1",
-  "qualification_stage": "oracle-baseline",
+  "qualification_stage": "python-parity",
   "operation": "orm",
   "basis": "linear",
   "family": "probit",

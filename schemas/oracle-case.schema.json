@@ -220,7 +220,7 @@
       "title": "Ordinal regression case",
       "properties": {
         "operation": {"const": "orm"},
-        "qualification_stage": {"const": "oracle-baseline"},
+        "qualification_stage": {"const": "python-parity"},
         "basis": {"$ref": "#/$defs/modelBasis"},
         "family": {"enum": ["logistic", "probit", "loglog", "cloglog", "cauchit"]},
         "x": {"$ref": "#/$defs/fitNumericVector"},

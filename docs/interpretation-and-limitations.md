@@ -3,7 +3,8 @@
 Holocron currently proves narrow engineering claims: predictor-distribution
 summaries, allowlisted numeric/factor/restricted-interaction formula designs,
 and selected estimator and post-estimation outputs from well-conditioned full-
-rank OLS, Gaussian/binomial `Glm`, and binary `lrm`, including selected diagonal
+rank OLS, Gaussian/binomial `Glm`, binary `lrm`, and exact-response ordinal
+models, including selected diagonal
 penalties and alternative covariance estimates, match a pinned R `rms` oracle
 under field-aware tolerances.
 Seven locked synthetic simulation scenarios additionally pass predeclared
@@ -31,17 +32,20 @@ exact; approximate comparison is restricted to allowlisted numerical paths.
 
 - automatic knots or factor levels, unrestricted or higher-order interactions,
   dataframe/date-time adapters, and model-level missing-data policy;
-- ordinal, Cox, parametric-survival, and nonparametric-survival Python
-  estimators;
+- Cox, parametric-survival, and nonparametric-survival Python estimators;
 - adjusted-effect `summary.rms`, complete `anova.rms` partitioning, nonlinear or
   simultaneous contrasts, calibration, validation, and resampling;
 - off-diagonal penalties, `pentrace`, weighted or offset fits, bootstrap
   confidence intervals, resampled transformation learning, and aliased fits;
 - GLM families/links outside Gaussian/identity and binomial/logit, ordinal
-  `lrm`, plotting, nomograms, and a dataframe adapter contract.
+  weights/offsets/partial proportional odds, marginal random-effects
+  prediction, plotting, nomograms, and a dataframe adapter contract.
 
 Some unsupported families already have committed R oracle outputs. Those files
 freeze future comparison targets and do not imply a Python implementation.
+The exact-response ordinal fixtures are parity-qualified; censored and
+random-effects ordinal paths are implementation-tested but still await their
+Phase 4 oracle, simulation, platform, and independent-review evidence.
 
 ## Decision boundary
 

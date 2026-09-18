@@ -13,6 +13,7 @@
     {"python_type": "holocron.design.DesignSpec", "schema_version": "holocron-design-spec/v2", "schema_file": "design-spec.schema.json", "stability": "stable-schema"},
     {"python_type": "holocron.design.DesignMatrix", "schema_version": "holocron-design-matrix/v1", "schema_file": "design-matrix.schema.json", "stability": "stable-schema"},
     {"python_type": "holocron.models.OlsResult", "schema_version": "holocron-ols-result/v1", "schema_file": "ols-result.schema.json", "stability": "stable-schema"},
-    {"python_type": "holocron.models.BinaryLogisticResult", "schema_version": "holocron-binary-logistic-result/v1", "schema_file": "binary-logistic-result.schema.json", "stability": "stable-schema"}
+    {"python_type": "holocron.models.BinaryLogisticResult", "schema_version": "holocron-binary-logistic-result/v1", "schema_file": "binary-logistic-result.schema.json", "stability": "stable-schema"},
+    {"python_type": "holocron.models.OrdinalResult", "schema_version": "holocron-ordinal-result/v1", "schema_file": "ordinal-result.schema.json", "stability": "experimental-schema"}
   ]
 }

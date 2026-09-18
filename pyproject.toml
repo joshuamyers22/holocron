@@ -36,6 +36,7 @@ packages = ["src/holocron"]
 "schemas/design-spec.schema.json" = "holocron/schemas/design-spec.schema.json"
 "schemas/formula.schema.json" = "holocron/schemas/formula.schema.json"
 "schemas/ols-result.schema.json" = "holocron/schemas/ols-result.schema.json"
+"schemas/ordinal-result.schema.json" = "holocron/schemas/ordinal-result.schema.json"
 "schemas/serialization-manifest.json" = "holocron/schemas/serialization-manifest.json"
 
 [tool.hatch.build.targets.sdist]
@@ -51,6 +52,7 @@ include = [
     "schemas/design-spec.schema.json",
     "schemas/formula.schema.json",
     "schemas/ols-result.schema.json",
+    "schemas/ordinal-result.schema.json",
     "schemas/serialization-manifest.json",
 ]
 exclude = [

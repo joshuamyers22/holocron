@@ -65,7 +65,7 @@ class ParityContractTests(unittest.TestCase):
         )
         self.assertEqual(
             stages,
-            {"environment": 1, "python-parity": 37, "oracle-baseline": 9},
+            {"environment": 1, "python-parity": 40, "oracle-baseline": 6},
         )
 
     def test_tolerance_pilot_covers_all_accepted_profiles(self) -> None:

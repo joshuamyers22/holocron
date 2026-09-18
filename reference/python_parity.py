@@ -15,6 +15,7 @@ from holocron.models import (
     fit_glm,
     fit_lrm,
     fit_ols,
+    fit_orm,
     fit_penalized_lrm,
     fit_penalized_ols,
     likelihood,
@@ -349,6 +350,55 @@ def build_python_output(case: dict[str, JsonValue]) -> dict[str, JsonValue]:
             "residuals": cast(JsonValue, list(result.residuals)),
             "degrees_of_freedom": result.residual_degrees_of_freedom,
             "sigma": result.residual_scale,
+        }
+
+    if operation == "orm":
+        y = cast(list[float], case["y"])
+        result = fit_orm(
+            y,
+            basis,
+            family=cast(
+                Literal["logistic", "probit", "loglog", "cloglog", "cauchit"],
+                case["family"],
+            ),
+            feature_names=design_names,
+        )
+        threshold_count = len(result.thresholds)
+        covariance_indices = (0, *range(threshold_count, len(result.parameter_values)))
+        reduced_covariance = [
+            [result.covariance[row][column] for column in covariance_indices]
+            for row in covariance_indices
+        ]
+        return {
+            "ok": True,
+            "protocol_version": "1",
+            "operation": "orm",
+            "basis": case["basis"],
+            "knots": cast(JsonValue, list(knots)),
+            "coefficient_names": cast(JsonValue, list(result.coefficient_names)),
+            "coefficients": {
+                name: value
+                for name, value in zip(
+                    result.coefficient_names, result.parameter_values, strict=True
+                )
+            },
+            "covariance_names": cast(
+                JsonValue, [result.threshold_names[0], *result.feature_names]
+            ),
+            "covariance": cast(JsonValue, reduced_covariance),
+            "design_names": cast(JsonValue, design_names),
+            "design": cast(JsonValue, basis),
+            "linear_predictors": cast(JsonValue, list(result.linear_predictors)),
+            "deviance": cast(JsonValue, list(result.deviance)),
+            "family": result.family,
+            "response": cast(JsonValue, y),
+            "response_levels": cast(JsonValue, list(result.response_levels)),
+            "probability_names": cast(
+                JsonValue, [f"y={level:g}" for level in result.response_levels]
+            ),
+            "fitted_probabilities": cast(
+                JsonValue, [list(row) for row in result.fitted_probabilities]
+            ),
         }
 
     if operation == "lrm":

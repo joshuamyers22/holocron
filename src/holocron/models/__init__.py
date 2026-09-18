@@ -3,6 +3,15 @@
 from holocron.models.glm import fit_glm, fit_lrm
 from holocron.models.linear import OlsResult, fit_ols
 from holocron.models.logistic import BinaryLogisticResult
+from holocron.models.ordinal import (
+    CensoredResponse,
+    OrdinalDiagnostics,
+    OrdinalResult,
+    OrdinalTest,
+    TurnbullResult,
+    fit_ordinal_lrm,
+    fit_orm,
+)
 from holocron.models.postfit import (
     AnovaResult,
     AnovaTest,
@@ -20,6 +29,11 @@ from holocron.models.postfit import (
     residuals,
     summarize,
 )
+from holocron.models.random_ordinal import (
+    RandomEffectsOrdinalResult,
+    VarianceComponentTest,
+    fit_random_intercept_orm,
+)
 from holocron.models.regularization import (
     CovarianceEstimate,
     PenalizedResult,
@@ -33,15 +47,22 @@ __all__ = [
     "AnovaResult",
     "AnovaTest",
     "BinaryLogisticResult",
+    "CensoredResponse",
     "CovarianceEstimate",
     "CovarianceResult",
     "InferenceEstimate",
     "LikelihoodResult",
     "ModelSummary",
     "OlsResult",
+    "OrdinalDiagnostics",
+    "OrdinalResult",
+    "OrdinalTest",
     "PenalizedResult",
     "PredictionResult",
+    "RandomEffectsOrdinalResult",
     "ResidualResult",
+    "TurnbullResult",
+    "VarianceComponentTest",
     "anova",
     "bootstrap_covariance",
     "contrast",
@@ -49,8 +70,11 @@ __all__ = [
     "fit_glm",
     "fit_lrm",
     "fit_ols",
+    "fit_ordinal_lrm",
+    "fit_orm",
     "fit_penalized_lrm",
     "fit_penalized_ols",
+    "fit_random_intercept_orm",
     "likelihood",
     "predict",
     "residuals",

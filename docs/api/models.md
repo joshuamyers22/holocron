@@ -95,6 +95,37 @@ Return the versioned binary-logistic result document.
 
 Serialize this result as canonical non-executable JSON.
 
+## `CensoredResponse`
+
+```python
+class holocron.models.ordinal.CensoredResponse(lower: tuple[float, ...], upper: tuple[float, ...]) -> None
+```
+
+Validated exact, left-, right-, interval-, or mixed-censored response.
+
+### Attributes
+
+| Name | Type |
+| --- | --- |
+| `lower` | `tuple[float, ...]` |
+| `upper` | `tuple[float, ...]` |
+
+### `censoring_types`
+
+Return the exact censoring kind for each observation.
+
+### `from_intervals(lower: collections.abc.Iterable[float], upper: collections.abc.Iterable[float] | None = None) -> holocron.models.ordinal.CensoredResponse`
+
+Construct a response; omitted upper endpoints declare exact values.
+
+### `turnbull(self, *, precision: int = 7, max_iterations: int = 10000, tolerance: float = 1e-08) -> holocron.models.ordinal.TurnbullResult`
+
+Compute exact-grid maximal intersections and the Turnbull NPMLE.
+
+Finite interval endpoints are inclusive.  The finite endpoint of a
+one-sided interval is open, matching ``Ocens2ord``: ``(-inf, b)``
+excludes ``b`` and ``(a, inf)`` excludes ``a``.
+
 ## `CovarianceEstimate`
 
 ```python
@@ -243,6 +274,129 @@ Return the versioned fitted-result document.
 
 Serialize the fitted result as canonical non-executable JSON.
 
+## `OrdinalDiagnostics`
+
+```python
+class holocron.models.ordinal.OrdinalDiagnostics(iterations: int, covariance_condition: float, minimum_fitted_probability: float, maximum_simplex_error: float) -> None
+```
+
+Numerical and fitted-probability diagnostics for an ordinal fit.
+
+### Attributes
+
+| Name | Type |
+| --- | --- |
+| `iterations` | `int` |
+| `covariance_condition` | `float` |
+| `minimum_fitted_probability` | `float` |
+| `maximum_simplex_error` | `float` |
+
+## `OrdinalResult`
+
+```python
+class holocron.models.ordinal.OrdinalResult(estimator: Literal['orm', 'lrm'], family: Literal['logistic', 'probit', 'loglog', 'cloglog', 'cauchit'], response_levels: tuple[float, ...], threshold_names: tuple[str, ...], feature_names: tuple[str, ...], thresholds: tuple[float, ...], coefficients: tuple[float, ...], covariance: tuple[tuple[float, ...], ...], linear_predictors: tuple[float, ...], fitted_probabilities: tuple[tuple[float, ...], ...], deviance: tuple[float, float], iterations: int, n_observations: int, design_fingerprint: str | None = None, censored: bool = False) -> None
+```
+
+Immutable fitted result for a cumulative-link ordinal model.
+
+### Attributes
+
+| Name | Type |
+| --- | --- |
+| `estimator` | `OrdinalEstimator` |
+| `family` | `OrdinalFamily` |
+| `response_levels` | `tuple[float, ...]` |
+| `threshold_names` | `tuple[str, ...]` |
+| `feature_names` | `tuple[str, ...]` |
+| `thresholds` | `tuple[float, ...]` |
+| `coefficients` | `tuple[float, ...]` |
+| `covariance` | `tuple[tuple[float, ...], ...]` |
+| `linear_predictors` | `tuple[float, ...]` |
+| `fitted_probabilities` | `tuple[tuple[float, ...], ...]` |
+| `deviance` | `tuple[float, float]` |
+| `iterations` | `int` |
+| `n_observations` | `int` |
+| `design_fingerprint` | `str | None` |
+| `censored` | `bool` |
+
+### `coefficient_names`
+
+Return thresholds followed by slope names.
+
+### `diagnostics(self) -> holocron.models.ordinal.OrdinalDiagnostics`
+
+Return bounded conditioning and probability-simplex diagnostics.
+
+### `fingerprint`
+
+Return the SHA-256 identity of the canonical result document.
+
+### `from_dict(document: object) -> holocron.models.ordinal.OrdinalResult`
+
+Reconstruct an ordinal result from an exact-version document.
+
+### `from_json(value: str) -> holocron.models.ordinal.OrdinalResult`
+
+Reconstruct an ordinal result from strict bounded JSON.
+
+### `likelihood_ratio_test(self) -> holocron.models.ordinal.OrdinalTest`
+
+Test all slope coefficients against the fitted intercept-only model.
+
+### `parameter_values`
+
+Return thresholds followed by slopes.
+
+### `predict_exceedance(self, features: collections.abc.Iterable[collections.abc.Iterable[float]] | holocron.design.formula.DesignMatrix, *, level: float) -> tuple[float, ...]`
+
+Predict P(Y >= level) for an official fitted response level.
+
+### `predict_linear(self, features: collections.abc.Iterable[collections.abc.Iterable[float]] | holocron.design.formula.DesignMatrix) -> tuple[float, ...]`
+
+Predict the first-threshold linear predictor used by rms.
+
+### `predict_mean(self, features: collections.abc.Iterable[collections.abc.Iterable[float]] | holocron.design.formula.DesignMatrix) -> tuple[float, ...]`
+
+Predict the response mean using numeric response-level scores.
+
+### `predict_probabilities(self, features: collections.abc.Iterable[collections.abc.Iterable[float]] | holocron.design.formula.DesignMatrix) -> tuple[tuple[float, ...], ...]`
+
+Predict mutually exclusive probabilities in response-level order.
+
+### `predict_quantile(self, features: collections.abc.Iterable[collections.abc.Iterable[float]] | holocron.design.formula.DesignMatrix, *, probability: float = 0.5) -> tuple[float, ...]`
+
+Predict the smallest response level whose CDF reaches probability.
+
+### `to_dict(self) -> dict[str, None | bool | int | float | str | list['JsonValue'] | dict[str, 'JsonValue']]`
+
+Return the versioned ordinal result document.
+
+### `to_json(self) -> str`
+
+Serialize this result as canonical non-executable JSON.
+
+### `wald_test(self, names: collections.abc.Iterable[str] | None = None) -> holocron.models.ordinal.OrdinalTest`
+
+Jointly test named thresholds or slopes against zero.
+
+## `OrdinalTest`
+
+```python
+class holocron.models.ordinal.OrdinalTest(kind: Literal['likelihood-ratio', 'wald'], coefficient_names: tuple[str, ...], statistic: float, degrees_of_freedom: int, p_value: float) -> None
+```
+
+A likelihood-ratio or joint Wald chi-square test.
+
+### Attributes
+
+| Name | Type |
+| --- | --- |
+| `kind` | `Literal['likelihood-ratio', 'wald']` |
+| `coefficient_names` | `tuple[str, ...]` |
+| `statistic` | `float` |
+| `degrees_of_freedom` | `int` |
+| `p_value` | `float` |
+
 ## `PenalizedResult`
 
 ```python
@@ -300,6 +454,32 @@ Predictions with model-based standard errors and confidence limits.
 | `lower` | `tuple[float, ...]` |
 | `upper` | `tuple[float, ...]` |
 
+## `RandomEffectsOrdinalResult`
+
+```python
+class holocron.models.random_ordinal.RandomEffectsOrdinalResult(fixed: holocron.models.ordinal.OrdinalResult, sigma: float | None, sigma1: float | None, sigma2: float | None, cluster_count: int, cluster_modes: tuple[float, ...], log_likelihood: float, clustered_null_log_likelihood: float, quadrature_points: int, quadrature_history: tuple[tuple[int, float], ...], parameter_names: tuple[str, ...], covariance: tuple[tuple[float, ...], ...], variance_component_test: holocron.models.random_ordinal.VarianceComponentTest) -> None
+```
+
+Marginal ordinal fit with one cluster-level Gaussian random effect.
+
+### Attributes
+
+| Name | Type |
+| --- | --- |
+| `fixed` | `OrdinalResult` |
+| `sigma` | `float | None` |
+| `sigma1` | `float | None` |
+| `sigma2` | `float | None` |
+| `cluster_count` | `int` |
+| `cluster_modes` | `tuple[float, ...]` |
+| `log_likelihood` | `float` |
+| `clustered_null_log_likelihood` | `float` |
+| `quadrature_points` | `int` |
+| `quadrature_history` | `tuple[tuple[int, float], ...]` |
+| `parameter_names` | `tuple[str, ...]` |
+| `covariance` | `tuple[tuple[float, ...], ...]` |
+| `variance_component_test` | `VarianceComponentTest` |
+
 ## `ResidualResult`
 
 ```python
@@ -314,6 +494,43 @@ A named residual vector in original training-row order.
 | --- | --- |
 | `kind` | `str` |
 | `values` | `tuple[float, ...]` |
+
+## `TurnbullResult`
+
+```python
+class holocron.models.ordinal.TurnbullResult(lower: tuple[float, ...], upper: tuple[float, ...], first: tuple[int, ...], last: tuple[int, ...], probabilities: tuple[float, ...], survival: tuple[float, ...], iterations: int, converged: bool) -> None
+```
+
+Maximal intersections and their self-consistent probability masses.
+
+### Attributes
+
+| Name | Type |
+| --- | --- |
+| `lower` | `tuple[float, ...]` |
+| `upper` | `tuple[float, ...]` |
+| `first` | `tuple[int, ...]` |
+| `last` | `tuple[int, ...]` |
+| `probabilities` | `tuple[float, ...]` |
+| `survival` | `tuple[float, ...]` |
+| `iterations` | `int` |
+| `converged` | `bool` |
+
+## `VarianceComponentTest`
+
+```python
+class holocron.models.random_ordinal.VarianceComponentTest(statistic: float, mixture: str, p_value: float) -> None
+```
+
+Boundary-aware likelihood-ratio test for ordinal random effects.
+
+### Attributes
+
+| Name | Type |
+| --- | --- |
+| `statistic` | `float` |
+| `mixture` | `str` |
+| `p_value` | `float` |
 
 ## `anova(result: holocron.models.linear.OlsResult | holocron.models.logistic.BinaryLogisticResult, terms: holocron.design.formula.DesignSpec | collections.abc.Mapping[str, collections.abc.Iterable[str]]) -> holocron.models.postfit.AnovaResult`
 
@@ -348,6 +565,14 @@ matrix. Rank-deficient fits are rejected instead of silently dropping
 columns; an explicit alias policy will be added before formula-level OLS is
 declared complete.
 
+## `fit_ordinal_lrm(response: collections.abc.Iterable[int | float], features: collections.abc.Iterable[collections.abc.Iterable[float]] | holocron.design.formula.DesignMatrix, *, feature_names: collections.abc.Iterable[str] | None = None, design_fingerprint: str | None = None, max_iterations: int = 100, tolerance: float = 1e-10) -> holocron.models.ordinal.OrdinalResult`
+
+Fit the multi-intercept proportional-odds subset of ``lrm``.
+
+## `fit_orm(response: collections.abc.Iterable[int | float] | holocron.models.ordinal.CensoredResponse, features: collections.abc.Iterable[collections.abc.Iterable[float]] | holocron.design.formula.DesignMatrix, *, family: Literal['logistic', 'probit', 'loglog', 'cloglog', 'cauchit'] = 'logistic', feature_names: collections.abc.Iterable[str] | None = None, design_fingerprint: str | None = None, max_iterations: int = 100, tolerance: float = 1e-10, estimator: Literal['orm', 'lrm'] = 'orm') -> holocron.models.ordinal.OrdinalResult`
+
+Fit an unpenalized cumulative-link model, including interval outcomes.
+
 ## `fit_penalized_lrm(response: collections.abc.Iterable[int | float], features: collections.abc.Iterable[collections.abc.Iterable[float]] | holocron.design.formula.DesignMatrix, *, penalty: float | collections.abc.Mapping[str, float], feature_names: collections.abc.Iterable[str] | None = None, include_intercept: bool | None = None, design_fingerprint: str | None = None, max_iterations: int = 100, tolerance: float = 1e-10) -> holocron.models.regularization.PenalizedResult`
 
 Fit binary lrm with a diagonal quadratic penalty on slopes.
@@ -355,6 +580,10 @@ Fit binary lrm with a diagonal quadratic penalty on slopes.
 ## `fit_penalized_ols(response: collections.abc.Iterable[float], features: collections.abc.Iterable[collections.abc.Iterable[float]] | holocron.design.formula.DesignMatrix, *, penalty: float | collections.abc.Mapping[str, float], variance: Literal['simple', 'sandwich'] = 'simple', feature_names: collections.abc.Iterable[str] | None = None, include_intercept: bool | None = None, design_fingerprint: str | None = None) -> holocron.models.regularization.PenalizedResult`
 
 Fit diagonal quadratic-penalty OLS with the rms variance choices.
+
+## `fit_random_intercept_orm(response: collections.abc.Iterable[int | float] | holocron.models.ordinal.CensoredResponse, features: collections.abc.Iterable[collections.abc.Iterable[float]] | holocron.design.formula.DesignMatrix, clusters: collections.abc.Iterable[collections.abc.Hashable], *, family: Literal['logistic', 'probit', 'loglog', 'cloglog', 'cauchit'] = 'logistic', feature_names: collections.abc.Iterable[str] | None = None, design_fingerprint: str | None = None, mix_re: collections.abc.Iterable[float] | None = None, quadrature_grid: collections.abc.Iterable[int] = (7, 11, 15, 21, 31, 45, 63), quadrature_tolerance: float = 1e-06, max_iterations: int = 80, tolerance: float = 1e-06) -> holocron.models.random_ordinal.RandomEffectsOrdinalResult`
+
+Fit a single random-intercept ORM with escalating adaptive quadrature.
 
 ## `likelihood(result: holocron.models.linear.OlsResult | holocron.models.logistic.BinaryLogisticResult) -> holocron.models.postfit.LikelihoodResult`
 

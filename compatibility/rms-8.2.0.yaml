@@ -61,14 +61,14 @@
       "id": "export:ExProb",
       "r_symbol": "ExProb",
       "kind": "export",
-      "python_entry_point": null,
+      "python_entry_point": "holocron.models.OrdinalResult.predict_exceedance",
       "tier": "B",
       "milestone": "Phase 4-5",
-      "status": "deferred",
+      "status": "mapped",
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "known_differences": "Returns exceedance probabilities at an observed ordinal response level; rms function factories, interpolation, and survival-model dispatch remain deferred."
     },
     {
       "id": "export:Glm",
@@ -156,14 +156,14 @@
       "id": "export:Ocens",
       "r_symbol": "Ocens",
       "kind": "export",
-      "python_entry_point": null,
+      "python_entry_point": "holocron.models.CensoredResponse",
       "tier": "B",
       "milestone": "Phase 4-5",
-      "status": "deferred",
+      "status": "mapped",
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "known_differences": "Numeric exact, left-, right-, interval-, and mixed-censoring endpoints are supported. Factor/character inputs, labels, units, missing rows, weights, and Surv conversion remain deferred."
     },
     {
       "id": "export:Ocens2Surv",
@@ -182,14 +182,14 @@
       "id": "export:Ocens2ord",
       "r_symbol": "Ocens2ord",
       "kind": "export",
-      "python_entry_point": null,
+      "python_entry_point": "holocron.models.CensoredResponse.turnbull",
       "tier": "B",
       "milestone": "Phase 4-5",
-      "status": "deferred",
+      "status": "mapped",
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "known_differences": "Implements rounded exact-grid open one-sided endpoints, maximal intersections, self-consistency, support consolidation, and a right-tail category. Rich R attributes, the deprecated data-changing consolidation mode, weights, and missing-row reinsertion remain deferred."
     },
     {
       "id": "export:Olinks",
@@ -815,7 +815,7 @@
         "lrm-rcs-nonlinear"
       ],
       "tolerance_profile": "binary-logistic-v1",
-      "known_differences": "Binary, unpenalized, full-rank logit fits only; ordinal responses, weights, offsets, penalties, formula-level fitting, and the broader R lrm method surface remain deferred."
+      "known_differences": "fit_lrm is binary; the companion fit_ordinal_lrm implements unpenalized full-rank multi-intercept proportional odds. Weights, offsets, ordinal penalties, formula-level fitting, partial proportional odds, and the broader R lrm method surface remain deferred."
     },
     {
       "id": "export:lrm.fit",
@@ -1013,10 +1013,10 @@
       "id": "export:orm",
       "r_symbol": "orm",
       "kind": "export",
-      "python_entry_point": null,
+      "python_entry_point": "holocron.models.fit_orm",
       "tier": "B",
       "milestone": "Phase 4-5",
-      "status": "deferred",
+      "status": "experimental",
       "owner": "joshuamyers22",
       "oracle_cases": [
         "orm-cloglog-rcs",
@@ -1024,7 +1024,7 @@
         "orm-probit-four-level"
       ],
       "tolerance_profile": "ordinal-model-v1",
-      "known_differences": "Oracle baselines captured; independent Python implementation and parity qualification remain deferred."
+      "known_differences": "Exact-response logistic, probit, loglog, cloglog, and cauchit cumulative links plus numeric mixed censoring are implemented. Three exact-response fixtures pass pinned-R parity. Single random intercept and mix_re use fit_random_intercept_orm; weights, offsets, penalties, y-dependent effects, and formula-level fitting remain deferred."
     },
     {
       "id": "export:orm.fit",

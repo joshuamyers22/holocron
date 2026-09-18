@@ -4,7 +4,7 @@
   "description": "Three-level ordinal complementary-log-log spline fit.",
   "expected_output": "orm-cloglog-rcs.json",
   "comparison_profile": "ordinal-model-v1",
-  "qualification_stage": "oracle-baseline",
+  "qualification_stage": "python-parity",
   "operation": "orm",
   "basis": "rcs",
   "family": "cloglog",

@@ -32,6 +32,7 @@ nav:
       - Generalized and logistic models: guides/generalized-models.md
       - Post-estimation operations: guides/post-estimation.md
       - Penalties and alternative covariance: guides/regularization-and-covariance.md
+      - Ordinal regression and censoring: guides/ordinal-censoring.md
       - Simulation and numerical edges: guides/simulation-and-edge-evidence.md
       - Serialization and reconstruction: guides/serialization.md
       - R migration: guides/r-migration.md

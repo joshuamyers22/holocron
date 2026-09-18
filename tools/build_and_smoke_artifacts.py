@@ -31,13 +31,17 @@ from holocron.design import DataDistribution, DesignSpec, RestrictedCubicSplineS
 from holocron.formula import Formula
 from holocron.models import (
     BinaryLogisticResult,
+    CensoredResponse,
     OlsResult,
+    OrdinalResult,
     anova,
     bootstrap_covariance,
     contrast,
     covariance,
     fit_lrm,
     fit_ols,
+    fit_ordinal_lrm,
+    fit_orm,
     fit_penalized_lrm,
     fit_penalized_ols,
     likelihood,
@@ -133,10 +137,27 @@ assert len(residuals(binary_fit, response=binary_y).values) == len(binary_y)
 assert predict(binary_fit, binary_design).scale == "response"
 assert likelihood(binary_fit).parameter_count == binary_fit.rank
 assert penalized_binary.penalty_weights == (1.0,)
+
+ordinal_y = (1, 1, 2, 2, 3, 3, 1, 2, 3, 1, 2, 3)
+ordinal_x = ((-2.0,), (-1.5,), (-1.0,), (-0.5,), (0.0,), (0.5,),
+             (1.0,), (1.5,), (2.0,), (-0.75,), (0.25,), (1.25,))
+ordinal_fit = fit_orm(ordinal_y, ordinal_x, feature_names=("x",))
+ordinal_lrm = fit_ordinal_lrm(ordinal_y, ordinal_x, feature_names=("x",))
+censored = CensoredResponse.from_intervals(
+    (1, 1, 2, 2, 3, 3, -np.inf, 1, 2, 1, 2, 3),
+    (1, 1, 2, 2, 3, 3, 2, np.inf, 3, 1, 2, 3),
+)
+turnbull = censored.turnbull()
+assert turnbull.converged
+assert ordinal_fit.estimator == "orm"
+assert ordinal_lrm.estimator == "lrm"
+assert OrdinalResult.from_json(ordinal_fit.to_json()) == ordinal_fit
+assert np.allclose(np.sum(ordinal_fit.fitted_probabilities, axis=1), 1.0)
 schema_root = importlib.resources.files("holocron").joinpath("schemas")
 assert schema_root.joinpath("serialization-manifest.json").is_file()
 assert schema_root.joinpath("ols-result.schema.json").is_file()
 assert schema_root.joinpath("binary-logistic-result.schema.json").is_file()
+assert schema_root.joinpath("ordinal-result.schema.json").is_file()
 print(f"artifact smoke passed: {module_path}")
 """
 
