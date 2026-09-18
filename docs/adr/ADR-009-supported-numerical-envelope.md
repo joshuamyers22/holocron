@@ -101,7 +101,11 @@ its additional cases and policy. Static repository checks reject missing Phase
 historical policy identity. The same platform job separately executes the Phase
 3 estimator, result-operation, regularization, and alternative-covariance
 differential tests without treating that execution as accepted cross-platform
-calibration evidence.
+calibration evidence. It also executes the locked Phase 3 simulation plan and
+numerical-edge corpus and retains their platform-specific reports. Those
+runtime artifacts detect platform-sensitive statistical drift, but they are not
+immutable tolerance-calibration records and do not promote the provisional
+Phase 3 oracle profiles.
 
 ## Consequences and boundaries
 

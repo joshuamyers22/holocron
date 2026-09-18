@@ -6,8 +6,19 @@ and selected estimator and post-estimation outputs from well-conditioned full-
 rank OLS, Gaussian/binomial `Glm`, and binary `lrm`, including selected diagonal
 penalties and alternative covariance estimates, match a pinned R `rms` oracle
 under field-aware tolerances.
+Seven locked synthetic simulation scenarios additionally pass predeclared
+recovery, coverage, calibration, discrimination, type-I-error, robust-
+covariance, bootstrap, and penalization thresholds, and 16 numerical edge cases
+pass their declared exception or result-invariant contracts.
 That is not evidence of package-wide equivalence, model validity, or fitness for
 a consequential decision.
+
+The simulations use correctly specified synthetic data and fixed engineering-
+gate sizes. They are internal validity checks, not evidence for transportability,
+real-world calibration, subgroup performance, robustness to missingness or
+model misspecification, or an end-user decision process. See the
+[simulation evidence guide](guides/simulation-and-edge-evidence.md) for the
+design and observed metrics.
 
 ## Supported numerical envelope
 

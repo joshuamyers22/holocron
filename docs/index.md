@@ -22,6 +22,9 @@ The current experimental surface supports only:
 - diagonal quadratic penalties for OLS and binary `lrm`, plus robust/clustered
   and iid bootstrap covariance for every currently supported estimator path.
 
+The core estimator envelope is also checked by seven seeded simulation
+scenarios totaling 2,620 outer replications and a 16-case numerical edge corpus.
+
 These APIs are checked against 37 cases from the pinned R `rms` 8.2-0 oracle.
 The remaining nine frozen ordinal and survival cases are future baselines, not
 compatibility claims.
@@ -37,6 +40,7 @@ surface and evidence links.
 - [Fit the supported generalized and logistic models](guides/generalized-models.md).
 - [Use the supported post-estimation operations](guides/post-estimation.md).
 - [Use penalties and alternative covariance estimators](guides/regularization-and-covariance.md).
+- [Inspect and reproduce simulation and numerical-edge evidence](guides/simulation-and-edge-evidence.md).
 - [Understand the interpretation boundary](interpretation-and-limitations.md).
 - [Compare Python and R concepts](guides/r-migration.md).
 - [Contribute through the frozen development environment](development.md).

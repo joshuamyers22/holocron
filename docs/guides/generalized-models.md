@@ -66,5 +66,8 @@ remain absent. Diagonal OLS/lrm penalties and alternative covariance estimates
 are documented in the [regularization and covariance guide](regularization-and-covariance.md).
 The supported covariance, likelihood, residual,
 prediction, coefficient-summary, ANOVA, and contrast surface is documented in
-the [post-estimation guide](post-estimation.md). Its narrow parity evidence does
-not establish calibration, coverage, or production suitability.
+the [post-estimation guide](post-estimation.md). The
+[simulation evidence](simulation-and-edge-evidence.md) establishes only the
+predeclared calibration, coverage, and type-I-error behavior of the documented
+synthetic scenarios; it does not establish external validity or production
+suitability.

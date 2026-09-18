@@ -90,3 +90,8 @@ Notable changes are recorded here using semantic versioning.
   clustered covariance, deterministic or seeded iid bootstrap covariance, three
   vertical pinned-R cases, installed-artifact coverage, and explicit fail-closed
   regularization and resampling boundaries.
+- Completed the fourth Phase 3 deliverable with a schema-locked seven-scenario,
+  2,620-replication simulation plan; recovery, coverage, calibration,
+  discrimination, type-I-error, robust-covariance, bootstrap, and penalization
+  reports; and a 16-case numerical edge corpus with clean revision-bound
+  evidence and cross-platform CI execution.

@@ -15,3 +15,8 @@ Every commit contributed for inclusion must include a `Signed-off-by` line. By
 signing off, the contributor affirms that they have the right to submit the
 work under the repository's current terms and that the declared provenance is
 complete. See `governance/PROVENANCE.md`.
+
+Changes to Phase 3 estimators, inference, penalties, covariance, or numerical
+failure behavior must also run `make phase-3-evidence`. Changes to its plan,
+thresholds, corpus, or report schemas require an updated acceptance record and
+a clean `make phase-3-evidence-clean` report from the committed implementation.

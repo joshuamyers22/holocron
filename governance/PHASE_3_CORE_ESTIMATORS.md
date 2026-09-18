@@ -59,6 +59,7 @@ ANOVA, and contrast operations are now accepted in the separate
 [result-operations record](PHASE_3_RESULT_OPERATIONS.md). The diagonal-penalty
 and alternative-covariance surface is accepted in the
 [regularization/covariance record](PHASE_3_REGULARIZATION_COVARIANCE.md).
-Simulation and numerical edge-case evidence, specialist review, the Phase 3
-exit gate, capability promotion beyond experimental, consequential use, and
-external distribution all remain open.
+Simulation and numerical edge-case evidence is now accepted in the
+[simulation/edge record](PHASE_3_SIMULATION_EDGES.md). The complete getting-
+started workflow, specialist review, the Phase 3 exit gate, capability promotion
+beyond experimental, consequential use, and external distribution remain open.

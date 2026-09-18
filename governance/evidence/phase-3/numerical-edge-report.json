@@ -1,0 +1,188 @@
+{
+  "cases": [
+    {
+      "case_id": "ols-exact-rank-deficiency",
+      "checks": [
+        "raised:RankDeficiencyError"
+      ],
+      "expected_outcome": "error",
+      "observed_exception": "RankDeficiencyError",
+      "outcome": "passed"
+    },
+    {
+      "case_id": "ols-no-residual-degrees-of-freedom",
+      "checks": [
+        "raised:InputValidationError"
+      ],
+      "expected_outcome": "error",
+      "observed_exception": "InputValidationError",
+      "outcome": "passed"
+    },
+    {
+      "case_id": "ols-near-collinear-full-rank",
+      "checks": [
+        "finite",
+        "covariance-symmetric",
+        "covariance-psd",
+        "prediction-stable"
+      ],
+      "expected_outcome": "success",
+      "observed_exception": null,
+      "outcome": "passed"
+    },
+    {
+      "case_id": "ols-scale-induced-rank-loss",
+      "checks": [
+        "raised:RankDeficiencyError"
+      ],
+      "expected_outcome": "error",
+      "observed_exception": "RankDeficiencyError",
+      "outcome": "passed"
+    },
+    {
+      "case_id": "glm-single-class-response",
+      "checks": [
+        "raised:InputValidationError"
+      ],
+      "expected_outcome": "error",
+      "observed_exception": "InputValidationError",
+      "outcome": "passed"
+    },
+    {
+      "case_id": "glm-complete-separation",
+      "checks": [
+        "raised:SeparationError"
+      ],
+      "expected_outcome": "error",
+      "observed_exception": "SeparationError",
+      "outcome": "passed"
+    },
+    {
+      "case_id": "lrm-complete-separation",
+      "checks": [
+        "raised:SeparationError"
+      ],
+      "expected_outcome": "error",
+      "observed_exception": "SeparationError",
+      "outcome": "passed"
+    },
+    {
+      "case_id": "lrm-iteration-exhaustion",
+      "checks": [
+        "raised:ConvergenceError"
+      ],
+      "expected_outcome": "error",
+      "observed_exception": "ConvergenceError",
+      "outcome": "passed"
+    },
+    {
+      "case_id": "penalized-lrm-recovers-separated-fit",
+      "checks": [
+        "finite",
+        "covariance-symmetric",
+        "covariance-psd",
+        "effective-df-bounded"
+      ],
+      "expected_outcome": "success",
+      "observed_exception": null,
+      "outcome": "passed"
+    },
+    {
+      "case_id": "penalized-ols-rms-negative-residual-df",
+      "checks": [
+        "finite",
+        "covariance-symmetric",
+        "covariance-psd",
+        "rms-effective-df-accounting",
+        "negative-residual-df"
+      ],
+      "expected_outcome": "success",
+      "observed_exception": null,
+      "outcome": "passed"
+    },
+    {
+      "case_id": "robust-covariance-one-cluster",
+      "checks": [
+        "raised:InputValidationError"
+      ],
+      "expected_outcome": "error",
+      "observed_exception": "InputValidationError",
+      "outcome": "passed"
+    },
+    {
+      "case_id": "robust-covariance-wrong-design",
+      "checks": [
+        "raised:InputValidationError"
+      ],
+      "expected_outcome": "error",
+      "observed_exception": "InputValidationError",
+      "outcome": "passed"
+    },
+    {
+      "case_id": "robust-covariance-valid-clusters",
+      "checks": [
+        "finite",
+        "covariance-symmetric",
+        "covariance-psd"
+      ],
+      "expected_outcome": "success",
+      "observed_exception": null,
+      "outcome": "passed"
+    },
+    {
+      "case_id": "bootstrap-ols-singular-resample",
+      "checks": [
+        "raised:NumericalError"
+      ],
+      "expected_outcome": "error",
+      "observed_exception": "NumericalError",
+      "outcome": "passed"
+    },
+    {
+      "case_id": "bootstrap-lrm-single-class-resample",
+      "checks": [
+        "raised:NumericalError"
+      ],
+      "expected_outcome": "error",
+      "observed_exception": "NumericalError",
+      "outcome": "passed"
+    },
+    {
+      "case_id": "bootstrap-ols-declared-schedule",
+      "checks": [
+        "finite",
+        "covariance-symmetric",
+        "covariance-psd",
+        "reproducible"
+      ],
+      "expected_outcome": "success",
+      "observed_exception": null,
+      "outcome": "passed"
+    }
+  ],
+  "corpus_id": "phase-3-core-numerical-edges-v1",
+  "corpus_sha256": "1c20d01ab1e8ca1cce7e1924d403ea24be3789ea84ff27e2057bbd0357fc91c2",
+  "evaluated_at_utc": "2026-09-18T18:41:15.682944Z",
+  "outcome": "passed",
+  "schema_version": "holocron-phase-3-edge-report/v1",
+  "source": {
+    "code_revision": "822cccc2e1dcb8eb337dda0c324fca3ea9ee6800",
+    "working_tree_dirty": false
+  },
+  "summary": {
+    "case_count": 16,
+    "categories": [
+      "bootstrap",
+      "conditioning",
+      "convergence",
+      "degrees-of-freedom",
+      "penalty",
+      "rank",
+      "response",
+      "robust-covariance",
+      "separation"
+    ],
+    "failed_cases": [],
+    "outcome": "passed"
+  }
+}

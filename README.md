@@ -14,11 +14,12 @@ Holocron is experimental and incomplete. Do not use it for consequential
 analysis, inference, prediction, or clinical decisions.
 
 Phases 0–2 are complete for private experimental development, and Phase 3 is
-active. Its first three deliverables—experimental `ols`, Gaussian/identity and
+active. Its first four deliverables—experimental `ols`, Gaussian/identity and
 binomial/logit `Glm`, and binary `lrm` estimators plus their covariance,
 likelihood, residual, prediction, coefficient-summary, ANOVA, and linear-
 contrast operations, diagonal OLS/lrm quadratic penalties, and robust and
-bootstrap covariance—are complete. The Phase 1 exit
+bootstrap covariance, plus locked simulation reports and a numerical edge-case
+corpus—are complete. The Phase 1 exit
 gate is recorded in the
 [completion record](https://github.com/joshuamyers22/holocron/blob/main/governance/PHASE_1_COMPLETION.md);
 the evidence-backed Phase 2 disposition is recorded in its
@@ -50,7 +51,10 @@ arm64/Accelerate and Ubuntu 24.04 x86_64/OpenBLAS, as defined by ADR-009.
 
 Transformation breadth is additionally checked by deterministic generative
 tests covering every supported degree, knot-count, level-count, and ordered pair
-of restricted-interaction component kinds.
+of restricted-interaction component kinds. Seven seeded Phase 3 simulation
+scenarios run 2,620 outer replications against predeclared statistical
+thresholds, and a data-driven corpus exercises 16 numerical edge cases across
+nine failure and stability categories.
 
 ## Library API
 
@@ -127,15 +131,18 @@ dependency/build graph are frozen and checked as described in the
 make setup
 make check
 make phase-1-e2e
+make phase-3-evidence-clean
 make build
 make audit
 ```
 
 `make check` runs formatting, linting, strict type checking, unit and parity
 fixture tests, frozen-environment checks, and reference-metadata validation.
-It also executes the Phase 1 design-to-fit-to-prediction slice and writes
-schema-valid parity evidence under `.work/phase-1-evidence/`. CI reruns its
-clean-checkout form and retains the evidence for 30 days.
+It also executes the Phase 1 and Phase 2 evidence gates plus the Phase 3
+simulation and numerical-edge suites. Their schema-valid reports are written
+under `.work/` and retained by CI for 30 days. The committed Phase 3 acceptance
+reports and interpretation are described in the
+[simulation guide](https://github.com/joshuamyers22/holocron/blob/main/docs/guides/simulation-and-edge-evidence.md).
 `make build` uses the locked build backend offline and without isolation, then
 inspects and independently installs both wheel and source distribution into
 fresh environments. Each installation runs dependency validation and the

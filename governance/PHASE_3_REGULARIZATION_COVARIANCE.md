@@ -47,6 +47,7 @@ of penalized fits, Efron OLS covariance, finite-sample corrections, cluster or
 group-stratified bootstrap, failed-replicate skipping, stored replicate
 coefficients, and bootstrap confidence intervals are absent.
 
-Simulation reports and the numerical edge-case corpus are the next Phase 3
-deliverable. Specialist review, the Phase 3 exit gate, consequential use, and
-external distribution remain open.
+Simulation reports and the numerical edge-case corpus are now accepted in the
+[simulation/edge record](PHASE_3_SIMULATION_EDGES.md). The complete getting-
+started workflow, specialist review, the Phase 3 exit gate, consequential use,
+and external distribution remain open.

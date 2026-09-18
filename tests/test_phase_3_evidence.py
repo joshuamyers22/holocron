@@ -1,7 +1,9 @@
 from __future__ import annotations
 
+import hashlib
 import unittest
 from datetime import UTC, datetime
+from pathlib import Path
 from typing import cast
 
 from reference.contracts import (
@@ -13,10 +15,20 @@ from reference.contracts import (
 from tools.run_phase_3_evidence import (
     CORPUS,
     CORPUS_SCHEMA,
+    EDGE_REPORT_SCHEMA,
     PLAN,
     PLAN_SCHEMA,
+    SIMULATION_REPORT_SCHEMA,
     run_edge_corpus,
 )
+
+ROOT = PLAN.parents[1]
+SIMULATION_REPORT = ROOT / "governance/evidence/phase-3/simulation-report.json"
+EDGE_REPORT = ROOT / "governance/evidence/phase-3/numerical-edge-report.json"
+
+
+def sha256(path: Path) -> str:
+    return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
 class PhaseThreeEvidenceTests(unittest.TestCase):
@@ -76,6 +88,22 @@ class PhaseThreeEvidenceTests(unittest.TestCase):
         self.assertEqual(summary["case_count"], 16)
         self.assertEqual(summary["failed_cases"], [])
         self.assertEqual(report["outcome"], "passed")
+
+    def test_committed_reports_validate_and_bind_their_inputs(self) -> None:
+        simulation = require_object(
+            load_json(SIMULATION_REPORT), name="simulation report"
+        )
+        edge = require_object(load_json(EDGE_REPORT), name="edge report")
+        validate_document(simulation, SIMULATION_REPORT_SCHEMA)
+        validate_document(edge, EDGE_REPORT_SCHEMA)
+
+        self.assertEqual(simulation["plan_sha256"], sha256(PLAN))
+        self.assertEqual(edge["corpus_sha256"], sha256(CORPUS))
+        self.assertEqual(simulation["outcome"], "passed")
+        self.assertEqual(edge["outcome"], "passed")
+        for report in (simulation, edge):
+            source = require_object(report["source"], name="report.source")
+            self.assertFalse(source["working_tree_dirty"])
 
 
 if __name__ == "__main__":

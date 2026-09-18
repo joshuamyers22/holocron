@@ -1,0 +1,341 @@
+{
+  "environment": {
+    "machine": "arm64",
+    "numpy_version": "2.5.3",
+    "operating_system": "Darwin",
+    "python_implementation": "CPython",
+    "python_version": "3.12.14"
+  },
+  "evaluated_at_utc": "2026-09-18T18:41:15.682944Z",
+  "outcome": "passed",
+  "plan_id": "phase-3-core-estimators-v1",
+  "plan_sha256": "f39d3dfa0db84fc1705975a088a414f751f28ddff0b1093bfa7f73a313377cd4",
+  "scenarios": [
+    {
+      "failed_replications": [],
+      "metrics": [
+        {
+          "maximum": 0.04,
+          "minimum": null,
+          "name": "intercept_abs_bias",
+          "outcome": "passed",
+          "value": 0.0018182672821496215
+        },
+        {
+          "maximum": 0.03,
+          "minimum": null,
+          "name": "slope_abs_bias",
+          "outcome": "passed",
+          "value": 0.000850215967001855
+        },
+        {
+          "maximum": 0.14,
+          "minimum": null,
+          "name": "slope_rmse",
+          "outcome": "passed",
+          "value": 0.1148167704386624
+        },
+        {
+          "maximum": 0.98,
+          "minimum": 0.92,
+          "name": "slope_coverage",
+          "outcome": "passed",
+          "value": 0.95
+        },
+        {
+          "maximum": 0.001,
+          "minimum": null,
+          "name": "failure_rate",
+          "outcome": "passed",
+          "value": 0.0
+        }
+      ],
+      "outcome": "passed",
+      "replication_sha256": "c645651b783d9ba24d9ccde2f361b0eac0925f31bd87bc98ecb63bd02a267384",
+      "replications": 500,
+      "scenario_id": "ols-gaussian-recovery",
+      "seed": 31001,
+      "successful_replications": 500
+    },
+    {
+      "failed_replications": [],
+      "metrics": [
+        {
+          "maximum": 0.08,
+          "minimum": 0.02,
+          "name": "type_i_error",
+          "outcome": "passed",
+          "value": 0.052
+        },
+        {
+          "maximum": 0.001,
+          "minimum": null,
+          "name": "failure_rate",
+          "outcome": "passed",
+          "value": 0.0
+        }
+      ],
+      "outcome": "passed",
+      "replication_sha256": "6541e8d6d78231b3fc0a0da79ae3feb244c94bb6a51099d4764edd90166cf363",
+      "replications": 500,
+      "scenario_id": "ols-null-type-i",
+      "seed": 31002,
+      "successful_replications": 500
+    },
+    {
+      "failed_replications": [],
+      "metrics": [
+        {
+          "maximum": 0.08,
+          "minimum": null,
+          "name": "glm_slope_abs_bias",
+          "outcome": "passed",
+          "value": 0.0048583674571920366
+        },
+        {
+          "maximum": 0.18,
+          "minimum": null,
+          "name": "glm_slope_rmse",
+          "outcome": "passed",
+          "value": 0.14541730520561424
+        },
+        {
+          "maximum": 0.99,
+          "minimum": 0.9,
+          "name": "glm_slope_coverage",
+          "outcome": "passed",
+          "value": 0.93
+        },
+        {
+          "maximum": 0.08,
+          "minimum": null,
+          "name": "lrm_slope_abs_bias",
+          "outcome": "passed",
+          "value": 0.0048583668805964875
+        },
+        {
+          "maximum": 0.18,
+          "minimum": null,
+          "name": "lrm_slope_rmse",
+          "outcome": "passed",
+          "value": 0.14541730577060483
+        },
+        {
+          "maximum": 0.99,
+          "minimum": 0.9,
+          "name": "lrm_slope_coverage",
+          "outcome": "passed",
+          "value": 0.93
+        },
+        {
+          "maximum": 1e-06,
+          "minimum": null,
+          "name": "glm_lrm_max_coefficient_difference",
+          "outcome": "passed",
+          "value": 2.6883337334027146e-08
+        },
+        {
+          "maximum": 0.12,
+          "minimum": null,
+          "name": "calibration_intercept_abs_mean",
+          "outcome": "passed",
+          "value": 0.014723752446756807
+        },
+        {
+          "maximum": 0.15,
+          "minimum": null,
+          "name": "calibration_slope_abs_error",
+          "outcome": "passed",
+          "value": 0.055668202049918625
+        },
+        {
+          "maximum": 0.23,
+          "minimum": null,
+          "name": "brier_mean",
+          "outcome": "passed",
+          "value": 0.222871591574309
+        },
+        {
+          "maximum": null,
+          "minimum": 0.64,
+          "name": "auc_mean",
+          "outcome": "passed",
+          "value": 0.6803399335896756
+        },
+        {
+          "maximum": 0.01,
+          "minimum": null,
+          "name": "failure_rate",
+          "outcome": "passed",
+          "value": 0.0
+        }
+      ],
+      "outcome": "passed",
+      "replication_sha256": "91f7d939ef94ed6c7623d58e425f7a6cf44a1061346697412e7b718cb01514d2",
+      "replications": 400,
+      "scenario_id": "binary-logit-recovery",
+      "seed": 31003,
+      "successful_replications": 400
+    },
+    {
+      "failed_replications": [],
+      "metrics": [
+        {
+          "maximum": 0.08,
+          "minimum": 0.02,
+          "name": "glm_type_i_error",
+          "outcome": "passed",
+          "value": 0.0375
+        },
+        {
+          "maximum": 0.08,
+          "minimum": 0.02,
+          "name": "lrm_type_i_error",
+          "outcome": "passed",
+          "value": 0.0375
+        },
+        {
+          "maximum": 0.01,
+          "minimum": null,
+          "name": "failure_rate",
+          "outcome": "passed",
+          "value": 0.0
+        }
+      ],
+      "outcome": "passed",
+      "replication_sha256": "ff3c24370cf7ccc48e20599d5dc15204e444a7ad49f8aac6647c8612f5ec9d13",
+      "replications": 400,
+      "scenario_id": "binary-null-type-i",
+      "seed": 31004,
+      "successful_replications": 400
+    },
+    {
+      "failed_replications": [],
+      "metrics": [
+        {
+          "maximum": 0.99,
+          "minimum": 0.9,
+          "name": "robust_coverage",
+          "outcome": "passed",
+          "value": 0.9175
+        },
+        {
+          "maximum": 0.92,
+          "minimum": null,
+          "name": "naive_coverage",
+          "outcome": "passed",
+          "value": 0.7125
+        },
+        {
+          "maximum": null,
+          "minimum": 0.04,
+          "name": "coverage_gain",
+          "outcome": "passed",
+          "value": 0.20499999999999996
+        },
+        {
+          "maximum": 1.2,
+          "minimum": 0.8,
+          "name": "robust_se_empirical_ratio",
+          "outcome": "passed",
+          "value": 0.9421369732177842
+        },
+        {
+          "maximum": 0.001,
+          "minimum": null,
+          "name": "failure_rate",
+          "outcome": "passed",
+          "value": 0.0
+        }
+      ],
+      "outcome": "passed",
+      "replication_sha256": "cd92a20a2c17c820b811511ec63b18594203159941e4b1504becc0512c65c8e4",
+      "replications": 400,
+      "scenario_id": "clustered-covariance-coverage",
+      "seed": 31005,
+      "successful_replications": 400
+    },
+    {
+      "failed_replications": [],
+      "metrics": [
+        {
+          "maximum": 1.3,
+          "minimum": 0.7,
+          "name": "bootstrap_empirical_variance_ratio",
+          "outcome": "passed",
+          "value": 1.067511314562076
+        },
+        {
+          "maximum": 0.03,
+          "minimum": null,
+          "name": "bootstrap_centering_abs_bias",
+          "outcome": "passed",
+          "value": 0.0009994821209784724
+        },
+        {
+          "maximum": 0.01,
+          "minimum": null,
+          "name": "failure_rate",
+          "outcome": "passed",
+          "value": 0.0
+        }
+      ],
+      "outcome": "passed",
+      "replication_sha256": "d1d638a0a11e359c2c6e9bd067b7f24da1d51dd8ef8d0f3e90e3842578ae1cc3",
+      "replications": 120,
+      "scenario_id": "ols-bootstrap-variance",
+      "seed": 31006,
+      "successful_replications": 120
+    },
+    {
+      "failed_replications": [],
+      "metrics": [
+        {
+          "maximum": 0.9,
+          "minimum": null,
+          "name": "coefficient_mse_ratio",
+          "outcome": "passed",
+          "value": 0.06411541890226662
+        },
+        {
+          "maximum": 1.05,
+          "minimum": null,
+          "name": "prediction_mse_ratio",
+          "outcome": "passed",
+          "value": 0.6978569680943283
+        },
+        {
+          "maximum": 3.0,
+          "minimum": 1.0,
+          "name": "mean_effective_df",
+          "outcome": "passed",
+          "value": 2.3477199293565847
+        },
+        {
+          "maximum": 0.001,
+          "minimum": null,
+          "name": "failure_rate",
+          "outcome": "passed",
+          "value": 0.0
+        }
+      ],
+      "outcome": "passed",
+      "replication_sha256": "7489571651eca529d2e89d9a25f17448df7d144233090d29341fbd02313191a4",
+      "replications": 300,
+      "scenario_id": "penalized-ols-collinearity",
+      "seed": 31007,
+      "successful_replications": 300
+    }
+  ],
+  "schema_version": "holocron-phase-3-simulation-report/v1",
+  "source": {
+    "code_revision": "822cccc2e1dcb8eb337dda0c324fca3ea9ee6800",
+    "working_tree_dirty": false
+  },
+  "summary": {
+    "failed_scenarios": [],
+    "outcome": "passed",
+    "replication_count": 2620,
+    "scenario_count": 7
+  }
+}
