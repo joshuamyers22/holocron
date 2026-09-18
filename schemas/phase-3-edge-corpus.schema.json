@@ -1,0 +1,70 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/joshuamyers22/holocron/schemas/phase-3-edge-corpus.schema.json",
+  "title": "Holocron Phase 3 numerical edge-case corpus",
+  "type": "object",
+  "properties": {
+    "schema_version": {"const": "holocron-phase-3-edge-corpus/v1"},
+    "corpus_id": {"const": "phase-3-core-numerical-edges-v1"},
+    "cases": {
+      "type": "array",
+      "minItems": 12,
+      "maxItems": 64,
+      "items": {
+        "type": "object",
+        "properties": {
+          "case_id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9-]*$"},
+          "category": {
+            "enum": ["rank", "degrees-of-freedom", "conditioning", "response", "separation", "convergence", "penalty", "robust-covariance", "bootstrap"]
+          },
+          "operation": {
+            "enum": ["fit_ols", "fit_glm", "fit_lrm", "fit_penalized_ols", "fit_penalized_lrm", "robust_covariance", "bootstrap_covariance"]
+          },
+          "response": {
+            "type": "array",
+            "minItems": 2,
+            "maxItems": 1000,
+            "items": {"type": "number"}
+          },
+          "features": {
+            "type": "array",
+            "minItems": 2,
+            "maxItems": 1000,
+            "items": {
+              "type": "array",
+              "minItems": 1,
+              "maxItems": 32,
+              "items": {"type": "number"}
+            }
+          },
+          "options": {"type": "object"},
+          "expected": {
+            "type": "object",
+            "properties": {
+              "outcome": {"enum": ["success", "error"]},
+              "exception": {
+                "oneOf": [
+                  {"type": "null"},
+                  {"enum": ["InputValidationError", "RankDeficiencyError", "ConvergenceError", "SeparationError", "NumericalError"]}
+                ]
+              },
+              "invariants": {
+                "type": "array",
+                "uniqueItems": true,
+                "items": {
+                  "enum": ["finite", "covariance-symmetric", "covariance-psd", "prediction-stable", "effective-df-bounded", "rms-effective-df-accounting", "negative-residual-df", "penalty-reduces-norm", "reproducible"]
+                }
+              }
+            },
+            "required": ["outcome", "exception", "invariants"],
+            "additionalProperties": false
+          }
+        },
+        "required": ["case_id", "category", "operation", "response", "features", "options", "expected"],
+        "additionalProperties": false
+      }
+    }
+  },
+  "required": ["schema_version", "corpus_id", "cases"],
+  "additionalProperties": false
+}

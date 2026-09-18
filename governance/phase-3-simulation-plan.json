@@ -1,0 +1,108 @@
+{
+  "schema_version": "holocron-phase-3-simulation-plan/v1",
+  "plan_id": "phase-3-core-estimators-v1",
+  "approved_for": "private-experimental-development",
+  "approved_on": "2026-09-18",
+  "confidence_level": 0.95,
+  "significance_level": 0.05,
+  "detail_policy": "Retain aggregate metrics, failed replication identifiers, and a SHA-256 digest of canonical per-replication diagnostics. Fixed scenario seeds reproduce any replication without committing row-level simulation data.",
+  "scenarios": [
+    {
+      "scenario_id": "ols-gaussian-recovery",
+      "seed": 31001,
+      "replications": 500,
+      "sample_size": 120,
+      "parameters": {"intercept": 1.5, "slope": 0.8, "sigma": 1.2},
+      "acceptance": {
+        "intercept_abs_bias": {"maximum": 0.04},
+        "slope_abs_bias": {"maximum": 0.03},
+        "slope_rmse": {"maximum": 0.14},
+        "slope_coverage": {"minimum": 0.92, "maximum": 0.98},
+        "failure_rate": {"maximum": 0.001}
+      }
+    },
+    {
+      "scenario_id": "ols-null-type-i",
+      "seed": 31002,
+      "replications": 500,
+      "sample_size": 120,
+      "parameters": {"intercept": 1.5, "slope": 0.0, "sigma": 1.2},
+      "acceptance": {
+        "type_i_error": {"minimum": 0.02, "maximum": 0.08},
+        "failure_rate": {"maximum": 0.001}
+      }
+    },
+    {
+      "scenario_id": "binary-logit-recovery",
+      "seed": 31003,
+      "replications": 400,
+      "sample_size": 300,
+      "parameters": {"intercept": -0.3, "slope": 0.7, "validation_size": 1200},
+      "acceptance": {
+        "glm_slope_abs_bias": {"maximum": 0.08},
+        "glm_slope_rmse": {"maximum": 0.18},
+        "glm_slope_coverage": {"minimum": 0.9, "maximum": 0.99},
+        "lrm_slope_abs_bias": {"maximum": 0.08},
+        "lrm_slope_rmse": {"maximum": 0.18},
+        "lrm_slope_coverage": {"minimum": 0.9, "maximum": 0.99},
+        "glm_lrm_max_coefficient_difference": {"maximum": 0.000001},
+        "calibration_intercept_abs_mean": {"maximum": 0.12},
+        "calibration_slope_abs_error": {"maximum": 0.15},
+        "brier_mean": {"maximum": 0.23},
+        "auc_mean": {"minimum": 0.64},
+        "failure_rate": {"maximum": 0.01}
+      }
+    },
+    {
+      "scenario_id": "binary-null-type-i",
+      "seed": 31004,
+      "replications": 400,
+      "sample_size": 300,
+      "parameters": {"intercept": -0.3, "slope": 0.0},
+      "acceptance": {
+        "glm_type_i_error": {"minimum": 0.02, "maximum": 0.08},
+        "lrm_type_i_error": {"minimum": 0.02, "maximum": 0.08},
+        "failure_rate": {"maximum": 0.01}
+      }
+    },
+    {
+      "scenario_id": "clustered-covariance-coverage",
+      "seed": 31005,
+      "replications": 400,
+      "sample_size": 200,
+      "parameters": {"cluster_count": 50, "cluster_size": 4, "intercept": 1.0, "slope": 0.7, "cluster_sigma": 1.0, "noise_sigma": 0.5},
+      "acceptance": {
+        "robust_coverage": {"minimum": 0.9, "maximum": 0.99},
+        "naive_coverage": {"maximum": 0.92},
+        "coverage_gain": {"minimum": 0.04},
+        "robust_se_empirical_ratio": {"minimum": 0.8, "maximum": 1.2},
+        "failure_rate": {"maximum": 0.001}
+      }
+    },
+    {
+      "scenario_id": "ols-bootstrap-variance",
+      "seed": 31006,
+      "replications": 120,
+      "sample_size": 120,
+      "parameters": {"intercept": 1.5, "slope": 0.8, "sigma": 1.2, "bootstrap_replicates": 60},
+      "acceptance": {
+        "bootstrap_empirical_variance_ratio": {"minimum": 0.7, "maximum": 1.3},
+        "bootstrap_centering_abs_bias": {"maximum": 0.03},
+        "failure_rate": {"maximum": 0.01}
+      }
+    },
+    {
+      "scenario_id": "penalized-ols-collinearity",
+      "seed": 31007,
+      "replications": 300,
+      "sample_size": 80,
+      "parameters": {"intercept": 1.0, "slope_1": 0.7, "slope_2": 0.7, "sigma": 1.0, "correlation": 0.98, "penalty": 5.0},
+      "acceptance": {
+        "coefficient_mse_ratio": {"maximum": 0.9},
+        "prediction_mse_ratio": {"maximum": 1.05},
+        "mean_effective_df": {"minimum": 1.0, "maximum": 3.0},
+        "failure_rate": {"maximum": 0.001}
+      }
+    }
+  ]
+}

@@ -1,0 +1,64 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/joshuamyers22/holocron/schemas/phase-3-simulation-plan.schema.json",
+  "title": "Holocron Phase 3 simulation plan",
+  "type": "object",
+  "properties": {
+    "schema_version": {"const": "holocron-phase-3-simulation-plan/v1"},
+    "plan_id": {"const": "phase-3-core-estimators-v1"},
+    "approved_for": {"const": "private-experimental-development"},
+    "approved_on": {"type": "string", "format": "date"},
+    "confidence_level": {"const": 0.95},
+    "significance_level": {"const": 0.05},
+    "detail_policy": {"type": "string", "minLength": 1},
+    "scenarios": {
+      "type": "array",
+      "minItems": 7,
+      "maxItems": 7,
+      "items": {
+        "type": "object",
+        "properties": {
+          "scenario_id": {
+            "enum": [
+              "ols-gaussian-recovery",
+              "ols-null-type-i",
+              "binary-logit-recovery",
+              "binary-null-type-i",
+              "clustered-covariance-coverage",
+              "ols-bootstrap-variance",
+              "penalized-ols-collinearity"
+            ]
+          },
+          "seed": {"type": "integer", "minimum": 0, "maximum": 9223372036854775807},
+          "replications": {"type": "integer", "minimum": 100, "maximum": 10000},
+          "sample_size": {"type": "integer", "minimum": 20, "maximum": 100000},
+          "parameters": {
+            "type": "object",
+            "minProperties": 1,
+            "additionalProperties": {"type": "number"}
+          },
+          "acceptance": {
+            "type": "object",
+            "minProperties": 1,
+            "additionalProperties": {
+              "type": "object",
+              "properties": {
+                "minimum": {"type": "number"},
+                "maximum": {"type": "number"}
+              },
+              "additionalProperties": false,
+              "anyOf": [
+                {"required": ["minimum"]},
+                {"required": ["maximum"]}
+              ]
+            }
+          }
+        },
+        "required": ["scenario_id", "seed", "replications", "sample_size", "parameters", "acceptance"],
+        "additionalProperties": false
+      }
+    }
+  },
+  "required": ["schema_version", "plan_id", "approved_for", "approved_on", "confidence_level", "significance_level", "detail_policy", "scenarios"],
+  "additionalProperties": false
+}

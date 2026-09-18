@@ -87,6 +87,12 @@ class GeneralizedModelTests(unittest.TestCase):
                 (0, 0, 0, 1, 1, 1),
                 ((-3.0,), (-2.0,), (-1.0,), (1.0,), (2.0,), (3.0,)),
             )
+        with self.assertRaises(SeparationError):
+            fit_glm(
+                (0, 0, 0, 1, 1, 1),
+                ((-3.0,), (-2.0,), (-1.0,), (1.0,), (2.0,), (3.0,)),
+                family="binomial",
+            )
         with self.assertRaises(ConvergenceError):
             fit_lrm(
                 (0, 0, 1, 0, 1, 1),

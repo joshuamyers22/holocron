@@ -397,8 +397,26 @@ class BinaryLogisticResult:
 
 def _separation_check(coefficients: FloatVector, probabilities: FloatVector) -> None:
     weights = probabilities * (1.0 - probabilities)
+    coefficients_finite = bool(
+        np.all(  # pyright: ignore[reportUnknownMemberType]
+            np.isfinite(coefficients)
+        )
+    )
+    probabilities_finite = bool(
+        np.all(  # pyright: ignore[reportUnknownMemberType]
+            np.isfinite(probabilities)
+        )
+    )
+    weights_finite = bool(
+        np.all(  # pyright: ignore[reportUnknownMemberType]
+            np.isfinite(weights)
+        )
+    )
     if (
-        float(np.max(np.abs(coefficients))) >= SEPARATION_COEFFICIENT_NORM
+        not coefficients_finite
+        or not probabilities_finite
+        or not weights_finite
+        or float(np.max(np.abs(coefficients))) >= SEPARATION_COEFFICIENT_NORM
         or float(np.min(weights)) <= MIN_WEIGHT
     ):
         raise SeparationError(
@@ -422,6 +440,7 @@ def _glm_irls(
     coefficients = np.zeros(parameter_count, dtype=np.float64)
     for iteration in range(1, max_iterations + 1):
         weights = probabilities * (1.0 - probabilities)
+        _separation_check(coefficients, probabilities)
         working_response = linear_predictors + (response - probabilities) / weights
         information = design.T @ (weights[:, None] * design)
         right_hand_side = design.T @ (weights * working_response)

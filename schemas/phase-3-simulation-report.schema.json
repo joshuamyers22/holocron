@@ -1,0 +1,85 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/joshuamyers22/holocron/schemas/phase-3-simulation-report.schema.json",
+  "title": "Holocron Phase 3 simulation report",
+  "type": "object",
+  "properties": {
+    "schema_version": {"const": "holocron-phase-3-simulation-report/v1"},
+    "evaluated_at_utc": {"type": "string", "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9:.]+Z$"},
+    "plan_id": {"const": "phase-3-core-estimators-v1"},
+    "plan_sha256": {"$ref": "#/$defs/sha256"},
+    "source": {"$ref": "#/$defs/source"},
+    "environment": {"$ref": "#/$defs/environment"},
+    "scenarios": {
+      "type": "array",
+      "minItems": 7,
+      "maxItems": 7,
+      "items": {"$ref": "#/$defs/scenario"}
+    },
+    "summary": {
+      "type": "object",
+      "properties": {
+        "scenario_count": {"const": 7},
+        "replication_count": {"type": "integer", "minimum": 700},
+        "failed_scenarios": {"type": "array", "uniqueItems": true, "items": {"type": "string"}},
+        "outcome": {"const": "passed"}
+      },
+      "required": ["scenario_count", "replication_count", "failed_scenarios", "outcome"],
+      "additionalProperties": false
+    },
+    "outcome": {"const": "passed"}
+  },
+  "required": ["schema_version", "evaluated_at_utc", "plan_id", "plan_sha256", "source", "environment", "scenarios", "summary", "outcome"],
+  "additionalProperties": false,
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "source": {
+      "type": "object",
+      "properties": {
+        "code_revision": {"type": "string", "pattern": "^[0-9a-f]{40}$|^unknown$"},
+        "working_tree_dirty": {"type": "boolean"}
+      },
+      "required": ["code_revision", "working_tree_dirty"],
+      "additionalProperties": false
+    },
+    "environment": {
+      "type": "object",
+      "properties": {
+        "python_implementation": {"type": "string", "minLength": 1},
+        "python_version": {"type": "string", "minLength": 1},
+        "numpy_version": {"type": "string", "minLength": 1},
+        "operating_system": {"type": "string", "minLength": 1},
+        "machine": {"type": "string", "minLength": 1}
+      },
+      "required": ["python_implementation", "python_version", "numpy_version", "operating_system", "machine"],
+      "additionalProperties": false
+    },
+    "metric": {
+      "type": "object",
+      "properties": {
+        "name": {"type": "string", "minLength": 1},
+        "value": {"type": "number"},
+        "minimum": {"type": ["number", "null"]},
+        "maximum": {"type": ["number", "null"]},
+        "outcome": {"const": "passed"}
+      },
+      "required": ["name", "value", "minimum", "maximum", "outcome"],
+      "additionalProperties": false
+    },
+    "scenario": {
+      "type": "object",
+      "properties": {
+        "scenario_id": {"type": "string", "minLength": 1},
+        "seed": {"type": "integer", "minimum": 0},
+        "replications": {"type": "integer", "minimum": 100},
+        "successful_replications": {"type": "integer", "minimum": 100},
+        "failed_replications": {"type": "array", "uniqueItems": true, "items": {"type": "integer", "minimum": 0}},
+        "replication_sha256": {"$ref": "#/$defs/sha256"},
+        "metrics": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/metric"}},
+        "outcome": {"const": "passed"}
+      },
+      "required": ["scenario_id", "seed", "replications", "successful_replications", "failed_replications", "replication_sha256", "metrics", "outcome"],
+      "additionalProperties": false
+    }
+  }
+}
