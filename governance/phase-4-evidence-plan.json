@@ -1,0 +1,56 @@
+{
+  "schema_version": "holocron-phase-4-evidence-plan/v1",
+  "plan_id": "phase-4-exit-gate-2026-09-18",
+  "parity_operations": ["orm", "orm_censored", "orm_random"],
+  "simulation_scenarios": [
+    {
+      "id": "ordinal-fixed-recovery",
+      "kind": "fixed",
+      "seed": 41001,
+      "replications": 120,
+      "sample_size": 180,
+      "thresholds": [0.7, -0.7],
+      "slope": 0.65,
+      "limits": {"slope_abs_bias": 0.12, "slope_rmse": 0.3, "failure_rate": 0.02}
+    },
+    {
+      "id": "ordinal-censored-recovery",
+      "kind": "censored",
+      "seed": 41002,
+      "replications": 100,
+      "sample_size": 180,
+      "thresholds": [0.7, -0.7],
+      "slope": 0.65,
+      "censoring_probability": 0.3,
+      "limits": {"slope_abs_bias": 0.18, "slope_rmse": 0.38, "failure_rate": 0.05}
+    },
+    {
+      "id": "ordinal-random-recovery",
+      "kind": "random",
+      "seed": 41003,
+      "replications": 12,
+      "clusters": 8,
+      "observations_per_cluster": 8,
+      "thresholds": [0.7, -0.7],
+      "slope": 0.65,
+      "sigma": 0.8,
+      "limits": {"slope_abs_bias": 0.45, "sigma_abs_bias": 0.75, "failure_rate": 0.25}
+    }
+  ],
+  "quadrature": {
+    "grid": [7, 11, 15, 21],
+    "tolerance": 0.00003,
+    "maximum_last_step_scaled_difference": 0.00003
+  },
+  "sparsity": {
+    "levels": [16, 32, 64],
+    "maximum_covariance_condition": 1000000000000.0,
+    "maximum_simplex_error": 1e-12
+  },
+  "platforms": ["ubuntu-24.04", "macos-15"],
+  "independent_review": {
+    "required": true,
+    "scope": "Phase 4 ordinal, censoring, random-effects, simulations, and numerical limits",
+    "status": "pending"
+  }
+}

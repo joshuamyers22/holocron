@@ -66,6 +66,16 @@ The command writes one schema-valid aggregate record to
 clean checkout for acceptance evidence. CI and the gated release workflow run
 the clean form; CI retains its artifact for 30 days.
 
+## Phase 4 evidence workflow
+
+`make phase-4-evidence` runs all six ordinal oracle cases, 232 locked simulation
+replications, adaptive-quadrature checks, 16/32/64-level sparsity checks, and
+the declared failure corpus. It writes a schema-valid aggregate report to
+`.work/phase-4-evidence/phase-4-exit.json`. Use `make phase-4-evidence-clean`
+for review evidence. CI runs the same package on Ubuntu and macOS and retains
+both platform reports. A passing report establishes technical evidence; it does
+not substitute for the required independent statistical approval.
+
 ## Compatibility changes
 
 Update the authoritative compatibility manifest in the same change as a public

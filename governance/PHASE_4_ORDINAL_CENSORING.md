@@ -31,9 +31,9 @@ within-cluster variation.
 
 ## Current evidence
 
-- All three frozen exact-response `rms::orm` cases pass the field-aware
-  `ordinal-model-v1` policy for logistic, probit, and complementary log-log
-  models, including a restricted-cubic-spline design.
+- Six frozen `rms::orm` cases pass named field-aware policies: three exact
+  response fits, one interval-censored fit, one random-intercept fit, and one
+  dual-scale `mix_re` fit.
 - Deterministic tests cover all five links, multi-intercept `lrm`, design
   identity, prediction operations, tests and diagnostics, strict schema round
   trips, left/right/interval/mixed censoring, exact-grid tail creation,
@@ -46,6 +46,10 @@ within-cluster variation.
 - Wheel and source-distribution smoke tests import the public ordinal API, fit
   and reconstruct an ordinal model, execute Turnbull conversion, and verify the
   packaged ordinal-result schema.
+- The locked Phase 4 evidence package passes 232 operating-characteristic
+  replications, both declared quadrature-stability checks, 16/32/64-level
+  sparsity and conditioning checks, and nine failure/stability cases. CI runs
+  it on Ubuntu 24.04 x86_64 and macOS 15 arm64 and retains schema-valid reports.
 
 ## Limits and gate status
 
@@ -57,8 +61,8 @@ prediction, multiple/crossed effects, random slopes, correlated effects,
 y-dependent effects, weights, offsets, penalties, and partial proportional odds
 are unsupported and fail or remain absent rather than being approximated.
 
-This record completes the implementation deliverable, not the Phase 4 exit
-gate. Censored and clustered oracle cases, operating-characteristic simulation,
-quadrature and sparsity benchmarks on both accepted platforms, tolerance
-calibration, and scoped independent statistical approval remain required before
-Phase 4 can close or those capabilities can advance beyond experimental.
+The technical exit evidence is complete and passing; see
+`PHASE_4_EXIT_EVIDENCE.md`. One-sided censoring retains documented exact-grid
+semantics under an explicit pinned-R parity exception. Scoped independent
+statistical approval is the only remaining Phase 4 exit criterion. Capability
+promotion and external use remain separate gates.

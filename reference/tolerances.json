@@ -88,6 +88,34 @@
         {"path": "/fitted_probabilities/*/*", "rule": {"mode": "numeric", "absolute": 1e-8, "relative": 1e-7}}
       ]
     },
+    "ordinal-censored-v1": {
+      "description": "Field-aware tolerances for censored ordinal conversion and model fits.",
+      "default": {"mode": "exact"},
+      "rules": [
+        {"path": "/coefficients/*", "rule": {"mode": "numeric", "absolute": 2e-7, "relative": 2e-6}},
+        {"path": "/covariance/*/*", "rule": {"mode": "numeric", "absolute": 2e-6, "relative": 2e-5}},
+        {"path": "/linear_predictors/*", "rule": {"mode": "numeric", "absolute": 2e-7, "relative": 2e-6}},
+        {"path": "/deviance/*", "rule": {"mode": "numeric", "absolute": 2e-7, "relative": 2e-6}},
+        {"path": "/turnbull_lower/*", "rule": {"mode": "numeric", "absolute": 1e-12, "relative": 1e-12}},
+        {"path": "/turnbull_upper/*", "rule": {"mode": "numeric", "absolute": 1e-12, "relative": 1e-12}},
+        {"path": "/turnbull_probabilities/*", "rule": {"mode": "numeric", "absolute": 2e-7, "relative": 2e-6}},
+        {"path": "/turnbull_survival/*", "rule": {"mode": "numeric", "absolute": 2e-7, "relative": 2e-6}},
+        {"path": "/fitted_probabilities/*/*", "rule": {"mode": "numeric", "absolute": 2e-7, "relative": 2e-6}}
+      ]
+    },
+    "ordinal-random-v1": {
+      "description": "Field-aware cross-implementation tolerances for adaptive-quadrature ordinal random effects.",
+      "default": {"mode": "exact"},
+      "rules": [
+        {"path": "/parameters/*", "rule": {"mode": "numeric", "absolute": 5e-3, "relative": 5e-3}},
+        {"path": "/covariance/*/*", "rule": {"mode": "numeric", "absolute": 2e-2, "relative": 2e-2}},
+        {"path": "/linear_predictors/*", "rule": {"mode": "numeric", "absolute": 5e-3, "relative": 5e-3}},
+        {"path": "/deviance/*", "rule": {"mode": "numeric", "absolute": 1e-2, "relative": 5e-4}},
+        {"path": "/sigma", "rule": {"mode": "numeric", "absolute": 5e-3, "relative": 5e-3}},
+        {"path": "/sigma1", "rule": {"mode": "numeric", "absolute": 1e-2, "relative": 1e-2}},
+        {"path": "/sigma2", "rule": {"mode": "numeric", "absolute": 1e-2, "relative": 1e-2}}
+      ]
+    },
     "cox-model-v1": {
       "description": "Field-aware tolerances for Cox fits and normalized survival predictions.",
       "default": {"mode": "exact"},

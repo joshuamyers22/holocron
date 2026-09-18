@@ -1,0 +1,17 @@
+{
+  "schema_version": "holocron-oracle-case/v1",
+  "case_id": "orm-random-logistic",
+  "description": "Three-level logistic ORM with one Gaussian cluster intercept and escalating adaptive quadrature.",
+  "expected_output": "orm-random-logistic.json",
+  "comparison_profile": "ordinal-random-v1",
+  "qualification_stage": "python-parity",
+  "operation": "orm_random",
+  "basis": "linear",
+  "family": "logistic",
+  "x": [-1.75, -1.25, -0.75, -0.25, 0.25, 0.75, 1.25, 1.75, -1.75, -1.25, -0.75, -0.25, 0.25, 0.75, 1.25, 1.75, -1.75, -1.25, -0.75, -0.25, 0.25, 0.75, 1.25, 1.75, -1.75, -1.25, -0.75, -0.25, 0.25, 0.75, 1.25, 1.75, -1.75, -1.25, -0.75, -0.25, 0.25, 0.75, 1.25, 1.75, -1.75, -1.25, -0.75, -0.25, 0.25, 0.75, 1.25, 1.75, -1.75, -1.25, -0.75, -0.25, 0.25, 0.75, 1.25, 1.75, -1.75, -1.25, -0.75, -0.25, 0.25, 0.75, 1.25, 1.75],
+  "y": [1, 1, 1, 1, 2, 1, 2, 2, 1, 1, 2, 1, 2, 2, 1, 2, 2, 1, 2, 2, 1, 2, 3, 2, 2, 1, 1, 2, 3, 2, 3, 2, 1, 2, 3, 2, 3, 2, 3, 3, 3, 2, 3, 2, 3, 3, 2, 3, 3, 2, 3, 3, 2, 3, 3, 3, 3, 3, 2, 3, 3, 3, 3, 3],
+  "clusters": [0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 3, 3, 4, 4, 4, 4, 4, 4, 4, 4, 5, 5, 5, 5, 5, 5, 5, 5, 6, 6, 6, 6, 6, 6, 6, 6, 7, 7, 7, 7, 7, 7, 7, 7],
+  "mix_re": null,
+  "quadrature_grid": [7, 11, 15, 21],
+  "quadrature_tolerance": 0.00003
+}

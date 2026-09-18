@@ -7,6 +7,7 @@ from typing import Literal, cast
 from holocron.design import DataDistribution, DesignSpec, RestrictedCubicSplineSpec
 from holocron.models import (
     BinaryLogisticResult,
+    CensoredResponse,
     InferenceEstimate,
     anova,
     bootstrap_covariance,
@@ -18,6 +19,7 @@ from holocron.models import (
     fit_orm,
     fit_penalized_lrm,
     fit_penalized_ols,
+    fit_random_intercept_orm,
     likelihood,
     predict,
     residuals,
@@ -399,6 +401,116 @@ def build_python_output(case: dict[str, JsonValue]) -> dict[str, JsonValue]:
             "fitted_probabilities": cast(
                 JsonValue, [list(row) for row in result.fitted_probabilities]
             ),
+        }
+
+    if operation == "orm_censored":
+
+        def endpoint(value: JsonValue) -> float:
+            if value == "neg_inf":
+                return float("-inf")
+            if value == "pos_inf":
+                return float("inf")
+            return float(cast(int | float, value))
+
+        lower = tuple(endpoint(value) for value in cast(list[JsonValue], case["lower"]))
+        upper = tuple(endpoint(value) for value in cast(list[JsonValue], case["upper"]))
+        response = CensoredResponse.from_intervals(lower, upper)
+        turnbull = response.turnbull()
+        result = fit_orm(
+            response,
+            tuple((float(value),) for value in cast(list[float], case["x"])),
+            family=cast(
+                Literal["logistic", "probit", "loglog", "cloglog", "cauchit"],
+                case["family"],
+            ),
+            feature_names=("x",),
+        )
+        threshold_count = len(result.thresholds)
+        covariance_indices = (0, *range(threshold_count, len(result.parameter_values)))
+        reduced_covariance = [
+            [result.covariance[row][column] for column in covariance_indices]
+            for row in covariance_indices
+        ]
+        return {
+            "ok": True,
+            "protocol_version": "1",
+            "operation": "orm_censored",
+            "basis": "linear",
+            "knots": [],
+            "coefficient_names": cast(JsonValue, list(result.coefficient_names)),
+            "coefficients": {
+                name: value
+                for name, value in zip(
+                    result.coefficient_names, result.parameter_values, strict=True
+                )
+            },
+            "covariance_names": cast(
+                JsonValue, [result.threshold_names[0], *result.feature_names]
+            ),
+            "covariance": cast(JsonValue, reduced_covariance),
+            "design_names": ["x"],
+            "design": cast(
+                JsonValue, [[value] for value in cast(list[float], case["x"])]
+            ),
+            "linear_predictors": cast(JsonValue, list(result.linear_predictors)),
+            "deviance": cast(JsonValue, list(result.deviance)),
+            "family": result.family,
+            "censoring_types": cast(JsonValue, list(response.censoring_types)),
+            "response_levels": cast(JsonValue, list(result.response_levels)),
+            "turnbull_lower": cast(JsonValue, list(turnbull.lower)),
+            "turnbull_upper": cast(JsonValue, list(turnbull.upper)),
+            "turnbull_probabilities": cast(JsonValue, list(turnbull.probabilities)),
+            "turnbull_survival": cast(JsonValue, list(turnbull.survival)),
+            "probability_names": cast(
+                JsonValue, [f"y={level:g}" for level in result.response_levels]
+            ),
+            "fitted_probabilities": cast(
+                JsonValue, [list(row) for row in result.fitted_probabilities]
+            ),
+        }
+
+    if operation == "orm_random":
+        mix_value = case["mix_re"]
+        result = fit_random_intercept_orm(
+            cast(list[float], case["y"]),
+            tuple((float(value),) for value in cast(list[float], case["x"])),
+            cast(list[int], case["clusters"]),
+            family=cast(
+                Literal["logistic", "probit", "loglog", "cloglog", "cauchit"],
+                case["family"],
+            ),
+            feature_names=("x",),
+            mix_re=None if mix_value is None else cast(list[float], mix_value),
+            quadrature_grid=cast(list[int], case["quadrature_grid"]),
+            quadrature_tolerance=float(cast(int | float, case["quadrature_tolerance"])),
+            tolerance=2e-5,
+        )
+        parameter_names = result.fixed.coefficient_names
+        parameter_values = result.fixed.parameter_values
+        fixed_count = len(parameter_names)
+        return {
+            "ok": True,
+            "protocol_version": "1",
+            "operation": "orm_random",
+            "basis": "linear",
+            "family": result.fixed.family,
+            "parameter_names": cast(JsonValue, list(parameter_names)),
+            "parameters": {
+                name: value
+                for name, value in zip(parameter_names, parameter_values, strict=True)
+            },
+            "covariance_names": cast(JsonValue, list(parameter_names)),
+            "covariance": cast(
+                JsonValue,
+                [list(row[:fixed_count]) for row in result.covariance[:fixed_count]],
+            ),
+            "response_levels": cast(JsonValue, list(result.fixed.response_levels)),
+            "linear_predictors": cast(JsonValue, list(result.fixed.linear_predictors)),
+            "deviance": cast(JsonValue, list(result.fixed.deviance)),
+            "cluster_count": result.cluster_count,
+            "sigma": result.sigma,
+            "sigma1": result.sigma1,
+            "sigma2": result.sigma2,
         }
 
     if operation == "lrm":

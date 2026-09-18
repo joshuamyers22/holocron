@@ -1,0 +1,14 @@
+{
+  "schema_version": "holocron-phase-4-edge-corpus/v1",
+  "cases": [
+    {"id": "two-response-levels", "action": "two_levels", "expected_exception": "InputValidationError"},
+    {"id": "rank-deficient-design", "action": "rank_deficient", "expected_exception": "RankDeficiencyError"},
+    {"id": "invalid-censoring-interval", "action": "invalid_interval", "expected_exception": "InputValidationError"},
+    {"id": "censoring-without-exact-value", "action": "no_exact", "expected_exception": "InputValidationError"},
+    {"id": "one-sided-exact-grid-contract", "action": "one_sided", "expected_exception": null},
+    {"id": "constant-mix-re", "action": "constant_mix", "expected_exception": "InputValidationError"},
+    {"id": "single-cluster", "action": "single_cluster", "expected_exception": "InputValidationError"},
+    {"id": "invalid-quadrature-grid", "action": "invalid_grid", "expected_exception": "InputValidationError"},
+    {"id": "forced-fixed-nonconvergence", "action": "fixed_nonconvergence", "expected_exception": "ConvergenceError"}
+  ]
+}

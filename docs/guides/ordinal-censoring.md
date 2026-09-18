@@ -83,12 +83,13 @@ features it stores `(K - 1 + p)^2` float64 values. Inputs are capped at 1,024
 parameters. The test gate includes a 64-level fit; this is a correctness bound,
 not a large-scale performance claim.
 
-Three exact-response `orm` fixtures currently pass the pinned R oracle under
-the named `ordinal-model-v1` policy. Censoring and random-effects behavior has
-deterministic mathematical and failure-mode coverage, but is not yet promoted
-as cross-language parity. The Phase 4 exit gate remains open pending registered
-R cases, operating-characteristic studies, cross-platform calibration, and
-independent statistical review.
+Six `orm` fixtures pass the pinned R oracle under named field-aware policies:
+three exact-response, one interval-censored, one random-intercept, and one
+dual-scale `mix_re` case. The locked Phase 4 simulations, quadrature checks,
+sparsity measurements, and failure corpus also pass on the accepted platform
+matrix. One-sided censoring keeps the documented open-endpoint semantics under
+an explicit pinned-R parity exception. Independent statistical review is the
+remaining Phase 4 exit criterion.
 
 Weights, offsets, penalties, partial proportional odds, arbitrary character or
 factor censoring endpoints, missing-row reinsertion, y-dependent effects,

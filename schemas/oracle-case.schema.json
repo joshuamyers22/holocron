@@ -230,6 +230,43 @@
       "required": ["operation", "basis", "family", "x", "y"]
     },
     {
+      "title": "Censored ordinal regression case",
+      "properties": {
+        "operation": {"const": "orm_censored"},
+        "qualification_stage": {"const": "python-parity"},
+        "basis": {"const": "linear"},
+        "family": {"enum": ["logistic", "probit", "loglog", "cloglog", "cauchit"]},
+        "x": {"$ref": "#/$defs/fitNumericVector"},
+        "lower": {"$ref": "#/$defs/lowerCensorVector"},
+        "upper": {"$ref": "#/$defs/upperCensorVector"}
+      },
+      "required": ["operation", "basis", "family", "x", "lower", "upper"]
+    },
+    {
+      "title": "Clustered ordinal regression case",
+      "properties": {
+        "operation": {"const": "orm_random"},
+        "qualification_stage": {"const": "python-parity"},
+        "basis": {"const": "linear"},
+        "family": {"enum": ["logistic", "probit", "loglog", "cloglog", "cauchit"]},
+        "x": {"$ref": "#/$defs/fitNumericVector"},
+        "y": {"$ref": "#/$defs/fitNumericVector"},
+        "clusters": {"type": "array", "minItems": 4, "items": {"type": "integer"}},
+        "mix_re": {
+          "oneOf": [
+            {"type": "null"},
+            {"type": "array", "minItems": 4, "items": {"type": "number"}}
+          ]
+        },
+        "quadrature_grid": {
+          "type": "array", "minItems": 2, "uniqueItems": true,
+          "items": {"type": "integer", "minimum": 3, "maximum": 127}
+        },
+        "quadrature_tolerance": {"type": "number", "exclusiveMinimum": 0}
+      },
+      "required": ["operation", "basis", "family", "x", "y", "clusters", "mix_re", "quadrature_grid", "quadrature_tolerance"]
+    },
+    {
       "title": "Cox proportional hazards case",
       "properties": {
         "operation": {"const": "cph"},
@@ -302,6 +339,16 @@
         {"contains": {"const": 0}},
         {"contains": {"const": 1}}
       ]
+    },
+    "lowerCensorVector": {
+      "type": "array",
+      "minItems": 3,
+      "items": {"oneOf": [{"type": "number"}, {"const": "neg_inf"}]}
+    },
+    "upperCensorVector": {
+      "type": "array",
+      "minItems": 3,
+      "items": {"oneOf": [{"type": "number"}, {"const": "pos_inf"}]}
     },
     "modelBasis": {"enum": ["linear", "rcs"]},
     "knotVector": {

@@ -28,14 +28,15 @@ The core estimator envelope is also checked by seven seeded simulation
 scenarios totaling 2,620 outer replications and a 16-case numerical edge corpus.
 Phase 3 is complete for private experimental development following independent
 statistical review of its alpha scope. The Phase 4 ordinal/censoring functional
-surface is implemented, while its parity, simulation, platform, and review exit
-gate remains open. Capability promotion,
+surface and technical exit evidence are complete and passing; scoped independent
+statistical review remains open. Capability promotion,
 consequential use, and external distribution remain separately blocked.
 
-The design, Phase 3, and exact-response ordinal APIs are checked against 40
+The design, Phase 3, and ordinal APIs are checked against 43
 cases from the pinned R `rms` 8.2-0 oracle. The remaining six frozen survival
-cases are future baselines, not compatibility claims; censored and clustered
-ordinal paths still await registered oracle cases.
+cases are future baselines, not compatibility claims. Interval-censored and
+clustered ordinal paths have registered oracle cases; one-sided censoring has a
+documented parity exception.
 See the generated [compatibility inventory](compatibility.md) for the exact
 surface and evidence links.
 

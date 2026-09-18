@@ -161,9 +161,9 @@
       "milestone": "Phase 4-5",
       "status": "mapped",
       "owner": "joshuamyers22",
-      "oracle_cases": [],
-      "tolerance_profile": null,
-      "known_differences": "Numeric exact, left-, right-, interval-, and mixed-censoring endpoints are supported. Factor/character inputs, labels, units, missing rows, weights, and Surv conversion remain deferred."
+      "oracle_cases": ["orm-censored-mixed"],
+      "tolerance_profile": "ordinal-censored-v1",
+      "known_differences": "Numeric exact, left-, right-, interval-, and mixed-censoring endpoints are supported. Interval-censored fitting passes pinned-R parity; one-sided endpoints retain the documented open-endpoint contract under an explicit pinned-R parity exception. Factor/character inputs, labels, units, missing rows, weights, and Surv conversion remain deferred."
     },
     {
       "id": "export:Ocens2Surv",
@@ -444,14 +444,14 @@
       "id": "export:cluster",
       "r_symbol": "cluster",
       "kind": "export",
-      "python_entry_point": null,
+      "python_entry_point": "holocron.models.fit_random_intercept_orm",
       "tier": "D",
-      "milestone": "Phase 8",
-      "status": "deferred",
+      "milestone": "Phase 4-5",
+      "status": "mapped",
       "owner": "joshuamyers22",
-      "oracle_cases": [],
-      "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "oracle_cases": ["orm-random-logistic"],
+      "tolerance_profile": "ordinal-random-v1",
+      "known_differences": "Maps formula-level cluster marking to the explicit fit_random_intercept_orm API. One Gaussian grouping effect is supported; multiple, crossed, correlated, and random-slope structures are deferred."
     },
     {
       "id": "export:combineRelatedPredictors",
@@ -886,14 +886,14 @@
       "id": "export:mix_re",
       "r_symbol": "mix_re",
       "kind": "export",
-      "python_entry_point": null,
+      "python_entry_point": "holocron.models.fit_random_intercept_orm",
       "tier": "B",
       "milestone": "Phase 4-5",
-      "status": "deferred",
+      "status": "mapped",
       "owner": "joshuamyers22",
-      "oracle_cases": [],
-      "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "oracle_cases": ["orm-random-mix-re"],
+      "tolerance_profile": "ordinal-random-v1",
+      "known_differences": "The explicit mix_re argument implements the signed dual-scale loading and requires within-cluster variation; formula-level special-term syntax is not exposed."
     },
     {
       "id": "export:modelData",
@@ -1024,7 +1024,7 @@
         "orm-probit-four-level"
       ],
       "tolerance_profile": "ordinal-model-v1",
-      "known_differences": "Exact-response logistic, probit, loglog, cloglog, and cauchit cumulative links plus numeric mixed censoring are implemented. Three exact-response fixtures pass pinned-R parity. Single random intercept and mix_re use fit_random_intercept_orm; weights, offsets, penalties, y-dependent effects, and formula-level fitting remain deferred."
+      "known_differences": "Exact-response logistic, probit, loglog, cloglog, and cauchit cumulative links plus numeric censoring are implemented. Three exact-response fixtures pass this profile; censored and clustered evidence is linked from Ocens, cluster, and mix_re. Weights, offsets, penalties, y-dependent effects, and formula-level fitting remain deferred."
     },
     {
       "id": "export:orm.fit",

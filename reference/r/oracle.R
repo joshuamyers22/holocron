@@ -2,6 +2,8 @@
 
 protocol_version <- "1"
 
+suppressPackageStartupMessages(library(rms))
+
 matrix_rows <- function(value) {
   if (is.null(dim(value))) value <- matrix(value, ncol = 1L)
   unname(lapply(seq_len(nrow(value)), function(index) {
@@ -39,6 +41,21 @@ require_numeric_vector <- function(request, name, minimum_length = 1L) {
   }
   if (any(!is.finite(value))) stop(sprintf("%s must contain only finite values", name))
   as.numeric(value)
+}
+
+require_censor_endpoint <- function(request, name, lower = TRUE) {
+  value <- request[[name]]
+  if (is.null(value) || length(value) < 3L) {
+    stop(sprintf("%s must contain at least three censoring endpoints", name))
+  }
+  text <- as.character(value)
+  sentinel <- if (lower) "neg_inf" else "pos_inf"
+  parsed <- suppressWarnings(as.numeric(text))
+  parsed[text == sentinel] <- if (lower) -Inf else Inf
+  if (any(is.na(parsed)) || any(text == if (lower) "pos_inf" else "neg_inf")) {
+    stop(sprintf("%s contains an invalid censoring endpoint", name))
+  }
+  parsed
 }
 
 require_choice <- function(request, name, choices) {
@@ -918,6 +935,104 @@ run_orm <- function(request) {
   )
 }
 
+run_orm_censored <- function(request) {
+  x <- require_numeric_vector(request, "x", 3L)
+  lower <- require_censor_endpoint(request, "lower", TRUE)
+  upper <- require_censor_endpoint(request, "upper", FALSE)
+  require_equal_lengths(list(x, lower, upper), c("x", "lower", "upper"))
+  if (any(lower > upper) || any(lower == Inf) || any(upper == -Inf)) {
+    stop("censoring intervals are invalid")
+  }
+  family <- require_choice(
+    request, "family", c("logistic", "probit", "loglog", "cloglog", "cauchit")
+  )
+  y <- rms::Ocens(lower, upper)
+  converted <- rms::Ocens2ord(y)
+  data <- data.frame(x = x)
+  fit <- rms::orm(y ~ x, data = data, family = family, x = TRUE, y = TRUE)
+  if (isTRUE(fit$fail)) stop("censored orm failed to converge")
+  probabilities <- stats::predict(fit, newdata = data, type = "fitted.ind")
+  npsurv <- attr(converted, "npsurv")
+  support_lower <- unname(as.numeric(attr(converted, "levels")))
+  support_upper <- attr(converted, "upper")
+  if (is.null(support_upper)) support_upper <- support_lower
+  support_upper <- unname(as.numeric(support_upper))
+  survival <- unname(as.numeric(npsurv$surv))
+  masses <- survival - c(survival[-1L], 0)
+  kinds <- ifelse(
+    lower == upper, "exact",
+    ifelse(is.infinite(lower), "left", ifelse(is.infinite(upper), "right", "interval"))
+  )
+  c(
+    fit_contract(fit, "orm_censored", "linear", numeric()),
+    list(
+      family = family,
+      censoring_types = name_vector(kinds),
+      response_levels = unname(as.numeric(fit$yunique)),
+      turnbull_lower = support_lower,
+      turnbull_upper = support_upper,
+      turnbull_probabilities = unname(as.numeric(masses)),
+      turnbull_survival = survival,
+      probability_names = name_vector(colnames(probabilities)),
+      fitted_probabilities = matrix_rows(probabilities)
+    )
+  )
+}
+
+run_orm_random <- function(request) {
+  x <- require_numeric_vector(request, "x", 3L)
+  y <- require_numeric_vector(request, "y", 3L)
+  clusters <- require_numeric_vector(request, "clusters", 3L)
+  require_equal_lengths(list(x, y, clusters), c("x", "y", "clusters"))
+  family <- require_choice(
+    request, "family", c("logistic", "probit", "loglog", "cloglog", "cauchit")
+  )
+  grid <- as.integer(require_numeric_vector(request, "quadrature_grid", 2L))
+  tolerance <- as.numeric(request$quadrature_tolerance)
+  if (length(tolerance) != 1L || !is.finite(tolerance) || tolerance <= 0) {
+    stop("quadrature_tolerance must be a positive number")
+  }
+  mix <- request$mix_re
+  data <- data.frame(x = x, y = y, cluster_id = clusters)
+  if (is.null(mix)) {
+    formula <- y ~ x + cluster(cluster_id)
+  } else {
+    mix <- as.numeric(mix)
+    require_equal_lengths(list(x, mix), c("x", "mix_re"))
+    data$mix_value <- mix
+    formula <- y ~ x + cluster(cluster_id) + mix_re(mix_value)
+  }
+  fit <- rms::orm(
+    formula, data = data, family = family, x = TRUE, y = TRUE,
+    nAGQ.grid = grid, nAGQ.tol = tolerance
+  )
+  if (isTRUE(fit$fail)) stop("random-effects orm failed to converge")
+  parameters <- stats::coef(fit)
+  parameter_names <- names(parameters)
+  if (!is.null(mix)) parameter_names[parameter_names == "log(sigma)"] <- "log(sigma1)"
+  names(parameters) <- parameter_names
+  covariance <- stats::vcov(fit, intercepts = "all")
+  covariance_names_value <- colnames(covariance)
+  if (!is.null(mix)) covariance_names_value[covariance_names_value == "log(sigma)"] <- "log(sigma1)"
+  list(
+    protocol_version = protocol_version,
+    operation = "orm_random",
+    basis = "linear",
+    family = family,
+    parameter_names = name_vector(parameter_names),
+    parameters = named_numbers(parameters),
+    covariance_names = name_vector(covariance_names_value),
+    covariance = matrix_rows(covariance),
+    response_levels = unname(as.numeric(fit$yunique)),
+    linear_predictors = unname(as.numeric(fit$linear.predictors)),
+    deviance = unname(tail(as.numeric(fit$deviance), 2L)),
+    cluster_count = length(unique(clusters)),
+    sigma = if (is.null(mix)) unname(as.numeric(fit$sigma)) else NULL,
+    sigma1 = if (is.null(mix)) NULL else unname(as.numeric(fit$sigma1)),
+    sigma2 = if (is.null(mix)) NULL else unname(as.numeric(fit$sigma2))
+  )
+}
+
 run_cph <- function(request) {
   x <- require_numeric_vector(request, "x", 3L)
   time <- require_numeric_vector(request, "time", 3L)
@@ -1059,6 +1174,8 @@ dispatch <- function(request) {
     model_operations = run_model_operations(request),
     regularization_covariance = run_regularization_covariance(request),
     orm = run_orm(request),
+    orm_censored = run_orm_censored(request),
+    orm_random = run_orm_random(request),
     cph = run_cph(request),
     psm = run_psm(request),
     npsurv = run_npsurv(request),

@@ -279,6 +279,49 @@
       ]
     },
     {
+      "title": "Censored ordinal regression output",
+      "allOf": [
+        {"$ref": "#/$defs/modelFitOutput"},
+        {
+          "properties": {
+            "operation": {"const": "orm_censored"},
+            "family": {"enum": ["logistic", "probit", "loglog", "cloglog", "cauchit"]},
+            "censoring_types": {"type": "array", "items": {"enum": ["exact", "left", "right", "interval"]}},
+            "response_levels": {"$ref": "#/$defs/numericVector"},
+            "turnbull_lower": {"$ref": "#/$defs/numericVector"},
+            "turnbull_upper": {"$ref": "#/$defs/numericVector"},
+            "turnbull_probabilities": {"$ref": "#/$defs/numericVector"},
+            "turnbull_survival": {"$ref": "#/$defs/numericVector"},
+            "probability_names": {"$ref": "#/$defs/nameVector"},
+            "fitted_probabilities": {"$ref": "#/$defs/numericMatrix"}
+          },
+          "required": ["operation", "family", "censoring_types", "response_levels", "turnbull_lower", "turnbull_upper", "turnbull_probabilities", "turnbull_survival", "probability_names", "fitted_probabilities"]
+        }
+      ]
+    },
+    {
+      "title": "Clustered ordinal regression output",
+      "properties": {
+        "ok": {"const": true},
+        "protocol_version": {"const": "1"},
+        "operation": {"const": "orm_random"},
+        "basis": {"const": "linear"},
+        "family": {"enum": ["logistic", "probit", "loglog", "cloglog", "cauchit"]},
+        "parameter_names": {"$ref": "#/$defs/nameVector"},
+        "parameters": {"type": "object", "minProperties": 1, "additionalProperties": {"type": "number"}},
+        "covariance_names": {"$ref": "#/$defs/nameVector"},
+        "covariance": {"$ref": "#/$defs/numericMatrix"},
+        "response_levels": {"$ref": "#/$defs/numericVector"},
+        "linear_predictors": {"$ref": "#/$defs/numericVector"},
+        "deviance": {"$ref": "#/$defs/numericVector"},
+        "cluster_count": {"type": "integer", "minimum": 2},
+        "sigma": {"oneOf": [{"type": "null"}, {"type": "number", "exclusiveMinimum": 0}]},
+        "sigma1": {"oneOf": [{"type": "null"}, {"type": "number", "exclusiveMinimum": 0}]},
+        "sigma2": {"oneOf": [{"type": "null"}, {"type": "number"}]}
+      },
+      "required": ["ok", "protocol_version", "operation", "basis", "family", "parameter_names", "parameters", "covariance_names", "covariance", "response_levels", "linear_predictors", "deviance", "cluster_count", "sigma", "sigma1", "sigma2"]
+    },
+    {
       "title": "Cox proportional hazards output",
       "allOf": [
         {"$ref": "#/$defs/survivalFitOutput"},

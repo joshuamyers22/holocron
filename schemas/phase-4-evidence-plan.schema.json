@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/joshuamyers22/holocron/schemas/phase-4-evidence-plan.schema.json",
+  "type": "object",
+  "properties": {
+    "schema_version": {"const": "holocron-phase-4-evidence-plan/v1"},
+    "plan_id": {"type": "string", "minLength": 1},
+    "parity_operations": {"type": "array", "const": ["orm", "orm_censored", "orm_random"]},
+    "simulation_scenarios": {"type": "array", "minItems": 3, "items": {"type": "object", "required": ["id", "kind", "seed", "replications", "limits"]}},
+    "quadrature": {"type": "object", "required": ["grid", "tolerance", "maximum_last_step_scaled_difference"]},
+    "sparsity": {"type": "object", "required": ["levels", "maximum_covariance_condition", "maximum_simplex_error"]},
+    "platforms": {"type": "array", "const": ["ubuntu-24.04", "macos-15"]},
+    "independent_review": {"type": "object", "required": ["required", "scope", "status"]}
+  },
+  "required": ["schema_version", "plan_id", "parity_operations", "simulation_scenarios", "quadrature", "sparsity", "platforms", "independent_review"],
+  "additionalProperties": false
+}

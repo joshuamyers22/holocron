@@ -43,9 +43,11 @@ exact; approximate comparison is restricted to allowlisted numerical paths.
 
 Some unsupported families already have committed R oracle outputs. Those files
 freeze future comparison targets and do not imply a Python implementation.
-The exact-response ordinal fixtures are parity-qualified; censored and
-random-effects ordinal paths are implementation-tested but still await their
-Phase 4 oracle, simulation, platform, and independent-review evidence.
+Exact-response, interval-censored, random-intercept, and dual-scale `mix_re`
+ordinal fixtures are parity-qualified. Phase 4 simulations, quadrature,
+sparsity, failure-mode, and platform evidence pass. One-sided censoring follows
+the documented open-endpoint contract under a pinned-R parity exception, and
+the Phase 4 scope still awaits independent statistical approval.
 
 ## Decision boundary
 

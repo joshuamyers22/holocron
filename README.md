@@ -25,9 +25,8 @@ independently reviewed and approved the Phase 3 alpha scope on 2026-09-18; the
 evidence-backed disposition is recorded in the
 [Phase 3 completion record](https://github.com/joshuamyers22/holocron/blob/main/governance/PHASE_3_COMPLETION.md).
 Every capability remains experimental pending its separate promotion reviews,
-and the Phase 4 ordinal/censoring functional deliverable is implemented. Its
-parity, simulation, cross-platform, and independent-review exit gate remains
-open. The Phase 1 exit
+and the Phase 4 ordinal/censoring functional deliverable and technical exit
+evidence are complete. Its independent statistical review remains open. The Phase 1 exit
 gate is recorded in the
 [completion record](https://github.com/joshuamyers22/holocron/blob/main/governance/PHASE_1_COMPLETION.md);
 the evidence-backed Phase 2 disposition is recorded in its
@@ -49,12 +48,12 @@ linear models, binary logistic regression, cumulative-link ordinal regression,
 numeric mixed-censoring conversion, and single-cluster random-intercept ordinal
 models, plus the accepted post-estimation
 operations, diagonal OLS/lrm penalties, and robust/bootstrap covariance. The
-design, Phase 3, and exact-response ordinal surfaces are checked across 40
+design, Phase 3, and ordinal surfaces are checked across 43
 independent parity cases
 against committed outputs from a Dockerized
-R oracle. Six survival cases remain frozen oracle baselines. Censoring and
-random-effects ordinal paths have deterministic implementation tests but are
-not yet cross-language parity claims.
+R oracle. Six survival cases remain frozen oracle baselines. Interval-censored,
+random-intercept, and dual-scale random-effect ORM cases are parity-qualified;
+one-sided censoring is covered by an explicit documented parity exception.
 Compatibility is claimed
 only for capabilities and support envelopes backed by the
 [compatibility manifest](https://github.com/joshuamyers22/holocron/blob/main/compatibility/rms-8.2.0.yaml).
@@ -67,6 +66,12 @@ of restricted-interaction component kinds. Seven seeded Phase 3 simulation
 scenarios run 2,620 outer replications against predeclared statistical
 thresholds, and a data-driven corpus exercises 16 numerical edge cases across
 nine failure and stability categories.
+
+The Phase 4 package additionally runs 232 seeded fixed, censored, and clustered
+ordinal replications, two quadrature-stability checks, three response-support
+sparsity/conditioning cases, and nine failure-mode cases on both accepted
+platforms. Its technical evidence passes; independent statistical approval is
+still required to close Phase 4.
 
 ## Library API
 

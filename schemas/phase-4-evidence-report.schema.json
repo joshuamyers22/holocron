@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/joshuamyers22/holocron/schemas/phase-4-evidence-report.schema.json",
+  "type": "object",
+  "properties": {
+    "schema_version": {"const": "holocron-phase-4-evidence-report/v1"},
+    "generated_at": {"type": "string", "format": "date-time"},
+    "revision": {"type": "string", "minLength": 1},
+    "source_dirty": {"type": "boolean"},
+    "environment": {"type": "object"},
+    "inputs": {"type": "object"},
+    "parity": {"type": "object", "required": ["passed", "case_count", "exact_comparisons", "numeric_comparisons", "cases"]},
+    "simulations": {"type": "object", "required": ["passed", "scenarios"]},
+    "quadrature": {"type": "object", "required": ["passed", "fits"]},
+    "sparsity": {"type": "object", "required": ["passed", "fits"]},
+    "failure_modes": {"type": "object", "required": ["passed", "cases"]},
+    "platform_policy": {"type": "object", "required": ["required_platforms", "ci_artifacts"]},
+    "independent_review": {"type": "object", "required": ["required", "status", "scope"]},
+    "technical_status": {"enum": ["pass", "fail"]},
+    "phase_4_exit_gate": {"enum": ["awaiting-independent-review", "closed", "failed"]}
+  },
+  "required": ["schema_version", "generated_at", "revision", "source_dirty", "environment", "inputs", "parity", "simulations", "quadrature", "sparsity", "failure_modes", "platform_policy", "independent_review", "technical_status", "phase_4_exit_gate"],
+  "additionalProperties": false
+}
