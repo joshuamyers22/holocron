@@ -1,0 +1,54 @@
+site_name: Holocron
+site_description: Independent Python implementation of the R rms workflow
+site_url: https://joshuamyers22.github.io/holocron/
+repo_url: https://github.com/joshuamyers22/holocron
+repo_name: joshuamyers22/holocron
+docs_dir: docs
+site_dir: .work/site
+strict: true
+
+theme:
+  name: mkdocs
+  locale: en
+
+markdown_extensions:
+  - admonition
+
+validation:
+  omitted_files: warn
+  absolute_links: warn
+  unrecognized_links: warn
+  anchors: warn
+
+nav:
+  - Home: index.md
+  - Installation: installation.md
+  - Getting started: getting-started.md
+  - Guides:
+      - Restricted cubic splines: guides/restricted-cubic-splines.md
+      - Ordinary least squares: guides/ordinary-least-squares.md
+      - R migration: guides/r-migration.md
+  - Examples:
+      - End-to-end vertical slice: examples/vertical-slice.md
+  - Compatibility: compatibility.md
+  - API reference:
+      - Design: api/design.md
+      - Models: api/models.md
+      - Exceptions: api/exceptions.md
+  - Interpretation and limitations: interpretation-and-limitations.md
+  - Development: development.md
+  - Releases: releases.md
+  - Engineering reference:
+      - Package structure: architecture/PACKAGE_STRUCTURE.md
+      - Frozen environments: reproducibility/FROZEN_ENVIRONMENTS.md
+      - Agentic verification: AGENTIC_VERIFICATION_GUIDE.md
+      - Bayesian regression implementation: BAYESIAN_REGRESSION_IMPLEMENTATION.md
+      - Statistical learning point of view: STATISTICAL_LEARNING_POINT_OF_VIEW.md
+  - Decisions:
+      - ADR 001 — Independent oracle: adr/ADR-001-independent-oracle.md
+      - ADR 002 — Package identity: adr/ADR-002-project-and-package-identity.md
+      - ADR 003 — Reference freeze: adr/ADR-003-reference-freeze-and-update-policy.md
+      - ADR 004 — Compatibility contract: adr/ADR-004-compatibility-contract.md
+      - ADR 009 — Numerical envelope: adr/ADR-009-supported-numerical-envelope.md
+      - ADR 011 — Scaffold adaptation: adr/ADR-011-production-scaffold-adaptation.md
+      - ADR 012 — Frozen environments: adr/ADR-012-frozen-environment-contract.md

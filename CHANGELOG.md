@@ -38,3 +38,7 @@ Notable changes are recorded here using semantic versioning.
   well-conditioned OLS after all 12 independent cases passed on macOS
   arm64/Accelerate and Ubuntu x86_64/OpenBLAS; added schema-validated pilot
   reports and a required cross-platform CI matrix.
+- Added the initial strict MkDocs site with executable offline examples,
+  source-generated API reference, and a generated 281-capability compatibility
+  inventory; the ordinary quality gate rejects stale pages, invalid links, and
+  documentation warnings.

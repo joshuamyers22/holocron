@@ -607,8 +607,9 @@ Independent-development and license/provenance policy is approved; the reference
 
 ### Phase 1 — Repository and parity laboratory (6–10 weeks)
 
-**Status:** In progress. The production-repository adaptation is complete; the
-remaining documentation-site and end-to-end evidence deliverables remain open.
+**Status:** In progress. The production-repository adaptation and initial
+documentation site are complete; artifact and end-to-end evidence deliverables
+remain open.
 
 **Deliverables**
 
@@ -622,7 +623,8 @@ remaining documentation-site and end-to-end evidence deliverables remain open.
   frozen oracle baselines for later model-family implementation);
 - [x] tolerance ADR based on a cross-platform pilot
   ([ADR-009](docs/adr/ADR-009-supported-numerical-envelope.md));
-- [ ] initial docs site and generated compatibility page;
+- [x] initial docs site and generated compatibility page
+  ([acceptance record](governance/PHASE_1_DOCUMENTATION.md));
 - [ ] clean artifact build and smoke tests.
 
 **Exit gate**

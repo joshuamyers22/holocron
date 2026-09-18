@@ -1,4 +1,4 @@
-.PHONY: setup lock-check format lint typecheck test frozen-environments frozen-environments-live reference-metadata tolerance-pilot check audit build oracle-build oracle-health oracle-check reference-source-check
+.PHONY: setup lock-check format lint typecheck test docs docs-generate docs-check frozen-environments frozen-environments-live reference-metadata tolerance-pilot check audit build oracle-build oracle-health oracle-check reference-source-check
 setup:
 	uv lock --check
 	uv sync --frozen --dev --no-install-project
@@ -14,6 +14,14 @@ typecheck:
 	uv run --frozen pyright
 test:
 	uv run --frozen python -m unittest discover -s tests
+docs:
+	uv run --frozen mkdocs serve
+docs-generate:
+	uv run --frozen python tools/generate_docs.py
+docs-check:
+	uv run --frozen python tools/generate_docs.py --check
+	uv run --frozen python tools/check_docs_examples.py
+	uv run --frozen mkdocs build --strict --clean
 frozen-environments:
 	uv run --frozen python tools/check_frozen_environments.py
 frozen-environments-live:
@@ -22,7 +30,7 @@ reference-metadata:
 	uv run --frozen python -m tools.check_reference_metadata
 tolerance-pilot:
 	uv run --frozen python -m tools.run_tolerance_pilot
-check: lock-check lint typecheck test frozen-environments reference-metadata
+check: lock-check lint typecheck test docs-check frozen-environments reference-metadata
 audit:
 	uv audit --preview-features audit-command --locked --no-dev
 	uv run --frozen python tools/check_licenses.py

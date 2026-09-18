@@ -1,0 +1,40 @@
+# Development
+
+Holocron uses a frozen uv environment and a single required local gate:
+
+```sh
+make setup
+make check
+```
+
+The repository's [contributing guide](https://github.com/joshuamyers22/holocron/blob/main/CONTRIBUTING.md)
+defines signed-commit, independent-development, test, and review requirements.
+The [frozen-environment guide](reproducibility/FROZEN_ENVIRONMENTS.md) explains
+the Python and R identities.
+
+## Documentation workflow
+
+Edit authored pages under `docs/`, then run:
+
+```sh
+make docs-generate
+make docs-check
+make docs
+```
+
+`make docs-generate` rebuilds API pages from public module exports and the
+compatibility page from the manifest. `make docs-check` rejects stale generated
+content, executes marked Python examples, validates internal links and anchors,
+and builds with warnings treated as errors. `make docs` starts the local preview
+server.
+
+Documentation examples must remain deterministic and offline. Mark a Python
+fence with `# holocron: execute` when it should be executed by the quality gate.
+Generated pages carry a header and should never be edited directly.
+
+## Compatibility changes
+
+Update the authoritative compatibility manifest in the same change as a public
+capability. A claim beyond `deferred` needs an owned Python entry point, oracle
+cases, a named tolerance profile, known differences, and the governance evidence
+required by [ADR-004](adr/ADR-004-compatibility-contract.md).

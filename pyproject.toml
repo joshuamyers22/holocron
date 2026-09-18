@@ -55,6 +55,7 @@ dev = [
     "editables==0.5",
     "hatchling==1.32.0",
     "jsonschema==4.26.0",
+    "mkdocs==1.6.1",
     "pyright==1.1.414",
     "ruff==0.16.7",
 ]

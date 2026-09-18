@@ -97,3 +97,19 @@ The project scope and delivery gates are defined in
 Statistical contributions must follow the
 [contributing guide](https://github.com/joshuamyers22/holocron/blob/main/CONTRIBUTING.md)
 and the independent-development policy.
+
+## Documentation
+
+The initial documentation site includes executable getting-started examples,
+generated public API reference, and a generated inventory of every compatibility
+disposition. Build or preview it locally with:
+
+```sh
+make docs-check
+make docs
+```
+
+Edit the authoritative compatibility manifest or public Python source, then run
+`make docs-generate` to refresh generated pages. The ordinary `make check` gate
+rejects stale generated content, failed examples, invalid internal links, and
+MkDocs warnings.
