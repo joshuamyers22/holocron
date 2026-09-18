@@ -8,13 +8,14 @@ from pathlib import Path
 from typing import cast
 
 import holocron
-from holocron import design, exceptions
+from holocron import design, exceptions, formula
 
 
 class PublicApiTests(unittest.TestCase):
     def test_top_level_api_is_deliberately_small(self) -> None:
         self.assertEqual(
-            holocron.__all__, ("__version__", "design", "exceptions", "models")
+            holocron.__all__,
+            ("__version__", "design", "exceptions", "formula", "models"),
         )
         self.assertRegex(holocron.__version__, r"^\d+(?:\.\d+)+(?:[A-Za-z0-9.+-]*)$")
 
@@ -35,9 +36,25 @@ class PublicApiTests(unittest.TestCase):
             design.__all__,
             [
                 "DataDistribution",
+                "DesignMatrix",
+                "DesignSpec",
                 "DistributionRange",
+                "GeneratedColumn",
                 "RestrictedCubicSplineSpec",
                 "VariableDistribution",
+            ],
+        )
+
+    def test_formula_namespace_exports_only_supported_nodes(self) -> None:
+        self.assertEqual(
+            formula.__all__,
+            [
+                "Formula",
+                "IdentityTerm",
+                "LinearSplineTerm",
+                "PolynomialTerm",
+                "RestrictedCubicSplineTerm",
+                "Variable",
             ],
         )
 

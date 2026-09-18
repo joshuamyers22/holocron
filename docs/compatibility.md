@@ -22,10 +22,10 @@ an implementation claim, and an experimental capability is not production-ready.
 | Status | Count | Meaning |
 | --- | ---: | --- |
 | implemented | 0 | Implemented and accepted under the capability contract. |
-| experimental | 3 | Implemented narrowly with parity evidence; not production-ready. |
+| experimental | 7 | Implemented narrowly with parity evidence; not production-ready. |
 | mapped | 0 | Mapped to a Python design, without an accepted implementation claim. |
 | unsupported | 0 | Intentionally excluded from the compatibility target. |
-| deferred | 278 | Catalogued for a later phase; no current implementation claim. |
+| deferred | 274 | Catalogued for a later phase; no current implementation claim. |
 
 ## Evidence-backed experimental surface
 
@@ -34,8 +34,12 @@ oracle-linked parity evidence. Their documented support envelopes remain narrow.
 
 | R symbol | Kind | Python entry point | Status | Milestone | Oracle cases | Tolerance profile | Known differences |
 | --- | --- | --- | --- | --- | ---: | --- | --- |
+| `Design` | export | `holocron.design.DesignSpec` | experimental | Phase 2-3 | 1 | `formula-design-v1` | Owned additive numeric AST only; categorical terms, interactions, automatic parameters, offsets, strata, and R formula evaluation remain deferred. |
+| `asis` | export | `holocron.formula.IdentityTerm` | experimental | Phase 2-3 | 1 | `formula-design-v1` | Numeric one-dimensional predictors only; labels and units are retained separately by DataDistribution. |
 | `datadist` | export | `holocron.design.DataDistribution` | experimental | Phase 2-3 | 4 | `data-distribution-v1` | Python uses immutable explicit metadata instead of R global options; categorical levels must be declared; dataframe/date-time adapters are deferred; ordered factors use the lower middle declared level when the level count is even; and default display probabilities are computed per variable when missingness differs. |
+| `lsp` | export | `holocron.formula.LinearSplineTerm` | experimental | Phase 2-3 | 1 | `formula-design-v1` | Explicit finite knots only; automatic parameters and categorical interactions remain deferred. |
 | `ols` | export | `holocron.models.fit_ols` | experimental | Phase 2-3 | 6 | `well-conditioned-ols-v1` | Initial narrow API; full rms contract remains deferred. |
+| `pol` | export | `holocron.formula.PolynomialTerm` | experimental | Phase 2-3 | 1 | `formula-design-v1` | Raw powers of explicit degree 2 through 10 only; no ambient option supplies a default degree. |
 | `rcs` | export | `holocron.design.RestrictedCubicSplineSpec` | experimental | Phase 2-3 | 6 | `deterministic-transform-v1` | Initial narrow API; full rms contract remains deferred. |
 
 ## Complete inventory
@@ -47,14 +51,14 @@ in the pinned namespace. Counts by tier are A: 31, B: 33, C: 26, D: 191.
 
 | R symbol | Kind | Python entry point | Status | Milestone | Oracle cases | Tolerance profile | Known differences |
 | --- | --- | --- | --- | --- | ---: | --- | --- |
-| `Design` | export | — | deferred | Phase 2-3 | 0 | — | Not yet implemented. |
-| `DesignAssign` | export | — | deferred | Phase 2-3 | 0 | — | Not yet implemented. |
+| `Design` | export | `holocron.design.DesignSpec` | experimental | Phase 2-3 | 1 | `formula-design-v1` | Owned additive numeric AST only; categorical terms, interactions, automatic parameters, offsets, strata, and R formula evaluation remain deferred. |
+| `DesignAssign` | export | — | deferred | Phase 2-3 | 0 | — | Complete R assignment behavior remains deferred; the experimental DesignSpec exposes narrower generated-column ownership and term slices. |
 | `Glm` | export | — | deferred | Phase 2-3 | 0 | — | Not yet implemented. |
 | `Newlabels` | export | — | deferred | Phase 2-3 | 0 | — | Not yet implemented. |
 | `Newlevels` | export | — | deferred | Phase 2-3 | 0 | — | Not yet implemented. |
 | `Predict` | export | — | deferred | Phase 2-3 | 0 | — | Not yet implemented. |
 | `Xcontrast` | export | — | deferred | Phase 2-3 | 0 | — | Not yet implemented. |
-| `asis` | export | — | deferred | Phase 2-3 | 0 | — | Not yet implemented. |
+| `asis` | export | `holocron.formula.IdentityTerm` | experimental | Phase 2-3 | 1 | `formula-design-v1` | Numeric one-dimensional predictors only; labels and units are retained separately by DataDistribution. |
 | `catg` | export | — | deferred | Phase 2-3 | 0 | — | Not yet implemented. |
 | `contrast` | export | — | deferred | Phase 2-3 | 0 | — | Not yet implemented. |
 | `datadist` | export | `holocron.design.DataDistribution` | experimental | Phase 2-3 | 4 | `data-distribution-v1` | Python uses immutable explicit metadata instead of R global options; categorical levels must be declared; dataframe/date-time adapters are deferred; ordered factors use the lower middle declared level when the level count is even; and default display probabilities are computed per variable when missingness differs. |
@@ -62,12 +66,12 @@ in the pinned namespace. Counts by tier are A: 31, B: 33, C: 26, D: 191.
 | `interactions.containing` | export | — | deferred | Phase 2-3 | 0 | — | Not yet implemented. |
 | `lrm` | export | — | deferred | Phase 2-3 | 4 | `binary-logistic-v1` | Oracle baselines captured; independent Python implementation and parity qualification remain deferred. |
 | `lrm.fit` | export | — | deferred | Phase 2-3 | 0 | — | Not yet implemented. |
-| `lsp` | export | — | deferred | Phase 2-3 | 0 | — | Not yet implemented. |
+| `lsp` | export | `holocron.formula.LinearSplineTerm` | experimental | Phase 2-3 | 1 | `formula-design-v1` | Explicit finite knots only; automatic parameters and categorical interactions remain deferred. |
 | `matrx` | export | — | deferred | Phase 2-3 | 0 | — | Not yet implemented. |
 | `modelData` | export | — | deferred | Phase 2-3 | 0 | — | Not yet implemented. |
 | `ols` | export | `holocron.models.fit_ols` | experimental | Phase 2-3 | 6 | `well-conditioned-ols-v1` | Initial narrow API; full rms contract remains deferred. |
 | `ols.influence` | export | — | deferred | Phase 2-3 | 0 | — | Not yet implemented. |
-| `pol` | export | — | deferred | Phase 2-3 | 0 | — | Not yet implemented. |
+| `pol` | export | `holocron.formula.PolynomialTerm` | experimental | Phase 2-3 | 1 | `formula-design-v1` | Raw powers of explicit degree 2 through 10 only; no ambient option supplies a default degree. |
 | `predictrms` | export | — | deferred | Phase 2-3 | 0 | — | Not yet implemented. |
 | `rcs` | export | `holocron.design.RestrictedCubicSplineSpec` | experimental | Phase 2-3 | 6 | `deterministic-transform-v1` | Initial narrow API; full rms contract remains deferred. |
 | `scored` | export | — | deferred | Phase 2-3 | 0 | — | Not yet implemented. |

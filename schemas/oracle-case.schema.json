@@ -85,6 +85,40 @@
       ]
     },
     {
+      "title": "Core numeric formula design case",
+      "properties": {
+        "operation": {"const": "design"},
+        "qualification_stage": {"const": "python-parity"},
+        "formula": {"type": "string", "minLength": 1, "maxLength": 4096},
+        "response": {
+          "oneOf": [
+            {"type": "null"},
+            {"type": "string", "minLength": 1, "maxLength": 256}
+          ]
+        },
+        "include_intercept": {"type": "boolean"},
+        "variables": {
+          "type": "array",
+          "minItems": 1,
+          "items": {"$ref": "#/$defs/designVariable"}
+        },
+        "terms": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 64,
+          "items": {"$ref": "#/$defs/designTerm"}
+        }
+      },
+      "required": [
+        "operation",
+        "formula",
+        "response",
+        "include_intercept",
+        "variables",
+        "terms"
+      ]
+    },
+    {
       "title": "Binary logistic regression case",
       "properties": {
         "operation": {"const": "lrm"},
@@ -256,6 +290,70 @@
         }
       ],
       "additionalProperties": false
+    },
+    "designVariable": {
+      "type": "object",
+      "properties": {
+        "name": {"type": "string", "minLength": 1, "maxLength": 256},
+        "values": {"$ref": "#/$defs/nonemptyNumericVector"}
+      },
+      "required": ["name", "values"],
+      "additionalProperties": false
+    },
+    "designTerm": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "kind": {"const": "identity"},
+            "variable": {"type": "string", "minLength": 1, "maxLength": 256}
+          },
+          "required": ["kind", "variable"],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {"const": "polynomial"},
+            "variable": {"type": "string", "minLength": 1, "maxLength": 256},
+            "degree": {"type": "integer", "minimum": 2, "maximum": 10}
+          },
+          "required": ["kind", "variable", "degree"],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {"const": "linear_spline"},
+            "variable": {"type": "string", "minLength": 1, "maxLength": 256},
+            "knots": {
+              "type": "array",
+              "minItems": 1,
+              "maxItems": 32,
+              "uniqueItems": true,
+              "items": {"type": "number"}
+            }
+          },
+          "required": ["kind", "variable", "knots"],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {"const": "restricted_cubic_spline"},
+            "variable": {"type": "string", "minLength": 1, "maxLength": 256},
+            "knots": {
+              "type": "array",
+              "minItems": 3,
+              "maxItems": 32,
+              "uniqueItems": true,
+              "items": {"type": "number"}
+            }
+          },
+          "required": ["kind", "variable", "knots"],
+          "additionalProperties": false
+        }
+      ]
     }
   }
 }

@@ -16,6 +16,8 @@ from typing import Literal, NoReturn, TypeAlias, TypeGuard, cast
 from jsonschema import Draft202012Validator
 
 from holocron import __version__
+from holocron.exceptions import HolocronError
+from holocron.formula import Formula
 
 JsonValue: TypeAlias = (
     None | bool | int | float | str | list["JsonValue"] | dict[str, "JsonValue"]
@@ -29,6 +31,7 @@ EVIDENCE_SCHEMA = ROOT / "schemas/parity-evidence.schema.json"
 POLICY_SCHEMA = ROOT / "schemas/tolerance-policy.schema.json"
 TOLERANCE_PILOT_SCHEMA = ROOT / "schemas/tolerance-pilot.schema.json"
 DATA_DISTRIBUTION_SCHEMA = ROOT / "schemas/data-distribution.schema.json"
+FORMULA_SCHEMA = ROOT / "schemas/formula.schema.json"
 POLICY_PATH = ROOT / "reference/tolerances.json"
 CASES = ROOT / "reference/cases"
 EXPECTED = ROOT / "reference/expected"
@@ -499,6 +502,75 @@ def validate_case_pair(
             raise ContractValidationError(
                 f"{case_path}: distribution variable order differs from output"
             )
+    if operation == "design":
+        try:
+            formula_document = Formula.parse(str(case["formula"])).to_dict()
+        except HolocronError as error:
+            raise ContractValidationError(
+                f"{case_path}: invalid formula expression"
+            ) from error
+        for field in ("response", "include_intercept", "terms"):
+            if case[field] != formula_document[field]:
+                raise ContractValidationError(
+                    f"{case_path}: {field} does not match parsed formula"
+                )
+        raw_variables = require_array(case["variables"], name="case.variables")
+        variables = [
+            require_object(value, name="case.variables item") for value in raw_variables
+        ]
+        names = [str(variable["name"]) for variable in variables]
+        if len(set(names)) != len(names):
+            raise ContractValidationError(
+                f"{case_path}: design variable names must be unique"
+            )
+        lengths = {
+            len(require_array(variable["values"], name=f"case.{name}.values"))
+            for name, variable in zip(names, variables, strict=True)
+        }
+        if len(lengths) != 1:
+            raise ContractValidationError(
+                f"{case_path}: design variable lengths differ"
+            )
+        terms = [
+            require_object(value, name="case.terms item")
+            for value in require_array(case["terms"], name="case.terms")
+        ]
+        unknown_variables = sorted(
+            {str(term["variable"]) for term in terms} - set(names)
+        )
+        if unknown_variables:
+            raise ContractValidationError(
+                f"{case_path}: design terms reference unknown variables: "
+                f"{unknown_variables}"
+            )
+        for field in (
+            "formula",
+            "response",
+            "include_intercept",
+            "terms",
+        ):
+            if case[field] != payload.get(field):
+                raise ContractValidationError(
+                    f"{case_path}: {field} does not match output"
+                )
+        output_names = require_array(
+            payload.get("column_names"), name="output.column_names"
+        )
+        nonlinear = require_array(
+            payload.get("nonlinear_mask"), name="output.nonlinear_mask"
+        )
+        if len(output_names) != len(nonlinear):
+            raise ContractValidationError(
+                f"{case_path}: design names and nonlinear mask lengths differ"
+            )
+        design = require_array(payload.get("design"), name="output.design")
+        if len(design) != lengths.pop() or any(
+            len(require_array(row, name="output.design row")) != len(output_names)
+            for row in design
+        ):
+            raise ContractValidationError(
+                f"{case_path}: design matrix dimensions do not match metadata"
+            )
     basis = case.get("basis")
     if basis == "rcs" and "knots" not in case:
         raise ContractValidationError(f"{case_path}: rcs basis requires knots")
@@ -583,6 +655,7 @@ def validate_repository_contracts() -> int:
         POLICY_SCHEMA,
         TOLERANCE_PILOT_SCHEMA,
         DATA_DISTRIBUTION_SCHEMA,
+        FORMULA_SCHEMA,
     ):
         schema = require_object(load_json(schema_path), name=str(schema_path))
         Draft202012Validator.check_schema(schema)

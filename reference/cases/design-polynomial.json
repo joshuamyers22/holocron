@@ -1,0 +1,18 @@
+{
+  "schema_version": "holocron-oracle-case/v1",
+  "case_id": "design-polynomial",
+  "description": "Raw fourth-degree polynomial with negative and fractional inputs.",
+  "operation": "design",
+  "expected_output": "design-polynomial.json",
+  "comparison_profile": "formula-design-v1",
+  "qualification_stage": "python-parity",
+  "formula": "outcome ~ pol(x, 4)",
+  "response": "outcome",
+  "include_intercept": true,
+  "variables": [
+    {"name": "x", "values": [-3, -0.5, 0, 1.25, 4]}
+  ],
+  "terms": [
+    {"kind": "polynomial", "variable": "x", "degree": 4}
+  ]
+}

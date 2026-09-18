@@ -1,0 +1,18 @@
+{
+  "schema_version": "holocron-oracle-case/v1",
+  "case_id": "design-linear-spline",
+  "description": "Linear spline across three explicit knots and both tails.",
+  "operation": "design",
+  "expected_output": "design-linear-spline.json",
+  "comparison_profile": "formula-design-v1",
+  "qualification_stage": "python-parity",
+  "formula": "~ lsp(marker, [-1.5, 0.0, 3.25])",
+  "response": null,
+  "include_intercept": true,
+  "variables": [
+    {"name": "marker", "values": [-4, -1.5, -0.25, 0, 2, 3.25, 8]}
+  ],
+  "terms": [
+    {"kind": "linear_spline", "variable": "marker", "knots": [-1.5, 0, 3.25]}
+  ]
+}

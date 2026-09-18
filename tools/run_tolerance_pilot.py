@@ -33,6 +33,7 @@ from reference.python_parity import build_python_output
 ACCEPTED_PROFILES = (
     "data-distribution-v1",
     "deterministic-transform-v1",
+    "formula-design-v1",
     "well-conditioned-ols-v1",
 )
 

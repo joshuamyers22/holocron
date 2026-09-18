@@ -34,6 +34,7 @@ This example demonstrates mechanics, not a defensible analysis strategy. Knot
 selection, estimands, model-level missing-data handling, validation,
 and interpretation remain the caller's responsibility. Read the
 [data-distribution guide](guides/data-distributions.md),
+[formula/design guide](guides/formulas-and-designs.md),
 [spline guide](guides/restricted-cubic-splines.md),
 [OLS guide](guides/ordinary-least-squares.md), and
 [limitations](interpretation-and-limitations.md) before using the result.

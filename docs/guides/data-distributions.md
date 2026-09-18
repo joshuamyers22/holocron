@@ -51,9 +51,10 @@ for provenance records.
 
 All columns must have equal length. Categorical levels must be declared; this
 prevents row ordering from silently defining category ordering. Labels and units
-are metadata only and do not perform conversion. Dataframe/date-time adapters,
-formula integration, automatic knots, and model-level missing-data behavior are
-not part of this capability.
+are metadata only and do not perform conversion. The formula engine is now
+available, but automatic use of distribution metadata for knot or adjustment
+selection, dataframe/date-time adapters, and model-level missing-data behavior
+remain outside this capability.
 
 The exact supported envelope and deliberate differences from R are recorded in
 the [compatibility inventory](../compatibility.md) and

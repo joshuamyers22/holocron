@@ -1,0 +1,73 @@
+{
+  "schema_version": "holocron-oracle-output/v1",
+  "case_id": "design-polynomial",
+  "reference": {
+    "package": "rms",
+    "version": "8.2-0",
+    "commit": "a4e4a305a029090e737562fb4d35bdb705db7d63",
+    "protocol_version": "1"
+  },
+  "ok": true,
+  "protocol_version": "1",
+  "operation": "design",
+  "formula": "outcome ~ pol(x, 4)",
+  "response": "outcome",
+  "include_intercept": true,
+  "terms": [
+    {
+      "kind": "polynomial",
+      "variable": "x",
+      "degree": 4
+    }
+  ],
+  "column_names": [
+    "pol(x,1)",
+    "pol(x,2)",
+    "pol(x,3)",
+    "pol(x,4)"
+  ],
+  "nonlinear_mask": [
+    false,
+    true,
+    true,
+    true
+  ],
+  "term_slices": [
+    [
+      0,
+      4
+    ]
+  ],
+  "design": [
+    [
+      -3,
+      9,
+      -27,
+      81
+    ],
+    [
+      -0.5,
+      0.25,
+      -0.125,
+      0.0625
+    ],
+    [
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      1.25,
+      1.5625,
+      1.953125,
+      2.44140625
+    ],
+    [
+      4,
+      16,
+      64,
+      256
+    ]
+  ]
+}

@@ -57,6 +57,13 @@
         {"path": "/variables/*/values/*", "rule": {"mode": "numeric", "absolute": 1e-12, "relative": 1e-12}}
       ]
     },
+    "formula-design-v1": {
+      "description": "Exact formula and generated-column metadata with float64 tolerance for core numeric transformations.",
+      "default": {"mode": "exact"},
+      "rules": [
+        {"path": "/design/*/*", "rule": {"mode": "numeric", "absolute": 1e-12, "relative": 1e-12}}
+      ]
+    },
     "binary-logistic-v1": {
       "description": "Field-aware tolerances for binary logistic coefficients, covariance, predictors, and probabilities.",
       "default": {"mode": "exact"},

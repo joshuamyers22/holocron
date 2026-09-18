@@ -41,10 +41,14 @@ implementations, other NumPy versions, and non-float64 inputs are outside this
 accepted envelope.
 
 The following named profiles and rules in `reference/tolerances.json` are
-accepted for the 12 cases labeled `python-parity`:
+accepted for the current cases labeled `python-parity`:
 
+- `data-distribution-v1`: exact structure and categorical metadata; numeric
+  summaries use `1e-12` absolute and `1e-12` relative tolerance.
 - `deterministic-transform-v1`: exact structure and metadata; spline basis
   values use `1e-12` absolute and `1e-12` relative tolerance.
+- `formula-design-v1`: exact formula, AST, generated-column, and term metadata;
+  transformed design values use `1e-12` absolute and relative tolerance.
 - `well-conditioned-ols-v1`: exact structure and metadata; design values use
   `1e-12` absolute/relative; coefficients, fitted values, residuals, and sigma
   use `1e-8` absolute and `1e-7` relative; covariance values use `1e-7`
@@ -56,12 +60,12 @@ absolute or relative allowance. Unlisted fields remain exact. No global numeric
 tolerance exists.
 
 The thresholds retain the project plan's pre-specified engineering budgets.
-They were not inferred by widening around observed errors. Across both hosted
-platforms, the largest observed absolute difference was `1.49e-13`; the largest
-relative difference was `4.82e-12`, occurring near zero where the absolute rule
-governs. The larger accepted OLS budgets preserve room for benign solver and
-BLAS ordering differences without being tuned to these 12 observations. They
-are engineering gates for experimental parity, not thresholds for statistical
+They were not inferred by widening around observed errors. In the original
+Phase 1 cross-platform calibration, the largest observed absolute difference
+was `1.49e-13`; the largest relative difference was `4.82e-12`, occurring near
+zero where the absolute rule governs. The later distribution and formula-design
+profiles use the pre-specified deterministic `1e-12` budget. These are
+engineering gates for experimental parity, not thresholds for statistical
 significance or clinical materiality.
 
 The profiles for binary logistic, ordinal, Cox, parametric survival, and
@@ -71,8 +75,9 @@ acceptance before its Python capability can advance.
 
 ## Evidence and enforcement
 
-Revision `bdd5b6eac6e86039f5adbc8ab81afcbc90014f12` executed all 12 independent
-cases against the same committed R fixtures and policy hash on both platforms:
+Revision `bdd5b6eac6e86039f5adbc8ab81afcbc90014f12` executed the original 12
+independent Phase 1 cases against the same committed R fixtures and policy hash
+on both platforms:
 
 | Platform | Cases | Maximum absolute error | Maximum relative error | Evidence |
 |---|---:|---:|---:|---|
@@ -85,11 +90,13 @@ They record the source revision, dirty-tree state, runtime and numerical-library
 identity, oracle identity, policy hash, per-case comparison counts, errors, and
 outcome, and validate against `schemas/tolerance-pilot.schema.json`.
 
-The required CI matrix reruns the pilot on `ubuntu-24.04` and `macos-15` for
-every pull request and push. `make tolerance-pilot` reproduces the report on the
-current platform. Static repository checks reject missing platforms, dirty or
-failed evidence, differing pilot revisions, incomplete case coverage, or a
-tolerance-policy hash that has changed without new evidence.
+The required CI matrix now reruns all 20 implemented cases on `ubuntu-24.04`
+and `macos-15` for every pull request and push. `make tolerance-pilot`
+reproduces the report on the current platform. The immutable table above remains
+the Phase 1 acceptance evidence; each later Phase 2 acceptance record identifies
+its additional cases and policy. Static repository checks reject missing Phase
+1 platforms, dirty or failed evidence, differing pilot revisions, or an altered
+historical policy identity.
 
 ## Consequences and boundaries
 

@@ -8,26 +8,29 @@ package metadata.
 
 | Namespace | Responsibility | Current public objects |
 |---|---|---|
-| `holocron.design` | Immutable predictor metadata, design specifications, and deterministic transformations | `DataDistribution`, `VariableDistribution`, `DistributionRange`, `RestrictedCubicSplineSpec` |
+| `holocron.design` | Immutable predictor metadata, compiled design specifications, and deterministic transformations | `DataDistribution`, `DesignSpec`, `DesignMatrix`, `GeneratedColumn`, `RestrictedCubicSplineSpec`, distribution records |
+| `holocron.formula` | Allowlisted formula AST, bounded parsing, and canonical serialization | `Formula`, `Variable`, identity/polynomial/linear-spline/RCS term nodes |
 | `holocron.models` | Estimators and immutable fitted-result contracts | `fit_ols`, `OlsResult` |
 | `holocron.exceptions` | Stable failure categories at public boundaries | `HolocronError` and specific subclasses |
 
-The package root exports the three namespaces and `__version__`. Statistical
+The package root exports the four namespaces and `__version__`. Statistical
 objects are not duplicated at the root. A name is public only when it is listed
 in the nearest package's `__all__`; implementation modules may change without
 notice while the project is experimental.
 
 New domains will receive a namespace only with a working vertical capability.
-Planned areas such as formulas, inference, survival, validation, graphics, and
+Planned areas such as inference, survival, validation, graphics, and
 reporting are not represented by empty placeholder packages.
 
 ## Dependency direction
 
 ```text
-holocron.design -----> holocron.exceptions
-holocron.models -----> holocron.exceptions
-        |                    |
-        +------> NumPy <-----+
+holocron.formula -----> holocron.exceptions
+       |                         ^
+       v                         |
+holocron.design -----------------+
+       |                         ^
+       +-----> NumPy <----- holocron.models
 ```
 
 Public result and specification objects are owned by Holocron. Third-party

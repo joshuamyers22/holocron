@@ -17,13 +17,15 @@ Phases 0 and 1 are complete and Phase 2 is active for private experimental
 development. The Phase 1
 exit gate is recorded in the
 [completion record](https://github.com/joshuamyers22/holocron/blob/main/governance/PHASE_1_COMPLETION.md);
-The first Phase 2 deliverable, immutable data-distribution metadata, is complete
-within its experimental envelope. External distribution and capability promotion
-remain blocked by the governance reviews described there.
+The first two Phase 2 deliverables—immutable data-distribution metadata and the
+allowlisted formula/core numeric design engine—are complete within their
+experimental envelopes. External distribution and capability promotion remain
+blocked by the governance reviews described there.
 
 The evidence-backed experimental surface implements predictor-distribution
-metadata, explicit-knot restricted cubic spline design, and classical full-rank
-ordinary least squares. These are checked across 16 independent parity cases
+metadata, safe additive numeric formulas, identity/polynomial/linear-spline/RCS
+design, and classical full-rank ordinary least squares. These are checked across
+20 independent parity cases
 against committed outputs from a Dockerized R oracle. Another 13 versioned
 logistic, ordinal, and survival cases are frozen as oracle baselines for later
 implementation and are not current parity claims.
@@ -36,30 +38,31 @@ arm64/Accelerate and Ubuntu 24.04 x86_64/OpenBLAS, as defined by ADR-009.
 ## Library API
 
 Holocron is a typed library and intentionally installs no command-line tools.
-Its current public namespaces are `holocron.design`, `holocron.models`, and
-`holocron.exceptions`:
+Its current public namespaces are `holocron.design`, `holocron.formula`,
+`holocron.models`, and `holocron.exceptions`:
 
 ```python
-from holocron.design import DataDistribution, RestrictedCubicSplineSpec
+from holocron.design import DataDistribution, DesignSpec
+from holocron.formula import Formula
 from holocron.models import fit_ols
 
 x = (-2.0, -1.0, 0.0, 1.0, 2.0, 3.0)
 y = (0.2, 0.8, 1.1, 1.7, 2.5, 3.6)
 
 metadata = DataDistribution.from_data({"x": x}, labels={"x": "Predictor"})
-spec = RestrictedCubicSplineSpec((-2.0, 0.0, 1.5, 3.0))
-design = spec.transform(x)
-fit = fit_ols(y, design, feature_names=("x", "x'", "x''"))
-predictions = fit.predict(design)
+spec = DesignSpec.from_formula(Formula.parse("y ~ rcs(x, [-2, 0, 1.5, 3])"))
+design = spec.transform({"x": x})
+fit = fit_ols(y, design.rows, feature_names=design.column_names)
+predictions = fit.predict(design.rows)
 ```
 
 `metadata["x"]` retains adjustment, effect, display, and overall ranges without
 depending on global state or the original input iterable.
 
-Automatic knot placement, formula parsing, missing-data policies, aliased-fit
-handling, robust covariance, and broader model families are not supported by
-this slice. Unsupported behavior must fail explicitly rather than silently
-substitute a different method. See the
+Automatic knot placement, categorical formula terms, interactions, missing-data
+policies, aliased-fit handling, robust covariance, and broader model families
+are not supported by this slice. Unsupported behavior must fail explicitly
+rather than silently substitute a different method. See the
 [package architecture](https://github.com/joshuamyers22/holocron/blob/main/docs/architecture/PACKAGE_STRUCTURE.md) for API and
 dependency boundaries.
 

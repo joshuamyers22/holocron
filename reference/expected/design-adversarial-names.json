@@ -1,0 +1,62 @@
+{
+  "schema_version": "holocron-oracle-output/v1",
+  "case_id": "design-adversarial-names",
+  "reference": {
+    "package": "rms",
+    "version": "8.2-0",
+    "commit": "a4e4a305a029090e737562fb4d35bdb705db7d63",
+    "protocol_version": "1"
+  },
+  "ok": true,
+  "protocol_version": "1",
+  "operation": "design",
+  "formula": "`response ~ value` ~ 0 + `blood pressure` + `x + code()`",
+  "response": "response ~ value",
+  "include_intercept": false,
+  "terms": [
+    {
+      "kind": "identity",
+      "variable": "blood pressure"
+    },
+    {
+      "kind": "identity",
+      "variable": "x + code()"
+    }
+  ],
+  "column_names": [
+    "asis(`blood pressure`)",
+    "asis(`x + code()`)"
+  ],
+  "nonlinear_mask": [
+    false,
+    false
+  ],
+  "term_slices": [
+    [
+      0,
+      1
+    ],
+    [
+      1,
+      2
+    ]
+  ],
+  "design": [
+    [
+      110,
+      -2
+    ],
+    [
+      125.5,
+      0
+    ],
+    [
+      140,
+      1.5
+    ],
+    [
+      98,
+      7
+    ]
+  ]
+}

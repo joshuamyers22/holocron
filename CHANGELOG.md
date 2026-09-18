@@ -52,3 +52,7 @@ Notable changes are recorded here using semantic versioning.
 - Added immutable data-distribution metadata with documented `datadist` summary
   and adjustment rules, explicit categorical ordering, labels and units,
   missingness counts, canonical serialization, and four pinned-R parity cases.
+- Added an immutable allowlisted formula AST and deterministic numeric design
+  compiler for identity, raw polynomial, linear-spline, and explicit-knot RCS
+  terms, with bounded parsing, canonical serialization, adversarial-name tests,
+  and four pinned-R design parity cases.

@@ -1,0 +1,20 @@
+{
+  "schema_version": "holocron-oracle-case/v1",
+  "case_id": "design-additive-rcs",
+  "description": "Additive identity and restricted cubic spline design.",
+  "operation": "design",
+  "expected_output": "design-additive-rcs.json",
+  "comparison_profile": "formula-design-v1",
+  "qualification_stage": "python-parity",
+  "formula": "y ~ age + rcs(time, [-2.0, 0.0, 3.0, 6.0])",
+  "response": "y",
+  "include_intercept": true,
+  "variables": [
+    {"name": "age", "values": [18, 24, 37, 52, 68, 81]},
+    {"name": "time", "values": [-4, -2, 1, 3, 7, 10]}
+  ],
+  "terms": [
+    {"kind": "identity", "variable": "age"},
+    {"kind": "restricted_cubic_spline", "variable": "time", "knots": [-2, 0, 3, 6]}
+  ]
+}

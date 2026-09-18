@@ -276,6 +276,123 @@ run_datadist <- function(request) {
   )
 }
 
+design_term_specs <- function(value) {
+  if (!is.data.frame(value)) return(value)
+  lapply(seq_len(nrow(value)), function(index) {
+    lapply(value, function(column) column[[index]])
+  })
+}
+
+design_variable_name <- function(value) {
+  if (grepl("^[[:alpha:]_][[:alnum:]_]*$", value) &&
+      !value %in% c("asis", "pol", "lsp", "rcs")) return(value)
+  paste0("`", gsub("`", "``", value, fixed = TRUE), "`")
+}
+
+design_number_name <- function(value) {
+  if (value == as.integer(value)) paste0(as.integer(value), ".0")
+  else format(value, digits = 17, scientific = FALSE, trim = TRUE)
+}
+
+run_design <- function(request) {
+  variable_specs <- distribution_specs(request$variables)
+  if (!length(variable_specs)) stop("design variables must not be empty")
+  variables <- list()
+  for (spec in variable_specs) {
+    name <- spec$name
+    if (is.null(name) || length(name) != 1L || !is.character(name) || !nzchar(name)) {
+      stop("design variable name must be one non-empty string")
+    }
+    if (name %in% names(variables)) stop(sprintf("duplicate design variable: %s", name))
+    values <- spec$values
+    if (!is.numeric(values) || !length(values) || any(!is.finite(values))) {
+      stop(sprintf("%s values must be a non-empty finite numeric vector", name))
+    }
+    variables[[name]] <- as.numeric(values)
+  }
+  require_equal_lengths(variables, names(variables))
+  terms <- design_term_specs(request$terms)
+  if (!length(terms)) stop("design terms must not be empty")
+  blocks <- list()
+  normalized_terms <- list()
+  column_names <- character()
+  nonlinear <- logical()
+  term_slices <- list()
+  start <- 0L
+  for (index in seq_along(terms)) {
+    term <- terms[[index]]
+    kind <- require_choice(
+      term, "kind", c("identity", "polynomial", "linear_spline", "restricted_cubic_spline")
+    )
+    variable <- term$variable
+    if (is.null(variable) || length(variable) != 1L || !is.character(variable) ||
+        !variable %in% names(variables)) {
+      stop("design term references an unknown variable")
+    }
+    x <- variables[[variable]]
+    displayed <- design_variable_name(variable)
+    if (kind == "identity") {
+      block <- matrix(as.numeric(rms::asis(x)), ncol = 1L)
+      names <- sprintf("asis(%s)", displayed)
+      flags <- FALSE
+      normalized <- list(kind = kind, variable = variable)
+    } else if (kind == "polynomial") {
+      degree <- term$degree
+      if (is.null(degree) || length(degree) != 1L || !is.numeric(degree) ||
+          degree != as.integer(degree) || degree < 2L) stop("invalid polynomial degree")
+      block <- unclass(rms::pol(x, as.integer(degree)))
+      attributes(block) <- list(dim = dim(block))
+      names <- sprintf("pol(%s,%d)", displayed, seq_len(as.integer(degree)))
+      flags <- seq_len(as.integer(degree)) > 1L
+      normalized <- list(kind = kind, variable = variable, degree = as.integer(degree))
+    } else {
+      knots <- unlist(term$knots, use.names = FALSE)
+      minimum <- if (kind == "linear_spline") 1L else 3L
+      if (!is.numeric(knots) || length(knots) < minimum || any(!is.finite(knots)) ||
+          is.unsorted(knots, strictly = TRUE)) stop("invalid spline knots")
+      if (kind == "linear_spline") {
+        block <- unclass(rms::lsp(x, knots))
+        attributes(block) <- list(dim = dim(block))
+        names <- c(
+          sprintf("lsp(%s,linear)", displayed),
+          vapply(knots, function(knot) sprintf(
+            "lsp(%s,knot=%s)", displayed, design_number_name(knot)
+          ), character(1L))
+        )
+      } else {
+        block <- unclass(rms::rcs(x, knots))
+        attributes(block) <- list(dim = dim(block))
+        names <- c(
+          sprintf("rcs(%s,linear)", displayed),
+          sprintf("rcs(%s,nonlinear=%d)", displayed, seq_len(ncol(block) - 1L))
+        )
+      }
+      flags <- c(FALSE, rep(TRUE, ncol(block) - 1L))
+      normalized <- list(kind = kind, variable = variable, knots = unname(as.list(knots)))
+    }
+    blocks[[index]] <- block
+    normalized_terms[[index]] <- normalized
+    column_names <- c(column_names, names)
+    nonlinear <- c(nonlinear, flags)
+    stop_column <- start + ncol(block)
+    term_slices[[index]] <- unname(list(start, stop_column))
+    start <- stop_column
+  }
+  design <- do.call(cbind, blocks)
+  list(
+    protocol_version = protocol_version,
+    operation = "design",
+    formula = request$formula,
+    response = request$response,
+    include_intercept = request$include_intercept,
+    terms = normalized_terms,
+    column_names = name_vector(column_names),
+    nonlinear_mask = unname(as.list(nonlinear)),
+    term_slices = term_slices,
+    design = matrix_rows(design)
+  )
+}
+
 run_lrm <- function(request) {
   x <- require_numeric_vector(request, "x", 3L)
   y <- require_binary_vector(request, "y")
@@ -459,6 +576,7 @@ dispatch <- function(request) {
     rcs = run_rcs(request),
     ols_rcs = run_ols_rcs(request),
     datadist = run_datadist(request),
+    design = run_design(request),
     lrm = run_lrm(request),
     orm = run_orm(request),
     cph = run_cph(request),

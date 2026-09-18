@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from typing import Literal, cast
 
-from holocron.design import DataDistribution, RestrictedCubicSplineSpec
+from holocron.design import DataDistribution, DesignSpec, RestrictedCubicSplineSpec
 from holocron.models import fit_ols
 from reference.contracts import JsonValue
 
@@ -17,6 +17,32 @@ def spline_column_names(column_count: int) -> list[str]:
 def build_python_output(case: dict[str, JsonValue]) -> dict[str, JsonValue]:
     """Compute an implemented case without invoking or importing the R oracle."""
     operation = case["operation"]
+    if operation == "design":
+        specification = DesignSpec.from_formula(cast(str, case["formula"]))
+        raw_variables = cast(list[JsonValue], case["variables"])
+        design_data: dict[str, list[float]] = {}
+        for raw_variable in raw_variables:
+            variable = cast(dict[str, JsonValue], raw_variable)
+            design_data[cast(str, variable["name"])] = cast(
+                list[float], variable["values"]
+            )
+        matrix = specification.transform(design_data)
+        formula_document = specification.formula.to_dict()
+        return {
+            "ok": True,
+            "protocol_version": "1",
+            "operation": "design",
+            "formula": specification.formula.expression,
+            "response": formula_document["response"],
+            "include_intercept": specification.formula.include_intercept,
+            "terms": formula_document["terms"],
+            "column_names": cast(JsonValue, list(matrix.column_names)),
+            "nonlinear_mask": cast(JsonValue, list(matrix.nonlinear_mask)),
+            "term_slices": cast(
+                JsonValue, [list(value) for value in matrix.term_slices]
+            ),
+            "design": cast(JsonValue, [list(row) for row in matrix.rows]),
+        }
     if operation == "datadist":
         raw_variables = cast(list[JsonValue], case["variables"])
         data: dict[str, list[float | str | None]] = {}

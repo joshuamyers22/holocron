@@ -1,0 +1,92 @@
+{
+  "schema_version": "holocron-oracle-output/v1",
+  "case_id": "design-additive-rcs",
+  "reference": {
+    "package": "rms",
+    "version": "8.2-0",
+    "commit": "a4e4a305a029090e737562fb4d35bdb705db7d63",
+    "protocol_version": "1"
+  },
+  "ok": true,
+  "protocol_version": "1",
+  "operation": "design",
+  "formula": "y ~ age + rcs(time, [-2.0, 0.0, 3.0, 6.0])",
+  "response": "y",
+  "include_intercept": true,
+  "terms": [
+    {
+      "kind": "identity",
+      "variable": "age"
+    },
+    {
+      "kind": "restricted_cubic_spline",
+      "variable": "time",
+      "knots": [
+        -2,
+        0,
+        3,
+        6
+      ]
+    }
+  ],
+  "column_names": [
+    "asis(age)",
+    "rcs(time,linear)",
+    "rcs(time,nonlinear=1)",
+    "rcs(time,nonlinear=2)"
+  ],
+  "nonlinear_mask": [
+    false,
+    false,
+    true,
+    true
+  ],
+  "term_slices": [
+    [
+      0,
+      1
+    ],
+    [
+      1,
+      4
+    ]
+  ],
+  "design": [
+    [
+      18,
+      -4,
+      0,
+      0
+    ],
+    [
+      24,
+      -2,
+      0,
+      0
+    ],
+    [
+      37,
+      1,
+      0.42187500000000017,
+      0.01562500000000001
+    ],
+    [
+      52,
+      3,
+      1.953125000000001,
+      0.42187500000000017
+    ],
+    [
+      68,
+      7,
+      8.750000000000005,
+      3.375000000000001
+    ],
+    [
+      81,
+      10,
+      14.375000000000005,
+      5.9062500000000036
+    ]
+  ]
+}

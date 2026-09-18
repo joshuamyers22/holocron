@@ -26,6 +26,7 @@ nav:
   - Getting started: getting-started.md
   - Guides:
       - Data distributions: guides/data-distributions.md
+      - Formulas and numeric designs: guides/formulas-and-designs.md
       - Restricted cubic splines: guides/restricted-cubic-splines.md
       - Ordinary least squares: guides/ordinary-least-squares.md
       - R migration: guides/r-migration.md
@@ -34,6 +35,7 @@ nav:
   - Compatibility: compatibility.md
   - API reference:
       - Design: api/design.md
+      - Formula: api/formula.md
       - Models: api/models.md
       - Exceptions: api/exceptions.md
   - Interpretation and limitations: interpretation-and-limitations.md

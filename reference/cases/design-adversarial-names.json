@@ -1,0 +1,20 @@
+{
+  "schema_version": "holocron-oracle-case/v1",
+  "case_id": "design-adversarial-names",
+  "description": "Identity design with quoted names that contain formula syntax.",
+  "operation": "design",
+  "expected_output": "design-adversarial-names.json",
+  "comparison_profile": "formula-design-v1",
+  "qualification_stage": "python-parity",
+  "formula": "`response ~ value` ~ 0 + `blood pressure` + `x + code()`",
+  "response": "response ~ value",
+  "include_intercept": false,
+  "variables": [
+    {"name": "blood pressure", "values": [110, 125.5, 140, 98]},
+    {"name": "x + code()", "values": [-2, 0, 1.5, 7]}
+  ],
+  "terms": [
+    {"kind": "identity", "variable": "blood pressure"},
+    {"kind": "identity", "variable": "x + code()"}
+  ]
+}

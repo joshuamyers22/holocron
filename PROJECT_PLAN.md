@@ -639,14 +639,16 @@ workflow artifact. See the [Phase 1 completion record](governance/PHASE_1_COMPLE
 
 ### Phase 2 — Design system (12–18 weeks)
 
-**Status:** In progress. Data-distribution metadata is complete for the
-experimental envelope; formula AST and core transformations are next.
+**Status:** In progress. Data-distribution metadata plus the formula AST and
+core numeric transformations are complete for the experimental envelope;
+categorical/ordered handling and restricted interactions are next.
 
 **Deliverables**
 
 - [x] data-distribution metadata
   ([acceptance record](governance/PHASE_2_DATA_DISTRIBUTION.md));
-- [ ] formula AST and core transformations;
+- [x] formula AST and core transformations
+  ([acceptance record](governance/PHASE_2_FORMULA_DESIGN.md));
 - [ ] categorical/ordered handling and restricted interactions;
 - [ ] stable design/result schemas and serialization draft;
 - [ ] exhaustive transformation differential/property tests;

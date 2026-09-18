@@ -1,0 +1,89 @@
+{
+  "schema_version": "holocron-oracle-output/v1",
+  "case_id": "design-linear-spline",
+  "reference": {
+    "package": "rms",
+    "version": "8.2-0",
+    "commit": "a4e4a305a029090e737562fb4d35bdb705db7d63",
+    "protocol_version": "1"
+  },
+  "ok": true,
+  "protocol_version": "1",
+  "operation": "design",
+  "formula": "~ lsp(marker, [-1.5, 0.0, 3.25])",
+  "response": null,
+  "include_intercept": true,
+  "terms": [
+    {
+      "kind": "linear_spline",
+      "variable": "marker",
+      "knots": [
+        -1.5,
+        0,
+        3.25
+      ]
+    }
+  ],
+  "column_names": [
+    "lsp(marker,linear)",
+    "lsp(marker,knot=-1.5)",
+    "lsp(marker,knot=0.0)",
+    "lsp(marker,knot=3.25)"
+  ],
+  "nonlinear_mask": [
+    false,
+    true,
+    true,
+    true
+  ],
+  "term_slices": [
+    [
+      0,
+      4
+    ]
+  ],
+  "design": [
+    [
+      -4,
+      0,
+      0,
+      0
+    ],
+    [
+      -1.5,
+      0,
+      0,
+      0
+    ],
+    [
+      -0.25,
+      1.25,
+      0,
+      0
+    ],
+    [
+      0,
+      1.5,
+      0,
+      0
+    ],
+    [
+      2,
+      3.5,
+      2,
+      0
+    ],
+    [
+      3.25,
+      4.75,
+      3.25,
+      0
+    ],
+    [
+      8,
+      9.5,
+      8,
+      4.75
+    ]
+  ]
+}

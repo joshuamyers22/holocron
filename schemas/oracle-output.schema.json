@@ -137,6 +137,53 @@
       ]
     },
     {
+      "title": "Core numeric formula design output",
+      "properties": {
+        "ok": {"const": true},
+        "protocol_version": {"const": "1"},
+        "operation": {"const": "design"},
+        "formula": {"type": "string", "minLength": 1, "maxLength": 4096},
+        "response": {
+          "oneOf": [
+            {"type": "null"},
+            {"type": "string", "minLength": 1, "maxLength": 256}
+          ]
+        },
+        "include_intercept": {"type": "boolean"},
+        "terms": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 64,
+          "items": {"$ref": "#/$defs/designTerm"}
+        },
+        "column_names": {"$ref": "#/$defs/nameVector"},
+        "nonlinear_mask": {
+          "type": "array",
+          "minItems": 1,
+          "items": {"type": "boolean"}
+        },
+        "term_slices": {
+          "type": "array",
+          "minItems": 1,
+          "items": {"$ref": "#/$defs/termSlice"}
+        },
+        "design": {"$ref": "#/$defs/numericMatrix"}
+      },
+      "required": [
+        "ok",
+        "protocol_version",
+        "operation",
+        "formula",
+        "response",
+        "include_intercept",
+        "terms",
+        "column_names",
+        "nonlinear_mask",
+        "term_slices",
+        "design"
+      ]
+    },
+    {
       "title": "Binary logistic regression output",
       "allOf": [
         {"$ref": "#/$defs/modelFitOutput"},
@@ -312,6 +359,71 @@
       "type": "array",
       "minItems": 1,
       "items": {"type": "string", "minLength": 1}
+    },
+    "termSlice": {
+      "type": "array",
+      "prefixItems": [
+        {"type": "integer", "minimum": 0},
+        {"type": "integer", "minimum": 1}
+      ],
+      "items": false,
+      "minItems": 2,
+      "maxItems": 2
+    },
+    "designTerm": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "kind": {"const": "identity"},
+            "variable": {"type": "string", "minLength": 1, "maxLength": 256}
+          },
+          "required": ["kind", "variable"],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {"const": "polynomial"},
+            "variable": {"type": "string", "minLength": 1, "maxLength": 256},
+            "degree": {"type": "integer", "minimum": 2, "maximum": 10}
+          },
+          "required": ["kind", "variable", "degree"],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {"const": "linear_spline"},
+            "variable": {"type": "string", "minLength": 1, "maxLength": 256},
+            "knots": {
+              "type": "array",
+              "minItems": 1,
+              "maxItems": 32,
+              "uniqueItems": true,
+              "items": {"type": "number"}
+            }
+          },
+          "required": ["kind", "variable", "knots"],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {"const": "restricted_cubic_spline"},
+            "variable": {"type": "string", "minLength": 1, "maxLength": 256},
+            "knots": {
+              "type": "array",
+              "minItems": 3,
+              "maxItems": 32,
+              "uniqueItems": true,
+              "items": {"type": "number"}
+            }
+          },
+          "required": ["kind", "variable", "knots"],
+          "additionalProperties": false
+        }
+      ]
     },
     "integerVector": {
       "type": "array",

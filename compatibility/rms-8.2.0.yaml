@@ -33,14 +33,16 @@
       "id": "export:Design",
       "r_symbol": "Design",
       "kind": "export",
-      "python_entry_point": null,
+      "python_entry_point": "holocron.design.DesignSpec",
       "tier": "A",
       "milestone": "Phase 2-3",
-      "status": "deferred",
+      "status": "experimental",
       "owner": "joshuamyers22",
-      "oracle_cases": [],
-      "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "oracle_cases": [
+        "design-additive-rcs"
+      ],
+      "tolerance_profile": "formula-design-v1",
+      "known_differences": "Owned additive numeric AST only; categorical terms, interactions, automatic parameters, offsets, strata, and R formula evaluation remain deferred."
     },
     {
       "id": "export:DesignAssign",
@@ -53,7 +55,7 @@
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "known_differences": "Complete R assignment behavior remains deferred; the experimental DesignSpec exposes narrower generated-column ownership and term slices."
     },
     {
       "id": "export:ExProb",
@@ -319,14 +321,16 @@
       "id": "export:asis",
       "r_symbol": "asis",
       "kind": "export",
-      "python_entry_point": null,
+      "python_entry_point": "holocron.formula.IdentityTerm",
       "tier": "A",
       "milestone": "Phase 2-3",
-      "status": "deferred",
+      "status": "experimental",
       "owner": "joshuamyers22",
-      "oracle_cases": [],
-      "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "oracle_cases": [
+        "design-adversarial-names"
+      ],
+      "tolerance_profile": "formula-design-v1",
+      "known_differences": "Numeric one-dimensional predictors only; labels and units are retained separately by DataDistribution."
     },
     {
       "id": "export:bj",
@@ -839,14 +843,14 @@
       "id": "export:lsp",
       "r_symbol": "lsp",
       "kind": "export",
-      "python_entry_point": null,
+      "python_entry_point": "holocron.formula.LinearSplineTerm",
       "tier": "A",
       "milestone": "Phase 2-3",
-      "status": "deferred",
+      "status": "experimental",
       "owner": "joshuamyers22",
-      "oracle_cases": [],
-      "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "oracle_cases": ["design-linear-spline"],
+      "tolerance_profile": "formula-design-v1",
+      "known_differences": "Explicit finite knots only; automatic parameters and categorical interactions remain deferred."
     },
     {
       "id": "export:matinv",
@@ -1152,14 +1156,14 @@
       "id": "export:pol",
       "r_symbol": "pol",
       "kind": "export",
-      "python_entry_point": null,
+      "python_entry_point": "holocron.formula.PolynomialTerm",
       "tier": "A",
       "milestone": "Phase 2-3",
-      "status": "deferred",
+      "status": "experimental",
       "owner": "joshuamyers22",
-      "oracle_cases": [],
-      "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "oracle_cases": ["design-polynomial"],
+      "tolerance_profile": "formula-design-v1",
+      "known_differences": "Raw powers of explicit degree 2 through 10 only; no ambient option supplies a default degree."
     },
     {
       "id": "export:poma",

@@ -31,8 +31,9 @@ The nonlinear columns use the explicit-knot normalization matched to the pinned
 
 ## Current boundary
 
-Automatic knot placement, formula parsing, principal-component rotation, and
-interaction restrictions are not implemented. Data-distribution metadata can
+The allowlisted formula parser supports `rcs(x, [knots...])`. Automatic knot
+placement, principal-component rotation, and interaction restrictions are not
+implemented. Data-distribution metadata can
 retain labels and units, but it is not yet connected to spline construction. Do
 not infer support for the full R `rcs` function from this primitive. See the
 [compatibility page](../compatibility.md) for the exact claim.

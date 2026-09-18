@@ -25,13 +25,14 @@ metadata—including distribution summaries, factor levels, knots, encodings, an
 generated-column identities—must be stored with the fitted design. Post-fit
 operations may not depend on mutable process-wide configuration.
 
-`DataDistribution` is the first design-domain object under this decision. It is
-independent of formula syntax and can therefore be accepted before the AST is
-implemented.
+`DataDistribution` was the first design-domain object under this decision.
+`Formula` and `DesignSpec` now implement the additive numeric subset with fixed
+resource limits and reconstructible generated-column metadata.
 
 ## Consequences and verification
 
-The next Phase 2 deliverable must specify the AST node vocabulary and resource
-limits before exposing formula strings. Unsupported expressions fail with a
-typed error. Formula and design metadata require versioned serialization,
-adversarial-name tests, and reconstruction tests before the Phase 2 exit gate.
+The initial AST vocabulary and resource limits are accepted in the
+[formula-design record](https://github.com/joshuamyers22/holocron/blob/main/governance/PHASE_2_FORMULA_DESIGN.md).
+Unsupported expressions fail with a typed error. Categorical nodes and
+interactions must extend this owned representation without weakening its parser,
+serialization, or reconstruction guarantees.

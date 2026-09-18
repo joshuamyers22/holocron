@@ -49,8 +49,9 @@ count, following the reference documentation rather than reusing the first
 numeric variable's probability when missingness differs. For an even number of
 ordered levels, Holocron selects the lower middle level explicitly.
 
-Dataframe/date-time adapters, formula integration, row-level model missing-data
-handling, automatic knot selection, and prediction adjustment semantics remain
-later Phase 2 work. Labels and units are retained metadata but do not perform
-unit conversion. The capability remains `experimental`; this acceptance does
-not approve external distribution or capability promotion.
+Dataframe/date-time adapters, automatic distribution-driven parameter selection,
+row-level model missing-data handling, and prediction adjustment semantics
+remain later Phase 2 work. The separate formula/design engine does not consult
+this metadata implicitly. Labels and units are retained metadata but do not
+perform unit conversion. The capability remains `experimental`; this acceptance
+does not approve external distribution or capability promotion.

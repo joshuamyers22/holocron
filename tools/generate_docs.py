@@ -20,6 +20,7 @@ STATUS_ORDER = ("implemented", "experimental", "mapped", "unsupported", "deferre
 TIER_ORDER = ("A", "B", "C", "D")
 API_MODULES = {
     ROOT / "docs/api/design.md": "holocron.design",
+    ROOT / "docs/api/formula.md": "holocron.formula",
     ROOT / "docs/api/models.md": "holocron.models",
     ROOT / "docs/api/exceptions.md": "holocron.exceptions",
 }

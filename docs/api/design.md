@@ -80,6 +80,91 @@ Return a copy extended with new columns under the same policies.
 Extension preserves existing metadata and column order. New columns must
 have the original row count and names that do not already exist.
 
+## `DesignMatrix`
+
+```python
+class holocron.design.formula.DesignMatrix(column_names: tuple[str, ...], nonlinear_mask: tuple[bool, ...], term_slices: tuple[tuple[int, int], ...], rows: tuple[tuple[float, ...], ...], specification_fingerprint: str) -> None
+```
+
+An immutable numeric design matrix plus generated-column identity.
+
+### Attributes
+
+| Name | Type |
+| --- | --- |
+| `column_names` | `tuple[str, ...]` |
+| `nonlinear_mask` | `tuple[bool, ...]` |
+| `term_slices` | `tuple[tuple[int, int], ...]` |
+| `rows` | `tuple[tuple[float, ...], ...]` |
+| `specification_fingerprint` | `str` |
+
+### `shape`
+
+Return ``(rows, columns)``.
+
+### `to_numpy(self) -> NDArray[numpy.float64]`
+
+Return an independent float64 NumPy array.
+
+## `DesignSpec`
+
+```python
+class holocron.design.formula.DesignSpec(formula: holocron.formula.ast.Formula, columns: tuple[holocron.design.formula.GeneratedColumn, ...]) -> None
+```
+
+A reconstructible numeric design specification derived from a formula.
+
+### Attributes
+
+| Name | Type |
+| --- | --- |
+| `formula` | `Formula` |
+| `columns` | `tuple[GeneratedColumn, ...]` |
+
+### `column_names`
+
+Return generated columns in stable design order.
+
+### `fingerprint`
+
+Return the SHA-256 identity of the design specification.
+
+### `from_dict(document: object) -> holocron.design.formula.DesignSpec`
+
+Reconstruct and verify a design specification document.
+
+### `from_formula(formula: holocron.formula.ast.Formula | str) -> holocron.design.formula.DesignSpec`
+
+Compile a formula object or restricted formula string.
+
+### `from_json(value: str) -> holocron.design.formula.DesignSpec`
+
+Reconstruct a design specification from JSON.
+
+### `nonlinear_mask`
+
+Identify nonlinear columns in stable design order.
+
+### `response_values(self, data: collections.abc.Mapping[str, collections.abc.Iterable[object]]) -> tuple[float, ...]`
+
+Snapshot the declared numeric response for estimator input.
+
+### `term_slices`
+
+Return half-open column slices owned by each formula term.
+
+### `to_dict(self) -> dict[str, None | bool | int | float | str | list['JsonValue'] | dict[str, 'JsonValue']]`
+
+Return versioned reconstruction metadata.
+
+### `to_json(self) -> str`
+
+Serialize reconstruction metadata as canonical JSON.
+
+### `transform(self, data: collections.abc.Mapping[str, collections.abc.Iterable[object]]) -> holocron.design.formula.DesignMatrix`
+
+Snapshot and transform numeric predictors under the compiled design.
+
 ## `DistributionRange`
 
 ```python
@@ -94,6 +179,29 @@ An inclusive lower and upper metadata range.
 | --- | --- |
 | `lower` | `DistributionValue` |
 | `upper` | `DistributionValue` |
+
+## `GeneratedColumn`
+
+```python
+class holocron.design.formula.GeneratedColumn(name: str, variable: str, transformation: str, term_index: int, within_term_index: int, nonlinear: bool) -> None
+```
+
+Stable identity and ownership metadata for one generated column.
+
+### Attributes
+
+| Name | Type |
+| --- | --- |
+| `name` | `str` |
+| `variable` | `str` |
+| `transformation` | `str` |
+| `term_index` | `int` |
+| `within_term_index` | `int` |
+| `nonlinear` | `bool` |
+
+### `to_dict(self) -> dict[str, None | bool | int | float | str | list['JsonValue'] | dict[str, 'JsonValue']]`
+
+Return the canonical metadata document for this column.
 
 ## `RestrictedCubicSplineSpec`
 

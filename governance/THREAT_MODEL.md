@@ -9,15 +9,15 @@
   repository credentials, release artifacts, user data supplied at runtime
 - Actors: ordinary users, mistaken contributors, malicious data/artifact
   producers, compromised dependencies or CI actions, and privileged maintainers
-- Trust boundaries: caller data to Python; future formula text to parser; source
+- Trust boundaries: caller data and formula text to Python; source
   snapshot and network dependencies to oracle build; JSON to offline oracle;
   GitHub events to CI; built artifacts to users
 
 | Abuse case | Impact | Prevention/detection/response | Evidence | Residual risk owner |
 |---|---|---|---|---|
-| Formula or callback injection | Arbitrary code execution | Allowlisted AST, no general evaluation, parser fuzzing before exposure | ADR-005 accepted; parser implementation remains gated | joshuamyers22 |
+| Formula or callback injection | Arbitrary code execution | Allowlisted additive AST, custom parser with no general evaluation, adversarial syntax tests | `src/holocron/formula/`; ADR-005; formula-design acceptance record | joshuamyers22 |
 | Malicious serialized model | Code execution or silent model drift | No supported pickle interchange; versioned data-only schema with limits | ADR-008 required before persistence | joshuamyers22 |
-| Huge interaction/design request | Memory/CPU exhaustion | Column/cardinality preflight limits and explicit dense/sparse conversion | Phase 2 requirement | joshuamyers22 |
+| Huge interaction/design request | Memory/CPU exhaustion | Formula length/name/term/column/degree/knot limits; interaction cardinality gate remains required | Formula-design acceptance record; interactions remain deferred | joshuamyers22 |
 | Pathological resampling request | Denial of service or partial evidence presented as complete | Bounded plans, explicit failures, retained completion counts | Phase 6 requirement | joshuamyers22 |
 | Crafted dataframe producer | Type confusion, row mismatch, data leakage | Canonical validated boundary, retained row identity, copy/ownership policy | ADR-006 accepted; dataframe adapters remain gated | joshuamyers22 |
 | Oracle JSON used as code channel | Build/runtime compromise | Fixed operation allowlist, no arbitrary formulas, non-root offline read-only runtime | `reference/r/oracle.R`; runner flags | joshuamyers22 |
