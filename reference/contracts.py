@@ -35,8 +35,11 @@ FORMULA_SCHEMA = ROOT / "schemas/formula.schema.json"
 DESIGN_SPEC_SCHEMA = ROOT / "schemas/design-spec.schema.json"
 DESIGN_MATRIX_SCHEMA = ROOT / "schemas/design-matrix.schema.json"
 OLS_RESULT_SCHEMA = ROOT / "schemas/ols-result.schema.json"
+BINARY_LOGISTIC_RESULT_SCHEMA = ROOT / "schemas/binary-logistic-result.schema.json"
 PHASE_2_EXIT_EVIDENCE_SCHEMA = ROOT / "schemas/phase-2-exit-evidence.schema.json"
 POLICY_PATH = ROOT / "reference/tolerances.json"
+PHASE_3_POLICY_PATH = ROOT / "reference/phase-3-tolerances.json"
+POLICY_PATHS = (POLICY_PATH, PHASE_3_POLICY_PATH)
 CASES = ROOT / "reference/cases"
 EXPECTED = ROOT / "reference/expected"
 FIXTURE_METADATA = frozenset({"schema_version", "case_id", "reference"})
@@ -208,52 +211,57 @@ def _parse_rule(value: JsonValue, *, name: str) -> ComparisonRule:
 
 def load_policies() -> dict[str, ComparisonPolicy]:
     """Load and semantically validate every named comparison profile."""
-    document = require_object(load_json(POLICY_PATH), name=str(POLICY_PATH))
-    validate_document(document, POLICY_SCHEMA)
-    raw_profiles = require_object(document["profiles"], name="profiles")
     policies: dict[str, ComparisonPolicy] = {}
-    for profile_name, raw_profile in raw_profiles.items():
-        profile = require_object(raw_profile, name=f"profiles.{profile_name}")
-        description = profile["description"]
-        if not isinstance(description, str):
-            raise ContractValidationError(
-                f"profiles.{profile_name}.description must be a string"
-            )
-        raw_rules = require_array(
-            profile["rules"], name=f"profiles.{profile_name}.rules"
-        )
-        path_rules: list[PathRule] = []
-        seen_paths: set[tuple[str, ...]] = set()
-        for index, raw_path_rule in enumerate(raw_rules):
-            path_rule = require_object(
-                raw_path_rule, name=f"profiles.{profile_name}.rules[{index}]"
-            )
-            raw_path = path_rule["path"]
-            if not isinstance(raw_path, str):
-                raise ContractValidationError("comparison path must be a string")
-            path = _pointer_segments(raw_path)
-            if path in seen_paths:
+    for policy_path in POLICY_PATHS:
+        document = require_object(load_json(policy_path), name=str(policy_path))
+        validate_document(document, POLICY_SCHEMA)
+        raw_profiles = require_object(document["profiles"], name="profiles")
+        for profile_name, raw_profile in raw_profiles.items():
+            if profile_name in policies:
                 raise ContractValidationError(
-                    f"duplicate comparison path in {profile_name}: {raw_path}"
+                    f"duplicate comparison profile across policy files: {profile_name}"
                 )
-            seen_paths.add(path)
-            path_rules.append(
-                PathRule(
-                    path,
-                    _parse_rule(
-                        path_rule["rule"],
-                        name=f"profiles.{profile_name}.rules[{index}].rule",
-                    ),
+            profile = require_object(raw_profile, name=f"profiles.{profile_name}")
+            description = profile["description"]
+            if not isinstance(description, str):
+                raise ContractValidationError(
+                    f"profiles.{profile_name}.description must be a string"
                 )
+            raw_rules = require_array(
+                profile["rules"], name=f"profiles.{profile_name}.rules"
             )
-        policies[profile_name] = ComparisonPolicy(
-            name=profile_name,
-            description=description,
-            default=_parse_rule(
-                profile["default"], name=f"profiles.{profile_name}.default"
-            ),
-            rules=tuple(path_rules),
-        )
+            path_rules: list[PathRule] = []
+            seen_paths: set[tuple[str, ...]] = set()
+            for index, raw_path_rule in enumerate(raw_rules):
+                path_rule = require_object(
+                    raw_path_rule, name=f"profiles.{profile_name}.rules[{index}]"
+                )
+                raw_path = path_rule["path"]
+                if not isinstance(raw_path, str):
+                    raise ContractValidationError("comparison path must be a string")
+                path = _pointer_segments(raw_path)
+                if path in seen_paths:
+                    raise ContractValidationError(
+                        f"duplicate comparison path in {profile_name}: {raw_path}"
+                    )
+                seen_paths.add(path)
+                path_rules.append(
+                    PathRule(
+                        path,
+                        _parse_rule(
+                            path_rule["rule"],
+                            name=f"profiles.{profile_name}.rules[{index}].rule",
+                        ),
+                    )
+                )
+            policies[profile_name] = ComparisonPolicy(
+                name=profile_name,
+                description=description,
+                default=_parse_rule(
+                    profile["default"], name=f"profiles.{profile_name}.default"
+                ),
+                rules=tuple(path_rules),
+            )
     return policies
 
 
@@ -432,6 +440,7 @@ def validate_case_pair(
         "basis",
         "knots",
         "family",
+        "link",
         "method",
         "distribution",
         "estimator",
@@ -448,7 +457,7 @@ def validate_case_pair(
     if reference["protocol_version"] != payload.get("protocol_version"):
         raise ContractValidationError(f"{case_path}: protocol versions do not match")
     operation = case["operation"]
-    if operation in {"ols_rcs", "lrm", "orm"}:
+    if operation in {"ols_rcs", "glm", "lrm", "orm"}:
         x = require_array(case["x"], name="case.x")
         y = require_array(case["y"], name="case.y")
         if len(x) != len(y):
@@ -671,6 +680,7 @@ def validate_repository_contracts() -> int:
         DESIGN_SPEC_SCHEMA,
         DESIGN_MATRIX_SCHEMA,
         OLS_RESULT_SCHEMA,
+        BINARY_LOGISTIC_RESULT_SCHEMA,
         PHASE_2_EXIT_EVIDENCE_SCHEMA,
     ):
         schema = require_object(load_json(schema_path), name=str(schema_path))

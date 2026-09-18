@@ -7,6 +7,60 @@ Statistical model estimators and owned result types.
 Import public names from `holocron.models`. The signatures and docstrings below
 are generated from the installed source during `make docs-check`.
 
+## `BinaryLogisticResult`
+
+```python
+class holocron.models.logistic.BinaryLogisticResult(estimator: Literal['glm', 'lrm'], coefficient_names: tuple[str, ...], coefficients: tuple[float, ...], covariance: tuple[tuple[float, ...], ...], linear_predictors: tuple[float, ...], fitted_probabilities: tuple[float, ...], deviance: tuple[float, float], iterations: int, rank: int, n_observations: int, n_features: int, includes_intercept: bool, design_fingerprint: str | None = None) -> None
+```
+
+Immutable maximum-likelihood result for a binary logit model.
+
+### Attributes
+
+| Name | Type |
+| --- | --- |
+| `estimator` | `Estimator` |
+| `coefficient_names` | `tuple[str, ...]` |
+| `coefficients` | `tuple[float, ...]` |
+| `covariance` | `tuple[tuple[float, ...], ...]` |
+| `linear_predictors` | `tuple[float, ...]` |
+| `fitted_probabilities` | `tuple[float, ...]` |
+| `deviance` | `tuple[float, float]` |
+| `iterations` | `int` |
+| `rank` | `int` |
+| `n_observations` | `int` |
+| `n_features` | `int` |
+| `includes_intercept` | `bool` |
+| `design_fingerprint` | `str | None` |
+
+### `fingerprint`
+
+Return the SHA-256 identity of the canonical result document.
+
+### `from_dict(document: object) -> holocron.models.logistic.BinaryLogisticResult`
+
+Reconstruct a binary result from an exact-version document.
+
+### `from_json(value: str) -> holocron.models.logistic.BinaryLogisticResult`
+
+Reconstruct a binary result from strict bounded JSON.
+
+### `predict_linear(self, features: collections.abc.Iterable[collections.abc.Iterable[float]] | holocron.design.formula.DesignMatrix) -> tuple[float, ...]`
+
+Predict the linear log-odds in fitted feature order.
+
+### `predict_probability(self, features: collections.abc.Iterable[collections.abc.Iterable[float]] | holocron.design.formula.DesignMatrix) -> tuple[float, ...]`
+
+Predict event probabilities in fitted feature order.
+
+### `to_dict(self) -> dict[str, None | bool | int | float | str | list['JsonValue'] | dict[str, 'JsonValue']]`
+
+Return the versioned binary-logistic result document.
+
+### `to_json(self) -> str`
+
+Serialize this result as canonical non-executable JSON.
+
 ## `OlsResult`
 
 ```python
@@ -58,6 +112,14 @@ Return the versioned fitted-result document.
 ### `to_json(self) -> str`
 
 Serialize the fitted result as canonical non-executable JSON.
+
+## `fit_glm(response: collections.abc.Iterable[float], features: collections.abc.Iterable[collections.abc.Iterable[float]] | holocron.design.formula.DesignMatrix, *, family: Literal['gaussian', 'binomial'] = 'gaussian', link: Optional[Literal['identity', 'logit']] = None, feature_names: collections.abc.Iterable[str] | None = None, include_intercept: bool | None = None, design_fingerprint: str | None = None, max_iterations: int = 100, tolerance: float = 1e-08) -> holocron.models.linear.OlsResult | holocron.models.logistic.BinaryLogisticResult`
+
+Fit the supported Gaussian/identity or binomial/logit GLM envelope.
+
+## `fit_lrm(response: collections.abc.Iterable[float], features: collections.abc.Iterable[collections.abc.Iterable[float]] | holocron.design.formula.DesignMatrix, *, feature_names: collections.abc.Iterable[str] | None = None, include_intercept: bool | None = None, design_fingerprint: str | None = None, max_iterations: int = 100, tolerance: float = 1e-10) -> holocron.models.logistic.BinaryLogisticResult`
+
+Fit the supported unpenalized binary subset of ``rms::lrm``.
 
 ## `fit_ols(response: collections.abc.Iterable[float], features: collections.abc.Iterable[collections.abc.Iterable[float]] | holocron.design.formula.DesignMatrix, *, feature_names: collections.abc.Iterable[str] | None = None, include_intercept: bool | None = None, design_fingerprint: str | None = None) -> holocron.models.linear.OlsResult`
 

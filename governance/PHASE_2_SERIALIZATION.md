@@ -36,7 +36,8 @@ statistical invariants. No executable object format is supported.
 
 This record stabilizes the meaning of the named schema versions, not the entire
 pre-alpha Python API. Current readers do not migrate older versions, and a
-support window is deferred until beta. OLS is the only serializable fitted-result
-family. Fingerprints are deterministic identities, not authentication or access
-control. Result documents can contain sensitive input-derived values and are not
-parity-evidence artifacts by default.
+support window is deferred until beta. At this record's acceptance, OLS was the
+only serializable fitted-result family; Phase 3 subsequently added the binary-
+logistic result under a new schema. Fingerprints are deterministic identities,
+not authentication or access control. Result documents can contain sensitive
+input-derived values and are not parity-evidence artifacts by default.

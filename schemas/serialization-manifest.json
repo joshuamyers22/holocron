@@ -12,6 +12,7 @@
     {"python_type": "holocron.formula.Formula", "schema_version": "holocron-formula/v2", "schema_file": "formula.schema.json", "stability": "stable-schema"},
     {"python_type": "holocron.design.DesignSpec", "schema_version": "holocron-design-spec/v2", "schema_file": "design-spec.schema.json", "stability": "stable-schema"},
     {"python_type": "holocron.design.DesignMatrix", "schema_version": "holocron-design-matrix/v1", "schema_file": "design-matrix.schema.json", "stability": "stable-schema"},
-    {"python_type": "holocron.models.OlsResult", "schema_version": "holocron-ols-result/v1", "schema_file": "ols-result.schema.json", "stability": "stable-schema"}
+    {"python_type": "holocron.models.OlsResult", "schema_version": "holocron-ols-result/v1", "schema_file": "ols-result.schema.json", "stability": "stable-schema"},
+    {"python_type": "holocron.models.BinaryLogisticResult", "schema_version": "holocron-binary-logistic-result/v1", "schema_file": "binary-logistic-result.schema.json", "stability": "stable-schema"}
   ]
 }

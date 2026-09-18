@@ -2,8 +2,9 @@
 
 Holocron currently proves narrow engineering claims: predictor-distribution
 summaries, allowlisted numeric/factor/restricted-interaction formula designs,
-and selected outputs from well-conditioned full-rank OLS match a pinned R
-`rms` oracle under field-aware tolerances.
+and selected outputs from well-conditioned full-rank OLS, Gaussian/binomial
+`Glm`, and binary `lrm` match a pinned R `rms` oracle under field-aware
+tolerances.
 That is not evidence of package-wide equivalence, model validity, or fitness for
 a consequential decision.
 
@@ -18,12 +19,12 @@ exact; approximate comparison is restricted to allowlisted numerical paths.
 
 - automatic knots or factor levels, unrestricted or higher-order interactions,
   dataframe/date-time adapters, and model-level missing-data policy;
-- binary logistic, ordinal, Cox, parametric survival, and nonparametric survival
-  Python estimators;
+- ordinal, Cox, parametric-survival, and nonparametric-survival Python
+  estimators;
 - inference tables, ANOVA, contrasts, calibration, validation, and resampling;
 - robust covariance, clustered errors, penalization, and aliased fits;
-- plotting, nomograms, fitted-model families beyond OLS, and a dataframe adapter
-  contract.
+- GLM families/links outside Gaussian/identity and binomial/logit, ordinal
+  `lrm`, plotting, nomograms, and a dataframe adapter contract.
 
 Some unsupported families already have committed R oracle outputs. Those files
 freeze future comparison targets and do not imply a Python implementation.

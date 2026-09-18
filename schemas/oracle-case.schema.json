@@ -122,13 +122,36 @@
       "title": "Binary logistic regression case",
       "properties": {
         "operation": {"const": "lrm"},
-        "qualification_stage": {"const": "oracle-baseline"},
+        "qualification_stage": {"const": "python-parity"},
         "basis": {"$ref": "#/$defs/modelBasis"},
         "x": {"$ref": "#/$defs/fitNumericVector"},
         "y": {"$ref": "#/$defs/binaryVector"},
         "knots": {"$ref": "#/$defs/knotVector"}
       },
       "required": ["operation", "basis", "x", "y"]
+    },
+    {
+      "title": "Generalized linear model case",
+      "properties": {
+        "operation": {"const": "glm"},
+        "qualification_stage": {"const": "python-parity"},
+        "basis": {"$ref": "#/$defs/modelBasis"},
+        "family": {"enum": ["gaussian", "binomial"]},
+        "link": {"enum": ["identity", "logit"]},
+        "x": {"$ref": "#/$defs/fitNumericVector"},
+        "y": {"$ref": "#/$defs/fitNumericVector"},
+        "knots": {"$ref": "#/$defs/knotVector"}
+      },
+      "required": ["operation", "basis", "family", "link", "x", "y"],
+      "allOf": [
+        {
+          "if": {"properties": {"family": {"const": "binomial"}}},
+          "then": {
+            "properties": {"link": {"const": "logit"}, "y": {"$ref": "#/$defs/binaryVector"}}
+          },
+          "else": {"properties": {"link": {"const": "identity"}}}
+        }
+      ]
     },
     {
       "title": "Ordinal regression case",

@@ -74,14 +74,18 @@
       "id": "export:Glm",
       "r_symbol": "Glm",
       "kind": "export",
-      "python_entry_point": null,
+      "python_entry_point": "holocron.models.fit_glm",
       "tier": "A",
       "milestone": "Phase 2-3",
-      "status": "deferred",
+      "status": "experimental",
       "owner": "joshuamyers22",
-      "oracle_cases": [],
-      "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "oracle_cases": [
+        "glm-gaussian-linear",
+        "glm-binomial-linear",
+        "glm-binomial-rcs"
+      ],
+      "tolerance_profile": "generalized-linear-v1",
+      "known_differences": "Initial envelope supports Gaussian/identity and binomial/logit only; weights, offsets, other families/links, penalties, dispersion options, formula-level fitting, and the broader R Glm method surface remain deferred."
     },
     {
       "id": "export:Gls",
@@ -799,10 +803,10 @@
       "id": "export:lrm",
       "r_symbol": "lrm",
       "kind": "export",
-      "python_entry_point": null,
+      "python_entry_point": "holocron.models.fit_lrm",
       "tier": "A",
       "milestone": "Phase 2-3",
-      "status": "deferred",
+      "status": "experimental",
       "owner": "joshuamyers22",
       "oracle_cases": [
         "lrm-linear-balanced",
@@ -811,7 +815,7 @@
         "lrm-rcs-nonlinear"
       ],
       "tolerance_profile": "binary-logistic-v1",
-      "known_differences": "Oracle baselines captured; independent Python implementation and parity qualification remain deferred."
+      "known_differences": "Binary, unpenalized, full-rank logit fits only; ordinal responses, weights, offsets, penalties, formula-level fitting, and the broader R lrm method surface remain deferred."
     },
     {
       "id": "export:lrm.fit",

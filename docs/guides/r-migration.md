@@ -7,7 +7,8 @@ order, transformation parameters, interaction restrictions, intercept policy,
 generated-column order, and the rows used by the model.
 
 This guide covers the current experimental design envelope and classical
-full-rank OLS. It is not a migration path for an arbitrary `rms` fit.
+full-rank OLS and the supported Gaussian/binomial `Glm` and binary `lrm`
+envelopes. It is not a migration path for an arbitrary `rms` fit.
 
 ## End-to-end example
 
@@ -94,6 +95,9 @@ for later effect or display operations.
 | `interactions.containing` | `DesignSpec.interactions_containing(...)` | Returns zero-based term indices from the immutable specification. |
 | stored model matrix | `DesignMatrix` | Contains rows, names, nonlinear flags, term slices, intercept policy, and specification fingerprint. |
 | `ols(...)` | `fit_ols(response, design)` | Pass the `DesignMatrix` to retain design identity and intercept policy. |
+| `Glm(..., family=gaussian())` | `fit_glm(response, design, family="gaussian")` | Identity link only; returns `OlsResult`. |
+| `Glm(..., family=binomial())` | `fit_glm(response, design, family="binomial")` | Logit link and binary response only. |
+| binary `lrm(...)` | `fit_lrm(response, design)` | Unpenalized full-rank binary response only. |
 | `predict(fit, newdata=...)` | `fit.predict(specification.transform(data))` | Transform with the original specification; unseen or missing values fail closed. |
 
 ## 1. Freeze the R-side contract
@@ -247,12 +251,13 @@ following:
   behavior;
 - aliased OLS columns, weights, penalties, robust/clustered covariance, ANOVA,
   contrasts, or inference tables; or
-- logistic, ordinal, Cox, parametric-survival, Kaplan–Meier, validation,
-  calibration, or nomogram execution in Python.
+- logistic behavior outside the supported unpenalized binary/logit envelope, or
+  ordinal, Cox, parametric-survival, Kaplan–Meier, validation, calibration, or
+  nomogram execution in Python.
 
-Some later model families have frozen R oracle baselines. Those are future
-comparison targets, not working Python migration paths. Holocron must raise an
-explicit error rather than substitute another method.
+Ordinal and survival model families have frozen R oracle baselines. Those are
+future comparison targets, not working Python migration paths. Holocron must
+raise an explicit error rather than substitute another method.
 
 ## Migration checklist
 

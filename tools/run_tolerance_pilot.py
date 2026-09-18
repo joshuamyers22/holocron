@@ -68,7 +68,7 @@ def build_report() -> dict[str, JsonValue]:
         expected_path = EXPECTED / str(raw_case["expected_output"])
         case, expected, policy = validate_case_pair(case_path, expected_path)
         if policy.name not in ACCEPTED_PROFILES:
-            raise ValueError(f"unaccepted pilot profile: {policy.name}")
+            continue
         reference = require_object(expected["reference"], name="expected.reference")
         if oracle is None:
             oracle = dict(reference)

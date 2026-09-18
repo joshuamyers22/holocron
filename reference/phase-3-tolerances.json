@@ -1,0 +1,18 @@
+{
+  "schema_version": "holocron-tolerance-policy/v1",
+  "profiles": {
+    "generalized-linear-v1": {
+      "description": "Field-aware tolerances for supported Gaussian/identity and binomial/logit Glm fits.",
+      "default": {"mode": "exact"},
+      "rules": [
+        {"path": "/design/*/*", "rule": {"mode": "numeric", "absolute": 1e-12, "relative": 1e-12}},
+        {"path": "/coefficients/*", "rule": {"mode": "numeric", "absolute": 1e-8, "relative": 1e-7}},
+        {"path": "/covariance/*/*", "rule": {"mode": "numeric", "absolute": 1e-7, "relative": 1e-6}},
+        {"path": "/linear_predictors/*", "rule": {"mode": "numeric", "absolute": 1e-8, "relative": 1e-7}},
+        {"path": "/deviance/*", "rule": {"mode": "numeric", "absolute": 1e-8, "relative": 1e-7}},
+        {"path": "/response/*", "rule": {"mode": "numeric", "absolute": 0, "relative": 0}},
+        {"path": "/fitted_mean/*", "rule": {"mode": "numeric", "absolute": 1e-8, "relative": 1e-7}}
+      ]
+    }
+  }
+}

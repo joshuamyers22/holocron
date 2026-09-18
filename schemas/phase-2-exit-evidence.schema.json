@@ -110,16 +110,25 @@
           "type": "object",
           "properties": {
             "export:ols": {"const": "experimental"},
-            "export:Glm": {"const": "deferred"},
-            "export:lrm": {"const": "deferred"}
+            "export:Glm": {"enum": ["deferred", "experimental"]},
+            "export:lrm": {"enum": ["deferred", "experimental"]}
           },
           "required": ["export:ols", "export:Glm", "export:lrm"],
           "additionalProperties": false
         },
-        "promoted_estimators": {"type": "array", "maxItems": 0},
+        "promoted_estimators": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {"enum": ["export:Glm", "export:lrm"]}
+        },
+        "promotion_evidence": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {"type": "string", "minLength": 1}
+        },
         "outcome": {"const": "passed"}
       },
-      "required": ["statuses", "promoted_estimators", "outcome"],
+      "required": ["statuses", "promoted_estimators", "promotion_evidence", "outcome"],
       "additionalProperties": false
     },
     "outcome": {"const": "passed"}

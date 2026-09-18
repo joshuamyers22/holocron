@@ -30,6 +30,7 @@ build-backend = "hatchling.build"
 packages = ["src/holocron"]
 
 [tool.hatch.build.targets.wheel.force-include]
+"schemas/binary-logistic-result.schema.json" = "holocron/schemas/binary-logistic-result.schema.json"
 "schemas/data-distribution.schema.json" = "holocron/schemas/data-distribution.schema.json"
 "schemas/design-matrix.schema.json" = "holocron/schemas/design-matrix.schema.json"
 "schemas/design-spec.schema.json" = "holocron/schemas/design-spec.schema.json"
@@ -44,6 +45,7 @@ include = [
     "LICENSE",
     "README.md",
     "pyproject.toml",
+    "schemas/binary-logistic-result.schema.json",
     "schemas/data-distribution.schema.json",
     "schemas/design-matrix.schema.json",
     "schemas/design-spec.schema.json",

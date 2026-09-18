@@ -13,6 +13,14 @@ class RankDeficiencyError(InputValidationError):
     """A design matrix does not satisfy the estimator's rank contract."""
 
 
+class ConvergenceError(HolocronError):
+    """An iterative estimator did not meet its declared convergence contract."""
+
+
+class SeparationError(ConvergenceError):
+    """A binary model has no finite unpenalized maximum-likelihood estimate."""
+
+
 class NumericalError(HolocronError, ArithmeticError):
     """A supported computation cannot produce a numerically valid result."""
 
@@ -24,7 +32,9 @@ class UnsupportedFeatureError(HolocronError, NotImplementedError):
 __all__ = (
     "HolocronError",
     "InputValidationError",
+    "ConvergenceError",
     "NumericalError",
     "RankDeficiencyError",
+    "SeparationError",
     "UnsupportedFeatureError",
 )

@@ -4,7 +4,7 @@
   "description": "Binary logistic fit with low event prevalence and overlap.",
   "expected_output": "lrm-linear-low-prevalence.json",
   "comparison_profile": "binary-logistic-v1",
-  "qualification_stage": "oracle-baseline",
+  "qualification_stage": "python-parity",
   "operation": "lrm",
   "basis": "linear",
   "x": [-4, -3, -2, -1, 0, 1, 2, 3, 4, -3.5, -2.5, -1.5, -0.5, 0.5, 1.5, 2.5, 3.5, 4.5],

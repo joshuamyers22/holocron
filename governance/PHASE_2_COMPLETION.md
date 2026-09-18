@@ -43,10 +43,10 @@ evidence for 30 days. The gated release workflow requires the same check.
 
 ## Promotion boundary and remaining blocks
 
-Passing this gate stabilizes the Phase 2 experimental design contract; it does
-not promote an estimator or authorize distribution. The compatibility manifest
-still classifies `ols` as `experimental` and `Glm` and `lrm` as `deferred`, and
-the gate fails if those dispositions change without a later-phase governance
-update. External distribution, production use, and non-experimental statistical
-claims remain blocked by the license/provenance and specialist-reviewer gates.
-Phase 3 model, result-operation, simulation, and failure-mode work is next.
+Passing this gate stabilized the Phase 2 experimental design contract; it did
+not itself promote an estimator or authorize distribution. At Phase 2 closure,
+the compatibility manifest classified `ols` as `experimental` and `Glm` and
+`lrm` as `deferred`. The repeatable gate accepts their subsequent experimental
+status only when the Phase 3 core-estimator acceptance record is present.
+External distribution, production use, and non-experimental statistical claims
+remain blocked by the license/provenance and specialist-reviewer gates.

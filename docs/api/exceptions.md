@@ -23,6 +23,14 @@ class holocron.exceptions.InputValidationError(*args: object)
 
 Input data or a statistical specification violates its contract.
 
+## `ConvergenceError`
+
+```python
+class holocron.exceptions.ConvergenceError(*args: object)
+```
+
+An iterative estimator did not meet its declared convergence contract.
+
 ## `NumericalError`
 
 ```python
@@ -38,6 +46,14 @@ class holocron.exceptions.RankDeficiencyError(*args: object)
 ```
 
 A design matrix does not satisfy the estimator's rank contract.
+
+## `SeparationError`
+
+```python
+class holocron.exceptions.SeparationError(*args: object)
+```
+
+A binary model has no finite unpenalized maximum-likelihood estimate.
 
 ## `UnsupportedFeatureError`
 

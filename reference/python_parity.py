@@ -5,7 +5,7 @@ from __future__ import annotations
 from typing import Literal, cast
 
 from holocron.design import DataDistribution, DesignSpec, RestrictedCubicSplineSpec
-from holocron.models import fit_ols
+from holocron.models import BinaryLogisticResult, fit_glm, fit_lrm, fit_ols
 from reference.contracts import JsonValue
 
 
@@ -87,12 +87,19 @@ def build_python_output(case: dict[str, JsonValue]) -> dict[str, JsonValue]:
         }
 
     x = cast(list[float], case["x"])
-    knots = tuple(cast(list[float], case["knots"]))
-    spec = RestrictedCubicSplineSpec(knots)
-    basis = spec.transform(x)
-    design_names = spline_column_names(spec.n_columns)
+    knots = tuple(cast(list[float], case.get("knots", [])))
+    spec: RestrictedCubicSplineSpec | None = None
+    if case.get("basis") == "linear":
+        basis = [[value] for value in x]
+        design_names = ["x"]
+    else:
+        spec = RestrictedCubicSplineSpec(knots)
+        basis = [list(row) for row in spec.transform(x)]
+        design_names = spline_column_names(spec.n_columns)
 
     if operation == "rcs":
+        if spec is None:
+            raise ValueError("rcs operation requires a spline specification")
         return {
             "ok": True,
             "protocol_version": "1",
@@ -102,7 +109,7 @@ def build_python_output(case: dict[str, JsonValue]) -> dict[str, JsonValue]:
             "nonlinear_mask": cast(JsonValue, list(spec.nonlinear_mask)),
             "nonlinear_columns": cast(JsonValue, list(spec.nonlinear_columns)),
             "column_names": cast(JsonValue, design_names),
-            "basis": cast(JsonValue, basis.tolist()),
+            "basis": cast(JsonValue, basis),
         }
 
     if operation == "ols_rcs":
@@ -124,11 +131,82 @@ def build_python_output(case: dict[str, JsonValue]) -> dict[str, JsonValue]:
             "covariance_names": cast(JsonValue, list(result.coefficient_names)),
             "covariance": cast(JsonValue, [list(row) for row in result.covariance]),
             "design_names": cast(JsonValue, design_names),
-            "design": cast(JsonValue, basis.tolist()),
+            "design": cast(JsonValue, basis),
             "fitted": cast(JsonValue, list(predictions)),
             "residuals": cast(JsonValue, list(result.residuals)),
             "degrees_of_freedom": result.residual_degrees_of_freedom,
             "sigma": result.residual_scale,
+        }
+
+    if operation == "lrm":
+        y = cast(list[float], case["y"])
+        result = fit_lrm(y, basis, feature_names=design_names)
+        return {
+            "ok": True,
+            "protocol_version": "1",
+            "operation": "lrm",
+            "basis": case["basis"],
+            "knots": cast(JsonValue, list(knots)),
+            "coefficient_names": cast(JsonValue, list(result.coefficient_names)),
+            "coefficients": {
+                name: value
+                for name, value in zip(
+                    result.coefficient_names, result.coefficients, strict=True
+                )
+            },
+            "covariance_names": cast(JsonValue, list(result.coefficient_names)),
+            "covariance": cast(JsonValue, [list(row) for row in result.covariance]),
+            "design_names": cast(JsonValue, design_names),
+            "design": cast(JsonValue, basis),
+            "linear_predictors": cast(JsonValue, list(result.linear_predictors)),
+            "deviance": cast(JsonValue, list(result.deviance)),
+            "response": cast(JsonValue, [int(value) for value in y]),
+            "fitted_probability": cast(JsonValue, list(result.fitted_probabilities)),
+        }
+
+    if operation == "glm":
+        y = cast(list[float], case["y"])
+        family = cast(Literal["gaussian", "binomial"], case["family"])
+        result = fit_glm(
+            y,
+            basis,
+            family=family,
+            feature_names=design_names,
+        )
+        if isinstance(result, BinaryLogisticResult):
+            linear_predictors = result.linear_predictors
+            fitted_mean = result.fitted_probabilities
+            deviance = result.deviance
+        else:
+            linear_predictors = result.fitted_values
+            fitted_mean = result.fitted_values
+            response_mean = sum(y) / len(y)
+            null_deviance = sum((value - response_mean) ** 2 for value in y)
+            residual_deviance = sum(value**2 for value in result.residuals)
+            deviance = (null_deviance, residual_deviance)
+        return {
+            "ok": True,
+            "protocol_version": "1",
+            "operation": "glm",
+            "basis": case["basis"],
+            "knots": cast(JsonValue, list(knots)),
+            "family": case["family"],
+            "link": case["link"],
+            "coefficient_names": cast(JsonValue, list(result.coefficient_names)),
+            "coefficients": {
+                name: value
+                for name, value in zip(
+                    result.coefficient_names, result.coefficients, strict=True
+                )
+            },
+            "covariance_names": cast(JsonValue, list(result.coefficient_names)),
+            "covariance": cast(JsonValue, [list(row) for row in result.covariance]),
+            "design_names": cast(JsonValue, design_names),
+            "design": cast(JsonValue, basis),
+            "linear_predictors": cast(JsonValue, list(linear_predictors)),
+            "deviance": cast(JsonValue, list(deviance)),
+            "response": cast(JsonValue, y),
+            "fitted_mean": cast(JsonValue, list(fitted_mean)),
         }
 
     raise ValueError(f"no independent Python parity implementation for {operation}")

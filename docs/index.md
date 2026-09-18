@@ -14,10 +14,13 @@ The current experimental surface supports only:
 - immutable predictor-distribution metadata;
 - allowlisted formulas with numeric, categorical, scored-ordered, spline, and
   restricted two-way interaction designs; and
-- classical ordinary least squares for a full-rank, caller-supplied design.
+- classical ordinary least squares, Gaussian/identity and binomial/logit
+  generalized linear models, and unpenalized binary logistic regression for a
+  full-rank, caller-supplied design.
 
-These APIs are checked against 24 cases from the pinned R `rms` 8.2-0 oracle.
-The remaining frozen oracle cases are future baselines, not compatibility claims.
+These APIs are checked against 31 cases from the pinned R `rms` 8.2-0 oracle.
+The remaining nine frozen ordinal and survival cases are future baselines, not
+compatibility claims.
 See the generated [compatibility inventory](compatibility.md) for the exact
 surface and evidence links.
 
@@ -27,6 +30,7 @@ surface and evidence links.
 - [Define predictor distributions and adjustment values](guides/data-distributions.md).
 - [Build safe formulas and reconstructible numeric designs](guides/formulas-and-designs.md).
 - [Run the first spline-and-OLS model](getting-started.md).
+- [Fit the supported generalized and logistic models](guides/generalized-models.md).
 - [Understand the interpretation boundary](interpretation-and-limitations.md).
 - [Compare Python and R concepts](guides/r-migration.md).
 - [Contribute through the frozen development environment](development.md).

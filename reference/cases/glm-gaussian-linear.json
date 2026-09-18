@@ -1,0 +1,14 @@
+{
+  "schema_version": "holocron-oracle-case/v1",
+  "case_id": "glm-gaussian-linear",
+  "description": "Gaussian identity Glm with a linear predictor and nonsymmetric residuals.",
+  "expected_output": "glm-gaussian-linear.json",
+  "comparison_profile": "generalized-linear-v1",
+  "qualification_stage": "python-parity",
+  "operation": "glm",
+  "basis": "linear",
+  "family": "gaussian",
+  "link": "identity",
+  "x": [-3, -2, -1, 0, 1, 2, 3, 4],
+  "y": [-2.7, -1.1, 0.2, 1.4, 2.1, 4.2, 5.1, 7.3]
+}

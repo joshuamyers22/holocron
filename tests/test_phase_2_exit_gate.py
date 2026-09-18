@@ -41,7 +41,11 @@ class PhaseTwoExitGateTests(unittest.TestCase):
         self.assertGreater(cast(int, summary["numeric_comparisons"]), 0)
         self.assertEqual(summary["failed_cases"], [])
         self.assertEqual(reconstruction["maximum_absolute_difference"], 0.0)
-        self.assertEqual(promotion["promoted_estimators"], [])
+        self.assertEqual(promotion["promoted_estimators"], ["export:Glm", "export:lrm"])
+        self.assertEqual(
+            promotion["promotion_evidence"],
+            ["governance/PHASE_3_CORE_ESTIMATORS.md"],
+        )
         self.assertEqual(len(result.evidence_sha256), 64)
         validate_document(evidence, PHASE_2_EXIT_EVIDENCE_SCHEMA)
 

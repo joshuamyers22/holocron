@@ -1,0 +1,22 @@
+{
+  "schema_version": "holocron-oracle-output/v1",
+  "case_id": "glm-gaussian-linear",
+  "reference": {"package": "rms", "version": "8.2-0", "commit": "a4e4a305a029090e737562fb4d35bdb705db7d63", "protocol_version": "1"},
+  "ok": true,
+  "protocol_version": "1",
+  "operation": "glm",
+  "basis": "linear",
+  "knots": [],
+  "family": "gaussian",
+  "link": "identity",
+  "coefficient_names": ["Intercept", "x"],
+  "coefficients": {"Intercept": 1.3857142857142855, "x": 1.3535714285714284},
+  "covariance_names": ["Intercept", "x"],
+  "covariance": [[0.01894912131519275, -0.0017226473922902505], [-0.0017226473922902505, 0.003445294784580501]],
+  "design_names": ["x"],
+  "design": [[-3], [-2], [-1], [0], [1], [2], [3], [4]],
+  "linear_predictors": [-2.6749999999999998, -1.3214285714285714, 0.03214285714285703, 1.3857142857142855, 2.739285714285714, 4.0928571428571425, 5.446428571428571, 6.799999999999999],
+  "deviance": [77.81874999999999, 0.8682142857142862],
+  "response": [-2.7, -1.1, 0.2, 1.4, 2.1, 4.2, 5.1, 7.3],
+  "fitted_mean": [-2.6749999999999998, -1.3214285714285714, 0.03214285714285703, 1.3857142857142855, 2.739285714285714, 4.0928571428571425, 5.446428571428571, 6.799999999999999]
+}

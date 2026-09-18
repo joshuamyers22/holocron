@@ -40,12 +40,13 @@ from reference.python_parity import build_python_output
 DESIGN_OPERATIONS = frozenset({"datadist", "design", "rcs"})
 MINIMUM_CASE_COUNTS = {"datadist": 4, "design": 8, "rcs": 6}
 ADVERSARIAL_CASE_ID = "design-adversarial-names"
-ESTIMATOR_STATUSES = {
+PHASE_2_ESTIMATOR_BASELINE = {
     "export:ols": "experimental",
     "export:Glm": "deferred",
     "export:lrm": "deferred",
 }
 COMPATIBILITY_MANIFEST = ROOT / "compatibility/rms-8.2.0.yaml"
+PHASE_3_ESTIMATOR_ACCEPTANCE = ROOT / "governance/PHASE_3_CORE_ESTIMATORS.md"
 
 
 @dataclass(frozen=True, slots=True)
@@ -168,19 +169,36 @@ def _estimator_promotion() -> dict[str, JsonValue]:
     for value in capabilities:
         capability = require_object(value, name="capability")
         capability_id = capability.get("id")
-        if capability_id in ESTIMATOR_STATUSES:
+        if capability_id in PHASE_2_ESTIMATOR_BASELINE:
             status = capability.get("status")
             if not isinstance(status, str):
                 raise ValueError("estimator capability status is malformed")
             statuses[capability_id] = status
-    if statuses != ESTIMATOR_STATUSES:
+    if statuses.get("export:ols") != "experimental" or any(
+        statuses.get(capability_id) not in {"deferred", "experimental"}
+        for capability_id in ("export:Glm", "export:lrm")
+    ):
         raise AssertionError(
-            "Phase 2 estimator dispositions changed: "
-            f"expected {ESTIMATOR_STATUSES}, received {statuses}"
+            "Phase 2 estimator dispositions changed outside the accepted progression: "
+            f"received {statuses}"
+        )
+    promoted = sorted(
+        capability_id
+        for capability_id, baseline in PHASE_2_ESTIMATOR_BASELINE.items()
+        if baseline == "deferred" and statuses.get(capability_id) == "experimental"
+    )
+    if promoted and not PHASE_3_ESTIMATOR_ACCEPTANCE.is_file():
+        raise AssertionError(
+            "later estimator promotion requires the Phase 3 acceptance record"
         )
     return {
         "statuses": cast(dict[str, JsonValue], statuses),
-        "promoted_estimators": [],
+        "promoted_estimators": cast(list[JsonValue], promoted),
+        "promotion_evidence": (
+            [PHASE_3_ESTIMATOR_ACCEPTANCE.relative_to(ROOT).as_posix()]
+            if promoted
+            else []
+        ),
         "outcome": "passed",
     }
 

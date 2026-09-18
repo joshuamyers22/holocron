@@ -198,6 +198,22 @@
       ]
     },
     {
+      "title": "Generalized linear model output",
+      "allOf": [
+        {"$ref": "#/$defs/modelFitOutput"},
+        {
+          "properties": {
+            "operation": {"const": "glm"},
+            "family": {"enum": ["gaussian", "binomial"]},
+            "link": {"enum": ["identity", "logit"]},
+            "response": {"$ref": "#/$defs/numericVector"},
+            "fitted_mean": {"$ref": "#/$defs/numericVector"}
+          },
+          "required": ["operation", "family", "link", "response", "fitted_mean"]
+        }
+      ]
+    },
+    {
       "title": "Ordinal regression output",
       "allOf": [
         {"$ref": "#/$defs/modelFitOutput"},

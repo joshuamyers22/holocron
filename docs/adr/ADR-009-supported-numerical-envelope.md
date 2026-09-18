@@ -13,11 +13,12 @@ machine or a permissive universal `allclose` threshold would not establish a
 credible compatibility envelope. Conversely, matching one set of fixtures does
 not justify public support for every platform accepted by package metadata.
 
-The Phase 1 implementation has two independently executable capabilities:
-restricted cubic spline design and well-conditioned, full-rank OLS over those
-designs. Logistic, ordinal, and survival fixtures are currently R oracle
-baselines without independent Python implementations. Their profiles therefore
-cannot be accepted by this cross-platform pilot.
+The Phase 1 implementation began with two independently executable
+capabilities: restricted cubic spline design and well-conditioned, full-rank
+OLS over those designs. Phase 2 extended this pilot to data-distribution and
+formula-design profiles. Later Python implementations may use their provisional
+profiles in differential tests, but they are not accepted by this historical
+cross-platform pilot until separately calibrated on both platforms.
 
 ## Decision
 
@@ -68,10 +69,10 @@ profiles use the pre-specified deterministic `1e-12` budget. These are
 engineering gates for experimental parity, not thresholds for statistical
 significance or clinical materiality.
 
-The profiles for binary logistic, ordinal, Cox, parametric survival, and
-nonparametric survival remain provisional oracle-repeatability policies. Each
-must receive its own cross-platform calibration and profile revision or explicit
-acceptance before its Python capability can advance.
+The profiles for generalized linear, binary logistic, ordinal, Cox, parametric
+survival, and nonparametric survival remain provisional oracle-repeatability
+policies. Each must receive its own cross-platform calibration and profile
+revision or explicit acceptance before its Python capability can advance.
 
 ## Evidence and enforcement
 
@@ -90,13 +91,15 @@ They record the source revision, dirty-tree state, runtime and numerical-library
 identity, oracle identity, policy hash, per-case comparison counts, errors, and
 outcome, and validate against `schemas/tolerance-pilot.schema.json`.
 
-The required CI matrix now reruns all 20 implemented cases on `ubuntu-24.04`
+The required CI matrix now reruns all 24 accepted-profile cases on `ubuntu-24.04`
 and `macos-15` for every pull request and push. `make tolerance-pilot`
 reproduces the report on the current platform. The immutable table above remains
 the Phase 1 acceptance evidence; each later Phase 2 acceptance record identifies
 its additional cases and policy. Static repository checks reject missing Phase
 1 platforms, dirty or failed evidence, differing pilot revisions, or an altered
-historical policy identity.
+historical policy identity. The same platform job separately executes the Phase
+3 core-estimator differential tests without treating that execution as accepted
+cross-platform calibration evidence.
 
 ## Consequences and boundaries
 

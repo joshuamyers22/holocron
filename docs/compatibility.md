@@ -22,10 +22,10 @@ an implementation claim, and an experimental capability is not production-ready.
 | Status | Count | Meaning |
 | --- | ---: | --- |
 | implemented | 0 | Implemented and accepted under the capability contract. |
-| experimental | 11 | Implemented narrowly with parity evidence; not production-ready. |
+| experimental | 13 | Implemented narrowly with parity evidence; not production-ready. |
 | mapped | 0 | Mapped to a Python design, without an accepted implementation claim. |
 | unsupported | 0 | Intentionally excluded from the compatibility target. |
-| deferred | 270 | Catalogued for a later phase; no current implementation claim. |
+| deferred | 268 | Catalogued for a later phase; no current implementation claim. |
 
 ## Evidence-backed experimental surface
 
@@ -36,10 +36,12 @@ oracle-linked parity evidence. Their documented support envelopes remain narrow.
 | --- | --- | --- | --- | --- | ---: | --- | --- |
 | `%ia%` | export | `holocron.formula.RestrictedInteractionTerm` | experimental | Phase 2-3 | 1 | `formula-design-v1` | Explicit two-way interactions only; both component main effects are required, doubly nonlinear products are omitted, and nested, self, unrestricted, matrix, and stratification interactions are rejected. |
 | `Design` | export | `holocron.design.DesignSpec` | experimental | Phase 2-3 | 1 | `formula-design-v1` | Owned allowlisted AST with explicit numeric, categorical, scored-ordered, and restricted-interaction terms; automatic parameters, offsets, strata, matrices, and R formula evaluation remain deferred. |
+| `Glm` | export | `holocron.models.fit_glm` | experimental | Phase 2-3 | 3 | `generalized-linear-v1` | Initial envelope supports Gaussian/identity and binomial/logit only; weights, offsets, other families/links, penalties, dispersion options, formula-level fitting, and the broader R Glm method surface remain deferred. |
 | `asis` | export | `holocron.formula.IdentityTerm` | experimental | Phase 2-3 | 1 | `formula-design-v1` | Numeric one-dimensional predictors only; labels and units are retained separately by DataDistribution. |
 | `catg` | export | `holocron.formula.CategoricalTerm` | experimental | Phase 2-3 | 1 | `formula-design-v1` | Levels and their reference order must be explicit; missing and unseen levels fail closed instead of using ambient factor metadata. |
 | `datadist` | export | `holocron.design.DataDistribution` | experimental | Phase 2-3 | 4 | `data-distribution-v1` | Python uses immutable explicit metadata instead of R global options; categorical levels must be declared; dataframe/date-time adapters are deferred; ordered factors use the lower middle declared level when the level count is even; and default display probabilities are computed per variable when missingness differs. |
 | `interactions.containing` | export | `holocron.design.DesignSpec.interactions_containing` | experimental | Phase 2-3 | 1 | `formula-design-v1` | Returns zero-based term indices from an immutable DesignSpec; it does not inspect an R Design attribute. |
+| `lrm` | export | `holocron.models.fit_lrm` | experimental | Phase 2-3 | 4 | `binary-logistic-v1` | Binary, unpenalized, full-rank logit fits only; ordinal responses, weights, offsets, penalties, formula-level fitting, and the broader R lrm method surface remain deferred. |
 | `lsp` | export | `holocron.formula.LinearSplineTerm` | experimental | Phase 2-3 | 1 | `formula-design-v1` | Explicit finite knots only; automatic parameters remain deferred. |
 | `ols` | export | `holocron.models.fit_ols` | experimental | Phase 2-3 | 6 | `well-conditioned-ols-v1` | Initial narrow API; full rms contract remains deferred. |
 | `pol` | export | `holocron.formula.PolynomialTerm` | experimental | Phase 2-3 | 1 | `formula-design-v1` | Raw powers of explicit degree 2 through 10 only; no ambient option supplies a default degree. |
@@ -58,7 +60,7 @@ in the pinned namespace. Counts by tier are A: 32, B: 33, C: 26, D: 190.
 | `%ia%` | export | `holocron.formula.RestrictedInteractionTerm` | experimental | Phase 2-3 | 1 | `formula-design-v1` | Explicit two-way interactions only; both component main effects are required, doubly nonlinear products are omitted, and nested, self, unrestricted, matrix, and stratification interactions are rejected. |
 | `Design` | export | `holocron.design.DesignSpec` | experimental | Phase 2-3 | 1 | `formula-design-v1` | Owned allowlisted AST with explicit numeric, categorical, scored-ordered, and restricted-interaction terms; automatic parameters, offsets, strata, matrices, and R formula evaluation remain deferred. |
 | `DesignAssign` | export | — | deferred | Phase 2-3 | 0 | — | Complete R assignment behavior remains deferred; the experimental DesignSpec exposes narrower generated-column ownership and term slices. |
-| `Glm` | export | — | deferred | Phase 2-3 | 0 | — | Not yet implemented. |
+| `Glm` | export | `holocron.models.fit_glm` | experimental | Phase 2-3 | 3 | `generalized-linear-v1` | Initial envelope supports Gaussian/identity and binomial/logit only; weights, offsets, other families/links, penalties, dispersion options, formula-level fitting, and the broader R Glm method surface remain deferred. |
 | `Newlabels` | export | — | deferred | Phase 2-3 | 0 | — | Not yet implemented. |
 | `Newlevels` | export | — | deferred | Phase 2-3 | 0 | — | Not yet implemented. |
 | `Predict` | export | — | deferred | Phase 2-3 | 0 | — | Not yet implemented. |
@@ -69,7 +71,7 @@ in the pinned namespace. Counts by tier are A: 32, B: 33, C: 26, D: 190.
 | `datadist` | export | `holocron.design.DataDistribution` | experimental | Phase 2-3 | 4 | `data-distribution-v1` | Python uses immutable explicit metadata instead of R global options; categorical levels must be declared; dataframe/date-time adapters are deferred; ordered factors use the lower middle declared level when the level count is even; and default display probabilities are computed per variable when missingness differs. |
 | `gTrans` | export | — | deferred | Phase 2-3 | 0 | — | Not yet implemented. |
 | `interactions.containing` | export | `holocron.design.DesignSpec.interactions_containing` | experimental | Phase 2-3 | 1 | `formula-design-v1` | Returns zero-based term indices from an immutable DesignSpec; it does not inspect an R Design attribute. |
-| `lrm` | export | — | deferred | Phase 2-3 | 4 | `binary-logistic-v1` | Oracle baselines captured; independent Python implementation and parity qualification remain deferred. |
+| `lrm` | export | `holocron.models.fit_lrm` | experimental | Phase 2-3 | 4 | `binary-logistic-v1` | Binary, unpenalized, full-rank logit fits only; ordinal responses, weights, offsets, penalties, formula-level fitting, and the broader R lrm method surface remain deferred. |
 | `lrm.fit` | export | — | deferred | Phase 2-3 | 0 | — | Not yet implemented. |
 | `lsp` | export | `holocron.formula.LinearSplineTerm` | experimental | Phase 2-3 | 1 | `formula-design-v1` | Explicit finite knots only; automatic parameters remain deferred. |
 | `matrx` | export | — | deferred | Phase 2-3 | 0 | — | Not yet implemented. |

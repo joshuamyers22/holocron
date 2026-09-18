@@ -8,7 +8,7 @@ from pathlib import Path
 from typing import cast
 
 import holocron
-from holocron import design, exceptions, formula
+from holocron import design, exceptions, formula, models
 
 
 class PublicApiTests(unittest.TestCase):
@@ -61,11 +61,25 @@ class PublicApiTests(unittest.TestCase):
             ],
         )
 
+    def test_models_namespace_exports_only_supported_estimators(self) -> None:
+        self.assertEqual(
+            models.__all__,
+            [
+                "BinaryLogisticResult",
+                "OlsResult",
+                "fit_glm",
+                "fit_lrm",
+                "fit_ols",
+            ],
+        )
+
     def test_public_errors_preserve_builtin_catch_categories(self) -> None:
         with self.assertRaises(ValueError):
             raise exceptions.InputValidationError("invalid input")
         with self.assertRaises(ArithmeticError):
             raise exceptions.NumericalError("numerical failure")
+        with self.assertRaises(exceptions.ConvergenceError):
+            raise exceptions.SeparationError("separated")
         with self.assertRaises(NotImplementedError):
             raise exceptions.UnsupportedFeatureError("unsupported")
 

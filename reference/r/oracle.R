@@ -536,6 +536,52 @@ run_lrm <- function(request) {
   )
 }
 
+run_glm <- function(request) {
+  x <- require_numeric_vector(request, "x", 3L)
+  y <- require_numeric_vector(request, "y", 3L)
+  require_equal_lengths(list(x, y), c("x", "y"))
+  basis <- require_choice(request, "basis", c("linear", "rcs"))
+  family_name <- require_choice(request, "family", c("gaussian", "binomial"))
+  link <- require_choice(request, "link", c("identity", "logit"))
+  if (family_name == "gaussian" && link != "identity") {
+    stop("gaussian Glm requires identity link")
+  }
+  if (family_name == "binomial") {
+    if (link != "logit") stop("binomial Glm requires logit link")
+    y <- require_binary_vector(request, "y")
+  }
+  knots <- model_knots(request, basis)
+  data <- data.frame(x = x, y = y)
+  family <- if (family_name == "gaussian") {
+    stats::gaussian(link = link)
+  } else {
+    stats::binomial(link = link)
+  }
+  fit <- rms::Glm(
+    model_formula("y", basis), data = data, family = family, x = TRUE, y = TRUE
+  )
+  if (!isTRUE(fit$converged)) stop("Glm failed to converge")
+  covariance <- stats::vcov(fit)
+  list(
+    protocol_version = protocol_version,
+    operation = "glm",
+    basis = basis,
+    knots = knots,
+    family = family_name,
+    link = link,
+    coefficient_names = name_vector(names(stats::coef(fit))),
+    coefficients = named_numbers(stats::coef(fit)),
+    covariance_names = covariance_names(fit, covariance),
+    covariance = matrix_rows(covariance),
+    design_names = name_vector(colnames(fit$x)),
+    design = matrix_rows(fit$x),
+    linear_predictors = unname(as.numeric(fit$linear.predictors)),
+    deviance = unname(as.numeric(c(fit$null.deviance, fit$deviance))),
+    response = unname(as.numeric(y)),
+    fitted_mean = unname(as.numeric(fit$fitted.values))
+  )
+}
+
 run_orm <- function(request) {
   x <- require_numeric_vector(request, "x", 3L)
   y <- require_numeric_vector(request, "y", 3L)
@@ -701,6 +747,7 @@ dispatch <- function(request) {
     datadist = run_datadist(request),
     design = run_design(request),
     lrm = run_lrm(request),
+    glm = run_glm(request),
     orm = run_orm(request),
     cph = run_cph(request),
     psm = run_psm(request),

@@ -34,6 +34,7 @@ The accepted schemas are:
 | `DesignSpec` | `holocron-design-spec/v2` |
 | `DesignMatrix` | `holocron-design-matrix/v1` |
 | `OlsResult` | `holocron-ols-result/v1` |
+| `BinaryLogisticResult` | `holocron-binary-logistic-result/v1` |
 
 `DesignMatrix` stores its specification fingerprint and intercept policy. An
 OLS fit made directly from that matrix derives the intercept policy, stores the

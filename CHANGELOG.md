@@ -76,3 +76,7 @@ Notable changes are recorded here using semantic versioning.
   implemented design-system parity cases, with aggregate schema-valid evidence,
   an adversarial-name requirement, exact serialized prediction reconstruction,
   estimator-promotion enforcement, and retained clean-CI evidence.
+- Completed the first Phase 3 deliverable with owned Gaussian/identity and
+  binomial/logit `Glm`, binary unpenalized `lrm`, structured convergence/rank/
+  separation failures, strict binary-result serialization, seven direct new or
+  promoted pinned-R parity cases, and the accepted numerical-backend policy.

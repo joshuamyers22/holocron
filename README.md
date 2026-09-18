@@ -14,7 +14,9 @@ Holocron is experimental and incomplete. Do not use it for consequential
 analysis, inference, prediction, or clinical decisions.
 
 Phases 0–2 are complete for private experimental development, and Phase 3 is
-next. The Phase 1 exit gate is recorded in the
+active. Its first deliverable—experimental `ols`, Gaussian/identity and
+binomial/logit `Glm`, and binary `lrm` estimators—is complete. The Phase 1 exit
+gate is recorded in the
 [completion record](https://github.com/joshuamyers22/holocron/blob/main/governance/PHASE_1_COMPLETION.md);
 the evidence-backed Phase 2 disposition is recorded in its
 [completion record](https://github.com/joshuamyers22/holocron/blob/main/governance/PHASE_2_COMPLETION.md).
@@ -30,11 +32,11 @@ there.
 
 The evidence-backed experimental surface implements predictor-distribution
 metadata, safe formulas, numeric and factor transformations, restricted
-interactions, and classical full-rank ordinary least squares. These are checked
-across 24 independent parity cases
-against committed outputs from a Dockerized R oracle. Another 13 versioned
-logistic, ordinal, and survival cases are frozen as oracle baselines for later
-implementation and are not current parity claims.
+interactions, classical full-rank ordinary least squares, bounded generalized
+linear models, and unpenalized binary logistic regression. These are checked
+across 31 independent parity cases against committed outputs from a Dockerized
+R oracle. Another nine ordinal and survival cases are frozen as oracle baselines
+for later implementation and are not current parity claims.
 Compatibility is claimed
 only for capabilities and support envelopes backed by the
 [compatibility manifest](https://github.com/joshuamyers22/holocron/blob/main/compatibility/rms-8.2.0.yaml).
@@ -70,17 +72,18 @@ restored_fit = type(fit).from_json(fit.to_json())
 `metadata["x"]` retains adjustment, effect, display, and overall ranges without
 depending on global state or the original input iterable.
 
-Design specifications, realized matrices, and OLS results use strict versioned
-data-only JSON. Fitting from a `DesignMatrix` carries its specification
-fingerprint into the result and checks that identity during prediction. The
-public schemas ship under `holocron/schemas`; arbitrary pickle interchange is
-not supported.
+Design specifications, realized matrices, OLS results, and binary-logistic
+results use strict versioned data-only JSON. Fitting from a `DesignMatrix`
+carries its specification fingerprint into the result and checks that identity
+during prediction. The public schemas ship under `holocron/schemas`; arbitrary
+pickle interchange is not supported.
 
 Explicit categorical and scored-ordered terms plus hierarchical two-way
 restricted interactions are supported by the design compiler. Automatic knot
 or level selection, unrestricted or higher-order interactions, missing-data
-policies, aliased-fit handling, robust covariance, and broader model families
-are not supported by this slice. Unsupported behavior must fail explicitly
+policies, aliased-fit handling, other GLM families/links, penalties, robust
+covariance, and broader model families are not supported by this slice.
+Unsupported behavior must fail explicitly
 rather than silently substitute a different method. See the
 [package architecture](https://github.com/joshuamyers22/holocron/blob/main/docs/architecture/PACKAGE_STRUCTURE.md) for API and
 dependency boundaries.

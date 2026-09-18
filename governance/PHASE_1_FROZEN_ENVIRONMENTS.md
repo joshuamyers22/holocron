@@ -18,7 +18,7 @@ non-isolated so the build frontend cannot create an unrecorded second resolution
 
 The separate R oracle is accepted as `holocron-rms-oracle:8.2-0` on Linux/arm64
 at image ID
-`sha256:67a496a40101a3e400e95342e491bcd82be5c811cc402d5731cb0649328fa84e`.
+`sha256:98f03964f0cd7bb713a27a745adab4ef5e44a466f782270a7ee5c1c8877d6704`.
 Its base image, R repository snapshot, source commits, complete source manifest,
 installed package inventory, external numerical libraries, locale, RNG, native
 routines, and runtime controls are recorded and checked.

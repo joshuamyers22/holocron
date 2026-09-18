@@ -99,6 +99,7 @@ def inspect_artifacts(directory: Path) -> tuple[Path, Path]:
         f"{sdist_root}/pyproject.toml",
         f"{sdist_root}/src/holocron/__init__.py",
         f"{sdist_root}/src/holocron/py.typed",
+        f"{sdist_root}/schemas/binary-logistic-result.schema.json",
         f"{sdist_root}/schemas/data-distribution.schema.json",
         f"{sdist_root}/schemas/design-matrix.schema.json",
         f"{sdist_root}/schemas/design-spec.schema.json",
@@ -133,6 +134,7 @@ def inspect_artifacts(directory: Path) -> tuple[Path, Path]:
     if "holocron/py.typed" not in wheel_names:
         raise ValueError("wheel does not contain the PEP 561 marker")
     expected_schema_files = {
+        "holocron/schemas/binary-logistic-result.schema.json",
         "holocron/schemas/data-distribution.schema.json",
         "holocron/schemas/design-matrix.schema.json",
         "holocron/schemas/design-spec.schema.json",

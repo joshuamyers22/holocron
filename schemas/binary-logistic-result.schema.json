@@ -1,0 +1,91 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/joshuamyers22/holocron/schemas/binary-logistic-result.schema.json",
+  "title": "Holocron binary logistic result",
+  "description": "A strict data-only result for an unpenalized binary logit fit.",
+  "type": "object",
+  "properties": {
+    "schema_version": {"const": "holocron-binary-logistic-result/v1"},
+    "result_type": {"const": "binary_logistic"},
+    "estimator": {"enum": ["glm", "lrm"]},
+    "family": {"const": "binomial"},
+    "link": {"const": "logit"},
+    "coefficient_names": {"$ref": "#/$defs/names"},
+    "coefficients": {"$ref": "#/$defs/numericVector"},
+    "covariance": {"$ref": "#/$defs/numericMatrix"},
+    "linear_predictors": {"$ref": "#/$defs/numericVector"},
+    "fitted_probabilities": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 1000000,
+      "items": {"type": "number", "minimum": 0, "maximum": 1}
+    },
+    "deviance": {
+      "type": "array",
+      "prefixItems": [
+        {"type": "number", "minimum": 0},
+        {"type": "number", "minimum": 0}
+      ],
+      "items": false,
+      "minItems": 2,
+      "maxItems": 2
+    },
+    "iterations": {"type": "integer", "minimum": 1, "maximum": 10000},
+    "rank": {"type": "integer", "minimum": 1, "maximum": 257},
+    "n_observations": {"type": "integer", "minimum": 1, "maximum": 1000000},
+    "n_features": {"type": "integer", "minimum": 1, "maximum": 256},
+    "includes_intercept": {"type": "boolean"},
+    "design_fingerprint": {
+      "oneOf": [
+        {"type": "null"},
+        {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+      ]
+    }
+  },
+  "required": [
+    "schema_version",
+    "result_type",
+    "estimator",
+    "family",
+    "link",
+    "coefficient_names",
+    "coefficients",
+    "covariance",
+    "linear_predictors",
+    "fitted_probabilities",
+    "deviance",
+    "iterations",
+    "rank",
+    "n_observations",
+    "n_features",
+    "includes_intercept",
+    "design_fingerprint"
+  ],
+  "additionalProperties": false,
+  "$defs": {
+    "names": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 257,
+      "uniqueItems": true,
+      "items": {"type": "string", "minLength": 1}
+    },
+    "numericVector": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 1000000,
+      "items": {"type": "number"}
+    },
+    "numericMatrix": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 257,
+      "items": {
+        "type": "array",
+        "minItems": 1,
+        "maxItems": 257,
+        "items": {"type": "number"}
+      }
+    }
+  }
+}

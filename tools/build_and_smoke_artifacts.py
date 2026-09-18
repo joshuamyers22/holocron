@@ -29,7 +29,7 @@ import numpy as np
 import holocron
 from holocron.design import DataDistribution, DesignSpec, RestrictedCubicSplineSpec
 from holocron.formula import Formula
-from holocron.models import OlsResult, fit_ols
+from holocron.models import BinaryLogisticResult, OlsResult, fit_lrm, fit_ols
 
 source_root = Path(os.environ["HOLOCRON_SMOKE_SOURCE_ROOT"]).resolve()
 environment_root = Path(os.environ["HOLOCRON_SMOKE_ENVIRONMENT_ROOT"]).resolve()
@@ -68,9 +68,22 @@ assert OlsResult.from_json(fit.to_json()) == fit
 assert fit.rank == 4
 assert fit.residual_degrees_of_freedom == 2
 assert np.allclose(predictions, fit.fitted_values)
+
+binary_x = (-3.0, -2.0, -1.0, 0.0, 1.0, 2.0, 3.0) * 2
+binary_y = (0, 0, 0, 0, 1, 1, 1, 0, 1, 0, 1, 0, 1, 1)
+binary_spec = DesignSpec.from_formula("event ~ x")
+binary_design = binary_spec.transform({"x": binary_x})
+binary_fit = fit_lrm(binary_y, binary_design)
+binary_restored = BinaryLogisticResult.from_json(binary_fit.to_json())
+assert binary_fit.design_fingerprint == binary_spec.fingerprint
+assert (
+    binary_restored.predict_probability(binary_design)
+    == binary_fit.fitted_probabilities
+)
 schema_root = importlib.resources.files("holocron").joinpath("schemas")
 assert schema_root.joinpath("serialization-manifest.json").is_file()
 assert schema_root.joinpath("ols-result.schema.json").is_file()
+assert schema_root.joinpath("binary-logistic-result.schema.json").is_file()
 print(f"artifact smoke passed: {module_path}")
 """
 
