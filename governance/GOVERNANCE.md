@@ -6,17 +6,20 @@ Holocron is privately owned and maintained by `joshuamyers22`, who currently
 acts as product owner, maintainer, Python/API owner, security contact, and
 triage owner for the compatibility inventory.
 
-The statistical architecture, numerical verification, independent verification,
-and legal/license reviewer roles are intentionally unfilled. Until qualified
-reviewers are appointed:
+Ron Mexico serves as the independent statistical reviewer for the Phase 3 alpha
+scope and approved that scope on 2026-09-18. Numerical verification,
+independent verification, and legal/license reviewer roles remain unfilled.
+Until those qualified reviewers are appointed and their applicable gates pass:
 
 - capabilities may be marked only `experimental` or `deferred`;
 - no stable, clinical, regulated, or full-parity claim may be made;
 - no package artifact may be published externally; and
 - the repository must remain private.
 
-This is a staffing constraint, not an inference that one maintainer constitutes
-independent review.
+The Phase 3 statistical approval is scope-specific; it is not approval of future
+phases, capability promotion, external distribution, or a broader compatibility
+claim. The remaining vacancies are staffing constraints, not an inference that
+one maintainer constitutes independent review.
 
 ## Decision rights
 

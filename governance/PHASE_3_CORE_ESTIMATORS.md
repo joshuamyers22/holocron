@@ -62,6 +62,8 @@ and alternative-covariance surface is accepted in the
 Simulation and numerical edge-case evidence is now accepted in the
 [simulation/edge record](PHASE_3_SIMULATION_EDGES.md). The complete getting-
 started workflow is now accepted in the
-[workflow record](PHASE_3_GETTING_STARTED.md). Specialist review, the Phase 3
-exit gate, capability promotion beyond experimental, consequential use, and
-external distribution remain open.
+[workflow record](PHASE_3_GETTING_STARTED.md). The Phase 3 exit gate subsequently
+passed with independent statistical approval, as recorded in the
+[completion record](PHASE_3_COMPLETION.md). Capability promotion beyond
+experimental, numerical and independent verification, consequential use, and
+external distribution remain separate open gates.

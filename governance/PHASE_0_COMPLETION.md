@@ -24,8 +24,10 @@
 - Public namespace ownership/triage: passed for 281 of 281 entries.
 - External distribution: blocked pending a qualified license/provenance reviewer
   and name/trademark clearance.
-- Capability promotion beyond `experimental`: blocked pending statistical,
-  numerical, and independent verification reviewers.
+- Capability promotion beyond `experimental`: blocked pending the applicable
+  scoped statistical, numerical, and independent-verification reviews. Phase 3
+  subsequently received its scoped statistical approval, but the other reviews
+  remain open.
 
 The two blockers do not prevent Phase 1 laboratory work. They do prevent public
 artifacts and stronger compatibility claims. They may not be waived by changing

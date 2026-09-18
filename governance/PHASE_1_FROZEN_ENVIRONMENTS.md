@@ -48,6 +48,7 @@ and a rebuild is accepted only through the migration procedure in ADR-012.
 
 ADR-009 defines the current Python, OS, architecture, NumPy, and BLAS/LAPACK
 evidence envelope; future capabilities and platform additions require new
-calibration. Vacant statistical, numerical,
-independent-verification, and license reviewers remain blocking under the Phase
-0 governance record.
+calibration. Phase 3 subsequently received scope-specific independent
+statistical approval. Numerical, independent-verification, and license reviewers
+remain vacant, and future phases require their own scoped statistical review,
+under the governance record.

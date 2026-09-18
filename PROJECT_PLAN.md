@@ -1,6 +1,6 @@
 # Independent Python Implementation of `rms`: Production Project Plan
 
-**Status:** Active — Phases 0–2 complete; all five Phase 3 deliverables are accepted for private development, with the Phase 3 exit gate pending independent review
+**Status:** Active — Phases 0–3 complete for private experimental development; Phase 4 is next
 **Plan date:** 2026-09-17  
 **Reference implementation:** Frank Harrell's R package `rms`  
 **Project name:** `holocron`  
@@ -671,8 +671,8 @@ design fingerprint, and confirms that no estimator was promoted. See the
 
 ### Phase 3 — Linear, generalized, and binary logistic core (16–24 weeks)
 
-**Status:** Deliverables complete for the private experimental envelope. The
-exit gate remains open pending independent statistical review of alpha scope.
+**Status:** Complete for the private experimental envelope. See the
+[Phase 3 completion record](governance/PHASE_3_COMPLETION.md).
 
 **Deliverables**
 
@@ -692,11 +692,13 @@ exit gate remains open pending independent statistical review of alpha scope.
 
 Registered parity and simulation thresholds pass; convergence/rank/separation failures are structured and documented; independent statistical review approves alpha scope.
 
-**Current disposition:** The implementation-controlled portions pass. Registered
-parity and simulation gates are green, and convergence, rank, separation, and
-numerical edge outcomes are structured and documented. Independent statistical
-review remains unassigned and cannot be self-approved, so Phase 3 is not closed
-and no capability advances beyond `experimental`.
+**Disposition:** Passed for private experimental development. Nineteen vertical
+model and operation cases pass 422 exact and 1,452 numeric pinned-R comparisons;
+all seven registered simulation scenarios and all 16 numerical-edge cases pass;
+and convergence, rank, separation, and other failure outcomes are structured.
+Ron Mexico independently reviewed and approved the Phase 3 alpha scope on
+2026-09-18. No capability advances beyond `experimental`; numerical,
+independent-verification, license, and distribution gates remain separate.
 
 ### Phase 4 — Ordinal regression and censoring model (20–32 weeks)
 
@@ -897,7 +899,8 @@ Every epic should be decomposed into vertical, reviewable capabilities rather th
 ## 17. Approval record
 
 - Product owner: joshuamyers22
-- Statistical lead: vacant; required before capability promotion
+- Statistical reviewer: Ron Mexico for the Phase 3 alpha scope; approval
+  recorded 2026-09-18; future phases and broader promotion require scoped review
 - Numerical lead: vacant; required before capability promotion
 - Python/API lead: joshuamyers22 (acting)
 - Verification owner: vacant; must be independent before capability promotion

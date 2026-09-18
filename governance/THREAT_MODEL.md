@@ -24,7 +24,7 @@
 | Compromised oracle dependency | False reference outputs | Base digest, dated repository, pinned commits, package manifest, source checksums | ADR-003; oracle health fixture | joshuamyers22 |
 | Compromised Python dependency/action | Build or credential compromise | Lock, audits, full-SHA actions, least privileges, SBOM at release | CI workflows; `uv.lock` | joshuamyers22 |
 | Secret or sensitive data committed/logged | Disclosure | Secret scanning, synthetic/public fixtures only, sanitized future evidence | Security workflow; project brief | joshuamyers22 |
-| Unsupported fit reported as successful | Scientific harm | Fail-closed errors/statuses, compatibility manifest, simulation and review gates | ADR-004 | Statistical reviewer (vacant) |
+| Unsupported fit reported as successful | Scientific harm | Fail-closed errors/statuses, compatibility manifest, simulation and review gates | ADR-004 | Ron Mexico (Phase 3 scope) |
 | GPL material copied into proprietary implementation | Distribution injunction/rewrite | Provenance attestations, isolated reference tree, legal distribution gate | ADR-001; provenance policy | License reviewer (vacant) |
 | Maintainer privilege misuse or account takeover | Malicious release or policy bypass | Private repo, least-privilege workflows; protected release approvals required before publishing | Release workflow review pending | joshuamyers22 |
 

@@ -100,3 +100,7 @@ Notable changes are recorded here using semantic versioning.
   inference and future prediction, robust/bootstrap covariance, penalization,
   and strict JSON reconstruction, with adjacent interpretation and stop
   boundaries.
+- Closed the private-development Phase 3 exit gate after 19 vertical cases
+  passed 422 exact and 1,452 numeric pinned-R comparisons, all seven registered
+  simulation scenarios and 16 numerical-edge cases passed, and independent
+  statistical reviewer Ron Mexico approved the experimental alpha scope.

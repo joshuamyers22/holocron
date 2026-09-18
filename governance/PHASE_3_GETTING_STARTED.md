@@ -49,7 +49,8 @@ missingness, weights, offsets, internal validation, calibration correction,
 model selection, bootstrap confidence intervals, and external validation remain
 unsupported or future work and are stated beside the workflow.
 
-All planned Phase 3 deliverables are now complete. The Phase 3 exit gate remains
-open because its independent statistical-review requirement cannot be
-self-approved by the implementation author; capability promotion,
-consequential use, and external distribution remain blocked.
+All planned Phase 3 deliverables are complete. The Phase 3 exit gate
+subsequently passed with independent statistical approval, as recorded in the
+[completion record](PHASE_3_COMPLETION.md). Capability promotion beyond
+experimental, numerical and independent verification, consequential use, and
+external distribution remain separate open gates.

@@ -24,6 +24,9 @@ The current experimental surface supports only:
 
 The core estimator envelope is also checked by seven seeded simulation
 scenarios totaling 2,620 outer replications and a 16-case numerical edge corpus.
+Phase 3 is complete for private experimental development following independent
+statistical review of its alpha scope; Phase 4 is next. Capability promotion,
+consequential use, and external distribution remain separately blocked.
 
 These APIs are checked against 37 cases from the pinned R `rms` 8.2-0 oracle.
 The remaining nine frozen ordinal and survival cases are future baselines, not

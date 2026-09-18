@@ -13,16 +13,19 @@ The project is distributed internally as `holocron-rms` and imported as
 Holocron is experimental and incomplete. Do not use it for consequential
 analysis, inference, prediction, or clinical decisions.
 
-Phases 0–2 are complete for private experimental development, and all five
-Phase 3 deliverables are complete. The deliverables cover experimental `ols`,
+Phases 0–3 are complete for private experimental development. The Phase 3
+deliverables cover experimental `ols`,
 Gaussian/identity and binomial/logit `Glm`, and binary `lrm` estimators plus
 their covariance,
 likelihood, residual, prediction, coefficient-summary, ANOVA, and linear-
 contrast operations, diagonal OLS/lrm quadratic penalties, and robust and
 bootstrap covariance, plus locked simulation reports and a numerical edge-case
-corpus and a complete executable getting-started workflow. The Phase 3 exit gate
-still awaits independent statistical review, so every capability remains
-experimental. The Phase 1 exit
+corpus and a complete executable getting-started workflow. Ron Mexico
+independently reviewed and approved the Phase 3 alpha scope on 2026-09-18; the
+evidence-backed disposition is recorded in the
+[Phase 3 completion record](https://github.com/joshuamyers22/holocron/blob/main/governance/PHASE_3_COMPLETION.md).
+Every capability remains experimental pending its separate promotion reviews,
+and Phase 4 is next. The Phase 1 exit
 gate is recorded in the
 [completion record](https://github.com/joshuamyers22/holocron/blob/main/governance/PHASE_1_COMPLETION.md);
 the evidence-backed Phase 2 disposition is recorded in its
