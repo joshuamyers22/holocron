@@ -17,9 +17,10 @@ Phases 0 and 1 are complete and Phase 2 is active for private experimental
 development. The Phase 1
 exit gate is recorded in the
 [completion record](https://github.com/joshuamyers22/holocron/blob/main/governance/PHASE_1_COMPLETION.md);
-The first three Phase 2 deliverables—immutable data-distribution metadata, the
+The first four Phase 2 deliverables—immutable data-distribution metadata, the
 allowlisted formula/core design engine, and explicit factor/restricted-
-interaction handling—are complete within their
+interaction handling, plus stable design/result schemas and a serialization
+policy—are complete within their
 experimental envelopes. External distribution and capability promotion remain
 blocked by the governance reviews described there.
 
@@ -53,12 +54,19 @@ y = (0.2, 0.8, 1.1, 1.7, 2.5, 3.6)
 metadata = DataDistribution.from_data({"x": x}, labels={"x": "Predictor"})
 spec = DesignSpec.from_formula(Formula.parse("y ~ rcs(x, [-2, 0, 1.5, 3])"))
 design = spec.transform({"x": x})
-fit = fit_ols(y, design.rows, feature_names=design.column_names)
-predictions = fit.predict(design.rows)
+fit = fit_ols(y, design)
+predictions = fit.predict(design)
+restored_fit = type(fit).from_json(fit.to_json())
 ```
 
 `metadata["x"]` retains adjustment, effect, display, and overall ranges without
 depending on global state or the original input iterable.
+
+Design specifications, realized matrices, and OLS results use strict versioned
+data-only JSON. Fitting from a `DesignMatrix` carries its specification
+fingerprint into the result and checks that identity during prediction. The
+public schemas ship under `holocron/schemas`; arbitrary pickle interchange is
+not supported.
 
 Explicit categorical and scored-ordered terms plus hierarchical two-way
 restricted interactions are supported by the design compiler. Automatic knot

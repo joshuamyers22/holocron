@@ -29,6 +29,7 @@ nav:
       - Formulas and numeric designs: guides/formulas-and-designs.md
       - Restricted cubic splines: guides/restricted-cubic-splines.md
       - Ordinary least squares: guides/ordinary-least-squares.md
+      - Serialization and reconstruction: guides/serialization.md
       - R migration: guides/r-migration.md
   - Examples:
       - End-to-end vertical slice: examples/vertical-slice.md
@@ -54,6 +55,7 @@ nav:
       - ADR 004 — Compatibility contract: adr/ADR-004-compatibility-contract.md
       - ADR 005 — Formula and design engine: adr/ADR-005-formula-design-engine.md
       - ADR 006 — Canonical data boundary: adr/ADR-006-canonical-data-boundary.md
+      - ADR 008 — Model and result serialization: adr/ADR-008-model-result-serialization.md
       - ADR 009 — Numerical envelope: adr/ADR-009-supported-numerical-envelope.md
       - ADR 011 — Scaffold adaptation: adr/ADR-011-production-scaffold-adaptation.md
       - ADR 012 — Frozen environments: adr/ADR-012-frozen-environment-contract.md

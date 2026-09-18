@@ -27,6 +27,7 @@ assert matrix.shape == (3, 9)
 assert matrix.term_slices == ((0, 1), (1, 3), (3, 6), (6, 9))
 assert specification.response_values({"outcome": (0, 1, 1)}) == (0.0, 1.0, 1.0)
 assert DesignSpec.from_json(specification.to_json()) == specification
+assert type(matrix).from_json(matrix.to_json()) == matrix
 ```
 
 The design omits an intercept column. `formula.include_intercept` records the
@@ -34,6 +35,9 @@ policy for a later estimator. Every generated column has a stable name,
 originating variables, transformation kind, term index, within-term index,
 nonlinear flag, and—for an interaction—the two component-column identities.
 `DesignMatrix.to_numpy()` returns an independent array.
+The matrix JSON carries the design-specification fingerprint, so fitted results
+can retain and check transformation identity. See
+[serialization and reconstruction](serialization.md) for the wire contract.
 
 ## Grammar
 

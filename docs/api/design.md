@@ -83,7 +83,7 @@ have the original row count and names that do not already exist.
 ## `DesignMatrix`
 
 ```python
-class holocron.design.formula.DesignMatrix(column_names: tuple[str, ...], nonlinear_mask: tuple[bool, ...], term_slices: tuple[tuple[int, int], ...], rows: tuple[tuple[float, ...], ...], specification_fingerprint: str) -> None
+class holocron.design.formula.DesignMatrix(column_names: tuple[str, ...], nonlinear_mask: tuple[bool, ...], term_slices: tuple[tuple[int, int], ...], rows: tuple[tuple[float, ...], ...], specification_fingerprint: str, include_intercept: bool) -> None
 ```
 
 An immutable numeric design matrix plus generated-column identity.
@@ -97,10 +97,31 @@ An immutable numeric design matrix plus generated-column identity.
 | `term_slices` | `tuple[tuple[int, int], ...]` |
 | `rows` | `tuple[tuple[float, ...], ...]` |
 | `specification_fingerprint` | `str` |
+| `include_intercept` | `bool` |
+
+### `fingerprint`
+
+Return the SHA-256 identity of the serialized design matrix.
+
+### `from_dict(document: object) -> holocron.design.formula.DesignMatrix`
+
+Reconstruct a design matrix from a strictly versioned document.
+
+### `from_json(value: str) -> holocron.design.formula.DesignMatrix`
+
+Reconstruct a design matrix from strict bounded JSON.
 
 ### `shape`
 
 Return ``(rows, columns)``.
+
+### `to_dict(self) -> dict[str, None | bool | int | float | str | list['JsonValue'] | dict[str, 'JsonValue']]`
+
+Return the versioned design-matrix document.
+
+### `to_json(self) -> str`
+
+Serialize the design matrix as canonical JSON.
 
 ### `to_numpy(self) -> NDArray[numpy.float64]`
 

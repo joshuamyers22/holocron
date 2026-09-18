@@ -99,6 +99,12 @@ def inspect_artifacts(directory: Path) -> tuple[Path, Path]:
         f"{sdist_root}/pyproject.toml",
         f"{sdist_root}/src/holocron/__init__.py",
         f"{sdist_root}/src/holocron/py.typed",
+        f"{sdist_root}/schemas/data-distribution.schema.json",
+        f"{sdist_root}/schemas/design-matrix.schema.json",
+        f"{sdist_root}/schemas/design-spec.schema.json",
+        f"{sdist_root}/schemas/formula.schema.json",
+        f"{sdist_root}/schemas/ols-result.schema.json",
+        f"{sdist_root}/schemas/serialization-manifest.json",
     }
     if not expected_sdist_files <= set(sdist_names):
         raise ValueError("source distribution is missing required project files")
@@ -126,6 +132,16 @@ def inspect_artifacts(directory: Path) -> tuple[Path, Path]:
         raise ValueError("wheel does not contain the holocron import package")
     if "holocron/py.typed" not in wheel_names:
         raise ValueError("wheel does not contain the PEP 561 marker")
+    expected_schema_files = {
+        "holocron/schemas/data-distribution.schema.json",
+        "holocron/schemas/design-matrix.schema.json",
+        "holocron/schemas/design-spec.schema.json",
+        "holocron/schemas/formula.schema.json",
+        "holocron/schemas/ols-result.schema.json",
+        "holocron/schemas/serialization-manifest.json",
+    }
+    if not expected_schema_files <= set(wheel_names):
+        raise ValueError("wheel is missing public serialization schemas")
     if any(name.endswith(".dist-info/entry_points.txt") for name in wheel_names):
         raise ValueError("library wheel unexpectedly declares console entry points")
     validate_identity(

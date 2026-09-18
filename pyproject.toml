@@ -29,6 +29,14 @@ build-backend = "hatchling.build"
 [tool.hatch.build.targets.wheel]
 packages = ["src/holocron"]
 
+[tool.hatch.build.targets.wheel.force-include]
+"schemas/data-distribution.schema.json" = "holocron/schemas/data-distribution.schema.json"
+"schemas/design-matrix.schema.json" = "holocron/schemas/design-matrix.schema.json"
+"schemas/design-spec.schema.json" = "holocron/schemas/design-spec.schema.json"
+"schemas/formula.schema.json" = "holocron/schemas/formula.schema.json"
+"schemas/ols-result.schema.json" = "holocron/schemas/ols-result.schema.json"
+"schemas/serialization-manifest.json" = "holocron/schemas/serialization-manifest.json"
+
 [tool.hatch.build.targets.sdist]
 include = [
     "src/holocron",
@@ -36,6 +44,12 @@ include = [
     "LICENSE",
     "README.md",
     "pyproject.toml",
+    "schemas/data-distribution.schema.json",
+    "schemas/design-matrix.schema.json",
+    "schemas/design-spec.schema.json",
+    "schemas/formula.schema.json",
+    "schemas/ols-result.schema.json",
+    "schemas/serialization-manifest.json",
 ]
 exclude = [
     "/data",

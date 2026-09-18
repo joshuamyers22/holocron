@@ -9,6 +9,7 @@ import re
 from dataclasses import dataclass
 from typing import ClassVar, TypeAlias, cast
 
+from holocron._serialization import canonical_json, parse_json_object
 from holocron.exceptions import InputValidationError, UnsupportedFeatureError
 
 JsonValue: TypeAlias = (
@@ -475,9 +476,7 @@ class Formula:
 
     def to_json(self) -> str:
         """Serialize the AST as deterministic JSON."""
-        return json.dumps(
-            self.to_dict(), allow_nan=False, separators=(",", ":"), sort_keys=True
-        )
+        return canonical_json(self.to_dict())
 
     @property
     def fingerprint(self) -> str:
@@ -513,11 +512,7 @@ class Formula:
     @classmethod
     def from_json(cls, value: str) -> Formula:
         """Reconstruct a formula from JSON without evaluating source."""
-        try:
-            document: object = json.loads(value)
-        except (json.JSONDecodeError, TypeError) as error:
-            raise InputValidationError("invalid formula JSON") from error
-        return cls.from_dict(document)
+        return cls.from_dict(parse_json_object(value, role="formula"))
 
 
 _TERM_TYPES = (

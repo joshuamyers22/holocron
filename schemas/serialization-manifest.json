@@ -1,0 +1,17 @@
+{
+  "schema_version": "holocron-serialization-manifest/v1",
+  "canonical_json": {
+    "encoding": "utf-8",
+    "allow_nonfinite_numbers": false,
+    "duplicate_keys": "reject",
+    "maximum_document_bytes": 67108864,
+    "sort_object_keys": true
+  },
+  "documents": [
+    {"python_type": "holocron.design.DataDistribution", "schema_version": "holocron-data-distribution/v1", "schema_file": "data-distribution.schema.json", "stability": "stable-schema"},
+    {"python_type": "holocron.formula.Formula", "schema_version": "holocron-formula/v2", "schema_file": "formula.schema.json", "stability": "stable-schema"},
+    {"python_type": "holocron.design.DesignSpec", "schema_version": "holocron-design-spec/v2", "schema_file": "design-spec.schema.json", "stability": "stable-schema"},
+    {"python_type": "holocron.design.DesignMatrix", "schema_version": "holocron-design-matrix/v1", "schema_file": "design-matrix.schema.json", "stability": "stable-schema"},
+    {"python_type": "holocron.models.OlsResult", "schema_version": "holocron-ols-result/v1", "schema_file": "ols-result.schema.json", "stability": "stable-schema"}
+  ]
+}

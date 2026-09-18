@@ -18,6 +18,7 @@ SMOKE_PROGRAM = """
 from __future__ import annotations
 
 import importlib.metadata
+import importlib.resources
 import importlib.util
 import os
 import sys
@@ -28,7 +29,7 @@ import numpy as np
 import holocron
 from holocron.design import DataDistribution, DesignSpec, RestrictedCubicSplineSpec
 from holocron.formula import Formula
-from holocron.models import fit_ols
+from holocron.models import OlsResult, fit_ols
 
 source_root = Path(os.environ["HOLOCRON_SMOKE_SOURCE_ROOT"]).resolve()
 environment_root = Path(os.environ["HOLOCRON_SMOKE_ENVIRONMENT_ROOT"]).resolve()
@@ -47,18 +48,29 @@ formula_spec = DesignSpec.from_formula(Formula.parse("y ~ rcs(x, [-2, 0, 1.5, 3]
 formula_design = formula_spec.transform({"x": x})
 spec = RestrictedCubicSplineSpec((-2.0, 0.0, 1.5, 3.0))
 design = spec.transform(x)
-fit = fit_ols(y, design, feature_names=("x", "x'", "x''"))
-predictions = fit.predict(design)
+fit = fit_ols(y, formula_design)
+predictions = fit.predict(formula_design)
 
 assert design.shape == (6, 3)
 assert metadata.adjustments == {"x": 0.5}
 assert DataDistribution.from_json(metadata.to_json()) == metadata
 assert DesignSpec.from_json(formula_spec.to_json()) == formula_spec
+assert type(formula_design).from_json(formula_design.to_json()) == formula_design
 assert np.allclose(formula_design.to_numpy(), design)
-assert fit.coefficient_names == ("Intercept", "x", "x'", "x''")
+assert fit.coefficient_names == (
+    "Intercept",
+    "rcs(x,linear)",
+    "rcs(x,nonlinear=1)",
+    "rcs(x,nonlinear=2)",
+)
+assert fit.design_fingerprint == formula_spec.fingerprint
+assert OlsResult.from_json(fit.to_json()) == fit
 assert fit.rank == 4
 assert fit.residual_degrees_of_freedom == 2
 assert np.allclose(predictions, fit.fitted_values)
+schema_root = importlib.resources.files("holocron").joinpath("schemas")
+assert schema_root.joinpath("serialization-manifest.json").is_file()
+assert schema_root.joinpath("ols-result.schema.json").is_file()
 print(f"artifact smoke passed: {module_path}")
 """
 

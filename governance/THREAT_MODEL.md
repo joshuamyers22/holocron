@@ -16,7 +16,7 @@
 | Abuse case | Impact | Prevention/detection/response | Evidence | Residual risk owner |
 |---|---|---|---|---|
 | Formula or callback injection | Arbitrary code execution | Allowlisted additive AST, custom parser with no general evaluation, adversarial syntax tests | `src/holocron/formula/`; ADR-005; formula-design acceptance record | joshuamyers22 |
-| Malicious serialized model | Code execution or silent model drift | No supported pickle interchange; versioned data-only schema with limits | ADR-008 required before persistence | joshuamyers22 |
+| Malicious serialized model | Code execution or silent model drift | No supported pickle interchange; strict versioned data-only JSON, duplicate/non-finite rejection, 64 MiB document limit, shape limits, and cross-field validation | ADR-008; serialization acceptance record; serialization tests | joshuamyers22 |
 | Huge interaction/design request | Memory/CPU exhaustion | Formula length/name/term/column/degree/knot/level limits and precomputed interaction column cardinality | Formula-design and categorical/interactions acceptance records | joshuamyers22 |
 | Pathological resampling request | Denial of service or partial evidence presented as complete | Bounded plans, explicit failures, retained completion counts | Phase 6 requirement | joshuamyers22 |
 | Crafted dataframe producer | Type confusion, row mismatch, data leakage | Canonical validated boundary, retained row identity, copy/ownership policy | ADR-006 accepted; dataframe adapters remain gated | joshuamyers22 |

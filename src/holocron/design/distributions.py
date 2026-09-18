@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 import hashlib
-import json
 import math
 from collections import Counter
 from collections.abc import Iterable, Mapping
@@ -13,6 +12,7 @@ from typing import Literal, TypeAlias, cast
 
 import numpy as np
 
+from holocron._serialization import canonical_json, parse_json_object
 from holocron.exceptions import InputValidationError
 
 DistributionValue: TypeAlias = float | str
@@ -628,9 +628,7 @@ class DataDistribution:
 
     def to_json(self) -> str:
         """Serialize the versioned metadata with canonical JSON ordering."""
-        return json.dumps(
-            self.to_dict(), allow_nan=False, separators=(",", ":"), sort_keys=True
-        )
+        return canonical_json(self.to_dict())
 
     @property
     def fingerprint(self) -> str:
@@ -744,13 +742,9 @@ class DataDistribution:
     @classmethod
     def from_json(cls, value: str) -> DataDistribution:
         """Reconstruct metadata from a canonical or pretty-printed JSON object."""
-        try:
-            document: object = json.loads(value)
-        except (json.JSONDecodeError, TypeError) as error:
-            raise InputValidationError("invalid data-distribution JSON") from error
-        if not isinstance(document, dict):
-            raise InputValidationError("data-distribution JSON must contain an object")
-        return cls.from_dict(cast(dict[str, object], document))
+        return cls.from_dict(
+            parse_json_object(value, role="data-distribution metadata")
+        )
 
 
 __all__ = [

@@ -1,0 +1,201 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/joshuamyers22/holocron/schemas/design-spec.schema.json",
+  "title": "Holocron design specification",
+  "description": "A reconstructible formula-derived design and its generated-column identities.",
+  "type": "object",
+  "properties": {
+    "schema_version": {"const": "holocron-design-spec/v2"},
+    "formula": {"$ref": "#/$defs/formula"},
+    "columns": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 256,
+      "items": {"$ref": "#/$defs/column"}
+    }
+  },
+  "required": ["schema_version", "formula", "columns"],
+  "additionalProperties": false,
+  "$defs": {
+    "name": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 256,
+      "pattern": "^[^\\u0000-\\u001f\\u007f]+$"
+    },
+    "knots": {
+      "type": "array",
+      "maxItems": 32,
+      "uniqueItems": true,
+      "items": {"type": "number"}
+    },
+    "level": {
+      "oneOf": [{"type": "number"}, {"$ref": "#/$defs/name"}]
+    },
+    "levels": {
+      "type": "array",
+      "maxItems": 64,
+      "uniqueItems": true,
+      "items": {"$ref": "#/$defs/level"}
+    },
+    "mainEffect": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {"kind": {"const": "identity"}, "variable": {"$ref": "#/$defs/name"}},
+          "required": ["kind", "variable"],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {"const": "polynomial"},
+            "variable": {"$ref": "#/$defs/name"},
+            "degree": {"type": "integer", "minimum": 2, "maximum": 10}
+          },
+          "required": ["kind", "variable", "degree"],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {"const": "linear_spline"},
+            "variable": {"$ref": "#/$defs/name"},
+            "knots": {"allOf": [{"$ref": "#/$defs/knots"}, {"minItems": 1}]}
+          },
+          "required": ["kind", "variable", "knots"],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {"const": "restricted_cubic_spline"},
+            "variable": {"$ref": "#/$defs/name"},
+            "knots": {"allOf": [{"$ref": "#/$defs/knots"}, {"minItems": 3}]}
+          },
+          "required": ["kind", "variable", "knots"],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {"const": "categorical"},
+            "variable": {"$ref": "#/$defs/name"},
+            "levels": {"allOf": [{"$ref": "#/$defs/levels"}, {"minItems": 2}]},
+            "unknown_level": {"const": "error"}
+          },
+          "required": ["kind", "variable", "levels", "unknown_level"],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {"const": "ordered"},
+            "variable": {"$ref": "#/$defs/name"},
+            "levels": {
+              "type": "array",
+              "minItems": 3,
+              "maxItems": 64,
+              "uniqueItems": true,
+              "items": {"type": "number"}
+            },
+            "unknown_level": {"const": "error"}
+          },
+          "required": ["kind", "variable", "levels", "unknown_level"],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "term": {
+      "oneOf": [
+        {"$ref": "#/$defs/mainEffect"},
+        {
+          "type": "object",
+          "properties": {
+            "kind": {"const": "restricted_interaction"},
+            "left": {"$ref": "#/$defs/mainEffect"},
+            "right": {"$ref": "#/$defs/mainEffect"}
+          },
+          "required": ["kind", "left", "right"],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "formula": {
+      "type": "object",
+      "properties": {
+        "schema_version": {"const": "holocron-formula/v2"},
+        "response": {"oneOf": [{"type": "null"}, {"$ref": "#/$defs/name"}]},
+        "include_intercept": {"type": "boolean"},
+        "terms": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 64,
+          "uniqueItems": true,
+          "items": {"$ref": "#/$defs/term"}
+        }
+      },
+      "required": ["schema_version", "response", "include_intercept", "terms"],
+      "additionalProperties": false
+    },
+    "column": {
+      "type": "object",
+      "properties": {
+        "name": {"type": "string", "minLength": 1, "maxLength": 1024},
+        "variables": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 2,
+          "uniqueItems": true,
+          "items": {"$ref": "#/$defs/name"}
+        },
+        "transformation": {
+          "enum": [
+            "identity",
+            "polynomial",
+            "linear_spline",
+            "restricted_cubic_spline",
+            "categorical",
+            "ordered",
+            "restricted_interaction"
+          ]
+        },
+        "term_index": {"type": "integer", "minimum": 0, "maximum": 63},
+        "within_term_index": {"type": "integer", "minimum": 0, "maximum": 255},
+        "nonlinear": {"type": "boolean"},
+        "component_columns": {
+          "type": "array",
+          "maxItems": 2,
+          "items": {"type": "string", "minLength": 1, "maxLength": 1024}
+        }
+      },
+      "required": [
+        "name",
+        "variables",
+        "transformation",
+        "term_index",
+        "within_term_index",
+        "nonlinear",
+        "component_columns"
+      ],
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "if": {"properties": {"transformation": {"const": "restricted_interaction"}}},
+          "then": {
+            "properties": {
+              "variables": {"minItems": 2},
+              "component_columns": {"minItems": 2}
+            }
+          },
+          "else": {
+            "properties": {
+              "variables": {"maxItems": 1},
+              "component_columns": {"maxItems": 0}
+            }
+          }
+        }
+      ]
+    }
+  }
+}

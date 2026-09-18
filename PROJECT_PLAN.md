@@ -640,9 +640,9 @@ workflow artifact. See the [Phase 1 completion record](governance/PHASE_1_COMPLE
 ### Phase 2 — Design system (12–18 weeks)
 
 **Status:** In progress. Data-distribution metadata, the formula AST and core
-transformations, and categorical/ordered handling with restricted interactions
-are complete for the experimental envelope; stable design/result schemas are
-next.
+transformations, categorical/ordered handling with restricted interactions, and
+stable design/result schemas with a serialization draft are complete for the
+experimental envelope; exhaustive transformation tests are next.
 
 **Deliverables**
 
@@ -652,7 +652,8 @@ next.
   ([acceptance record](governance/PHASE_2_FORMULA_DESIGN.md));
 - [x] categorical/ordered handling and restricted interactions
   ([acceptance record](governance/PHASE_2_CATEGORICAL_INTERACTIONS.md));
-- [ ] stable design/result schemas and serialization draft;
+- [x] stable design/result schemas and serialization draft
+  ([acceptance record](governance/PHASE_2_SERIALIZATION.md));
 - [ ] exhaustive transformation differential/property tests;
 - [ ] R migration guide for design specifications.
 

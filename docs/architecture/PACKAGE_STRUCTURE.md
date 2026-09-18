@@ -49,6 +49,9 @@ modeling dependencies are therefore not installed preemptively.
 - No installed CLI exists. The development-only parity laboratory validates
   versioned case, output, policy, and evidence schemas under `reference/` and
   `schemas/`; it is excluded from distributions and never called at runtime.
+- The public data-only schemas and serialization manifest are deliberately
+  copied into wheel package data at `holocron/schemas`; oracle and evidence
+  schemas remain repository-only development assets.
 - Unsupported statistical combinations raise a typed error; they do not select
   a different method silently.
 

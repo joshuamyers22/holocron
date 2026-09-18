@@ -1,6 +1,6 @@
 # Project Brief
 
-- Status and scope: Phases 0 and 1 complete and Phase 2 active for private experimental development as of 2026-09-18; data-distribution metadata, the allowlisted formula AST, core transformations, explicit factors, and restricted interactions are complete, while external distribution and non-experimental statistical claims remain blocked
+- Status and scope: Phases 0 and 1 complete and Phase 2 active for private experimental development as of 2026-09-18; data-distribution metadata, the allowlisted formula AST, core transformations, explicit factors, restricted interactions, and stable design/result schemas with a serialization policy are complete, while external distribution and non-experimental statistical claims remain blocked
 - Problem and affected users: Python lacks an integrated equivalent of R's `rms`; biostatisticians, epidemiologists, statistical programmers, and scientific-library authors must assemble incomplete workflows across packages.
 - Measurable success criteria: Every claimed compatible capability is linked to a pinned R 8.2-0 oracle case, method-specific numerical tolerances, statistical simulation evidence, typed public results, executable documentation, and a reproducible release artifact.
 - Explicit non-goals: Runtime delegation to R; a thin `rpy2` wrapper; initial implementation of the separate `rmsb` package; silent method substitutions; claiming drop-in or full parity without manifest-backed evidence.
@@ -16,7 +16,7 @@
 - Availability and recovery objectives: No hosted service exists; source and evidence recover from the private GitHub repository, locks, and immutable upstream/source identities
 - Research/batch and live-path latency distribution, throughput, and jitter: Batch scientific library only during the current phases; no latency SLA or live serving path
 - Queue, capacity, stale-data, and overload behavior: Not applicable until a service is proposed; local computations must gain explicit shape and resource limits before public support
-- Top failure or abuse scenarios: Statistically plausible but non-equivalent results; arbitrary code execution through formulas/serialization; unbounded design expansion or resampling; convergence reported as success; GPL/provenance violations
+- Top failure or abuse scenarios: Statistically plausible but non-equivalent results; arbitrary code execution through formulas/serialization; model/design identity drift; unbounded design expansion or resampling; convergence reported as success; GPL/provenance violations
 - Units, precision, timezone, and market calendar: Float64 initial numerical contract; units and labels are explicit design metadata; oracle timezone UTC and numeric locale C; market calendars are out of scope
 - Missing-data, outlier, adjustment, and censoring rules: Explicit and model-specific; fail closed until the behavior is specified and parity-tested
 - Point-in-time and look-ahead-bias controls: Library callers own source truth; Holocron validation APIs must retain row identity, accept explicit resample plans, repeat learned steps inside folds, and reject declared availability violations

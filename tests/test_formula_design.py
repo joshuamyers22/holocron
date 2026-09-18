@@ -5,7 +5,7 @@ from typing import cast
 
 import numpy as np
 
-from holocron.design import DesignSpec, RestrictedCubicSplineSpec
+from holocron.design import DesignMatrix, DesignSpec, RestrictedCubicSplineSpec
 from holocron.exceptions import InputValidationError, UnsupportedFeatureError
 from holocron.formula import (
     CategoricalTerm,
@@ -20,6 +20,8 @@ from holocron.formula import (
 )
 from reference.contracts import (
     CASES,
+    DESIGN_MATRIX_SCHEMA,
+    DESIGN_SPEC_SCHEMA,
     EXPECTED,
     FORMULA_SCHEMA,
     compare_json,
@@ -239,6 +241,27 @@ class DesignSpecTests(unittest.TestCase):
             restored.transform(new_data), specification.transform(new_data)
         )
         self.assertFalse(restored.formula.include_intercept)
+        matrix = specification.transform(new_data)
+        self.assertFalse(matrix.include_intercept)
+        self.assertEqual(DesignMatrix.from_json(matrix.to_json()), matrix)
+        self.assertEqual(len(matrix.fingerprint), 64)
+        validate_document(specification.to_dict(), DESIGN_SPEC_SCHEMA)
+        validate_document(matrix.to_dict(), DESIGN_MATRIX_SCHEMA)
+
+    def test_strict_serialization_rejects_tampering_and_json_extensions(self) -> None:
+        specification = DesignSpec.from_formula("~ x")
+        matrix = specification.transform({"x": (1.0, 2.0)})
+        document = matrix.to_dict()
+        document["specification_fingerprint"] = "not-a-digest"
+        with self.assertRaises(InputValidationError):
+            DesignMatrix.from_dict(document)
+        with self.assertRaises(InputValidationError):
+            DesignMatrix.from_json(
+                '{"schema_version":"holocron-design-matrix/v1",'
+                '"schema_version":"holocron-design-matrix/v1"}'
+            )
+        with self.assertRaises(InputValidationError):
+            DesignMatrix.from_json(matrix.to_json().replace("1.0", "NaN", 1))
 
     def test_rejects_invalid_design_data_and_tampered_metadata(self) -> None:
         specification = DesignSpec.from_formula("y ~ x + pol(z, 2)")

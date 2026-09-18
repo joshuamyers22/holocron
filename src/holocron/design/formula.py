@@ -13,6 +13,11 @@ from typing import TypeAlias, cast
 import numpy as np
 import numpy.typing as npt
 
+from holocron._serialization import (
+    canonical_json,
+    parse_json_object,
+    validate_sha256,
+)
 from holocron.design.splines import RestrictedCubicSplineSpec
 from holocron.exceptions import InputValidationError
 from holocron.formula import (
@@ -31,7 +36,10 @@ JsonValue: TypeAlias = (
     None | bool | int | float | str | list["JsonValue"] | dict[str, "JsonValue"]
 )
 
-SCHEMA_VERSION = "holocron-design-spec/v2"
+SPEC_SCHEMA_VERSION = "holocron-design-spec/v2"
+MATRIX_SCHEMA_VERSION = "holocron-design-matrix/v1"
+MAX_DESIGN_ROWS = 1_000_000
+MAX_DESIGN_COLUMNS = 256
 
 
 def _numeric_vector(values: Iterable[object], *, name: str) -> npt.NDArray[np.float64]:
@@ -55,6 +63,15 @@ def _numeric_vector(values: Iterable[object], *, name: str) -> npt.NDArray[np.fl
 
 def _number_name(value: float) -> str:
     return repr(float(value))
+
+
+def _is_integer_pair(value: object) -> bool:
+    if not isinstance(value, tuple):
+        return False
+    items = cast(tuple[object, ...], value)
+    return len(items) == 2 and all(
+        not isinstance(item, bool) and isinstance(item, int) for item in items
+    )
 
 
 def _factor_codes(
@@ -297,21 +314,56 @@ class DesignMatrix:
     term_slices: tuple[tuple[int, int], ...]
     rows: tuple[tuple[float, ...], ...]
     specification_fingerprint: str
+    include_intercept: bool
 
     def __post_init__(self) -> None:
+        raw_names = cast(object, self.column_names)
+        if not isinstance(raw_names, tuple):
+            raise InputValidationError("design column names must be non-empty strings")
+        names = cast(tuple[object, ...], raw_names)
+        if any(not isinstance(name, str) or not name for name in names):
+            raise InputValidationError("design column names must be non-empty strings")
         width = len(self.column_names)
         if width == 0 or len(set(self.column_names)) != width:
             raise InputValidationError(
                 "design column names must be non-empty and unique"
             )
+        if width > MAX_DESIGN_COLUMNS:
+            raise InputValidationError(
+                f"design matrix exceeds the {MAX_DESIGN_COLUMNS}-column limit"
+            )
+        raw_nonlinear = cast(object, self.nonlinear_mask)
+        if not isinstance(raw_nonlinear, tuple):
+            raise InputValidationError("nonlinear mask must contain booleans")
+        nonlinear = cast(tuple[object, ...], raw_nonlinear)
+        if any(not isinstance(value, bool) for value in nonlinear):
+            raise InputValidationError("nonlinear mask must contain booleans")
         if len(self.nonlinear_mask) != width:
             raise InputValidationError("nonlinear mask must match design columns")
-        if not self.rows:
+        if not isinstance(cast(object, self.rows), tuple) or not self.rows:
             raise InputValidationError("design matrix must contain at least one row")
+        if len(self.rows) > MAX_DESIGN_ROWS:
+            raise InputValidationError(
+                f"design matrix exceeds the {MAX_DESIGN_ROWS}-row limit"
+            )
+        if any(not isinstance(cast(object, row), tuple) for row in self.rows):
+            raise InputValidationError("design rows must be tuples")
         if any(len(row) != width for row in self.rows):
             raise InputValidationError("design rows must match design columns")
-        if any(not math.isfinite(value) for row in self.rows for value in row):
+        if any(
+            isinstance(value, bool)
+            or not isinstance(value, Real)
+            or not math.isfinite(float(value))
+            for row in self.rows
+            for value in row
+        ):
             raise InputValidationError("design matrix must contain finite values")
+        raw_slices = cast(object, self.term_slices)
+        if not isinstance(raw_slices, tuple):
+            raise InputValidationError("term slices must contain integer pairs")
+        slices = cast(tuple[object, ...], raw_slices)
+        if any(not _is_integer_pair(item) for item in slices):
+            raise InputValidationError("term slices must contain integer pairs")
         expected_start = 0
         for start, stop in self.term_slices:
             if start != expected_start or stop <= start or stop > width:
@@ -319,6 +371,11 @@ class DesignMatrix:
             expected_start = stop
         if expected_start != width:
             raise InputValidationError("term slices must partition design columns")
+        validate_sha256(
+            self.specification_fingerprint, role="specification_fingerprint"
+        )
+        if not isinstance(cast(object, self.include_intercept), bool):
+            raise InputValidationError("include_intercept must be boolean")
 
     @property
     def shape(self) -> tuple[int, int]:
@@ -328,6 +385,89 @@ class DesignMatrix:
     def to_numpy(self) -> FloatMatrix:
         """Return an independent float64 NumPy array."""
         return np.asarray(self.rows, dtype=np.float64)
+
+    def to_dict(self) -> dict[str, JsonValue]:
+        """Return the versioned design-matrix document."""
+        return {
+            "schema_version": MATRIX_SCHEMA_VERSION,
+            "column_names": list(self.column_names),
+            "nonlinear_mask": list(self.nonlinear_mask),
+            "term_slices": [list(value) for value in self.term_slices],
+            "rows": [list(row) for row in self.rows],
+            "specification_fingerprint": self.specification_fingerprint,
+            "include_intercept": self.include_intercept,
+        }
+
+    def to_json(self) -> str:
+        """Serialize the design matrix as canonical JSON."""
+        return canonical_json(self.to_dict())
+
+    @property
+    def fingerprint(self) -> str:
+        """Return the SHA-256 identity of the serialized design matrix."""
+        return hashlib.sha256(self.to_json().encode()).hexdigest()
+
+    @classmethod
+    def from_dict(cls, document: object) -> DesignMatrix:
+        """Reconstruct a design matrix from a strictly versioned document."""
+        if not isinstance(document, dict):
+            raise InputValidationError("design matrix document must be an object")
+        raw = cast(dict[str, object], document)
+        required = {
+            "schema_version",
+            "column_names",
+            "nonlinear_mask",
+            "term_slices",
+            "rows",
+            "specification_fingerprint",
+            "include_intercept",
+        }
+        if set(raw) != required:
+            raise InputValidationError("design matrix document fields differ")
+        if raw["schema_version"] != MATRIX_SCHEMA_VERSION:
+            raise InputValidationError("unsupported design matrix schema version")
+        names = raw["column_names"]
+        nonlinear = raw["nonlinear_mask"]
+        slices = raw["term_slices"]
+        rows = raw["rows"]
+        if not all(
+            isinstance(value, list) for value in (names, nonlinear, slices, rows)
+        ):
+            raise InputValidationError("design matrix arrays are malformed")
+        raw_names = cast(list[object], names)
+        raw_nonlinear = cast(list[object], nonlinear)
+        raw_slices = cast(list[object], slices)
+        raw_rows = cast(list[object], rows)
+        if any(not isinstance(value, str) for value in raw_names):
+            raise InputValidationError("design column names must be strings")
+        if any(not isinstance(value, bool) for value in raw_nonlinear):
+            raise InputValidationError("nonlinear mask must contain booleans")
+        if any(not isinstance(value, list) for value in (*raw_slices, *raw_rows)):
+            raise InputValidationError("design matrix rows and slices must be arrays")
+        if any(len(cast(list[object], value)) != 2 for value in raw_slices):
+            raise InputValidationError("term slices must contain pairs")
+        return cls(
+            column_names=tuple(cast(str, value) for value in raw_names),
+            nonlinear_mask=tuple(cast(bool, value) for value in raw_nonlinear),
+            term_slices=tuple(
+                (
+                    cast(int, cast(list[object], item)[0]),
+                    cast(int, cast(list[object], item)[1]),
+                )
+                for item in raw_slices
+            ),
+            rows=tuple(
+                tuple(cast(float, value) for value in cast(list[object], item))
+                for item in raw_rows
+            ),
+            specification_fingerprint=cast(str, raw["specification_fingerprint"]),
+            include_intercept=cast(bool, raw["include_intercept"]),
+        )
+
+    @classmethod
+    def from_json(cls, value: str) -> DesignMatrix:
+        """Reconstruct a design matrix from strict bounded JSON."""
+        return cls.from_dict(parse_json_object(value, role="design matrix"))
 
 
 @dataclass(frozen=True, slots=True)
@@ -423,6 +563,7 @@ class DesignSpec:
             term_slices=self.term_slices,
             rows=rows,
             specification_fingerprint=self.fingerprint,
+            include_intercept=self.formula.include_intercept,
         )
 
     def interactions_containing(self, variable: str) -> tuple[int, ...]:
@@ -450,16 +591,14 @@ class DesignSpec:
     def to_dict(self) -> dict[str, JsonValue]:
         """Return versioned reconstruction metadata."""
         return {
-            "schema_version": SCHEMA_VERSION,
+            "schema_version": SPEC_SCHEMA_VERSION,
             "formula": self.formula.to_dict(),
             "columns": [column.to_dict() for column in self.columns],
         }
 
     def to_json(self) -> str:
         """Serialize reconstruction metadata as canonical JSON."""
-        return json.dumps(
-            self.to_dict(), allow_nan=False, separators=(",", ":"), sort_keys=True
-        )
+        return canonical_json(self.to_dict())
 
     @property
     def fingerprint(self) -> str:
@@ -474,7 +613,7 @@ class DesignSpec:
         raw = cast(dict[str, object], document)
         if set(raw) != {"schema_version", "formula", "columns"}:
             raise InputValidationError("design specification fields differ")
-        if raw["schema_version"] != SCHEMA_VERSION:
+        if raw["schema_version"] != SPEC_SCHEMA_VERSION:
             raise InputValidationError("unsupported design specification version")
         formula = Formula.from_dict(raw["formula"])
         expected = cls.from_formula(formula)
@@ -488,11 +627,7 @@ class DesignSpec:
     @classmethod
     def from_json(cls, value: str) -> DesignSpec:
         """Reconstruct a design specification from JSON."""
-        try:
-            document: object = json.loads(value)
-        except (json.JSONDecodeError, TypeError) as error:
-            raise InputValidationError("invalid design specification JSON") from error
-        return cls.from_dict(document)
+        return cls.from_dict(parse_json_object(value, role="design specification"))
 
 
 __all__ = ["DesignMatrix", "DesignSpec", "GeneratedColumn"]

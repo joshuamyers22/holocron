@@ -32,6 +32,9 @@ POLICY_SCHEMA = ROOT / "schemas/tolerance-policy.schema.json"
 TOLERANCE_PILOT_SCHEMA = ROOT / "schemas/tolerance-pilot.schema.json"
 DATA_DISTRIBUTION_SCHEMA = ROOT / "schemas/data-distribution.schema.json"
 FORMULA_SCHEMA = ROOT / "schemas/formula.schema.json"
+DESIGN_SPEC_SCHEMA = ROOT / "schemas/design-spec.schema.json"
+DESIGN_MATRIX_SCHEMA = ROOT / "schemas/design-matrix.schema.json"
+OLS_RESULT_SCHEMA = ROOT / "schemas/ols-result.schema.json"
 POLICY_PATH = ROOT / "reference/tolerances.json"
 CASES = ROOT / "reference/cases"
 EXPECTED = ROOT / "reference/expected"
@@ -664,6 +667,9 @@ def validate_repository_contracts() -> int:
         TOLERANCE_PILOT_SCHEMA,
         DATA_DISTRIBUTION_SCHEMA,
         FORMULA_SCHEMA,
+        DESIGN_SPEC_SCHEMA,
+        DESIGN_MATRIX_SCHEMA,
+        OLS_RESULT_SCHEMA,
     ):
         schema = require_object(load_json(schema_path), name=str(schema_path))
         Draft202012Validator.check_schema(schema)

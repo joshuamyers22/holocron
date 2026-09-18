@@ -22,7 +22,7 @@ exact; approximate comparison is restricted to allowlisted numerical paths.
   Python estimators;
 - inference tables, ANOVA, contrasts, calibration, validation, and resampling;
 - robust covariance, clustered errors, penalization, and aliased fits;
-- plotting, nomograms, fitted-model serialization, and a dataframe adapter
+- plotting, nomograms, fitted-model families beyond OLS, and a dataframe adapter
   contract.
 
 Some unsupported families already have committed R oracle outputs. Those files

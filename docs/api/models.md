@@ -10,7 +10,7 @@ are generated from the installed source during `make docs-check`.
 ## `OlsResult`
 
 ```python
-class holocron.models.linear.OlsResult(coefficient_names: tuple[str, ...], coefficients: tuple[float, ...], covariance: tuple[tuple[float, ...], ...], fitted_values: tuple[float, ...], residuals: tuple[float, ...], residual_degrees_of_freedom: int, residual_scale: float, rank: int, n_observations: int, n_features: int, includes_intercept: bool) -> None
+class holocron.models.linear.OlsResult(coefficient_names: tuple[str, ...], coefficients: tuple[float, ...], covariance: tuple[tuple[float, ...], ...], fitted_values: tuple[float, ...], residuals: tuple[float, ...], residual_degrees_of_freedom: int, residual_scale: float, rank: int, n_observations: int, n_features: int, includes_intercept: bool, design_fingerprint: str | None = None) -> None
 ```
 
 An immutable ordinary least-squares result.
@@ -33,12 +33,33 @@ estimator, matching the initial supported behavior of ``rms::ols``.
 | `n_observations` | `int` |
 | `n_features` | `int` |
 | `includes_intercept` | `bool` |
+| `design_fingerprint` | `str | None` |
 
-### `predict(self, features: collections.abc.Iterable[collections.abc.Iterable[float]]) -> tuple[float, ...]`
+### `fingerprint`
+
+Return the SHA-256 identity of the canonical result document.
+
+### `from_dict(document: object) -> holocron.models.linear.OlsResult`
+
+Reconstruct an OLS result from a strictly versioned document.
+
+### `from_json(value: str) -> holocron.models.linear.OlsResult`
+
+Reconstruct an OLS result from strict bounded JSON.
+
+### `predict(self, features: collections.abc.Iterable[collections.abc.Iterable[float]] | holocron.design.formula.DesignMatrix) -> tuple[float, ...]`
 
 Predict from feature columns in the original fitted order.
 
-## `fit_ols(response: collections.abc.Iterable[float], features: collections.abc.Iterable[collections.abc.Iterable[float]], *, feature_names: collections.abc.Iterable[str] | None = None, include_intercept: bool = True) -> holocron.models.linear.OlsResult`
+### `to_dict(self) -> dict[str, None | bool | int | float | str | list['JsonValue'] | dict[str, 'JsonValue']]`
+
+Return the versioned fitted-result document.
+
+### `to_json(self) -> str`
+
+Serialize the fitted result as canonical non-executable JSON.
+
+## `fit_ols(response: collections.abc.Iterable[float], features: collections.abc.Iterable[collections.abc.Iterable[float]] | holocron.design.formula.DesignMatrix, *, feature_names: collections.abc.Iterable[str] | None = None, include_intercept: bool | None = None, design_fingerprint: str | None = None) -> holocron.models.linear.OlsResult`
 
 Fit a full-rank ordinary least-squares model using QR factorization.
 

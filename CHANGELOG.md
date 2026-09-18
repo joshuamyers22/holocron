@@ -60,3 +60,7 @@ Notable changes are recorded here using semantic versioning.
   reference coding with fail-closed unseen-level handling, and hierarchical
   two-way restricted interactions that omit doubly nonlinear products; four
   additional pinned-R cases qualify the generated values and metadata.
+- Stabilized versioned schemas for reconstructible design specifications,
+  realized design matrices, and OLS results; added strict bounded canonical JSON,
+  design/result fingerprints, wrong-design prediction rejection, packaged schema
+  assets, and the initial cross-version migration policy in ADR-008.
