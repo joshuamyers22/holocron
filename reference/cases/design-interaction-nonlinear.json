@@ -1,0 +1,25 @@
+{
+  "schema_version": "holocron-oracle-case/v1",
+  "case_id": "design-interaction-nonlinear",
+  "description": "Restricted polynomial-by-spline interaction excluding doubly nonlinear products.",
+  "operation": "design",
+  "expected_output": "design-interaction-nonlinear.json",
+  "comparison_profile": "formula-design-v1",
+  "qualification_stage": "python-parity",
+  "formula": "~ pol(x, 3) + rcs(z, [0.0, 1.0, 3.0, 6.0]) + ia(pol(x, 3), rcs(z, [0.0, 1.0, 3.0, 6.0]))",
+  "response": null,
+  "include_intercept": true,
+  "variables": [
+    {"name": "x", "values": [-2, -1, 0.5, 1, 2, 3]},
+    {"name": "z", "values": [-1, 0.5, 2, 3, 5, 7]}
+  ],
+  "terms": [
+    {"kind": "polynomial", "variable": "x", "degree": 3},
+    {"kind": "restricted_cubic_spline", "variable": "z", "knots": [0, 1, 3, 6]},
+    {
+      "kind": "restricted_interaction",
+      "left": {"kind": "polynomial", "variable": "x", "degree": 3},
+      "right": {"kind": "restricted_cubic_spline", "variable": "z", "knots": [0, 1, 3, 6]}
+    }
+  ]
+}

@@ -535,9 +535,17 @@ def validate_case_pair(
             require_object(value, name="case.terms item")
             for value in require_array(case["terms"], name="case.terms")
         ]
-        unknown_variables = sorted(
-            {str(term["variable"]) for term in terms} - set(names)
-        )
+        referenced_variables: set[str] = set()
+        for term in terms:
+            if term.get("kind") == "restricted_interaction":
+                for side in ("left", "right"):
+                    component = require_object(
+                        term.get(side), name=f"case.terms interaction {side}"
+                    )
+                    referenced_variables.add(str(component["variable"]))
+            else:
+                referenced_variables.add(str(term["variable"]))
+        unknown_variables = sorted(referenced_variables - set(names))
         if unknown_variables:
             raise ContractValidationError(
                 f"{case_path}: design terms reference unknown variables: "

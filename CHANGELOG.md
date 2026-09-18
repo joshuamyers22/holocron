@@ -56,3 +56,7 @@ Notable changes are recorded here using semantic versioning.
   compiler for identity, raw polynomial, linear-spline, and explicit-knot RCS
   terms, with bounded parsing, canonical serialization, adversarial-name tests,
   and four pinned-R design parity cases.
+- Added explicit unordered and scored-ordered factor nodes, first-level
+  reference coding with fail-closed unseen-level handling, and hierarchical
+  two-way restricted interactions that omit doubly nonlinear products; four
+  additional pinned-R cases qualify the generated values and metadata.

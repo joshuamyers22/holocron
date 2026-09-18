@@ -1,0 +1,16 @@
+{
+  "schema_version": "holocron-oracle-output/v1",
+  "case_id": "design-categorical",
+  "reference": {"package": "rms", "version": "8.2-0", "commit": "a4e4a305a029090e737562fb4d35bdb705db7d63", "protocol_version": "1"},
+  "ok": true,
+  "protocol_version": "1",
+  "operation": "design",
+  "formula": "y ~ catg(group, [\"control\", \"treated\", \"other\"])",
+  "response": "y",
+  "include_intercept": true,
+  "terms": [{"kind": "categorical", "variable": "group", "levels": ["control", "treated", "other"], "unknown_level": "error"}],
+  "column_names": ["catg(group,level=\"treated\")", "catg(group,level=\"other\")"],
+  "nonlinear_mask": [false, false],
+  "term_slices": [[0, 2]],
+  "design": [[0, 0], [1, 0], [0, 1], [1, 0], [0, 0], [0, 1]]
+}

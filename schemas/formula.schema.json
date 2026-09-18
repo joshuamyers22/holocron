@@ -2,10 +2,10 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://github.com/joshuamyers22/holocron/schemas/formula.schema.json",
   "title": "Holocron formula AST",
-  "description": "The versioned, allowlisted additive numeric formula syntax tree.",
+  "description": "The versioned, allowlisted formula syntax tree.",
   "type": "object",
   "properties": {
-    "schema_version": {"const": "holocron-formula/v1"},
+    "schema_version": {"const": "holocron-formula/v2"},
     "response": {
       "oneOf": [
         {"type": "null"},
@@ -36,7 +36,19 @@
       "uniqueItems": true,
       "items": {"type": "number"}
     },
-    "term": {
+    "level": {
+      "oneOf": [
+        {"type": "number"},
+        {"$ref": "#/$defs/name"}
+      ]
+    },
+    "levels": {
+      "type": "array",
+      "maxItems": 64,
+      "uniqueItems": true,
+      "items": {"$ref": "#/$defs/level"}
+    },
+    "mainEffect": {
       "oneOf": [
         {
           "type": "object",
@@ -85,6 +97,54 @@
             }
           },
           "required": ["kind", "variable", "knots"],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {"const": "categorical"},
+            "variable": {"$ref": "#/$defs/name"},
+            "levels": {
+              "allOf": [
+                {"$ref": "#/$defs/levels"},
+                {"minItems": 2}
+              ]
+            },
+            "unknown_level": {"const": "error"}
+          },
+          "required": ["kind", "variable", "levels", "unknown_level"],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {"const": "ordered"},
+            "variable": {"$ref": "#/$defs/name"},
+            "levels": {
+              "type": "array",
+              "minItems": 3,
+              "maxItems": 64,
+              "uniqueItems": true,
+              "items": {"type": "number"}
+            },
+            "unknown_level": {"const": "error"}
+          },
+          "required": ["kind", "variable", "levels", "unknown_level"],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "term": {
+      "oneOf": [
+        {"$ref": "#/$defs/mainEffect"},
+        {
+          "type": "object",
+          "properties": {
+            "kind": {"const": "restricted_interaction"},
+            "left": {"$ref": "#/$defs/mainEffect"},
+            "right": {"$ref": "#/$defs/mainEffect"}
+          },
+          "required": ["kind", "left", "right"],
           "additionalProperties": false
         }
       ]

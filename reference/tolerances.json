@@ -58,7 +58,7 @@
       ]
     },
     "formula-design-v1": {
-      "description": "Exact formula and generated-column metadata with float64 tolerance for core numeric transformations.",
+      "description": "Exact formula, factor, interaction, and generated-column metadata with float64 tolerance for design values.",
       "default": {"mode": "exact"},
       "rules": [
         {"path": "/design/*/*", "rule": {"mode": "numeric", "absolute": 1e-12, "relative": 1e-12}}

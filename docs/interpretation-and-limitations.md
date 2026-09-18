@@ -1,9 +1,9 @@
 # Interpretation and limitations
 
 Holocron currently proves narrow engineering claims: predictor-distribution
-summaries, allowlisted additive numeric formula designs, and selected outputs
-from well-conditioned full-rank OLS match a pinned R `rms` oracle under
-field-aware tolerances.
+summaries, allowlisted numeric/factor/restricted-interaction formula designs,
+and selected outputs from well-conditioned full-rank OLS match a pinned R
+`rms` oracle under field-aware tolerances.
 That is not evidence of package-wide equivalence, model validity, or fitness for
 a consequential decision.
 
@@ -16,7 +16,7 @@ exact; approximate comparison is restricted to allowlisted numerical paths.
 
 ## Not yet supported
 
-- automatic knots, categorical/ordered formula terms, interactions,
+- automatic knots or factor levels, unrestricted or higher-order interactions,
   dataframe/date-time adapters, and model-level missing-data policy;
 - binary logistic, ordinal, Cox, parametric survival, and nonparametric survival
   Python estimators;

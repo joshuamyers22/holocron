@@ -15,13 +15,14 @@ JsonValue: TypeAlias = (
     None | bool | int | float | str | list["JsonValue"] | dict[str, "JsonValue"]
 )
 
-SCHEMA_VERSION = "holocron-formula/v1"
+SCHEMA_VERSION = "holocron-formula/v2"
 MAX_EXPRESSION_LENGTH = 4096
 MAX_NAME_LENGTH = 256
 MAX_TERMS = 64
 MAX_GENERATED_COLUMNS = 256
 MAX_POLYNOMIAL_DEGREE = 10
 MAX_KNOTS = 32
+MAX_LEVELS = 64
 
 _BARE_NAME = re.compile(r"^[^\W\d]\w*$", re.UNICODE)
 _NUMBER = re.compile(r"(?:\d+(?:\.\d*)?|\.\d+)(?:[eE][+-]?\d+)?")
@@ -63,7 +64,15 @@ def _knots(values: object, *, minimum: int, role: str) -> tuple[float, ...]:
 def quote_name(value: str) -> str:
     """Return a deterministic formula spelling for a validated variable name."""
     name = _name(value, role="variable name")
-    if _BARE_NAME.fullmatch(name) and name not in {"asis", "pol", "lsp", "rcs"}:
+    if _BARE_NAME.fullmatch(name) and name not in {
+        "asis",
+        "catg",
+        "ia",
+        "lsp",
+        "pol",
+        "rcs",
+        "scored",
+    }:
         return name
     return f"`{name.replace('`', '``')}`"
 
@@ -185,9 +194,164 @@ class RestrictedCubicSplineTerm:
         return f"rcs({self.variable.expression}, [{values}])"
 
 
-FormulaTerm: TypeAlias = (
-    IdentityTerm | PolynomialTerm | LinearSplineTerm | RestrictedCubicSplineTerm
+Level: TypeAlias = str | float
+
+
+def _levels(
+    values: object, *, minimum: int, numeric: bool, role: str
+) -> tuple[Level, ...]:
+    if not isinstance(values, (list, tuple)):
+        raise InputValidationError(f"{role} levels must be a sequence")
+    items = cast(list[object] | tuple[object, ...], values)
+    if not minimum <= len(items) <= MAX_LEVELS:
+        raise InputValidationError(
+            f"{role} requires between {minimum} and {MAX_LEVELS} levels"
+        )
+    result: list[Level] = []
+    level_type: type[object] | None = None
+    for value in items:
+        if isinstance(value, str) and not numeric:
+            normalized: Level = _name(value, role=f"{role} level")
+            current_type: type[object] = str
+        else:
+            normalized = _finite(value, role=f"{role} level")
+            current_type = float
+        if level_type is None:
+            level_type = current_type
+        elif current_type is not level_type:
+            raise InputValidationError(f"{role} levels must have one value type")
+        result.append(normalized)
+    if len(set(result)) != len(result):
+        raise InputValidationError(f"{role} levels must be unique")
+    if numeric:
+        numeric_result = cast(list[float], result)
+        if any(
+            left >= right
+            for left, right in zip(numeric_result, numeric_result[1:], strict=False)
+        ):
+            raise InputValidationError(f"{role} levels must be strictly increasing")
+    return tuple(result)
+
+
+def _level_expression(value: Level) -> str:
+    if isinstance(value, str):
+        return json.dumps(value, ensure_ascii=False)
+    return _number_expression(value)
+
+
+@dataclass(frozen=True, slots=True)
+class CategoricalTerm:
+    """An unordered factor with an explicit first/reference level."""
+
+    variable: Variable
+    levels: tuple[Level, ...]
+    unknown_level: str = "error"
+    kind: ClassVar[str] = "categorical"
+
+    def __post_init__(self) -> None:
+        if not isinstance(cast(object, self.variable), Variable):
+            raise InputValidationError("term variable must be a Variable")
+        object.__setattr__(
+            self,
+            "levels",
+            _levels(self.levels, minimum=2, numeric=False, role="categorical"),
+        )
+        if self.unknown_level != "error":
+            raise InputValidationError(
+                "categorical unknown-level policy must be 'error'"
+            )
+
+    @property
+    def n_columns(self) -> int:
+        return len(self.levels) - 1
+
+    @property
+    def expression(self) -> str:
+        values = ", ".join(_level_expression(value) for value in self.levels)
+        return f"catg({self.variable.expression}, [{values}])"
+
+
+@dataclass(frozen=True, slots=True)
+class OrderedTerm:
+    """An ``rms::scored`` ordered factor with explicit numeric levels."""
+
+    variable: Variable
+    levels: tuple[float, ...]
+    unknown_level: str = "error"
+    kind: ClassVar[str] = "ordered"
+
+    def __post_init__(self) -> None:
+        if not isinstance(cast(object, self.variable), Variable):
+            raise InputValidationError("term variable must be a Variable")
+        object.__setattr__(
+            self,
+            "levels",
+            cast(
+                tuple[float, ...],
+                _levels(self.levels, minimum=3, numeric=True, role="ordered"),
+            ),
+        )
+        if self.unknown_level != "error":
+            raise InputValidationError("ordered unknown-level policy must be 'error'")
+
+    @property
+    def n_columns(self) -> int:
+        return len(self.levels) - 1
+
+    @property
+    def expression(self) -> str:
+        values = ", ".join(_number_expression(value) for value in self.levels)
+        return f"scored({self.variable.expression}, [{values}])"
+
+
+MainEffectTerm: TypeAlias = (
+    IdentityTerm
+    | PolynomialTerm
+    | LinearSplineTerm
+    | RestrictedCubicSplineTerm
+    | CategoricalTerm
+    | OrderedTerm
 )
+
+
+def _nonlinear_flags(term: MainEffectTerm) -> tuple[bool, ...]:
+    if isinstance(term, (IdentityTerm, CategoricalTerm)):
+        return (False,) * term.n_columns
+    return (False,) + (True,) * (term.n_columns - 1)
+
+
+@dataclass(frozen=True, slots=True)
+class RestrictedInteractionTerm:
+    """An ``rms`` restricted interaction that excludes doubly nonlinear products."""
+
+    left: MainEffectTerm
+    right: MainEffectTerm
+    kind: ClassVar[str] = "restricted_interaction"
+
+    def __post_init__(self) -> None:
+        if not isinstance(
+            cast(object, self.left), _MAIN_EFFECT_TYPES
+        ) or not isinstance(cast(object, self.right), _MAIN_EFFECT_TYPES):
+            raise InputValidationError(
+                "interaction components must be main-effect terms"
+            )
+        if self.left.variable == self.right.variable:
+            raise InputValidationError("interaction variables must be distinct")
+
+    @property
+    def n_columns(self) -> int:
+        return sum(
+            not (left and right)
+            for left in _nonlinear_flags(self.left)
+            for right in _nonlinear_flags(self.right)
+        )
+
+    @property
+    def expression(self) -> str:
+        return f"ia({self.left.expression}, {self.right.expression})"
+
+
+FormulaTerm: TypeAlias = MainEffectTerm | RestrictedInteractionTerm
 
 
 def _number_expression(value: float) -> str:
@@ -195,6 +359,12 @@ def _number_expression(value: float) -> str:
 
 
 def _term_document(term: FormulaTerm) -> dict[str, JsonValue]:
+    if isinstance(term, RestrictedInteractionTerm):
+        return {
+            "kind": term.kind,
+            "left": _term_document(term.left),
+            "right": _term_document(term.right),
+        }
     document: dict[str, JsonValue] = {
         "kind": term.kind,
         "variable": term.variable.name,
@@ -203,12 +373,15 @@ def _term_document(term: FormulaTerm) -> dict[str, JsonValue]:
         document["degree"] = term.degree
     if isinstance(term, (LinearSplineTerm, RestrictedCubicSplineTerm)):
         document["knots"] = list(term.knots)
+    if isinstance(term, (CategoricalTerm, OrderedTerm)):
+        document["levels"] = list(term.levels)
+        document["unknown_level"] = term.unknown_level
     return document
 
 
 @dataclass(frozen=True, slots=True)
 class Formula:
-    """An immutable, additive numeric formula AST.
+    """An immutable, allowlisted formula AST.
 
     Construct it directly or use :meth:`parse`. The parser implements only the
     documented grammar and never evaluates Python or R source.
@@ -233,6 +406,22 @@ class Formula:
             raise InputValidationError("formula contains an unsupported term node")
         if len(set(self.terms)) != len(self.terms):
             raise InputValidationError("formula terms must be unique")
+        main_effects = {
+            term
+            for term in self.terms
+            if not isinstance(term, RestrictedInteractionTerm)
+        }
+        for term in self.terms:
+            if isinstance(term, RestrictedInteractionTerm):
+                if term.left not in main_effects or term.right not in main_effects:
+                    raise InputValidationError(
+                        "interaction components must also appear as main effects"
+                    )
+                reverse = RestrictedInteractionTerm(term.right, term.left)
+                if reverse in self.terms and reverse != term:
+                    raise InputValidationError(
+                        "formula contains a duplicate reversed interaction"
+                    )
         column_count = sum(term.n_columns for term in self.terms)
         if column_count > MAX_GENERATED_COLUMNS:
             raise InputValidationError(
@@ -265,7 +454,15 @@ class Formula:
     @property
     def predictor_names(self) -> tuple[str, ...]:
         """Return referenced predictor names in first-use order."""
-        return tuple(dict.fromkeys(term.variable.name for term in self.terms))
+        names: list[str] = []
+        for term in self.terms:
+            components = (
+                (term.left, term.right)
+                if isinstance(term, RestrictedInteractionTerm)
+                else (term,)
+            )
+            names.extend(component.variable.name for component in components)
+        return tuple(dict.fromkeys(names))
 
     def to_dict(self) -> dict[str, JsonValue]:
         """Return the versioned canonical AST document."""
@@ -328,6 +525,18 @@ _TERM_TYPES = (
     PolynomialTerm,
     LinearSplineTerm,
     RestrictedCubicSplineTerm,
+    CategoricalTerm,
+    OrderedTerm,
+    RestrictedInteractionTerm,
+)
+
+_MAIN_EFFECT_TYPES = (
+    IdentityTerm,
+    PolynomialTerm,
+    LinearSplineTerm,
+    RestrictedCubicSplineTerm,
+    CategoricalTerm,
+    OrderedTerm,
 )
 
 
@@ -336,11 +545,23 @@ def _term_from_document(value: object) -> FormulaTerm:
         raise InputValidationError("each formula term must be an object")
     raw = cast(dict[str, object], value)
     kind = raw.get("kind")
+    if kind == "restricted_interaction":
+        if set(raw) != {"kind", "left", "right"}:
+            raise InputValidationError("formula term document fields differ")
+        left = _term_from_document(raw["left"])
+        right = _term_from_document(raw["right"])
+        if isinstance(left, RestrictedInteractionTerm) or isinstance(
+            right, RestrictedInteractionTerm
+        ):
+            raise InputValidationError("nested interactions are not supported")
+        return RestrictedInteractionTerm(left, right)
     expected = {"kind", "variable"}
     if kind == "polynomial":
         expected.add("degree")
     elif kind in {"linear_spline", "restricted_cubic_spline"}:
         expected.add("knots")
+    elif kind in {"categorical", "ordered"}:
+        expected.update({"levels", "unknown_level"})
     elif kind != "identity":
         raise InputValidationError(f"unknown formula term kind: {kind!r}")
     if set(raw) != expected:
@@ -353,6 +574,21 @@ def _term_from_document(value: object) -> FormulaTerm:
         if isinstance(degree, bool) or not isinstance(degree, int):
             raise InputValidationError("polynomial degree must be an integer")
         return PolynomialTerm(variable, degree)
+    if kind == "categorical":
+        return CategoricalTerm(
+            variable,
+            _levels(raw["levels"], minimum=2, numeric=False, role="categorical"),
+            cast(str, raw["unknown_level"]),
+        )
+    if kind == "ordered":
+        return OrderedTerm(
+            variable,
+            cast(
+                tuple[float, ...],
+                _levels(raw["levels"], minimum=3, numeric=True, role="ordered"),
+            ),
+            cast(str, raw["unknown_level"]),
+        )
     knots = _knots(
         raw["knots"],
         minimum=1 if kind == "linear_spline" else 3,
@@ -429,6 +665,34 @@ def _tokenize(expression: str) -> tuple[_Token, ...]:
                 _Token("NAME", _name("".join(value), role="quoted name"), start)
             )
             continue
+        if character == '"':
+            start = index
+            index += 1
+            escaped = False
+            while index < len(expression):
+                current = expression[index]
+                if current == '"' and not escaped:
+                    index += 1
+                    break
+                if ord(current) < 32:
+                    raise InputValidationError(
+                        f"control character in string at position {index}"
+                    )
+                escaped = current == "\\" and not escaped
+                index += 1
+            else:
+                raise InputValidationError(
+                    f"unterminated string literal at position {start}"
+                )
+            literal = expression[start:index]
+            try:
+                decoded: object = json.loads(literal)
+            except json.JSONDecodeError as error:
+                raise InputValidationError(
+                    f"invalid string literal at position {start}"
+                ) from error
+            tokens.append(_Token("STRING", cast(str, decoded), start))
+            continue
         if character.isalpha() or character == "_":
             start = index
             index += 1
@@ -498,12 +762,26 @@ class _Parser:
         variable_or_call = token.value
         if self.current.kind != "LPAREN":
             return IdentityTerm(Variable(variable_or_call))
-        if variable_or_call not in {"asis", "pol", "lsp", "rcs"}:
+        if variable_or_call not in {
+            "asis",
+            "catg",
+            "ia",
+            "lsp",
+            "pol",
+            "rcs",
+            "scored",
+        }:
             raise UnsupportedFeatureError(
                 f"unsupported transformation {variable_or_call!r} "
                 f"at position {token.position}"
             )
         self.advance()
+        if variable_or_call == "ia":
+            left = self.parse_component()
+            self.expect("COMMA", message="ia requires two component terms")
+            right = self.parse_component()
+            self.expect("RPAREN", message="ia accepts exactly two component terms")
+            return RestrictedInteractionTerm(left, right)
         variable = Variable(
             self.expect("NAME", message="transformation requires a variable").value
         )
@@ -523,41 +801,89 @@ class _Parser:
                 raise InputValidationError("pol degree must be an integer")
             self.expect("RPAREN", message="pol accepts one degree")
             return PolynomialTerm(variable, degree)
-        knots = self.parse_number_list()
+        if variable_or_call == "catg":
+            levels = self.parse_level_list()
+            self.expect("RPAREN", message="unexpected categorical argument")
+            return CategoricalTerm(variable, levels)
+        if variable_or_call == "scored":
+            levels = self.parse_number_list(role="level", limit=MAX_LEVELS)
+            self.expect("RPAREN", message="unexpected ordered argument")
+            return OrderedTerm(variable, levels)
+        knots = self.parse_number_list(role="knot", limit=MAX_KNOTS)
         self.expect("RPAREN", message="unexpected transformation argument")
         if variable_or_call == "lsp":
             return LinearSplineTerm(variable, knots)
         return RestrictedCubicSplineTerm(variable, knots)
 
-    def parse_number_list(self) -> tuple[float, ...]:
-        self.expect("LBRACKET", message="knots must use a bracketed numeric list")
+    def parse_component(self) -> MainEffectTerm:
+        term = self.parse_term()
+        if isinstance(term, RestrictedInteractionTerm):
+            raise InputValidationError("nested interactions are not supported")
+        return term
+
+    def parse_number_list(self, *, role: str, limit: int) -> tuple[float, ...]:
+        self.expect("LBRACKET", message=f"{role}s must use a bracketed numeric list")
         values = [
             _finite(
-                float(self.expect("NUMBER", message="expected a knot").value),
-                role="knot",
+                float(self.expect("NUMBER", message=f"expected a {role}").value),
+                role=role,
             )
         ]
         while self.current.kind == "COMMA":
             self.advance()
             values.append(
                 _finite(
-                    float(self.expect("NUMBER", message="expected a knot").value),
-                    role="knot",
+                    float(self.expect("NUMBER", message=f"expected a {role}").value),
+                    role=role,
                 )
             )
-            if len(values) > MAX_KNOTS:
+            if len(values) > limit:
                 raise InputValidationError(
-                    f"knot count exceeds the {MAX_KNOTS}-knot limit"
+                    f"{role} count exceeds the {limit}-{role} limit"
                 )
-        self.expect("RBRACKET", message="unterminated knot list")
+        self.expect("RBRACKET", message=f"unterminated {role} list")
+        return tuple(values)
+
+    def parse_level_list(self) -> tuple[Level, ...]:
+        self.expect("LBRACKET", message="levels must use a bracketed literal list")
+        kind = self.current.kind
+        if kind not in {"NUMBER", "STRING"}:
+            raise InputValidationError(
+                f"expected a level at position {self.current.position}"
+            )
+
+        def take() -> Level:
+            token = self.advance()
+            if token.kind != kind:
+                raise InputValidationError(
+                    "categorical levels must have one value type"
+                )
+            return (
+                token.value
+                if kind == "STRING"
+                else _finite(float(token.value), role="level")
+            )
+
+        values = [take()]
+        while self.current.kind == "COMMA":
+            self.advance()
+            values.append(take())
+            if len(values) > MAX_LEVELS:
+                raise InputValidationError(
+                    f"level count exceeds the {MAX_LEVELS}-level limit"
+                )
+        self.expect("RBRACKET", message="unterminated level list")
         return tuple(values)
 
 
 __all__ = [
     "Formula",
+    "CategoricalTerm",
     "IdentityTerm",
     "LinearSplineTerm",
     "PolynomialTerm",
+    "OrderedTerm",
+    "RestrictedInteractionTerm",
     "RestrictedCubicSplineTerm",
     "Variable",
 ]

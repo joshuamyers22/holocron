@@ -1,0 +1,23 @@
+{
+  "schema_version": "holocron-oracle-case/v1",
+  "case_id": "design-ordered",
+  "description": "Explicit scored ordered factor with linear score and nonlinear indicators.",
+  "operation": "design",
+  "expected_output": "design-ordered.json",
+  "comparison_profile": "formula-design-v1",
+  "qualification_stage": "python-parity",
+  "formula": "~ scored(stage, [1.0, 2.0, 4.0, 8.0])",
+  "response": null,
+  "include_intercept": true,
+  "variables": [
+    {"name": "stage", "values": [1, 2, 4, 8, 4, 1]}
+  ],
+  "terms": [
+    {
+      "kind": "ordered",
+      "variable": "stage",
+      "levels": [1, 2, 4, 8],
+      "unknown_level": "error"
+    }
+  ]
+}

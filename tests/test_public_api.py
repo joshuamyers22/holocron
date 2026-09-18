@@ -49,11 +49,14 @@ class PublicApiTests(unittest.TestCase):
         self.assertEqual(
             formula.__all__,
             [
+                "CategoricalTerm",
                 "Formula",
                 "IdentityTerm",
                 "LinearSplineTerm",
+                "OrderedTerm",
                 "PolynomialTerm",
                 "RestrictedCubicSplineTerm",
+                "RestrictedInteractionTerm",
                 "Variable",
             ],
         )

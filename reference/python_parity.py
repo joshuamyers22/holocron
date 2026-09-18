@@ -20,11 +20,11 @@ def build_python_output(case: dict[str, JsonValue]) -> dict[str, JsonValue]:
     if operation == "design":
         specification = DesignSpec.from_formula(cast(str, case["formula"]))
         raw_variables = cast(list[JsonValue], case["variables"])
-        design_data: dict[str, list[float]] = {}
+        design_data: dict[str, list[float | str]] = {}
         for raw_variable in raw_variables:
             variable = cast(dict[str, JsonValue], raw_variable)
             design_data[cast(str, variable["name"])] = cast(
-                list[float], variable["values"]
+                list[float | str], variable["values"]
             )
         matrix = specification.transform(design_data)
         formula_document = specification.formula.to_dict()

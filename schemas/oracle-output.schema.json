@@ -370,7 +370,7 @@
       "minItems": 2,
       "maxItems": 2
     },
-    "designTerm": {
+    "designMainEffect": {
       "oneOf": [
         {
           "type": "object",
@@ -421,6 +421,55 @@
             }
           },
           "required": ["kind", "variable", "knots"],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {"const": "categorical"},
+            "variable": {"type": "string", "minLength": 1, "maxLength": 256},
+            "levels": {
+              "type": "array",
+              "minItems": 2,
+              "maxItems": 64,
+              "uniqueItems": true,
+              "items": {"$ref": "#/$defs/distributionValue"}
+            },
+            "unknown_level": {"const": "error"}
+          },
+          "required": ["kind", "variable", "levels", "unknown_level"],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {"const": "ordered"},
+            "variable": {"type": "string", "minLength": 1, "maxLength": 256},
+            "levels": {
+              "type": "array",
+              "minItems": 3,
+              "maxItems": 64,
+              "uniqueItems": true,
+              "items": {"type": "number"}
+            },
+            "unknown_level": {"const": "error"}
+          },
+          "required": ["kind", "variable", "levels", "unknown_level"],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "designTerm": {
+      "oneOf": [
+        {"$ref": "#/$defs/designMainEffect"},
+        {
+          "type": "object",
+          "properties": {
+            "kind": {"const": "restricted_interaction"},
+            "left": {"$ref": "#/$defs/designMainEffect"},
+            "right": {"$ref": "#/$defs/designMainEffect"}
+          },
+          "required": ["kind", "left", "right"],
           "additionalProperties": false
         }
       ]

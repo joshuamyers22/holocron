@@ -17,15 +17,16 @@ Phases 0 and 1 are complete and Phase 2 is active for private experimental
 development. The Phase 1
 exit gate is recorded in the
 [completion record](https://github.com/joshuamyers22/holocron/blob/main/governance/PHASE_1_COMPLETION.md);
-The first two Phase 2 deliverables—immutable data-distribution metadata and the
-allowlisted formula/core numeric design engine—are complete within their
+The first three Phase 2 deliverables—immutable data-distribution metadata, the
+allowlisted formula/core design engine, and explicit factor/restricted-
+interaction handling—are complete within their
 experimental envelopes. External distribution and capability promotion remain
 blocked by the governance reviews described there.
 
 The evidence-backed experimental surface implements predictor-distribution
-metadata, safe additive numeric formulas, identity/polynomial/linear-spline/RCS
-design, and classical full-rank ordinary least squares. These are checked across
-20 independent parity cases
+metadata, safe formulas, numeric and factor transformations, restricted
+interactions, and classical full-rank ordinary least squares. These are checked
+across 24 independent parity cases
 against committed outputs from a Dockerized R oracle. Another 13 versioned
 logistic, ordinal, and survival cases are frozen as oracle baselines for later
 implementation and are not current parity claims.
@@ -59,7 +60,9 @@ predictions = fit.predict(design.rows)
 `metadata["x"]` retains adjustment, effect, display, and overall ranges without
 depending on global state or the original input iterable.
 
-Automatic knot placement, categorical formula terms, interactions, missing-data
+Explicit categorical and scored-ordered terms plus hierarchical two-way
+restricted interactions are supported by the design compiler. Automatic knot
+or level selection, unrestricted or higher-order interactions, missing-data
 policies, aliased-fit handling, robust covariance, and broader model families
 are not supported by this slice. Unsupported behavior must fail explicitly
 rather than silently substitute a different method. See the

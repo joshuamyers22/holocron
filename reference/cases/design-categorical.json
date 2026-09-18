@@ -1,0 +1,23 @@
+{
+  "schema_version": "holocron-oracle-case/v1",
+  "case_id": "design-categorical",
+  "description": "Explicit unordered factor levels with first-level reference coding.",
+  "operation": "design",
+  "expected_output": "design-categorical.json",
+  "comparison_profile": "formula-design-v1",
+  "qualification_stage": "python-parity",
+  "formula": "y ~ catg(group, [\"control\", \"treated\", \"other\"])",
+  "response": "y",
+  "include_intercept": true,
+  "variables": [
+    {"name": "group", "values": ["control", "treated", "other", "treated", "control", "other"]}
+  ],
+  "terms": [
+    {
+      "kind": "categorical",
+      "variable": "group",
+      "levels": ["control", "treated", "other"],
+      "unknown_level": "error"
+    }
+  ]
+}

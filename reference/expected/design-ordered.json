@@ -1,0 +1,16 @@
+{
+  "schema_version": "holocron-oracle-output/v1",
+  "case_id": "design-ordered",
+  "reference": {"package": "rms", "version": "8.2-0", "commit": "a4e4a305a029090e737562fb4d35bdb705db7d63", "protocol_version": "1"},
+  "ok": true,
+  "protocol_version": "1",
+  "operation": "design",
+  "formula": "~ scored(stage, [1.0, 2.0, 4.0, 8.0])",
+  "response": null,
+  "include_intercept": true,
+  "terms": [{"kind": "ordered", "variable": "stage", "levels": [1, 2, 4, 8], "unknown_level": "error"}],
+  "column_names": ["scored(stage,linear)", "scored(stage,level=4.0)", "scored(stage,level=8.0)"],
+  "nonlinear_mask": [false, true, true],
+  "term_slices": [[0, 3]],
+  "design": [[1, 0, 0], [2, 0, 0], [4, 1, 0], [8, 0, 1], [4, 1, 0], [1, 0, 0]]
+}

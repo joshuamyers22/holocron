@@ -279,7 +279,11 @@ run_datadist <- function(request) {
 design_term_specs <- function(value) {
   if (!is.data.frame(value)) return(value)
   lapply(seq_len(nrow(value)), function(index) {
-    lapply(value, function(column) column[[index]])
+    lapply(value, function(column) {
+      if (is.data.frame(column)) {
+        lapply(column[index, , drop = FALSE], function(item) item[[1L]])
+      } else column[[index]]
+    })
   })
 }
 
@@ -294,6 +298,16 @@ design_number_name <- function(value) {
   else format(value, digits = 17, scientific = FALSE, trim = TRUE)
 }
 
+design_level_name <- function(value) {
+  if (is.character(value)) as.character(jsonlite::toJSON(value, auto_unbox = TRUE))
+  else design_number_name(value)
+}
+
+design_one_term <- function(value) {
+  if (!is.data.frame(value)) return(value)
+  lapply(value, function(column) column[[1L]])
+}
+
 run_design <- function(request) {
   variable_specs <- distribution_specs(request$variables)
   if (!length(variable_specs)) stop("design variables must not be empty")
@@ -304,54 +318,59 @@ run_design <- function(request) {
       stop("design variable name must be one non-empty string")
     }
     if (name %in% names(variables)) stop(sprintf("duplicate design variable: %s", name))
-    values <- spec$values
-    if (!is.numeric(values) || !length(values) || any(!is.finite(values))) {
-      stop(sprintf("%s values must be a non-empty finite numeric vector", name))
+    values <- unlist(spec$values, use.names = FALSE)
+    if (!length(values) || (!is.numeric(values) && !is.character(values)) ||
+        (is.numeric(values) && any(!is.finite(values))) ||
+        (is.character(values) && any(!nzchar(values)))) {
+      stop(sprintf("%s values must be a non-empty finite numeric or string vector", name))
     }
-    variables[[name]] <- as.numeric(values)
+    variables[[name]] <- values
   }
   require_equal_lengths(variables, names(variables))
   terms <- design_term_specs(request$terms)
   if (!length(terms)) stop("design terms must not be empty")
-  blocks <- list()
-  normalized_terms <- list()
-  column_names <- character()
-  nonlinear <- logical()
-  term_slices <- list()
-  start <- 0L
-  for (index in seq_along(terms)) {
-    term <- terms[[index]]
+  transform_main <- function(raw_term) {
+    term <- design_one_term(raw_term)
     kind <- require_choice(
-      term, "kind", c("identity", "polynomial", "linear_spline", "restricted_cubic_spline")
+      term, "kind", c(
+        "identity", "polynomial", "linear_spline", "restricted_cubic_spline",
+        "categorical", "ordered"
+      )
     )
     variable <- term$variable
     if (is.null(variable) || length(variable) != 1L || !is.character(variable) ||
         !variable %in% names(variables)) {
       stop("design term references an unknown variable")
     }
-    x <- variables[[variable]]
+    x <- unlist(variables[[variable]], use.names = FALSE)
     displayed <- design_variable_name(variable)
     if (kind == "identity") {
-      block <- matrix(as.numeric(rms::asis(x)), ncol = 1L)
+      if (!is.numeric(x)) stop("identity values must be numeric")
+      transformed <- rms::asis(x)
+      block <- matrix(as.numeric(transformed), ncol = 1L)
       names <- sprintf("asis(%s)", displayed)
       flags <- FALSE
       normalized <- list(kind = kind, variable = variable)
     } else if (kind == "polynomial") {
+      if (!is.numeric(x)) stop("polynomial values must be numeric")
       degree <- term$degree
       if (is.null(degree) || length(degree) != 1L || !is.numeric(degree) ||
           degree != as.integer(degree) || degree < 2L) stop("invalid polynomial degree")
-      block <- unclass(rms::pol(x, as.integer(degree)))
+      transformed <- rms::pol(x, as.integer(degree))
+      block <- unclass(transformed)
       attributes(block) <- list(dim = dim(block))
       names <- sprintf("pol(%s,%d)", displayed, seq_len(as.integer(degree)))
       flags <- seq_len(as.integer(degree)) > 1L
       normalized <- list(kind = kind, variable = variable, degree = as.integer(degree))
-    } else {
+    } else if (kind %in% c("linear_spline", "restricted_cubic_spline")) {
+      if (!is.numeric(x)) stop("spline values must be numeric")
       knots <- unlist(term$knots, use.names = FALSE)
       minimum <- if (kind == "linear_spline") 1L else 3L
       if (!is.numeric(knots) || length(knots) < minimum || any(!is.finite(knots)) ||
           is.unsorted(knots, strictly = TRUE)) stop("invalid spline knots")
       if (kind == "linear_spline") {
-        block <- unclass(rms::lsp(x, knots))
+        transformed <- rms::lsp(x, knots)
+        block <- unclass(transformed)
         attributes(block) <- list(dim = dim(block))
         names <- c(
           sprintf("lsp(%s,linear)", displayed),
@@ -360,7 +379,8 @@ run_design <- function(request) {
           ), character(1L))
         )
       } else {
-        block <- unclass(rms::rcs(x, knots))
+        transformed <- rms::rcs(x, knots)
+        block <- unclass(transformed)
         attributes(block) <- list(dim = dim(block))
         names <- c(
           sprintf("rcs(%s,linear)", displayed),
@@ -369,11 +389,114 @@ run_design <- function(request) {
       }
       flags <- c(FALSE, rep(TRUE, ncol(block) - 1L))
       normalized <- list(kind = kind, variable = variable, knots = unname(as.list(knots)))
+    } else {
+      levels <- unlist(term$levels, use.names = FALSE)
+      policy <- require_choice(term, "unknown_level", c("error"))
+      if (kind == "categorical") {
+        transformed <- rms::catg(x, levels)
+        codes <- unclass(transformed)
+        attributes(codes) <- NULL
+        block <- vapply(
+          seq.int(2L, length(levels)),
+          function(level) as.numeric(codes == level),
+          numeric(length(codes))
+        )
+        if (is.null(dim(block))) block <- matrix(block, ncol = 1L)
+        names <- vapply(
+          levels[-1L],
+          function(level) sprintf(
+            "catg(%s,level=%s)", displayed, design_level_name(level)
+          ),
+          character(1L)
+        )
+        flags <- rep(FALSE, ncol(block))
+      } else {
+        if (!is.numeric(x) || !is.numeric(levels)) {
+          stop("ordered values and levels must be numeric")
+        }
+        transformed <- rms::scored(x, levels)
+        block <- cbind(
+          as.numeric(x),
+          vapply(
+            levels[-c(1L, 2L)],
+            function(level) as.numeric(x == level),
+            numeric(length(x))
+          )
+        )
+        names <- c(
+          sprintf("scored(%s,linear)", displayed),
+          vapply(
+            levels[-c(1L, 2L)],
+            function(level) sprintf(
+              "scored(%s,level=%s)", displayed, design_number_name(level)
+            ),
+            character(1L)
+          )
+        )
+        flags <- c(FALSE, rep(TRUE, ncol(block) - 1L))
+      }
+      normalized <- list(
+        kind = kind,
+        variable = variable,
+        levels = unname(as.list(levels)),
+        unknown_level = policy
+      )
     }
+    list(
+      block = block,
+      names = names,
+      nonlinear = flags,
+      normalized = normalized,
+      source = transformed
+    )
+  }
+
+  transform_term <- function(raw_term) {
+    term <- design_one_term(raw_term)
+    if (!identical(term$kind, "restricted_interaction")) return(transform_main(term))
+    left <- transform_main(term$left)
+    right <- transform_main(term$right)
+    names <- character()
+    flags <- logical()
+    column <- 0L
+    for (left_index in seq_len(ncol(left$block))) {
+      for (right_index in seq_len(ncol(right$block))) {
+        if (left$nonlinear[left_index] && right$nonlinear[right_index]) next
+        column <- column + 1L
+        names[column] <- sprintf(
+          "ia(%s,%s)", left$names[left_index], right$names[right_index]
+        )
+        flags[column] <- left$nonlinear[left_index] || right$nonlinear[right_index]
+      }
+    }
+    block <- unclass(rms::`%ia%`(left$source, right$source))
+    attributes(block) <- list(dim = dim(block))
+    if (ncol(block) != column) stop("rms restricted interaction width differs")
+    list(
+      block = block,
+      names = names,
+      nonlinear = flags,
+      normalized = list(
+        kind = "restricted_interaction",
+        left = left$normalized,
+        right = right$normalized
+      )
+    )
+  }
+
+  blocks <- list()
+  normalized_terms <- list()
+  column_names <- character()
+  nonlinear <- logical()
+  term_slices <- list()
+  start <- 0L
+  for (index in seq_along(terms)) {
+    transformed <- transform_term(terms[[index]])
+    block <- transformed$block
     blocks[[index]] <- block
-    normalized_terms[[index]] <- normalized
-    column_names <- c(column_names, names)
-    nonlinear <- c(nonlinear, flags)
+    normalized_terms[[index]] <- transformed$normalized
+    column_names <- c(column_names, transformed$names)
+    nonlinear <- c(nonlinear, transformed$nonlinear)
     stop_column <- start + ncol(block)
     term_slices[[index]] <- unname(list(start, stop_column))
     start <- stop_column

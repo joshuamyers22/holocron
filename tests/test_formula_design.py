@@ -8,11 +8,14 @@ import numpy as np
 from holocron.design import DesignSpec, RestrictedCubicSplineSpec
 from holocron.exceptions import InputValidationError, UnsupportedFeatureError
 from holocron.formula import (
+    CategoricalTerm,
     Formula,
     IdentityTerm,
     LinearSplineTerm,
+    OrderedTerm,
     PolynomialTerm,
     RestrictedCubicSplineTerm,
+    RestrictedInteractionTerm,
     Variable,
 )
 from reference.contracts import (
@@ -135,6 +138,52 @@ class FormulaTests(unittest.TestCase):
             ):
                 Formula.from_dict(candidate)
 
+    def test_parses_explicit_factors_and_restricted_interactions(self) -> None:
+        formula = Formula.parse(
+            'y ~ catg(group, ["control", "treated", "other"]) + '
+            "scored(stage, [1, 2, 4, 8]) + pol(x, 3) + "
+            "rcs(z, [0, 1, 3, 6]) + ia(pol(x, 3), rcs(z, [0, 1, 3, 6]))"
+        )
+
+        self.assertIsInstance(formula.terms[0], CategoricalTerm)
+        self.assertIsInstance(formula.terms[1], OrderedTerm)
+        self.assertIsInstance(formula.terms[-1], RestrictedInteractionTerm)
+        self.assertEqual(formula.terms[-1].n_columns, 5)
+        self.assertEqual(Formula.parse(formula.expression), formula)
+        self.assertEqual(Formula.from_json(formula.to_json()), formula)
+        validate_document(formula.to_dict(), FORMULA_SCHEMA)
+
+        escaped = Formula.parse('~ catg(label, ["plain", "quote\\"level"])')
+        self.assertEqual(Formula.parse(escaped.expression), escaped)
+
+    def test_rejects_ambiguous_factor_and_interaction_contracts(self) -> None:
+        rejected = (
+            'y ~ catg(g, ["a", 2])',
+            'y ~ catg(g, ["a", "a"])',
+            "y ~ scored(s, [1, 2])",
+            "y ~ scored(s, [1, 3, 2])",
+            "y ~ x + ia(x, z)",
+            "y ~ x + ia(x, x)",
+            "y ~ x + z + w + ia(x, z) + ia(z, x)",
+            "y ~ x + z + w + ia(x, ia(z, w))",
+        )
+        for expression in rejected:
+            with (
+                self.subTest(expression=expression),
+                self.assertRaises(InputValidationError),
+            ):
+                Formula.parse(expression)
+        too_many_levels = ", ".join(str(index) for index in range(65))
+        with self.assertRaises(InputValidationError):
+            Formula.parse(f"y ~ catg(group, [{too_many_levels}])")
+        many_levels = ", ".join(str(index) for index in range(20))
+        expansive = (
+            f"~ catg(a, [{many_levels}]) + catg(b, [{many_levels}]) + "
+            f"ia(catg(a, [{many_levels}]), catg(b, [{many_levels}]))"
+        )
+        with self.assertRaises(InputValidationError):
+            Formula.parse(expansive)
+
 
 class DesignSpecTests(unittest.TestCase):
     def test_core_transformations_and_metadata(self) -> None:
@@ -228,6 +277,78 @@ class DesignSpecTests(unittest.TestCase):
         with self.assertRaises(InputValidationError):
             two_sided.response_values({"x": (1.0, 2.0)})
 
+    def test_factor_coding_and_unseen_level_policy(self) -> None:
+        specification = DesignSpec.from_formula(
+            'y ~ catg(group, ["control", "treated", "other"]) + '
+            "scored(stage, [1, 2, 4, 8])"
+        )
+        result = specification.transform(
+            {
+                "group": ("control", "treated", "other", "treated"),
+                "stage": (1, 2, 4, 8),
+            }
+        )
+
+        np.testing.assert_array_equal(
+            result.to_numpy(),
+            np.asarray(
+                (
+                    (0, 0, 1, 0, 0),
+                    (1, 0, 2, 0, 0),
+                    (0, 1, 4, 1, 0),
+                    (1, 0, 8, 0, 1),
+                ),
+                dtype=float,
+            ),
+        )
+        self.assertEqual(result.nonlinear_mask, (False, False, False, True, True))
+        self.assertEqual(result.term_slices, ((0, 2), (2, 5)))
+        self.assertEqual(DesignSpec.from_json(specification.to_json()), specification)
+        numeric = DesignSpec.from_formula("~ catg(code, [10, 20, 30])")
+        np.testing.assert_array_equal(
+            numeric.transform({"code": (10, 30, 20)}).to_numpy(),
+            np.asarray(((0, 0), (0, 1), (1, 0)), dtype=float),
+        )
+        with self.assertRaises(InputValidationError):
+            specification.transform({"group": ("control", "unknown"), "stage": (1, 2)})
+        with self.assertRaises(InputValidationError):
+            specification.transform(
+                {"group": ("control", "treated"), "stage": (1, None)}
+            )
+
+    def test_restricted_interaction_omits_doubly_nonlinear_products(self) -> None:
+        specification = DesignSpec.from_formula(
+            "~ pol(x, 3) + rcs(z, [0, 1, 3, 6]) + ia(pol(x, 3), rcs(z, [0, 1, 3, 6]))"
+        )
+        data = {"x": (1.0, 2.0, 3.0), "z": (0.5, 2.0, 5.0)}
+        result = specification.transform(data)
+        polynomial = result.to_numpy()[:, :3]
+        spline = result.to_numpy()[:, 3:6]
+        interaction = result.to_numpy()[:, 6:]
+        expected = np.column_stack(  # pyright: ignore[reportUnknownMemberType]
+            (
+                polynomial[:, 0] * spline[:, 0],
+                polynomial[:, 0] * spline[:, 1],
+                polynomial[:, 0] * spline[:, 2],
+                polynomial[:, 1] * spline[:, 0],
+                polynomial[:, 2] * spline[:, 0],
+            )
+        )
+
+        np.testing.assert_allclose(interaction, expected)
+        self.assertEqual(result.shape, (3, 11))
+        self.assertEqual(result.term_slices, ((0, 3), (3, 6), (6, 11)))
+        self.assertEqual(result.nonlinear_mask[6:], (False, True, True, True, True))
+        self.assertEqual(specification.interactions_containing("x"), (2,))
+        self.assertEqual(specification.interactions_containing("missing"), ())
+        interaction_columns = specification.columns[6:]
+        self.assertTrue(
+            all(column.variables == ("x", "z") for column in interaction_columns)
+        )
+        self.assertTrue(
+            all(len(column.component_columns) == 2 for column in interaction_columns)
+        )
+
     def test_matches_all_rms_core_design_fixtures(self) -> None:
         case_paths = [
             path
@@ -235,7 +356,7 @@ class DesignSpecTests(unittest.TestCase):
             if require_object(load_json(path), name=str(path)).get("operation")
             == "design"
         ]
-        self.assertEqual(len(case_paths), 4)
+        self.assertEqual(len(case_paths), 8)
         for case_path in case_paths:
             raw_case = require_object(load_json(case_path), name=str(case_path))
             with self.subTest(case_id=raw_case["case_id"]):

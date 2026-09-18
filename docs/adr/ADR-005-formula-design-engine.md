@@ -26,13 +26,16 @@ generated-column identities—must be stored with the fitted design. Post-fit
 operations may not depend on mutable process-wide configuration.
 
 `DataDistribution` was the first design-domain object under this decision.
-`Formula` and `DesignSpec` now implement the additive numeric subset with fixed
-resource limits and reconstructible generated-column metadata.
+`Formula` and `DesignSpec` now implement explicit numeric and factor terms plus
+hierarchical two-way restricted interactions with fixed resource limits and
+reconstructible generated-column metadata.
 
 ## Consequences and verification
 
 The initial AST vocabulary and resource limits are accepted in the
 [formula-design record](https://github.com/joshuamyers22/holocron/blob/main/governance/PHASE_2_FORMULA_DESIGN.md).
 Unsupported expressions fail with a typed error. Categorical nodes and
-interactions must extend this owned representation without weakening its parser,
-serialization, or reconstruction guarantees.
+restricted interactions extend the same owned representation with explicit
+level, reference, unseen-value, hierarchy, and nonlinear-product rules, as
+accepted in the
+[categorical/interactions record](https://github.com/joshuamyers22/holocron/blob/main/governance/PHASE_2_CATEGORICAL_INTERACTIONS.md).

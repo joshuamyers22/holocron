@@ -39,10 +39,12 @@ degree 2 through 10, and at most 32 explicit knots per spline term.
 
 ## Deliberate boundaries
 
-The grammar is additive and numeric. Categorical/ordered encoding, interactions,
-offsets, strata, matrices, custom transformations, automatic knot selection,
-model-level missing-data handling, and dataframe adapters remain later Phase 2
-work. Polynomial terms are raw powers, matching `rms::pol`; orthogonal
+The accepted v1 grammar was additive and numeric. Categorical/ordered encoding
+and restricted interactions are now accepted separately in the
+[third-deliverable record](PHASE_2_CATEGORICAL_INTERACTIONS.md). Offsets,
+strata, matrices, custom transformations, automatic knot selection, model-level
+missing-data handling, and dataframe adapters remain later Phase 2 work.
+Polynomial terms are raw powers, matching `rms::pol`; orthogonal
 polynomials are not substituted. An intercept is formula metadata and is not a
 column in `DesignMatrix`. The versioned JSON forms support deterministic
 reconstruction now, but their cross-version stability policy remains part of the

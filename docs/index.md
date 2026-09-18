@@ -12,11 +12,11 @@ claims.
 The current experimental surface supports only:
 
 - immutable predictor-distribution metadata;
-- allowlisted additive numeric formulas and identity, polynomial, linear-spline,
-  and explicit-knot restricted-cubic-spline designs; and
+- allowlisted formulas with numeric, categorical, scored-ordered, spline, and
+  restricted two-way interaction designs; and
 - classical ordinary least squares for a full-rank, caller-supplied design.
 
-These APIs are checked against 20 cases from the pinned R `rms` 8.2-0 oracle.
+These APIs are checked against 24 cases from the pinned R `rms` 8.2-0 oracle.
 The remaining frozen oracle cases are future baselines, not compatibility claims.
 See the generated [compatibility inventory](compatibility.md) for the exact
 surface and evidence links.

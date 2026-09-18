@@ -1,0 +1,35 @@
+{
+  "schema_version": "holocron-oracle-case/v1",
+  "case_id": "design-interaction-categorical",
+  "description": "Restricted interaction between a linear predictor and categorical indicators.",
+  "operation": "design",
+  "expected_output": "design-interaction-categorical.json",
+  "comparison_profile": "formula-design-v1",
+  "qualification_stage": "python-parity",
+  "formula": "~ x + catg(group, [\"base\", \"A\", \"B\"]) + ia(x, catg(group, [\"base\", \"A\", \"B\"]))",
+  "response": null,
+  "include_intercept": true,
+  "variables": [
+    {"name": "x", "values": [-2, -1, 0, 1, 2, 3]},
+    {"name": "group", "values": ["base", "A", "B", "A", "base", "B"]}
+  ],
+  "terms": [
+    {"kind": "identity", "variable": "x"},
+    {
+      "kind": "categorical",
+      "variable": "group",
+      "levels": ["base", "A", "B"],
+      "unknown_level": "error"
+    },
+    {
+      "kind": "restricted_interaction",
+      "left": {"kind": "identity", "variable": "x"},
+      "right": {
+        "kind": "categorical",
+        "variable": "group",
+        "levels": ["base", "A", "B"],
+        "unknown_level": "error"
+      }
+    }
+  ]
+}

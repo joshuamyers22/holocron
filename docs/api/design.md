@@ -112,7 +112,7 @@ Return an independent float64 NumPy array.
 class holocron.design.formula.DesignSpec(formula: holocron.formula.ast.Formula, columns: tuple[holocron.design.formula.GeneratedColumn, ...]) -> None
 ```
 
-A reconstructible numeric design specification derived from a formula.
+A reconstructible design specification derived from a formula.
 
 ### Attributes
 
@@ -141,6 +141,10 @@ Compile a formula object or restricted formula string.
 
 Reconstruct a design specification from JSON.
 
+### `interactions_containing(self, variable: str) -> tuple[int, ...]`
+
+Return zero-based restricted-interaction term indices using ``variable``.
+
 ### `nonlinear_mask`
 
 Identify nonlinear columns in stable design order.
@@ -163,7 +167,7 @@ Serialize reconstruction metadata as canonical JSON.
 
 ### `transform(self, data: collections.abc.Mapping[str, collections.abc.Iterable[object]]) -> holocron.design.formula.DesignMatrix`
 
-Snapshot and transform numeric predictors under the compiled design.
+Snapshot and transform predictors under the compiled design.
 
 ## `DistributionRange`
 
@@ -183,7 +187,7 @@ An inclusive lower and upper metadata range.
 ## `GeneratedColumn`
 
 ```python
-class holocron.design.formula.GeneratedColumn(name: str, variable: str, transformation: str, term_index: int, within_term_index: int, nonlinear: bool) -> None
+class holocron.design.formula.GeneratedColumn(name: str, variables: tuple[str, ...], transformation: str, term_index: int, within_term_index: int, nonlinear: bool, component_columns: tuple[str, ...] = ()) -> None
 ```
 
 Stable identity and ownership metadata for one generated column.
@@ -193,11 +197,12 @@ Stable identity and ownership metadata for one generated column.
 | Name | Type |
 | --- | --- |
 | `name` | `str` |
-| `variable` | `str` |
+| `variables` | `tuple[str, ...]` |
 | `transformation` | `str` |
 | `term_index` | `int` |
 | `within_term_index` | `int` |
 | `nonlinear` | `bool` |
+| `component_columns` | `tuple[str, ...]` |
 
 ### `to_dict(self) -> dict[str, None | bool | int | float | str | list['JsonValue'] | dict[str, 'JsonValue']]`
 

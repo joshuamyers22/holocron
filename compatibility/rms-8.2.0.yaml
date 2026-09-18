@@ -20,14 +20,14 @@
       "id": "export:%ia%",
       "r_symbol": "%ia%",
       "kind": "export",
-      "python_entry_point": null,
-      "tier": "D",
-      "milestone": "Phase 8",
-      "status": "deferred",
+      "python_entry_point": "holocron.formula.RestrictedInteractionTerm",
+      "tier": "A",
+      "milestone": "Phase 2-3",
+      "status": "experimental",
       "owner": "joshuamyers22",
-      "oracle_cases": [],
-      "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "oracle_cases": ["design-interaction-nonlinear"],
+      "tolerance_profile": "formula-design-v1",
+      "known_differences": "Explicit two-way interactions only; both component main effects are required, doubly nonlinear products are omitted, and nested, self, unrestricted, matrix, and stratification interactions are rejected."
     },
     {
       "id": "export:Design",
@@ -42,7 +42,7 @@
         "design-additive-rcs"
       ],
       "tolerance_profile": "formula-design-v1",
-      "known_differences": "Owned additive numeric AST only; categorical terms, interactions, automatic parameters, offsets, strata, and R formula evaluation remain deferred."
+      "known_differences": "Owned allowlisted AST with explicit numeric, categorical, scored-ordered, and restricted-interaction terms; automatic parameters, offsets, strata, matrices, and R formula evaluation remain deferred."
     },
     {
       "id": "export:DesignAssign",
@@ -427,14 +427,14 @@
       "id": "export:catg",
       "r_symbol": "catg",
       "kind": "export",
-      "python_entry_point": null,
+      "python_entry_point": "holocron.formula.CategoricalTerm",
       "tier": "A",
       "milestone": "Phase 2-3",
-      "status": "deferred",
+      "status": "experimental",
       "owner": "joshuamyers22",
-      "oracle_cases": [],
-      "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "oracle_cases": ["design-categorical"],
+      "tolerance_profile": "formula-design-v1",
+      "known_differences": "Levels and their reference order must be explicit; missing and unseen levels fail closed instead of using ambient factor metadata."
     },
     {
       "id": "export:cluster",
@@ -760,14 +760,14 @@
       "id": "export:interactions.containing",
       "r_symbol": "interactions.containing",
       "kind": "export",
-      "python_entry_point": null,
+      "python_entry_point": "holocron.design.DesignSpec.interactions_containing",
       "tier": "A",
       "milestone": "Phase 2-3",
-      "status": "deferred",
+      "status": "experimental",
       "owner": "joshuamyers22",
-      "oracle_cases": [],
-      "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "oracle_cases": ["design-interaction-categorical"],
+      "tolerance_profile": "formula-design-v1",
+      "known_differences": "Returns zero-based term indices from an immutable DesignSpec; it does not inspect an R Design attribute."
     },
     {
       "id": "export:legend.nomabbrev",
@@ -850,7 +850,7 @@
       "owner": "joshuamyers22",
       "oracle_cases": ["design-linear-spline"],
       "tolerance_profile": "formula-design-v1",
-      "known_differences": "Explicit finite knots only; automatic parameters and categorical interactions remain deferred."
+      "known_differences": "Explicit finite knots only; automatic parameters remain deferred."
     },
     {
       "id": "export:matinv",
@@ -1400,14 +1400,14 @@
       "id": "export:scored",
       "r_symbol": "scored",
       "kind": "export",
-      "python_entry_point": null,
+      "python_entry_point": "holocron.formula.OrderedTerm",
       "tier": "A",
       "milestone": "Phase 2-3",
-      "status": "deferred",
+      "status": "experimental",
       "owner": "joshuamyers22",
-      "oracle_cases": [],
-      "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "oracle_cases": ["design-ordered"],
+      "tolerance_profile": "formula-design-v1",
+      "known_differences": "Three or more strictly increasing numeric levels must be explicit; missing and unseen levels fail closed."
     },
     {
       "id": "export:sensuc",

@@ -7,13 +7,37 @@ Safe formula specifications for Holocron.
 Import public names from `holocron.formula`. The signatures and docstrings below
 are generated from the installed source during `make docs-check`.
 
+## `CategoricalTerm`
+
+```python
+class holocron.formula.ast.CategoricalTerm(variable: holocron.formula.ast.Variable, levels: tuple[str | float, ...], unknown_level: str = 'error') -> None
+```
+
+An unordered factor with an explicit first/reference level.
+
+### Attributes
+
+| Name | Type |
+| --- | --- |
+| `variable` | `Variable` |
+| `levels` | `tuple[Level, ...]` |
+| `unknown_level` | `str` |
+
+### `expression`
+
+No public documentation is available.
+
+### `n_columns`
+
+No public documentation is available.
+
 ## `Formula`
 
 ```python
-class holocron.formula.ast.Formula(response: holocron.formula.ast.Variable | None, terms: tuple[holocron.formula.ast.IdentityTerm | holocron.formula.ast.PolynomialTerm | holocron.formula.ast.LinearSplineTerm | holocron.formula.ast.RestrictedCubicSplineTerm, ...], include_intercept: bool = True) -> None
+class holocron.formula.ast.Formula(response: holocron.formula.ast.Variable | None, terms: tuple[holocron.formula.ast.IdentityTerm | holocron.formula.ast.PolynomialTerm | holocron.formula.ast.LinearSplineTerm | holocron.formula.ast.RestrictedCubicSplineTerm | holocron.formula.ast.CategoricalTerm | holocron.formula.ast.OrderedTerm | holocron.formula.ast.RestrictedInteractionTerm, ...], include_intercept: bool = True) -> None
 ```
 
-An immutable, additive numeric formula AST.
+An immutable, allowlisted formula AST.
 
 Construct it directly or use :meth:`parse`. The parser implements only the
 documented grammar and never evaluates Python or R source.
@@ -103,6 +127,30 @@ No public documentation is available.
 
 No public documentation is available.
 
+## `OrderedTerm`
+
+```python
+class holocron.formula.ast.OrderedTerm(variable: holocron.formula.ast.Variable, levels: tuple[float, ...], unknown_level: str = 'error') -> None
+```
+
+An ``rms::scored`` ordered factor with explicit numeric levels.
+
+### Attributes
+
+| Name | Type |
+| --- | --- |
+| `variable` | `Variable` |
+| `levels` | `tuple[float, ...]` |
+| `unknown_level` | `str` |
+
+### `expression`
+
+No public documentation is available.
+
+### `n_columns`
+
+No public documentation is available.
+
 ## `PolynomialTerm`
 
 ```python
@@ -140,6 +188,29 @@ A restricted cubic spline term with explicit knots.
 | --- | --- |
 | `variable` | `Variable` |
 | `knots` | `tuple[float, ...]` |
+
+### `expression`
+
+No public documentation is available.
+
+### `n_columns`
+
+No public documentation is available.
+
+## `RestrictedInteractionTerm`
+
+```python
+class holocron.formula.ast.RestrictedInteractionTerm(left: holocron.formula.ast.IdentityTerm | holocron.formula.ast.PolynomialTerm | holocron.formula.ast.LinearSplineTerm | holocron.formula.ast.RestrictedCubicSplineTerm | holocron.formula.ast.CategoricalTerm | holocron.formula.ast.OrderedTerm, right: holocron.formula.ast.IdentityTerm | holocron.formula.ast.PolynomialTerm | holocron.formula.ast.LinearSplineTerm | holocron.formula.ast.RestrictedCubicSplineTerm | holocron.formula.ast.CategoricalTerm | holocron.formula.ast.OrderedTerm) -> None
+```
+
+An ``rms`` restricted interaction that excludes doubly nonlinear products.
+
+### Attributes
+
+| Name | Type |
+| --- | --- |
+| `left` | `MainEffectTerm` |
+| `right` | `MainEffectTerm` |
 
 ### `expression`
 
