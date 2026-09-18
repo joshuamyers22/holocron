@@ -23,6 +23,7 @@ from reference.contracts import (
     validate_repository_contracts,
     write_evidence,
 )
+from tools.run_tolerance_pilot import build_report
 
 
 class ParityContractTests(unittest.TestCase):
@@ -60,6 +61,18 @@ class ParityContractTests(unittest.TestCase):
         self.assertEqual(
             stages,
             {"environment": 1, "python-parity": 12, "oracle-baseline": 13},
+        )
+
+    def test_tolerance_pilot_covers_all_python_parity_cases(self) -> None:
+        report = build_report()
+        summary = cast(dict[str, JsonValue], report["summary"])
+        policy = cast(dict[str, JsonValue], report["policy"])
+
+        self.assertEqual(summary["outcome"], "passed")
+        self.assertEqual(summary["case_count"], 12)
+        self.assertEqual(
+            policy["accepted_profiles"],
+            ["deterministic-transform-v1", "well-conditioned-ols-v1"],
         )
 
     def test_policy_applies_field_specific_numeric_tolerances(self) -> None:

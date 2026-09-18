@@ -17,3 +17,17 @@ jobs:
       - run: make setup
       - run: make check
       - run: make audit build
+  tolerance-pilot:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-24.04, macos-15]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: astral-sh/setup-uv@20cfd1bf945f4377ade1205e4dbc17946fc9a30d # v10.0.1
+        with:
+          version: "0.12.7"
+      - run: make setup
+      - run: uv run --frozen python -m tools.run_tolerance_pilot --output ".work/tolerance-${{ runner.os }}-${{ runner.arch }}.json"

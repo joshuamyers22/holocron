@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import unittest
-from typing import cast
 
 import numpy as np
 
@@ -10,13 +9,13 @@ from holocron.exceptions import InputValidationError
 from reference.contracts import (
     CASES,
     EXPECTED,
-    JsonValue,
     compare_json,
     load_json,
     output_payload,
     require_object,
     validate_case_pair,
 )
+from reference.python_parity import build_python_output
 
 
 class RestrictedCubicSplineSpecTests(unittest.TestCase):
@@ -67,23 +66,7 @@ class RestrictedCubicSplineSpecTests(unittest.TestCase):
                 case, expected, policy = validate_case_pair(
                     case_path, EXPECTED / str(raw_case["expected_output"])
                 )
-                knots = tuple(cast(list[float], case["knots"]))
-                spec = RestrictedCubicSplineSpec(knots)
-                x = cast(list[float], case["x"])
-                basis = spec.transform(x)
-                actual: dict[str, JsonValue] = {
-                    "ok": True,
-                    "protocol_version": "1",
-                    "operation": "rcs",
-                    "x": cast(JsonValue, x),
-                    "knots": cast(JsonValue, list(spec.knots)),
-                    "nonlinear_mask": cast(JsonValue, list(spec.nonlinear_mask)),
-                    "nonlinear_columns": cast(JsonValue, list(spec.nonlinear_columns)),
-                    "column_names": cast(
-                        JsonValue, list(cast(list[str], expected["column_names"]))
-                    ),
-                    "basis": cast(JsonValue, basis.tolist()),
-                }
+                actual = build_python_output(case)
                 compare_json(actual, output_payload(expected), policy).require_match()
 
 

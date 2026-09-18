@@ -1,4 +1,4 @@
-.PHONY: setup lock-check format lint typecheck test frozen-environments frozen-environments-live reference-metadata check audit build oracle-build oracle-health oracle-check reference-source-check
+.PHONY: setup lock-check format lint typecheck test frozen-environments frozen-environments-live reference-metadata tolerance-pilot check audit build oracle-build oracle-health oracle-check reference-source-check
 setup:
 	uv lock --check
 	uv sync --frozen --dev --no-install-project
@@ -20,6 +20,8 @@ frozen-environments-live:
 	uv run --frozen python tools/check_frozen_environments.py --live-r-oracle
 reference-metadata:
 	uv run --frozen python -m tools.check_reference_metadata
+tolerance-pilot:
+	uv run --frozen python -m tools.run_tolerance_pilot
 check: lock-check lint typecheck test frozen-environments reference-metadata
 audit:
 	uv audit --preview-features audit-command --locked --no-dev

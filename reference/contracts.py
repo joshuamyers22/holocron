@@ -27,6 +27,7 @@ CASE_SCHEMA = ROOT / "schemas/oracle-case.schema.json"
 OUTPUT_SCHEMA = ROOT / "schemas/oracle-output.schema.json"
 EVIDENCE_SCHEMA = ROOT / "schemas/parity-evidence.schema.json"
 POLICY_SCHEMA = ROOT / "schemas/tolerance-policy.schema.json"
+TOLERANCE_PILOT_SCHEMA = ROOT / "schemas/tolerance-pilot.schema.json"
 POLICY_PATH = ROOT / "reference/tolerances.json"
 CASES = ROOT / "reference/cases"
 EXPECTED = ROOT / "reference/expected"
@@ -535,7 +536,13 @@ def discover_case_pairs() -> list[tuple[Path, Path]]:
 
 def validate_repository_contracts() -> int:
     """Validate all schemas, policies, fixtures, and cross-document references."""
-    for schema_path in (CASE_SCHEMA, OUTPUT_SCHEMA, EVIDENCE_SCHEMA, POLICY_SCHEMA):
+    for schema_path in (
+        CASE_SCHEMA,
+        OUTPUT_SCHEMA,
+        EVIDENCE_SCHEMA,
+        POLICY_SCHEMA,
+        TOLERANCE_PILOT_SCHEMA,
+    ):
         schema = require_object(load_json(schema_path), name=str(schema_path))
         Draft202012Validator.check_schema(schema)
     policies = load_policies()
