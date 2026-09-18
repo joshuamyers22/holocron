@@ -42,6 +42,8 @@ KINDS = (
 MAIN_TRIALS_PER_KIND = 64
 RCS_TAIL_TRIALS = 64
 SEED = 20_260_918
+TRANSFORM_ABSOLUTE_TOLERANCE = 1e-12
+TRANSFORM_RELATIVE_TOLERANCE = 1e-12
 
 
 def _numbers(values: Iterable[object]) -> tuple[float, ...]:
@@ -258,8 +260,8 @@ class TransformationDifferentialTests(unittest.TestCase):
                     np.testing.assert_allclose(
                         actual.to_numpy(),
                         np.asarray(expected, dtype=float),
-                        rtol=2e-13,
-                        atol=2e-13,
+                        rtol=TRANSFORM_RELATIVE_TOLERANCE,
+                        atol=TRANSFORM_ABSOLUTE_TOLERANCE,
                     )
                     self.assertEqual(actual.shape, (len(values), expected_width))
                     self.assertEqual(term.n_columns, expected_width)
@@ -303,7 +305,10 @@ class TransformationDifferentialTests(unittest.TestCase):
                     )
 
                     np.testing.assert_allclose(
-                        actual.to_numpy(), np.asarray(expected), rtol=2e-13, atol=2e-13
+                        actual.to_numpy(),
+                        np.asarray(expected),
+                        rtol=TRANSFORM_RELATIVE_TOLERANCE,
+                        atol=TRANSFORM_ABSOLUTE_TOLERANCE,
                     )
                     left_width = len(left_expected[0])
                     right_width = len(right_expected[0])
@@ -408,7 +413,12 @@ class TransformationPropertyTests(unittest.TestCase):
                 expected = np.asarray(
                     tuple(_reference_rcs_row(value, knots) for value in values)
                 )
-                np.testing.assert_allclose(actual, expected, rtol=2e-13, atol=2e-13)
+                np.testing.assert_allclose(
+                    actual,
+                    expected,
+                    rtol=TRANSFORM_RELATIVE_TOLERANCE,
+                    atol=TRANSFORM_ABSOLUTE_TOLERANCE,
+                )
                 np.testing.assert_allclose(actual[:3, 1:], 0.0, atol=1e-14)
                 right = actual[-3:, :]
                 np.testing.assert_allclose(

@@ -36,6 +36,9 @@ wrong-type, and undeclared values.
   RCS and complete designs. They pass 363 exact metadata comparisons and 382
   numeric comparisons under the accepted field-aware policies. Maximum absolute
   difference is `1.42e-13`; maximum relative difference is `7.76e-16`.
+- Generated numeric differential assertions use the accepted
+  `deterministic-transform-v1` absolute and relative tolerance of `1e-12`;
+  structural metadata, masks, slices, and identities remain exact.
 - Twenty-six generated invalid-value combinations verify fail-closed behavior,
   in addition to the parser, schema, resource-boundary, and interaction failures
   in the existing unit suite.
