@@ -1,4 +1,4 @@
-.PHONY: setup lock-check format lint typecheck test docs docs-generate docs-check frozen-environments frozen-environments-live reference-metadata tolerance-pilot check audit build oracle-build oracle-health oracle-check reference-source-check
+.PHONY: setup lock-check format lint typecheck test docs docs-generate docs-check frozen-environments frozen-environments-live reference-metadata tolerance-pilot check audit build clean-build oracle-build oracle-health oracle-check reference-source-check
 setup:
 	uv lock --check
 	uv sync --frozen --dev --no-install-project
@@ -35,8 +35,9 @@ audit:
 	uv audit --preview-features audit-command --locked --no-dev
 	uv run --frozen python tools/check_licenses.py
 build:
-	uv build --no-build-isolation
-	uv run --frozen python tools/check_build_artifacts.py
+	uv run --frozen python tools/build_and_smoke_artifacts.py --output-directory dist
+clean-build:
+	uv run --frozen python tools/build_and_smoke_artifacts.py --output-directory dist --require-clean
 
 oracle-build:
 	@test -n "$(RMS_SOURCE)" || (echo "usage: make oracle-build RMS_SOURCE=/absolute/path/to/rms-master"; exit 2)

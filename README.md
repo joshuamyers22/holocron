@@ -88,9 +88,11 @@ make audit
 
 `make check` runs formatting, linting, strict type checking, unit and parity
 fixture tests, frozen-environment checks, and reference-metadata validation.
-`make build` uses the locked build backend without isolation, then creates and
-inspects both wheel and source distribution, including checks that reference
-source and retired template application modules are absent.
+`make build` uses the locked build backend offline and without isolation, then
+inspects and independently installs both wheel and source distribution into
+fresh environments. Each installation runs dependency validation and the
+supported RCS-to-OLS workflow from outside the checkout. `make clean-build`
+additionally rejects source-tree changes and is the required CI/release gate.
 
 The project scope and delivery gates are defined in
 [project plan](https://github.com/joshuamyers22/holocron/blob/main/PROJECT_PLAN.md).

@@ -122,16 +122,30 @@ def check_python_environment() -> None:
         "uv sync --frozen --dev --no-install-project",
         "uv sync --frozen --dev --no-build-isolation",
         "uv run --frozen",
-        "uv build --no-build-isolation",
+        "tools/build_and_smoke_artifacts.py",
     )
     if any(command not in makefile for command in required_make_commands):
         raise ValueError("Makefile does not enforce the frozen build sequence")
+    artifact_builder = (ROOT / "tools/build_and_smoke_artifacts.py").read_text()
+    required_artifact_controls = (
+        '"--offline"',
+        '"--no-python-downloads"',
+        '"--no-build-isolation"',
+        '"--frozen"',
+        '"--require-clean"',
+    )
+    if any(control not in artifact_builder for control in required_artifact_controls):
+        raise ValueError("artifact builder does not enforce the frozen build contract")
     for relative_workflow in (
         ".github/workflows/ci.yml",
         ".github/workflows/release.yml",
     ):
         workflow = (ROOT / relative_workflow).read_text()
-        if 'version: "0.12.7"' not in workflow or "run: make setup" not in workflow:
+        if (
+            'version: "0.12.7"' not in workflow
+            or "run: make setup" not in workflow
+            or "clean-build" not in workflow
+        ):
             raise ValueError(f"{relative_workflow} does not use the frozen setup")
 
     lock_path = ROOT / str(lock["path"])

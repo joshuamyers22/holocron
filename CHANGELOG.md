@@ -42,3 +42,7 @@ Notable changes are recorded here using semantic versioning.
   source-generated API reference, and a generated 281-capability compatibility
   inventory; the ordinary quality gate rejects stale pages, invalid links, and
   documentation warnings.
+- Added a clean artifact gate that builds and inspects wheel and source
+  distributions offline, independently installs both into fresh environments,
+  validates dependencies and checkout isolation, and smoke-tests the supported
+  RCS-to-OLS workflow in CI and release jobs.

@@ -16,7 +16,7 @@ jobs:
           version: "0.12.7"
       - run: make setup
       - run: make check
-      - run: make audit build
+      - run: make audit clean-build
   tolerance-pilot:
     strategy:
       fail-fast: false

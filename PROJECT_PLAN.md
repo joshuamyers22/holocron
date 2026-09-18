@@ -607,9 +607,9 @@ Independent-development and license/provenance policy is approved; the reference
 
 ### Phase 1 — Repository and parity laboratory (6–10 weeks)
 
-**Status:** In progress. The production-repository adaptation and initial
-documentation site are complete; artifact and end-to-end evidence deliverables
-remain open.
+**Status:** In progress. The repository, parity laboratory, documentation, and
+clean artifact gates are complete; the end-to-end evidence deliverable remains
+open.
 
 **Deliverables**
 
@@ -625,7 +625,8 @@ remain open.
   ([ADR-009](docs/adr/ADR-009-supported-numerical-envelope.md));
 - [x] initial docs site and generated compatibility page
   ([acceptance record](governance/PHASE_1_DOCUMENTATION.md));
-- [ ] clean artifact build and smoke tests.
+- [x] clean artifact build and smoke tests
+  ([acceptance record](governance/PHASE_1_ARTIFACT_INSTALLATION.md)).
 
 **Exit gate**
 

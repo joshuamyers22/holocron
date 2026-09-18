@@ -32,6 +32,18 @@ Documentation examples must remain deterministic and offline. Mark a Python
 fence with `# holocron: execute` when it should be executed by the quality gate.
 Generated pages carry a header and should never be edited directly.
 
+## Artifact workflow
+
+`make build` clears `dist/`, builds the wheel and source distribution offline,
+inspects their contents, and installs each artifact into an independent temporary
+environment. The smoke program runs in isolated Python mode from outside the
+checkout, verifies package identity and dependency consistency, and executes the
+supported spline-design, OLS-fit, and prediction path.
+
+Use `make clean-build` for release-style evidence. It rejects tracked or
+untracked source changes before building; CI and the gated release workflow use
+this target. Temporary installation environments are removed after the checks.
+
 ## Compatibility changes
 
 Update the authoritative compatibility manifest in the same change as a public

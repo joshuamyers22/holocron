@@ -2,10 +2,11 @@
 
 from __future__ import annotations
 
+import argparse
 import tarfile
 import tomllib
 import zipfile
-from pathlib import Path
+from pathlib import Path, PurePosixPath
 from typing import cast
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -47,24 +48,66 @@ def project_identity() -> tuple[str, str]:
 
 def reject_forbidden(names: list[str], *, artifact: str) -> None:
     for name in names:
-        parts = set(Path(name).parts)
+        path = PurePosixPath(name)
+        if path.is_absolute() or ".." in path.parts:
+            raise ValueError(f"{artifact} contains an unsafe path: {name}")
+        parts = set(path.parts)
         if parts & FORBIDDEN_PARTS or "rms-master" in name or name.endswith(".R"):
             raise ValueError(f"{artifact} contains forbidden reference content: {name}")
-        if Path(name).name in REMOVED_TEMPLATE_MODULES:
+        if "__pycache__" in parts or name.endswith((".pyc", ".pyo")):
+            raise ValueError(f"{artifact} contains generated Python content: {name}")
+        if path.name in REMOVED_TEMPLATE_MODULES:
             raise ValueError(f"{artifact} contains removed template module: {name}")
 
 
-def main() -> None:
+def validate_identity(
+    metadata: str, *, distribution: str, version: str, artifact: str
+) -> None:
+    for field in (f"Name: {distribution}\n", f"Version: {version}\n"):
+        if field not in metadata:
+            raise ValueError(f"{artifact} metadata has the wrong project identity")
+
+
+def inspect_artifacts(directory: Path) -> tuple[Path, Path]:
+    """Inspect the expected sdist and wheel, then return their paths."""
     distribution, version = project_identity()
     normalized = distribution.replace("-", "_")
-    sdist = ROOT / f"dist/{normalized}-{version}.tar.gz"
-    wheel = ROOT / f"dist/{normalized}-{version}-py3-none-any.whl"
+    sdist = directory / f"{normalized}-{version}.tar.gz"
+    wheel = directory / f"{normalized}-{version}-py3-none-any.whl"
     if not sdist.is_file() or not wheel.is_file():
         raise FileNotFoundError("expected wheel and source distribution are missing")
 
+    sdist_root = f"{normalized}-{version}"
     with tarfile.open(sdist, mode="r:gz") as archive:
-        sdist_names = archive.getnames()
+        sdist_members = archive.getmembers()
+        sdist_names = [member.name for member in sdist_members]
+        if any(member.issym() or member.islnk() for member in sdist_members):
+            raise ValueError("source distribution contains links")
+        metadata_member = next(
+            member
+            for member in sdist_members
+            if member.name == f"{sdist_root}/PKG-INFO"
+        )
+        metadata_file = archive.extractfile(metadata_member)
+        if metadata_file is None:
+            raise ValueError("source distribution metadata is not a regular file")
+        sdist_metadata = metadata_file.read().decode()
     reject_forbidden(sdist_names, artifact=sdist.name)
+    expected_sdist_files = {
+        f"{sdist_root}/LICENSE",
+        f"{sdist_root}/README.md",
+        f"{sdist_root}/pyproject.toml",
+        f"{sdist_root}/src/holocron/__init__.py",
+        f"{sdist_root}/src/holocron/py.typed",
+    }
+    if not expected_sdist_files <= set(sdist_names):
+        raise ValueError("source distribution is missing required project files")
+    validate_identity(
+        sdist_metadata,
+        distribution=distribution,
+        version=version,
+        artifact=sdist.name,
+    )
 
     with zipfile.ZipFile(wheel) as archive:
         wheel_names = archive.namelist()
@@ -73,19 +116,42 @@ def main() -> None:
         )
         metadata = archive.read(metadata_name).decode()
     reject_forbidden(wheel_names, artifact=wheel.name)
+    expected_wheel_roots = {"holocron", f"{normalized}-{version}.dist-info"}
+    actual_wheel_roots = {PurePosixPath(name).parts[0] for name in wheel_names}
+    if actual_wheel_roots != expected_wheel_roots:
+        raise ValueError(
+            f"wheel has unexpected top-level content: {actual_wheel_roots}"
+        )
     if "holocron/__init__.py" not in wheel_names:
         raise ValueError("wheel does not contain the holocron import package")
     if "holocron/py.typed" not in wheel_names:
         raise ValueError("wheel does not contain the PEP 561 marker")
     if any(name.endswith(".dist-info/entry_points.txt") for name in wheel_names):
         raise ValueError("library wheel unexpectedly declares console entry points")
-    if f"Name: {distribution}\n" not in metadata:
-        raise ValueError("wheel metadata has the wrong distribution name")
+    validate_identity(
+        metadata,
+        distribution=distribution,
+        version=version,
+        artifact=wheel.name,
+    )
     for removed_dependency in ("polars", "statsmodels"):
         if f"requires-dist: {removed_dependency}" in metadata.lower():
             raise ValueError(
                 f"wheel retains removed runtime dependency: {removed_dependency}"
             )
+    return sdist, wheel
+
+
+def main() -> None:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument(
+        "--directory",
+        type=Path,
+        default=ROOT / "dist",
+        help="directory containing the wheel and source distribution",
+    )
+    args = parser.parse_args()
+    sdist, wheel = inspect_artifacts(args.directory.resolve())
     print(f"build artifacts verified: {sdist.name}, {wheel.name}")
 
 

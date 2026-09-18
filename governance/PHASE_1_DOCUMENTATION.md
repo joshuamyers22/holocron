@@ -38,5 +38,5 @@ their first line. Authored examples remain deterministic, synthetic, and offline
 
 ## Remaining Phase 1 work
 
-The clean artifact build, installation smoke tests, and minimal evidence-emitting
-end-to-end slice remain separate Phase 1 deliverables.
+The minimal evidence-emitting end-to-end slice remains a separate Phase 1
+deliverable.
