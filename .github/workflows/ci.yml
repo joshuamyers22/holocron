@@ -60,13 +60,14 @@ jobs:
       - name: Exercise Phase 3 estimators and operations on the platform matrix
         run: uv run --frozen python -m unittest tests.test_generalized_models tests.test_postfit_operations tests.test_regularization_covariance
       - name: Exercise Phase 3 simulation thresholds on the platform matrix
-        run: uv run --frozen python -m tools.run_phase_3_evidence --simulation-output ".work/phase-3-${{ runner.os }}-${{ runner.arch }}-simulation.json" --edge-output ".work/phase-3-${{ runner.os }}-${{ runner.arch }}-edges.json"
+        run: uv run --frozen python -m tools.run_phase_3_evidence --simulation-output ".work/phase-3-platform/simulation-report.json" --edge-output ".work/phase-3-platform/numerical-edge-report.json"
       - name: Retain platform Phase 3 evidence
         if: always()
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: phase-3-platform-evidence-${{ runner.os }}-${{ runner.arch }}-${{ github.sha }}
-          path: .work/phase-3-${{ runner.os }}-${{ runner.arch }}-*.json
+          path: .work/phase-3-platform/*.json
           if-no-files-found: error
           retention-days: 30
+          include-hidden-files: true
       - run: uv run --frozen python -m tools.run_tolerance_pilot --output ".work/tolerance-${{ runner.os }}-${{ runner.arch }}.json"
