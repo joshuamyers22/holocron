@@ -4,7 +4,7 @@
   "description": "Cox spline fit using Breslow tie handling.",
   "expected_output": "cph-breslow-rcs.json",
   "comparison_profile": "cox-model-v1",
-  "qualification_stage": "oracle-baseline",
+  "qualification_stage": "python-parity",
   "operation": "cph",
   "basis": "rcs",
   "method": "breslow",

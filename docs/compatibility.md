@@ -22,10 +22,10 @@ an implementation claim, and an experimental capability is not production-ready.
 | Status | Count | Meaning |
 | --- | ---: | --- |
 | implemented | 0 | Implemented and accepted under the capability contract. |
-| experimental | 33 | Implemented narrowly with parity evidence; not production-ready. |
+| experimental | 36 | Implemented narrowly with parity evidence; not production-ready. |
 | mapped | 5 | Mapped to a Python design, without an accepted implementation claim. |
 | unsupported | 0 | Intentionally excluded from the compatibility target. |
-| deferred | 243 | Catalogued for a later phase; no current implementation claim. |
+| deferred | 240 | Catalogued for a later phase; no current implementation claim. |
 
 ## Evidence-backed experimental surface
 
@@ -43,13 +43,16 @@ oracle-linked parity evidence. Their documented support envelopes remain narrow.
 | `bootcov` | export | `holocron.models.bootstrap_covariance` | experimental | Phase 6 | 1 | `covariance-resampling-v1` | Supports iid row bootstrap covariance for current OLS, binomial Glm, and binary lrm fits, with a fixed NumPy seed or an auditable declared schedule; cluster bootstrap, failed-replicate skipping, coefficient persistence, intervals, and out-of-sample likelihood remain deferred. |
 | `catg` | export | `holocron.formula.CategoricalTerm` | experimental | Phase 2-3 | 1 | `formula-design-v1` | Levels and their reference order must be explicit; missing and unseen levels fail closed instead of using ambient factor metadata. |
 | `contrast` | export | `holocron.models.contrast` | experimental | Phase 2-3 | 3 | `postfit-inference-v1` | Supports one declared linear coefficient contrast with model-based uncertainty; rms design-setting expansion, simultaneous intervals, joint contrasts, profile intervals, and Bayesian paths remain deferred. |
+| `cph` | export | `holocron.models.fit_cph` | experimental | Phase 4-5 | 2 | `cox-model-v1` | Right-censored, caller-supplied full-rank designs with Efron or Breslow ties, observed covariance, centered predictors, baseline cumulative hazard, and survival prediction are supported. Strata, entry times, weights, offsets, residuals, robust covariance, and formula-level fitting remain deferred. |
 | `datadist` | export | `holocron.design.DataDistribution` | experimental | Phase 2-3 | 4 | `data-distribution-v1` | Python uses immutable explicit metadata instead of R global options; categorical levels must be declared; dataframe/date-time adapters are deferred; ordered factors use the lower middle declared level when the level count is even; and default display probabilities are computed per variable when missingness differs. |
 | `interactions.containing` | export | `holocron.design.DesignSpec.interactions_containing` | experimental | Phase 2-3 | 1 | `formula-design-v1` | Returns zero-based term indices from an immutable DesignSpec; it does not inspect an R Design attribute. |
 | `lrm` | export | `holocron.models.fit_lrm` | experimental | Phase 2-3 | 4 | `binary-logistic-v1` | fit_lrm is binary; the companion fit_ordinal_lrm implements unpenalized full-rank multi-intercept proportional odds. Weights, offsets, ordinal penalties, formula-level fitting, partial proportional odds, and the broader R lrm method surface remain deferred. |
 | `lsp` | export | `holocron.formula.LinearSplineTerm` | experimental | Phase 2-3 | 1 | `formula-design-v1` | Explicit finite knots only; automatic parameters remain deferred. |
+| `npsurv` | export | `holocron.models.fit_npsurv` | experimental | Phase 4-5 | 2 | `nonparametric-survival-v1` | Unstratified right-censored Kaplan-Meier curves with risk/event/censor counts and log-scale Greenwood intervals are supported. Entry times, weights, strata, alternate estimators, and formula-level fitting remain deferred. |
 | `ols` | export | `holocron.models.fit_ols` | experimental | Phase 2-3 | 6 | `well-conditioned-ols-v1` | Initial narrow API; full rms contract remains deferred. |
 | `orm` | export | `holocron.models.fit_orm` | experimental | Phase 4-5 | 3 | `ordinal-model-v1` | Exact-response logistic, probit, loglog, cloglog, and cauchit cumulative links plus numeric censoring are implemented. Three exact-response fixtures pass this profile; censored and clustered evidence is linked from Ocens, cluster, and mix_re. Weights, offsets, penalties, y-dependent effects, and formula-level fitting remain deferred. |
 | `pol` | export | `holocron.formula.PolynomialTerm` | experimental | Phase 2-3 | 1 | `formula-design-v1` | Raw powers of explicit degree 2 through 10 only; no ambient option supplies a default degree. |
+| `psm` | export | `holocron.models.fit_psm` | experimental | Phase 4-5 | 2 | `parametric-survival-v1` | Right-censored Weibull and exponential accelerated-failure-time fits with observed covariance and survival prediction are supported for caller-supplied full-rank designs. Other distributions, left/interval censoring, weights, offsets, residuals, and formula-level fitting remain deferred. |
 | `rcs` | export | `holocron.design.RestrictedCubicSplineSpec` | experimental | Phase 2-3 | 6 | `deterministic-transform-v1` | Initial narrow API; full rms contract remains deferred. |
 | `robcov` | export | `holocron.models.robust_covariance` | experimental | Phase 6 | 1 | `covariance-resampling-v1` | Supports the uncorrected Huber cluster sandwich for current unpenalized OLS, binomial Glm, and binary lrm fits; Efron OLS covariance, finite-sample corrections, and penalized fits remain deferred. |
 | `scored` | export | `holocron.formula.OrderedTerm` | experimental | Phase 2-3 | 1 | `formula-design-v1` | Three or more strictly increasing numeric levels must be explicit; missing and unseen levels fail closed. |
@@ -122,14 +125,14 @@ in the pinned namespace. Counts by tier are A: 32, B: 33, C: 26, D: 190.
 | `Olinks` | export | — | deferred | Phase 4-5 | 0 | — | Not yet implemented. |
 | `Survival` | export | — | deferred | Phase 4-5 | 0 | — | Not yet implemented. |
 | `adapt_orm` | export | — | deferred | Phase 4-5 | 0 | — | Not yet implemented. |
-| `cph` | export | — | deferred | Phase 4-5 | 2 | `cox-model-v1` | Oracle baselines captured; independent Python implementation and parity qualification remain deferred. |
+| `cph` | export | `holocron.models.fit_cph` | experimental | Phase 4-5 | 2 | `cox-model-v1` | Right-censored, caller-supplied full-rank designs with Efron or Breslow ties, observed covariance, centered predictors, baseline cumulative hazard, and survival prediction are supported. Strata, entry times, weights, offsets, residuals, robust covariance, and formula-level fitting remain deferred. |
 | `mix_re` | export | `holocron.models.fit_random_intercept_orm` | mapped | Phase 4-5 | 1 | `ordinal-random-v1` | The explicit mix_re argument implements the signed dual-scale loading and requires within-cluster variation; formula-level special-term syntax is not exposed. |
-| `npsurv` | export | — | deferred | Phase 4-5 | 2 | `nonparametric-survival-v1` | Oracle baselines captured; independent Python implementation and parity qualification remain deferred. |
+| `npsurv` | export | `holocron.models.fit_npsurv` | experimental | Phase 4-5 | 2 | `nonparametric-survival-v1` | Unstratified right-censored Kaplan-Meier curves with risk/event/censor counts and log-scale Greenwood intervals are supported. Entry times, weights, strata, alternate estimators, and formula-level fitting remain deferred. |
 | `ordESS` | export | — | deferred | Phase 4-5 | 0 | — | Not yet implemented. |
 | `ordParallel` | export | — | deferred | Phase 4-5 | 0 | — | Not yet implemented. |
 | `orm` | export | `holocron.models.fit_orm` | experimental | Phase 4-5 | 3 | `ordinal-model-v1` | Exact-response logistic, probit, loglog, cloglog, and cauchit cumulative links plus numeric censoring are implemented. Three exact-response fixtures pass this profile; censored and clustered evidence is linked from Ocens, cluster, and mix_re. Weights, offsets, penalties, y-dependent effects, and formula-level fitting remain deferred. |
 | `orm.fit` | export | — | deferred | Phase 4-5 | 0 | — | Not yet implemented. |
-| `psm` | export | — | deferred | Phase 4-5 | 2 | `parametric-survival-v1` | Oracle baselines captured; independent Python implementation and parity qualification remain deferred. |
+| `psm` | export | `holocron.models.fit_psm` | experimental | Phase 4-5 | 2 | `parametric-survival-v1` | Right-censored Weibull and exponential accelerated-failure-time fits with observed covariance and survival prediction are supported for caller-supplied full-rank designs. Other distributions, left/interval censoring, weights, offsets, residuals, and formula-level fitting remain deferred. |
 | `survest` | export | — | deferred | Phase 4-5 | 0 | — | Not yet implemented. |
 | `ExProb.orm` | s3_method | — | deferred | Phase 4-5 | 0 | — | Not yet implemented. |
 | `Hazard.psm` | s3_method | — | deferred | Phase 4-5 | 0 | — | Not yet implemented. |

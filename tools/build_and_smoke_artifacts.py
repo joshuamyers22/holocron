@@ -32,18 +32,24 @@ from holocron.formula import Formula
 from holocron.models import (
     BinaryLogisticResult,
     CensoredResponse,
+    CoxResult,
+    NonparametricSurvivalResult,
     OlsResult,
     OrdinalResult,
+    ParametricSurvivalResult,
     anova,
     bootstrap_covariance,
     contrast,
     covariance,
+    fit_cph,
     fit_lrm,
+    fit_npsurv,
     fit_ols,
     fit_ordinal_lrm,
     fit_orm,
     fit_penalized_lrm,
     fit_penalized_ols,
+    fit_psm,
     likelihood,
     predict,
     residuals,
@@ -153,11 +159,29 @@ assert ordinal_fit.estimator == "orm"
 assert ordinal_lrm.estimator == "lrm"
 assert OrdinalResult.from_json(ordinal_fit.to_json()) == ordinal_fit
 assert np.allclose(np.sum(ordinal_fit.fitted_probabilities, axis=1), 1.0)
+
+survival_time = (12, 9, 15, 7, 11, 6, 8, 4, 5, 10, 13, 7, 3, 6, 14, 9, 5, 2)
+survival_event = (1, 1, 0, 1, 0, 1, 1, 0, 1, 0, 1, 1, 1, 0, 0, 1, 1, 1)
+survival_x = tuple((value,) for value in
+                   (-2, -1.5, -1, -0.5, 0, 0.5, 1, 1.5, 2,
+                    -1.8, -0.8, 0.2, 1.2, 2.2, -2.2, -1.2, 0.8, 1.8))
+cox_fit = fit_cph(survival_time, survival_event, survival_x, feature_names=("x",))
+psm_fit = fit_psm(survival_time, survival_event, survival_x, feature_names=("x",))
+km_fit = fit_npsurv(survival_time, survival_event)
+assert CoxResult.from_json(cox_fit.to_json()) == cox_fit
+assert ParametricSurvivalResult.from_json(psm_fit.to_json()) == psm_fit
+assert NonparametricSurvivalResult.from_json(km_fit.to_json()) == km_fit
+assert len(cox_fit.predict_survival(((0.0,),), (3.0, 6.0))) == 1
+assert len(psm_fit.predict_survival(((0.0,),), (3.0, 6.0))) == 1
+assert len(km_fit.predict((3.0, 6.0))) == 2
 schema_root = importlib.resources.files("holocron").joinpath("schemas")
 assert schema_root.joinpath("serialization-manifest.json").is_file()
 assert schema_root.joinpath("ols-result.schema.json").is_file()
 assert schema_root.joinpath("binary-logistic-result.schema.json").is_file()
 assert schema_root.joinpath("ordinal-result.schema.json").is_file()
+assert schema_root.joinpath("cox-result.schema.json").is_file()
+assert schema_root.joinpath("parametric-survival-result.schema.json").is_file()
+assert schema_root.joinpath("nonparametric-survival-result.schema.json").is_file()
 print(f"artifact smoke passed: {module_path}")
 """
 

@@ -13,12 +13,15 @@ from holocron.models import (
     bootstrap_covariance,
     contrast,
     covariance,
+    fit_cph,
     fit_glm,
     fit_lrm,
+    fit_npsurv,
     fit_ols,
     fit_orm,
     fit_penalized_lrm,
     fit_penalized_ols,
+    fit_psm,
     fit_random_intercept_orm,
     likelihood,
     predict,
@@ -51,6 +54,25 @@ def _inference_output(value: InferenceEstimate) -> dict[str, JsonValue]:
 def build_python_output(case: dict[str, JsonValue]) -> dict[str, JsonValue]:
     """Compute an implemented case without invoking or importing the R oracle."""
     operation = case["operation"]
+    if operation == "npsurv":
+        result = fit_npsurv(
+            cast(list[float], case["time"]), cast(list[int], case["event"])
+        )
+        return {
+            "ok": True,
+            "protocol_version": "1",
+            "operation": "npsurv",
+            "estimator": "kaplan-meier",
+            "observations": result.n_observations,
+            "time": cast(JsonValue, list(result.time)),
+            "n_risk": cast(JsonValue, list(result.n_risk)),
+            "n_event": cast(JsonValue, list(result.n_event)),
+            "n_censor": cast(JsonValue, list(result.n_censor)),
+            "survival": cast(JsonValue, list(result.survival)),
+            "standard_error": cast(JsonValue, list(result.standard_error)),
+            "lower": cast(JsonValue, list(result.lower)),
+            "upper": cast(JsonValue, list(result.upper)),
+        }
     if operation == "design":
         specification = DesignSpec.from_formula(cast(str, case["formula"]))
         raw_variables = cast(list[JsonValue], case["variables"])
@@ -352,6 +374,95 @@ def build_python_output(case: dict[str, JsonValue]) -> dict[str, JsonValue]:
             "residuals": cast(JsonValue, list(result.residuals)),
             "degrees_of_freedom": result.residual_degrees_of_freedom,
             "sigma": result.residual_scale,
+        }
+
+    if operation == "cph":
+        result = fit_cph(
+            cast(list[float], case["time"]),
+            cast(list[int], case["event"]),
+            basis,
+            method=cast(Literal["efron", "breslow"], case["method"]),
+            feature_names=design_names,
+        )
+        evaluation_x = cast(list[float], case["evaluation_x"])
+        evaluation_basis = (
+            [[value] for value in evaluation_x]
+            if spec is None
+            else [list(row) for row in spec.transform(evaluation_x)]
+        )
+        evaluation_linear = result.predict_linear(evaluation_basis)
+        survival = result.predict_survival(
+            evaluation_basis, cast(list[float], case["evaluation_times"])
+        )
+        return {
+            "ok": True,
+            "protocol_version": "1",
+            "operation": "cph",
+            "basis": case["basis"],
+            "knots": cast(JsonValue, list(knots)),
+            "method": result.method,
+            "coefficient_names": cast(JsonValue, list(result.coefficient_names)),
+            "coefficients": {
+                name: value
+                for name, value in zip(
+                    result.coefficient_names, result.coefficients, strict=True
+                )
+            },
+            "covariance_names": cast(JsonValue, list(result.coefficient_names)),
+            "covariance": cast(JsonValue, [list(row) for row in result.covariance]),
+            "design_names": cast(JsonValue, design_names),
+            "design": cast(JsonValue, basis),
+            "linear_predictors": cast(JsonValue, list(result.linear_predictors)),
+            "log_likelihood": cast(JsonValue, list(result.log_likelihood)),
+            "evaluation_x": cast(JsonValue, evaluation_x),
+            "evaluation_linear_predictors": cast(JsonValue, list(evaluation_linear)),
+            "evaluation_times": case["evaluation_times"],
+            "predicted_survival": cast(JsonValue, [list(row) for row in survival]),
+        }
+
+    if operation == "psm":
+        result = fit_psm(
+            cast(list[float], case["time"]),
+            cast(list[int], case["event"]),
+            basis,
+            distribution=cast(Literal["weibull", "exponential"], case["distribution"]),
+            feature_names=design_names,
+        )
+        evaluation_x = cast(list[float], case["evaluation_x"])
+        evaluation_basis = (
+            [[value] for value in evaluation_x]
+            if spec is None
+            else [list(row) for row in spec.transform(evaluation_x)]
+        )
+        evaluation_linear = result.predict_linear(evaluation_basis)
+        survival = result.predict_survival(
+            evaluation_basis, cast(list[float], case["evaluation_times"])
+        )
+        return {
+            "ok": True,
+            "protocol_version": "1",
+            "operation": "psm",
+            "basis": case["basis"],
+            "knots": cast(JsonValue, list(knots)),
+            "distribution": result.distribution,
+            "coefficient_names": cast(JsonValue, list(result.coefficient_names)),
+            "coefficients": {
+                name: value
+                for name, value in zip(
+                    result.coefficient_names, result.coefficients, strict=True
+                )
+            },
+            "covariance_names": cast(JsonValue, list(result.coefficient_names)),
+            "covariance": cast(JsonValue, [list(row) for row in result.covariance]),
+            "design_names": cast(JsonValue, design_names),
+            "design": cast(JsonValue, basis),
+            "linear_predictors": cast(JsonValue, list(result.linear_predictors)),
+            "log_likelihood": cast(JsonValue, list(result.log_likelihood)),
+            "scale": result.scale,
+            "evaluation_x": cast(JsonValue, evaluation_x),
+            "evaluation_linear_predictors": cast(JsonValue, list(evaluation_linear)),
+            "evaluation_times": case["evaluation_times"],
+            "predicted_survival": cast(JsonValue, [list(row) for row in survival]),
         }
 
     if operation == "orm":

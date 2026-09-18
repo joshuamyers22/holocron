@@ -38,11 +38,12 @@ provided.
   cases: six restricted-cubic-spline designs, six full-rank spline OLS fits,
   four binary logistic fits, three ordinal fits, two Cox fits, two parametric
   survival fits, and two Kaplan–Meier estimates.
-- The 12 design and OLS cases are recomputed by the independent Python
-  implementation in ordinary tests. The 13 logistic, ordinal, and survival
-  cases are explicitly labeled `oracle-baseline`; they define versioned inputs
-  and frozen reference behavior without claiming Python parity before those
-  model families exist.
+- At Phase 1 acceptance, 12 design and OLS cases were recomputed by the
+  independent Python implementation and the 13 later-family cases were frozen
+  oracle baselines. Subsequent phases implemented the binary-logistic, ordinal,
+  and survival targets; every original statistical case is now labeled
+  `python-parity`. The expanded corpus contains 49 Python-parity cases plus the
+  environment-health case.
 
 ## Boundaries
 

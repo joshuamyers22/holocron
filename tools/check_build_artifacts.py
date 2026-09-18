@@ -100,11 +100,15 @@ def inspect_artifacts(directory: Path) -> tuple[Path, Path]:
         f"{sdist_root}/src/holocron/__init__.py",
         f"{sdist_root}/src/holocron/py.typed",
         f"{sdist_root}/schemas/binary-logistic-result.schema.json",
+        f"{sdist_root}/schemas/cox-result.schema.json",
         f"{sdist_root}/schemas/data-distribution.schema.json",
         f"{sdist_root}/schemas/design-matrix.schema.json",
         f"{sdist_root}/schemas/design-spec.schema.json",
         f"{sdist_root}/schemas/formula.schema.json",
         f"{sdist_root}/schemas/ols-result.schema.json",
+        f"{sdist_root}/schemas/nonparametric-survival-result.schema.json",
+        f"{sdist_root}/schemas/ordinal-result.schema.json",
+        f"{sdist_root}/schemas/parametric-survival-result.schema.json",
         f"{sdist_root}/schemas/serialization-manifest.json",
     }
     if not expected_sdist_files <= set(sdist_names):
@@ -135,11 +139,15 @@ def inspect_artifacts(directory: Path) -> tuple[Path, Path]:
         raise ValueError("wheel does not contain the PEP 561 marker")
     expected_schema_files = {
         "holocron/schemas/binary-logistic-result.schema.json",
+        "holocron/schemas/cox-result.schema.json",
         "holocron/schemas/data-distribution.schema.json",
         "holocron/schemas/design-matrix.schema.json",
         "holocron/schemas/design-spec.schema.json",
         "holocron/schemas/formula.schema.json",
         "holocron/schemas/ols-result.schema.json",
+        "holocron/schemas/nonparametric-survival-result.schema.json",
+        "holocron/schemas/ordinal-result.schema.json",
+        "holocron/schemas/parametric-survival-result.schema.json",
         "holocron/schemas/serialization-manifest.json",
     }
     if not expected_schema_files <= set(wheel_names):

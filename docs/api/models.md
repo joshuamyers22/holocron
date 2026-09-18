@@ -161,6 +161,62 @@ A named covariance matrix, optionally restricted to selected terms.
 | `coefficient_names` | `tuple[str, ...]` |
 | `matrix` | `tuple[tuple[float, ...], ...]` |
 
+## `CoxResult`
+
+```python
+class holocron.models.survival.CoxResult(method: Literal['efron', 'breslow'], feature_names: tuple[str, ...], coefficients: tuple[float, ...], covariance: tuple[tuple[float, ...], ...], feature_means: tuple[float, ...], linear_predictors: tuple[float, ...], log_likelihood: tuple[float, float], baseline_times: tuple[float, ...], baseline_cumulative_hazard: tuple[float, ...], iterations: int, n_observations: int) -> None
+```
+
+Immutable Cox proportional-hazards fit for right-censored outcomes.
+
+### Attributes
+
+| Name | Type |
+| --- | --- |
+| `method` | `CoxMethod` |
+| `feature_names` | `tuple[str, ...]` |
+| `coefficients` | `tuple[float, ...]` |
+| `covariance` | `tuple[tuple[float, ...], ...]` |
+| `feature_means` | `tuple[float, ...]` |
+| `linear_predictors` | `tuple[float, ...]` |
+| `log_likelihood` | `tuple[float, float]` |
+| `baseline_times` | `tuple[float, ...]` |
+| `baseline_cumulative_hazard` | `tuple[float, ...]` |
+| `iterations` | `int` |
+| `n_observations` | `int` |
+
+### `coefficient_names`
+
+Return names in coefficient and covariance order.
+
+### `fingerprint`
+
+Return the SHA-256 identity of the canonical result document.
+
+### `from_dict(document: object) -> holocron.models.survival.CoxResult`
+
+Reconstruct a Cox result from an exact-version document.
+
+### `from_json(value: str) -> holocron.models.survival.CoxResult`
+
+Reconstruct a Cox result from strict bounded JSON.
+
+### `predict_linear(self, features: collections.abc.Iterable[collections.abc.Iterable[float]]) -> tuple[float, ...]`
+
+Predict mean-centered log relative hazards.
+
+### `predict_survival(self, features: collections.abc.Iterable[collections.abc.Iterable[float]], times: collections.abc.Iterable[float]) -> tuple[tuple[float, ...], ...]`
+
+Predict survival at each requested time for every feature row.
+
+### `to_dict(self) -> dict[str, None | bool | int | float | str | list['JsonValue'] | dict[str, 'JsonValue']]`
+
+Return the strict versioned result document.
+
+### `to_json(self) -> str`
+
+Serialize the fit as canonical non-executable JSON.
+
 ## `InferenceEstimate`
 
 ```python
@@ -221,6 +277,53 @@ Coefficient-level inference and likelihood metadata for one model.
 | `confidence_level` | `float` |
 | `coefficients` | `tuple[InferenceEstimate, ...]` |
 | `likelihood` | `LikelihoodResult` |
+
+## `NonparametricSurvivalResult`
+
+```python
+class holocron.models.survival.NonparametricSurvivalResult(time: tuple[float, ...], n_risk: tuple[int, ...], n_event: tuple[int, ...], n_censor: tuple[int, ...], survival: tuple[float, ...], standard_error: tuple[float, ...], lower: tuple[float, ...], upper: tuple[float, ...], confidence_level: float, n_observations: int) -> None
+```
+
+Immutable Kaplan–Meier curve with log-scale Greenwood intervals.
+
+### Attributes
+
+| Name | Type |
+| --- | --- |
+| `time` | `tuple[float, ...]` |
+| `n_risk` | `tuple[int, ...]` |
+| `n_event` | `tuple[int, ...]` |
+| `n_censor` | `tuple[int, ...]` |
+| `survival` | `tuple[float, ...]` |
+| `standard_error` | `tuple[float, ...]` |
+| `lower` | `tuple[float, ...]` |
+| `upper` | `tuple[float, ...]` |
+| `confidence_level` | `float` |
+| `n_observations` | `int` |
+
+### `fingerprint`
+
+Return the SHA-256 identity of the canonical result document.
+
+### `from_dict(document: object) -> holocron.models.survival.NonparametricSurvivalResult`
+
+Reconstruct a Kaplan–Meier result from an exact-version document.
+
+### `from_json(value: str) -> holocron.models.survival.NonparametricSurvivalResult`
+
+Reconstruct a Kaplan–Meier result from strict bounded JSON.
+
+### `predict(self, times: collections.abc.Iterable[float]) -> tuple[float, ...]`
+
+Evaluate the right-continuous Kaplan–Meier step function.
+
+### `to_dict(self) -> dict[str, None | bool | int | float | str | list['JsonValue'] | dict[str, 'JsonValue']]`
+
+Return the strict versioned result document.
+
+### `to_json(self) -> str`
+
+Serialize the curve as canonical non-executable JSON.
 
 ## `OlsResult`
 
@@ -434,6 +537,56 @@ Predict on the linear scale while enforcing design identity.
 
 Predict fitted means: Gaussian means or binary probabilities.
 
+## `ParametricSurvivalResult`
+
+```python
+class holocron.models.survival.ParametricSurvivalResult(distribution: Literal['weibull', 'exponential'], coefficient_names: tuple[str, ...], coefficients: tuple[float, ...], covariance: tuple[tuple[float, ...], ...], scale: float, linear_predictors: tuple[float, ...], log_likelihood: tuple[float, float], iterations: int, n_observations: int) -> None
+```
+
+Immutable Weibull or exponential accelerated-failure-time fit.
+
+### Attributes
+
+| Name | Type |
+| --- | --- |
+| `distribution` | `ParametricDistribution` |
+| `coefficient_names` | `tuple[str, ...]` |
+| `coefficients` | `tuple[float, ...]` |
+| `covariance` | `tuple[tuple[float, ...], ...]` |
+| `scale` | `float` |
+| `linear_predictors` | `tuple[float, ...]` |
+| `log_likelihood` | `tuple[float, float]` |
+| `iterations` | `int` |
+| `n_observations` | `int` |
+
+### `fingerprint`
+
+Return the SHA-256 identity of the canonical result document.
+
+### `from_dict(document: object) -> holocron.models.survival.ParametricSurvivalResult`
+
+Reconstruct a parametric result from an exact-version document.
+
+### `from_json(value: str) -> holocron.models.survival.ParametricSurvivalResult`
+
+Reconstruct a parametric result from strict bounded JSON.
+
+### `predict_linear(self, features: collections.abc.Iterable[collections.abc.Iterable[float]]) -> tuple[float, ...]`
+
+Predict log survival-time location.
+
+### `predict_survival(self, features: collections.abc.Iterable[collections.abc.Iterable[float]], times: collections.abc.Iterable[float]) -> tuple[tuple[float, ...], ...]`
+
+Predict survival at each strictly positive requested time.
+
+### `to_dict(self) -> dict[str, None | bool | int | float | str | list['JsonValue'] | dict[str, 'JsonValue']]`
+
+Return the strict versioned result document.
+
+### `to_json(self) -> str`
+
+Serialize the fit as canonical non-executable JSON.
+
 ## `PredictionResult`
 
 ```python
@@ -548,6 +701,10 @@ Evaluate one linear coefficient contrast with model-based uncertainty.
 
 Return the full covariance matrix or a named principal submatrix.
 
+## `fit_cph(times: collections.abc.Iterable[float], events: collections.abc.Iterable[int | bool], features: collections.abc.Iterable[collections.abc.Iterable[float]], *, method: Literal['efron', 'breslow'] = 'efron', feature_names: collections.abc.Iterable[str] | None = None, max_iterations: int = 100, tolerance: float = 1e-09) -> holocron.models.survival.CoxResult`
+
+Fit a right-censored Cox model with Efron or Breslow ties.
+
 ## `fit_glm(response: collections.abc.Iterable[float], features: collections.abc.Iterable[collections.abc.Iterable[float]] | holocron.design.formula.DesignMatrix, *, family: Literal['gaussian', 'binomial'] = 'gaussian', link: Optional[Literal['identity', 'logit']] = None, feature_names: collections.abc.Iterable[str] | None = None, include_intercept: bool | None = None, design_fingerprint: str | None = None, max_iterations: int = 100, tolerance: float = 1e-08) -> holocron.models.linear.OlsResult | holocron.models.logistic.BinaryLogisticResult`
 
 Fit the supported Gaussian/identity or binomial/logit GLM envelope.
@@ -555,6 +712,10 @@ Fit the supported Gaussian/identity or binomial/logit GLM envelope.
 ## `fit_lrm(response: collections.abc.Iterable[float], features: collections.abc.Iterable[collections.abc.Iterable[float]] | holocron.design.formula.DesignMatrix, *, feature_names: collections.abc.Iterable[str] | None = None, include_intercept: bool | None = None, design_fingerprint: str | None = None, max_iterations: int = 100, tolerance: float = 1e-10) -> holocron.models.logistic.BinaryLogisticResult`
 
 Fit the supported unpenalized binary subset of ``rms::lrm``.
+
+## `fit_npsurv(times: collections.abc.Iterable[float], events: collections.abc.Iterable[int | bool], *, confidence_level: float = 0.95) -> holocron.models.survival.NonparametricSurvivalResult`
+
+Compute a Kaplan–Meier curve and log-scale Greenwood intervals.
 
 ## `fit_ols(response: collections.abc.Iterable[float], features: collections.abc.Iterable[collections.abc.Iterable[float]] | holocron.design.formula.DesignMatrix, *, feature_names: collections.abc.Iterable[str] | None = None, include_intercept: bool | None = None, design_fingerprint: str | None = None) -> holocron.models.linear.OlsResult`
 
@@ -580,6 +741,10 @@ Fit binary lrm with a diagonal quadratic penalty on slopes.
 ## `fit_penalized_ols(response: collections.abc.Iterable[float], features: collections.abc.Iterable[collections.abc.Iterable[float]] | holocron.design.formula.DesignMatrix, *, penalty: float | collections.abc.Mapping[str, float], variance: Literal['simple', 'sandwich'] = 'simple', feature_names: collections.abc.Iterable[str] | None = None, include_intercept: bool | None = None, design_fingerprint: str | None = None) -> holocron.models.regularization.PenalizedResult`
 
 Fit diagonal quadratic-penalty OLS with the rms variance choices.
+
+## `fit_psm(times: collections.abc.Iterable[float], events: collections.abc.Iterable[int | bool], features: collections.abc.Iterable[collections.abc.Iterable[float]], *, distribution: Literal['weibull', 'exponential'] = 'weibull', feature_names: collections.abc.Iterable[str] | None = None, max_iterations: int = 100, tolerance: float = 1e-10) -> holocron.models.survival.ParametricSurvivalResult`
+
+Fit a right-censored Weibull or exponential AFT model.
 
 ## `fit_random_intercept_orm(response: collections.abc.Iterable[int | float] | holocron.models.ordinal.CensoredResponse, features: collections.abc.Iterable[collections.abc.Iterable[float]] | holocron.design.formula.DesignMatrix, clusters: collections.abc.Iterable[collections.abc.Hashable], *, family: Literal['logistic', 'probit', 'loglog', 'cloglog', 'cauchit'] = 'logistic', feature_names: collections.abc.Iterable[str] | None = None, design_fingerprint: str | None = None, mix_re: collections.abc.Iterable[float] | None = None, quadrature_grid: collections.abc.Iterable[int] = (7, 11, 15, 21, 31, 45, 63), quadrature_tolerance: float = 1e-06, max_iterations: int = 80, tolerance: float = 1e-06) -> holocron.models.random_ordinal.RandomEffectsOrdinalResult`
 

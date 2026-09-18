@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/joshuamyers22/holocron/schemas/nonparametric-survival-result.schema.json",
+  "title": "Holocron Kaplan-Meier result",
+  "type": "object",
+  "properties": {
+    "schema_version": {"const": "holocron-nonparametric-survival-result/v1"},
+    "estimator": {"const": "kaplan-meier"},
+    "time": {"$ref": "#/$defs/positive"},
+    "n_risk": {"$ref": "#/$defs/counts"},
+    "n_event": {"$ref": "#/$defs/counts"},
+    "n_censor": {"$ref": "#/$defs/counts"},
+    "survival": {"$ref": "#/$defs/probabilities"},
+    "standard_error": {"$ref": "#/$defs/nonnegative"},
+    "lower": {"$ref": "#/$defs/probabilities"},
+    "upper": {"$ref": "#/$defs/probabilities"},
+    "confidence_level": {"type": "number", "exclusiveMinimum": 0, "exclusiveMaximum": 1},
+    "n_observations": {"type": "integer", "minimum": 1}
+  },
+  "required": ["schema_version", "estimator", "time", "n_risk", "n_event", "n_censor", "survival", "standard_error", "lower", "upper", "confidence_level", "n_observations"],
+  "additionalProperties": false,
+  "$defs": {
+    "positive": {"type": "array", "minItems": 1, "items": {"type": "number", "exclusiveMinimum": 0}},
+    "counts": {"type": "array", "minItems": 1, "items": {"type": "integer", "minimum": 0}},
+    "probabilities": {"type": "array", "minItems": 1, "items": {"type": "number", "minimum": 0, "maximum": 1}},
+    "nonnegative": {"type": "array", "minItems": 1, "items": {"type": "number", "minimum": 0}}
+  }
+}

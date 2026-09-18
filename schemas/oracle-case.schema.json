@@ -270,7 +270,7 @@
       "title": "Cox proportional hazards case",
       "properties": {
         "operation": {"const": "cph"},
-        "qualification_stage": {"const": "oracle-baseline"},
+        "qualification_stage": {"const": "python-parity"},
         "basis": {"$ref": "#/$defs/modelBasis"},
         "method": {"enum": ["efron", "breslow"]},
         "x": {"$ref": "#/$defs/fitNumericVector"},
@@ -286,7 +286,7 @@
       "title": "Parametric survival case",
       "properties": {
         "operation": {"const": "psm"},
-        "qualification_stage": {"const": "oracle-baseline"},
+        "qualification_stage": {"const": "python-parity"},
         "basis": {"$ref": "#/$defs/modelBasis"},
         "distribution": {"enum": ["weibull", "exponential"]},
         "x": {"$ref": "#/$defs/fitNumericVector"},
@@ -302,7 +302,7 @@
       "title": "Nonparametric survival case",
       "properties": {
         "operation": {"const": "npsurv"},
-        "qualification_stage": {"const": "oracle-baseline"},
+        "qualification_stage": {"const": "python-parity"},
         "estimator": {"const": "kaplan-meier"},
         "time": {"$ref": "#/$defs/positiveNumericVector"},
         "event": {"$ref": "#/$defs/binaryVector"}

@@ -522,17 +522,17 @@
       "id": "export:cph",
       "r_symbol": "cph",
       "kind": "export",
-      "python_entry_point": null,
+      "python_entry_point": "holocron.models.fit_cph",
       "tier": "B",
       "milestone": "Phase 4-5",
-      "status": "deferred",
+      "status": "experimental",
       "owner": "joshuamyers22",
       "oracle_cases": [
         "cph-breslow-rcs",
         "cph-efron-linear"
       ],
       "tolerance_profile": "cox-model-v1",
-      "known_differences": "Oracle baselines captured; independent Python implementation and parity qualification remain deferred."
+      "known_differences": "Right-censored, caller-supplied full-rank designs with Efron or Breslow ties, observed covariance, centered predictors, baseline cumulative hazard, and survival prediction are supported. Strata, entry times, weights, offsets, residuals, robust covariance, and formula-level fitting remain deferred."
     },
     {
       "id": "export:cr.setup",
@@ -925,17 +925,17 @@
       "id": "export:npsurv",
       "r_symbol": "npsurv",
       "kind": "export",
-      "python_entry_point": null,
+      "python_entry_point": "holocron.models.fit_npsurv",
       "tier": "B",
       "milestone": "Phase 4-5",
-      "status": "deferred",
+      "status": "experimental",
       "owner": "joshuamyers22",
       "oracle_cases": [
         "npsurv-delayed-censoring",
         "npsurv-kaplan-meier"
       ],
       "tolerance_profile": "nonparametric-survival-v1",
-      "known_differences": "Oracle baselines captured; independent Python implementation and parity qualification remain deferred."
+      "known_differences": "Unstratified right-censored Kaplan-Meier curves with risk/event/censor counts and log-scale Greenwood intervals are supported. Entry times, weights, strata, alternate estimators, and formula-level fitting remain deferred."
     },
     {
       "id": "export:ols",
@@ -1290,17 +1290,17 @@
       "id": "export:psm",
       "r_symbol": "psm",
       "kind": "export",
-      "python_entry_point": null,
+      "python_entry_point": "holocron.models.fit_psm",
       "tier": "B",
       "milestone": "Phase 4-5",
-      "status": "deferred",
+      "status": "experimental",
       "owner": "joshuamyers22",
       "oracle_cases": [
         "psm-exponential-rcs",
         "psm-weibull-linear"
       ],
       "tolerance_profile": "parametric-survival-v1",
-      "known_differences": "Oracle baselines captured; independent Python implementation and parity qualification remain deferred."
+      "known_differences": "Right-censored Weibull and exponential accelerated-failure-time fits with observed covariance and survival prediction are supported for caller-supplied full-rank designs. Other distributions, left/interval censoring, weights, offsets, residuals, and formula-level fitting remain deferred."
     },
     {
       "id": "export:rcs",

@@ -14,6 +14,9 @@
     {"python_type": "holocron.design.DesignMatrix", "schema_version": "holocron-design-matrix/v1", "schema_file": "design-matrix.schema.json", "stability": "stable-schema"},
     {"python_type": "holocron.models.OlsResult", "schema_version": "holocron-ols-result/v1", "schema_file": "ols-result.schema.json", "stability": "stable-schema"},
     {"python_type": "holocron.models.BinaryLogisticResult", "schema_version": "holocron-binary-logistic-result/v1", "schema_file": "binary-logistic-result.schema.json", "stability": "stable-schema"},
-    {"python_type": "holocron.models.OrdinalResult", "schema_version": "holocron-ordinal-result/v1", "schema_file": "ordinal-result.schema.json", "stability": "experimental-schema"}
+    {"python_type": "holocron.models.OrdinalResult", "schema_version": "holocron-ordinal-result/v1", "schema_file": "ordinal-result.schema.json", "stability": "experimental-schema"},
+    {"python_type": "holocron.models.CoxResult", "schema_version": "holocron-cox-result/v1", "schema_file": "cox-result.schema.json", "stability": "experimental-schema"},
+    {"python_type": "holocron.models.ParametricSurvivalResult", "schema_version": "holocron-parametric-survival-result/v1", "schema_file": "parametric-survival-result.schema.json", "stability": "experimental-schema"},
+    {"python_type": "holocron.models.NonparametricSurvivalResult", "schema_version": "holocron-nonparametric-survival-result/v1", "schema_file": "nonparametric-survival-result.schema.json", "stability": "experimental-schema"}
   ]
 }

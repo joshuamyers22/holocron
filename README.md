@@ -49,12 +49,14 @@ metadata, safe formulas, numeric and factor transformations, restricted
 interactions, classical full-rank ordinary least squares, bounded generalized
 linear models, binary logistic regression, cumulative-link ordinal regression,
 numeric mixed-censoring conversion, and single-cluster random-intercept ordinal
-models, plus the accepted post-estimation
+models, plus right-censored Efron/Breslow Cox models, Weibull/exponential
+accelerated-failure-time models, and unstratified Kaplan–Meier curves. It also
+includes the accepted post-estimation
 operations, diagonal OLS/lrm penalties, and robust/bootstrap covariance. The
-design, Phase 3, and ordinal surfaces are checked across 43
-independent parity cases
-against committed outputs from a Dockerized
-R oracle. Six survival cases remain frozen oracle baselines. Interval-censored,
+implemented surfaces are checked across 49 independent parity cases against
+committed outputs from a Dockerized R oracle. The six survival cases cover
+coefficients, covariance, likelihoods, risk sets, and survival curves.
+Interval-censored,
 random-intercept, and dual-scale random-effect ORM cases are parity-qualified;
 one-sided censoring is covered by an explicit documented parity exception.
 Compatibility is claimed
@@ -75,6 +77,11 @@ ordinal replications, two quadrature-stability checks, three response-support
 sparsity/conditioning cases, and nine failure-mode cases on both accepted
 platforms. Its technical evidence and scoped independent statistical review
 pass, closing Phase 4 for private experimental development.
+
+The first Phase 5 deliverable is complete within its experimental envelope.
+The remaining survival work—strata, entry times, weights, offsets, broader
+censoring and distributions, residuals, richer survival quantities, and time-
+dependent validation—remains open, as does the Phase 5 exit gate.
 
 ## Library API
 
@@ -102,7 +109,8 @@ restored_fit = type(fit).from_json(fit.to_json())
 depending on global state or the original input iterable.
 
 Design specifications, realized matrices, OLS results, binary-logistic results,
-and ordinal results use strict versioned data-only JSON. Fitting from a `DesignMatrix`
+ordinal results, and all three survival result types use strict versioned data-
+only JSON. Fitting from a `DesignMatrix`
 carries its specification fingerprint into the result and checks that identity
 during prediction. The public schemas ship under `holocron/schemas`; arbitrary
 pickle interchange is not supported.

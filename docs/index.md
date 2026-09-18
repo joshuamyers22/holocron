@@ -22,7 +22,9 @@ The current experimental surface supports only:
 - diagonal quadratic penalties for OLS and binary `lrm`, plus robust/clustered
   and iid bootstrap covariance for every currently supported estimator path.
 - experimental cumulative-link ordinal regression, exact-grid mixed-censoring
-  conversion, and single-cluster random-intercept models.
+  conversion, and single-cluster random-intercept models; and
+- experimental right-censored Efron/Breslow Cox, Weibull/exponential
+  accelerated-failure-time, and unstratified Kaplan–Meier estimators.
 
 The core estimator envelope is also checked by seven seeded simulation
 scenarios totaling 2,620 outer replications and a 16-case numerical edge corpus.
@@ -32,11 +34,10 @@ ordinal, censoring, random-effects, and documented parity-exception evidence.
 Capability promotion,
 consequential use, and external distribution remain separately blocked.
 
-The design, Phase 3, and ordinal APIs are checked against 43
-cases from the pinned R `rms` 8.2-0 oracle. The remaining six frozen survival
-cases are future baselines, not compatibility claims. Interval-censored and
-clustered ordinal paths have registered oracle cases; one-sided censoring has a
-documented parity exception.
+The implemented APIs are checked against 49 cases from the pinned R `rms`
+8.2-0 oracle. Six cover Cox, parametric-survival, and Kaplan–Meier fits and
+survival curves. Interval-censored and clustered ordinal paths have registered
+oracle cases; one-sided censoring has a documented parity exception.
 See the generated [compatibility inventory](compatibility.md) for the exact
 surface and evidence links.
 
@@ -48,6 +49,7 @@ surface and evidence links.
 - [Run the complete Phase 3 getting-started workflow](getting-started.md).
 - [Fit the supported generalized and logistic models](guides/generalized-models.md).
 - [Fit ordinal and censored-response models](guides/ordinal-censoring.md).
+- [Fit supported survival models](guides/survival-models.md).
 - [Use the supported post-estimation operations](guides/post-estimation.md).
 - [Use penalties and alternative covariance estimators](guides/regularization-and-covariance.md).
 - [Inspect and reproduce simulation and numerical-edge evidence](guides/simulation-and-edge-evidence.md).

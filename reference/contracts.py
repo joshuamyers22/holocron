@@ -37,6 +37,13 @@ DESIGN_MATRIX_SCHEMA = ROOT / "schemas/design-matrix.schema.json"
 OLS_RESULT_SCHEMA = ROOT / "schemas/ols-result.schema.json"
 BINARY_LOGISTIC_RESULT_SCHEMA = ROOT / "schemas/binary-logistic-result.schema.json"
 ORDINAL_RESULT_SCHEMA = ROOT / "schemas/ordinal-result.schema.json"
+COX_RESULT_SCHEMA = ROOT / "schemas/cox-result.schema.json"
+PARAMETRIC_SURVIVAL_RESULT_SCHEMA = (
+    ROOT / "schemas/parametric-survival-result.schema.json"
+)
+NONPARAMETRIC_SURVIVAL_RESULT_SCHEMA = (
+    ROOT / "schemas/nonparametric-survival-result.schema.json"
+)
 PHASE_2_EXIT_EVIDENCE_SCHEMA = ROOT / "schemas/phase-2-exit-evidence.schema.json"
 POLICY_PATH = ROOT / "reference/tolerances.json"
 PHASE_3_POLICY_PATH = ROOT / "reference/phase-3-tolerances.json"

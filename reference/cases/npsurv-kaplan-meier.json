@@ -4,7 +4,7 @@
   "description": "Kaplan-Meier estimate with ties and censoring.",
   "expected_output": "npsurv-kaplan-meier.json",
   "comparison_profile": "nonparametric-survival-v1",
-  "qualification_stage": "oracle-baseline",
+  "qualification_stage": "python-parity",
   "operation": "npsurv",
   "estimator": "kaplan-meier",
   "time": [1, 2, 2, 3, 4, 4, 5, 6, 7, 7, 8, 9, 10, 10, 12],

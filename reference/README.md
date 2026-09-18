@@ -69,21 +69,22 @@ make reference-source-check RMS_SOURCE=/absolute/path/to/rms-master
 `make oracle-check` discovers every committed case, validates its case and output
 schemas, executes it through the live container, applies its named comparison
 profile, and emits validated evidence. Normal Python tests independently compute
-the 37 implemented data-distribution, formula-design, spline-design, OLS,
-generalized-linear, binary-logistic, post-estimation, regularization, and
-alternative-covariance results and use the same profiles against those outputs;
-they do not invoke Docker or R. The remaining nine
-statistical cases are oracle baselines for deferred ordinal and survival
-implementations. `make reference-metadata` validates every schema, policy,
-fixture, and cross-document link without Docker and runs in ordinary CI.
+all 49 statistical cases across data-distribution, formula/design, OLS,
+generalized-linear, binary-logistic, post-estimation, regularization, ordinal,
+censoring, random-effects, Cox, parametric-survival, and Kaplan–Meier operations
+and use the same profiles against those outputs; they do not invoke Docker or R.
+No statistical case remains only an oracle baseline. `make reference-metadata`
+validates every schema, policy, fixture, and cross-document link without Docker
+and runs in ordinary CI.
 
 `make frozen-environments` is the Docker-free CI gate for the committed Python
 and R environment contracts. `make frozen-environments-live` additionally fails
 unless the local oracle tag resolves to the accepted image ID and Linux/arm64
 platform.
 
-`make tolerance-pilot` independently recomputes all cases labeled
-`python-parity`, records the local Python, NumPy, OS, architecture, and
+`make tolerance-pilot` independently recomputes the accepted design/OLS pilot
+profiles among cases labeled `python-parity`, records the local Python, NumPy,
+OS, architecture, and
 BLAS/LAPACK identity, and validates a report against
 `../schemas/tolerance-pilot.schema.json`. CI runs this gate on the two platforms
 accepted by ADR-009.

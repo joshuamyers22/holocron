@@ -69,6 +69,8 @@ jobs:
       - run: make setup
       - name: Exercise Phase 3 estimators and operations on the platform matrix
         run: uv run --frozen python -m unittest tests.test_generalized_models tests.test_postfit_operations tests.test_regularization_covariance
+      - name: Exercise Phase 5 survival estimators on the platform matrix
+        run: uv run --frozen python -m unittest tests.test_survival_models
       - name: Exercise Phase 3 simulation thresholds on the platform matrix
         run: uv run --frozen python -m tools.run_phase_3_evidence --simulation-output ".work/phase-3-platform/simulation-report.json" --edge-output ".work/phase-3-platform/numerical-edge-report.json"
       - name: Exercise Phase 4 evidence on the platform matrix

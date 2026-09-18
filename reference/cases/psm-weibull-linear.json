@@ -4,7 +4,7 @@
   "description": "Weibull accelerated failure-time fit with censoring.",
   "expected_output": "psm-weibull-linear.json",
   "comparison_profile": "parametric-survival-v1",
-  "qualification_stage": "oracle-baseline",
+  "qualification_stage": "python-parity",
   "operation": "psm",
   "basis": "linear",
   "distribution": "weibull",

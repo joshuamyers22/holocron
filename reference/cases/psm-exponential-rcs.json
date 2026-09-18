@@ -4,7 +4,7 @@
   "description": "Exponential accelerated failure-time spline fit.",
   "expected_output": "psm-exponential-rcs.json",
   "comparison_profile": "parametric-survival-v1",
-  "qualification_stage": "oracle-baseline",
+  "qualification_stage": "python-parity",
   "operation": "psm",
   "basis": "rcs",
   "distribution": "exponential",

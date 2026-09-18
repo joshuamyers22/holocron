@@ -10,7 +10,7 @@ package metadata.
 |---|---|---|
 | `holocron.design` | Immutable predictor metadata, compiled design specifications, and deterministic transformations | `DataDistribution`, `DesignSpec`, `DesignMatrix`, `GeneratedColumn`, `RestrictedCubicSplineSpec`, distribution records |
 | `holocron.formula` | Allowlisted formula AST, bounded parsing, and canonical serialization | `Formula`, `Variable`, identity/polynomial/linear-spline/RCS term nodes |
-| `holocron.models` | Estimators and immutable fitted-result contracts | `fit_ols`, `OlsResult` |
+| `holocron.models` | Estimators and immutable fitted-result contracts | `fit_ols`, `fit_cph`, `OlsResult`, `CoxResult` |
 | `holocron.exceptions` | Stable failure categories at public boundaries | `HolocronError` and specific subclasses |
 
 The package root exports the four namespaces and `__version__`. Statistical

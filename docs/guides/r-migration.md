@@ -266,12 +266,14 @@ following:
   intervals, adjusted-effect summaries, complete `anova.rms` partitions, or
   nonlinear, simultaneous, grid-based, or expression-driven contrasts; or
 - logistic behavior outside the supported binary/logit and diagonal-penalty
-  envelope, or ordinal, Cox, parametric-survival, Kaplan–Meier, validation,
-  calibration, or nomogram execution in Python.
+  envelope; ordinal behavior outside its declared contract; Cox strata, entry
+  times, weights, offsets, or residuals; parametric families other than
+  Weibull/exponential or non-right censoring; stratified/weighted/entry-time
+  Kaplan–Meier; or validation, calibration, or nomogram execution in Python.
 
-Ordinal and survival model families have frozen R oracle baselines. Those are
-future comparison targets, not working Python migration paths. Holocron must
-raise an explicit error rather than substitute another method.
+Supported ordinal and first-slice survival paths have Python parity evidence.
+Anything outside those explicit envelopes remains a stop condition; Holocron
+must raise an explicit error rather than substitute another method.
 
 ## Migration checklist
 

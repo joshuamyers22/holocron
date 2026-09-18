@@ -4,7 +4,7 @@
   "description": "Cox proportional hazards fit using Efron tie handling.",
   "expected_output": "cph-efron-linear.json",
   "comparison_profile": "cox-model-v1",
-  "qualification_stage": "oracle-baseline",
+  "qualification_stage": "python-parity",
   "operation": "cph",
   "basis": "linear",
   "method": "efron",

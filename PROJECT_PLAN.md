@@ -742,6 +742,15 @@ The exit gate is closed; see `governance/PHASE_4_COMPLETION.md`.
 
 Survival parity suite and simulations pass across censoring/tie/strata regimes; numerical reviewers approve likelihood and information implementations.
 
+**Implementation progress:** The first deliverable is complete for the private
+experimental envelope. Independent `fit_cph`, `fit_psm`, and `fit_npsurv`
+implementations cover right-censored Efron/Breslow Cox models,
+Weibull/exponential accelerated-failure-time models, and unstratified Kaplan–
+Meier curves. Six registered cases pass 190 exact and 446 numeric pinned-R
+comparisons, and strict result schemas ship with the package. The remaining
+deliverables and the Phase 5 exit gate remain open; see
+`governance/PHASE_5_SURVIVAL_ESTIMATORS.md`.
+
 ### Phase 6 — Validation, calibration, diagnostics, and model summaries (18–28 weeks)
 
 **Deliverables**

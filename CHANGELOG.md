@@ -32,8 +32,8 @@ Notable changes are recorded here using semantic versioning.
   profiles and emit hashed evidence records.
 - Expanded the Phase 1 oracle corpus to 25 statistical cases spanning spline
   design, OLS, binary logistic, ordinal, Cox, parametric survival, and
-  Kaplan–Meier workflows; 12 design/OLS cases run independent Python parity and
-  13 later-family cases are labeled frozen oracle baselines.
+  Kaplan–Meier workflows; 12 design/OLS cases initially ran independent Python
+  parity and 13 later-family cases were frozen as future baselines.
 - Accepted ADR-009's float64 numerical envelope for RCS design and
   well-conditioned OLS after all 12 independent cases passed on macOS
   arm64/Accelerate and Ubuntu x86_64/OpenBLAS; added schema-validated pilot
@@ -110,5 +110,10 @@ Notable changes are recorded here using semantic versioning.
   escalating adaptive quadrature, single and dual-scale cluster effects,
   boundary inference, prediction/test diagnostics, strict result JSON, a
   64-level stress case, and installed-artifact smoke coverage. The Phase 4
-  parity, simulation, cross-platform, and independent-review exit gate remains
-  open.
+  parity, simulation, cross-platform, and independent-review exit gate closed
+  after Ron Mexico approved the private experimental scope.
+- Completed the first Phase 5 deliverable with independent right-censored
+  Efron/Breslow Cox, Weibull/exponential accelerated-failure-time, and
+  unstratified Kaplan–Meier implementations; added typed survival prediction,
+  strict result schemas, artifact smoke coverage, and six cases passing 190
+  exact and 446 numeric pinned-R comparisons.
