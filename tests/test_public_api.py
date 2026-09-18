@@ -85,6 +85,7 @@ class PublicApiTests(unittest.TestCase):
                 "PredictionResult",
                 "RandomEffectsOrdinalResult",
                 "ResidualResult",
+                "SurvivalResidualResult",
                 "TurnbullResult",
                 "VarianceComponentTest",
                 "anova",
@@ -107,6 +108,7 @@ class PublicApiTests(unittest.TestCase):
                 "residuals",
                 "robust_covariance",
                 "summarize",
+                "survival_residuals",
             ],
         )
 

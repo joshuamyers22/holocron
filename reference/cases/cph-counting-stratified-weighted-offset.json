@@ -1,0 +1,22 @@
+{
+  "schema_version": "holocron-oracle-case/v1",
+  "case_id": "cph-counting-stratified-weighted-offset",
+  "description": "Cox counting-process fit with Breslow ties, strata, weights, and offsets.",
+  "expected_output": "cph-counting-stratified-weighted-offset.json",
+  "comparison_profile": "cox-risk-set-v2",
+  "qualification_stage": "python-parity",
+  "operation": "cph",
+  "basis": "linear",
+  "method": "breslow",
+  "x": [-2, -1.5, -1, -0.5, 0, 0.5, 1, 1.5, 2, -1.8, -0.8, 0.2, 1.2, 2.2, -2.2, -1.2, 0.8, 1.8],
+  "time": [12, 9, 15, 7, 11, 6, 8, 4, 5, 10, 13, 7, 3, 6, 14, 9, 5, 2],
+  "event": [1, 1, 0, 1, 0, 1, 1, 0, 1, 0, 1, 1, 1, 0, 0, 1, 1, 1],
+  "entry": [0, 1, 2, 0, 1, 2, 0, 1, 2, 0, 1, 2, 0, 1, 2, 0, 1, 1],
+  "strata": ["A", "B", "A", "B", "A", "B", "A", "B", "A", "B", "A", "B", "A", "B", "A", "B", "A", "B"],
+  "weights": [1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2],
+  "offset": [-0.075, -0.025, 0.025, 0.075, -0.075, -0.025, 0.025, 0.075, -0.075, -0.025, 0.025, 0.075, -0.075, -0.025, 0.025, 0.075, -0.075, -0.025],
+  "evaluation_x": [-1, 0.5],
+  "evaluation_times": [3, 6, 10],
+  "evaluation_strata": ["A", "B"],
+  "evaluation_offset": [0.1, -0.1]
+}

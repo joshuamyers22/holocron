@@ -34,9 +34,10 @@ ordinal, censoring, random-effects, and documented parity-exception evidence.
 Capability promotion,
 consequential use, and external distribution remain separately blocked.
 
-The implemented APIs are checked against 49 cases from the pinned R `rms`
-8.2-0 oracle. Six cover Cox, parametric-survival, and Kaplan–Meier fits and
-survival curves. Interval-censored and clustered ordinal paths have registered
+The implemented APIs are checked against 52 cases from the pinned R `rms`
+8.2-0 oracle. Nine cover Cox, parametric-survival, and Kaplan–Meier fits,
+risk-set features, baseline quantities, predictions, and residuals.
+Interval-censored and clustered ordinal paths have registered
 oracle cases; one-sided censoring has a documented parity exception.
 See the generated [compatibility inventory](compatibility.md) for the exact
 surface and evidence links.

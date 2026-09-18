@@ -152,6 +152,53 @@
         {"path": "/lower/*", "rule": {"mode": "numeric", "absolute": 1e-10, "relative": 1e-9}},
         {"path": "/upper/*", "rule": {"mode": "numeric", "absolute": 1e-10, "relative": 1e-9}}
       ]
+    },
+    "cox-risk-set-v2": {
+      "description": "Field-aware tolerances for weighted counting-process Cox risk sets, baselines, predictions, and residuals.",
+      "default": {"mode": "exact"},
+      "rules": [
+        {"path": "/design/*/*", "rule": {"mode": "numeric", "absolute": 1e-12, "relative": 1e-12}},
+        {"path": "/coefficients/*", "rule": {"mode": "numeric", "absolute": 2e-8, "relative": 2e-7}},
+        {"path": "/covariance/*/*", "rule": {"mode": "numeric", "absolute": 2e-7, "relative": 2e-6}},
+        {"path": "/linear_predictors/*", "rule": {"mode": "numeric", "absolute": 2e-8, "relative": 2e-7}},
+        {"path": "/log_likelihood/*", "rule": {"mode": "numeric", "absolute": 2e-8, "relative": 2e-7}},
+        {"path": "/evaluation_linear_predictors/*", "rule": {"mode": "numeric", "absolute": 2e-8, "relative": 2e-7}},
+        {"path": "/baseline_hazard/*", "rule": {"mode": "numeric", "absolute": 2e-8, "relative": 2e-7}},
+        {"path": "/baseline_cumulative_hazard/*", "rule": {"mode": "numeric", "absolute": 2e-8, "relative": 2e-7}},
+        {"path": "/baseline_survival/*", "rule": {"mode": "numeric", "absolute": 2e-8, "relative": 2e-7}},
+        {"path": "/predicted_survival/*/*", "rule": {"mode": "numeric", "absolute": 2e-8, "relative": 2e-7}},
+        {"path": "/martingale_residuals/*", "rule": {"mode": "numeric", "absolute": 2e-8, "relative": 2e-7}},
+        {"path": "/deviance_residuals/*", "rule": {"mode": "numeric", "absolute": 2e-8, "relative": 2e-7}}
+      ]
+    },
+    "parametric-survival-risk-set-v2": {
+      "description": "Field-aware tolerances for weighted stratified Weibull fits, hazard/survival predictions, and residuals.",
+      "default": {"mode": "exact"},
+      "rules": [
+        {"path": "/design/*/*", "rule": {"mode": "numeric", "absolute": 1e-12, "relative": 1e-12}},
+        {"path": "/coefficients/*", "rule": {"mode": "numeric", "absolute": 2e-7, "relative": 2e-6}},
+        {"path": "/covariance/*/*", "rule": {"mode": "numeric", "absolute": 2e-6, "relative": 2e-5}},
+        {"path": "/linear_predictors/*", "rule": {"mode": "numeric", "absolute": 2e-7, "relative": 2e-6}},
+        {"path": "/log_likelihood/*", "rule": {"mode": "numeric", "absolute": 2e-7, "relative": 2e-6}},
+        {"path": "/scales/*", "rule": {"mode": "numeric", "absolute": 2e-7, "relative": 2e-6}},
+        {"path": "/evaluation_linear_predictors/*", "rule": {"mode": "numeric", "absolute": 2e-7, "relative": 2e-6}},
+        {"path": "/predicted_survival/*/*", "rule": {"mode": "numeric", "absolute": 2e-7, "relative": 2e-6}},
+        {"path": "/predicted_hazard/*/*", "rule": {"mode": "numeric", "absolute": 2e-7, "relative": 2e-6}},
+        {"path": "/normalized_residuals/*", "rule": {"mode": "numeric", "absolute": 2e-7, "relative": 2e-6}},
+        {"path": "/response_residuals/*", "rule": {"mode": "numeric", "absolute": 2e-7, "relative": 2e-6}},
+        {"path": "/martingale_residuals/*", "rule": {"mode": "numeric", "absolute": 2e-7, "relative": 2e-6}},
+        {"path": "/deviance_residuals/*", "rule": {"mode": "numeric", "absolute": 2e-7, "relative": 2e-6}}
+      ]
+    },
+    "nonparametric-survival-risk-set-v2": {
+      "description": "Exact weighted risk sets with field-aware tolerance for stratified Kaplan-Meier uncertainty.",
+      "default": {"mode": "exact"},
+      "rules": [
+        {"path": "/survival/*", "rule": {"mode": "numeric", "absolute": 1e-10, "relative": 1e-9}},
+        {"path": "/standard_error/*", "rule": {"mode": "numeric", "absolute": 1e-10, "relative": 1e-9}},
+        {"path": "/lower/*", "rule": {"mode": "numeric", "absolute": 1e-10, "relative": 1e-9}},
+        {"path": "/upper/*", "rule": {"mode": "numeric", "absolute": 1e-10, "relative": 1e-9}}
+      ]
     }
   }
 }

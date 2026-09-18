@@ -51,6 +51,9 @@ left/interval censoring, weights, offsets, and residuals, remain deferred.
 Kaplan–Meier strata, entry times, weights, and alternate estimators remain
 deferred.
 
-The deliverable does not close Phase 5 or promote any capability beyond
-`experimental`. The remaining Phase 5 deliverables, survival simulations, and
-independent numerical review are still required by the phase exit gate.
+These were the boundaries at acceptance of the first deliverable. The
+subsequent risk-set deliverable closes the strata, entry, weight, offset,
+baseline-quantity, and supported residual gaps; see
+`governance/PHASE_5_RISK_SETS.md`. Broader prediction, censoring, validation,
+simulation, and review gates remain open. No capability is promoted beyond
+`experimental`.

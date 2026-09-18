@@ -35,6 +35,10 @@ The accepted schemas are:
 | `DesignMatrix` | `holocron-design-matrix/v1` |
 | `OlsResult` | `holocron-ols-result/v1` |
 | `BinaryLogisticResult` | `holocron-binary-logistic-result/v1` |
+| `OrdinalResult` | `holocron-ordinal-result/v1` |
+| `CoxResult` | `holocron-cox-result/v2` |
+| `ParametricSurvivalResult` | `holocron-parametric-survival-result/v2` |
+| `NonparametricSurvivalResult` | `holocron-nonparametric-survival-result/v2` |
 
 `DesignMatrix` stores its specification fingerprint and intercept policy. An
 OLS fit made directly from that matrix derives the intercept policy, stores the
@@ -44,11 +48,12 @@ design fingerprint and therefore cannot provide this check.
 
 Published schema versions retain their field meaning. A breaking semantic or
 structural change creates a new version and schema file; it never edits the old
-version into a new meaning. Current readers accept only their exact version.
-Before Holocron promises cross-version loading, each older accepted version must
-receive a bounded, tested, one-step data migration into the next version. Readers
-must not guess a version or silently discard fields. This is the initial
-serialization policy; retention duration and migration-support windows remain a
+version into a new meaning. The survival v2 readers accept their exact version
+plus the shipped v1 shape and perform a bounded, tested, one-step migration in
+memory. V1 files remain unchanged and packaged; writers emit only v2. Other
+readers accept only their declared version. Future cross-version loading needs
+the same explicit migration path: readers must not guess a version or silently
+discard fields. Retention duration and migration-support windows remain a
 beta-release decision.
 
 The JSON Schemas and serialization manifest ship in wheel and source

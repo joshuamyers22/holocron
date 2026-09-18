@@ -1,0 +1,35 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/joshuamyers22/holocron/schemas/cox-result-v2.schema.json",
+  "title": "Holocron Cox proportional-hazards result v2",
+  "type": "object",
+  "properties": {
+    "schema_version": {"const": "holocron-cox-result/v2"},
+    "method": {"enum": ["efron", "breslow"]},
+    "feature_names": {"$ref": "#/$defs/names"},
+    "coefficients": {"$ref": "#/$defs/vector"},
+    "covariance": {"$ref": "#/$defs/matrix"},
+    "feature_means": {"$ref": "#/$defs/vector"},
+    "linear_predictors": {"$ref": "#/$defs/vector"},
+    "log_likelihood": {"type": "array", "minItems": 2, "maxItems": 2, "items": {"type": "number"}},
+    "baseline_times": {"$ref": "#/$defs/positiveVector"},
+    "baseline_cumulative_hazard": {"$ref": "#/$defs/nonnegativeVector"},
+    "baseline_strata": {"$ref": "#/$defs/stringVector"},
+    "baseline_hazard": {"$ref": "#/$defs/nonnegativeVector"},
+    "baseline_survival": {"$ref": "#/$defs/probabilityVector"},
+    "strata_levels": {"$ref": "#/$defs/names"},
+    "iterations": {"type": "integer", "minimum": 0},
+    "n_observations": {"type": "integer", "minimum": 1}
+  },
+  "required": ["schema_version", "method", "feature_names", "coefficients", "covariance", "feature_means", "linear_predictors", "log_likelihood", "baseline_times", "baseline_cumulative_hazard", "baseline_strata", "baseline_hazard", "baseline_survival", "strata_levels", "iterations", "n_observations"],
+  "additionalProperties": false,
+  "$defs": {
+    "names": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
+    "stringVector": {"type": "array", "minItems": 1, "items": {"type": "string", "minLength": 1}},
+    "vector": {"type": "array", "minItems": 1, "items": {"type": "number"}},
+    "positiveVector": {"type": "array", "minItems": 1, "items": {"type": "number", "exclusiveMinimum": 0}},
+    "nonnegativeVector": {"type": "array", "minItems": 1, "items": {"type": "number", "minimum": 0}},
+    "probabilityVector": {"type": "array", "minItems": 1, "items": {"type": "number", "minimum": 0, "maximum": 1}},
+    "matrix": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/vector"}}
+  }
+}

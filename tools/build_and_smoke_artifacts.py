@@ -55,6 +55,7 @@ from holocron.models import (
     residuals,
     robust_covariance,
     summarize,
+    survival_residuals,
 )
 
 source_root = Path(os.environ["HOLOCRON_SMOKE_SOURCE_ROOT"]).resolve()
@@ -165,23 +166,49 @@ survival_event = (1, 1, 0, 1, 0, 1, 1, 0, 1, 0, 1, 1, 1, 0, 0, 1, 1, 1)
 survival_x = tuple((value,) for value in
                    (-2, -1.5, -1, -0.5, 0, 0.5, 1, 1.5, 2,
                     -1.8, -0.8, 0.2, 1.2, 2.2, -2.2, -1.2, 0.8, 1.8))
-cox_fit = fit_cph(survival_time, survival_event, survival_x, feature_names=("x",))
-psm_fit = fit_psm(survival_time, survival_event, survival_x, feature_names=("x",))
-km_fit = fit_npsurv(survival_time, survival_event)
+survival_entry = tuple(float(min(index % 3, time - 1))
+                       for index, time in enumerate(survival_time))
+survival_strata = tuple("A" if index % 2 == 0 else "B" for index in range(18))
+survival_weights = tuple(1.0 + 0.5 * (index % 3) for index in range(18))
+survival_offsets = tuple(0.05 * (index % 4 - 1.5) for index in range(18))
+cox_fit = fit_cph(
+    survival_time, survival_event, survival_x, feature_names=("x",),
+    entry_times=survival_entry, strata=survival_strata,
+    weights=survival_weights, offsets=survival_offsets,
+)
+psm_fit = fit_psm(
+    survival_time, survival_event, survival_x, feature_names=("x",),
+    strata=survival_strata, weights=survival_weights, offsets=survival_offsets,
+)
+km_fit = fit_npsurv(
+    survival_time, survival_event, entry_times=survival_entry,
+    strata=survival_strata, weights=survival_weights,
+)
 assert CoxResult.from_json(cox_fit.to_json()) == cox_fit
 assert ParametricSurvivalResult.from_json(psm_fit.to_json()) == psm_fit
 assert NonparametricSurvivalResult.from_json(km_fit.to_json()) == km_fit
-assert len(cox_fit.predict_survival(((0.0,),), (3.0, 6.0))) == 1
-assert len(psm_fit.predict_survival(((0.0,),), (3.0, 6.0))) == 1
-assert len(km_fit.predict((3.0, 6.0))) == 2
+assert len(cox_fit.predict_survival(
+    ((0.0,),), (3.0, 6.0), strata=("A",), offsets=(0.1,)
+)) == 1
+assert len(psm_fit.predict_hazard(
+    ((0.0,),), (3.0, 6.0), strata=("B",), offsets=(-0.1,)
+)) == 1
+assert len(survival_residuals(
+    cox_fit, survival_time, survival_event,
+    entry_times=survival_entry, strata=survival_strata,
+).values) == len(survival_time)
+assert len(km_fit.predict((3.0, 6.0), stratum="A")) == 2
 schema_root = importlib.resources.files("holocron").joinpath("schemas")
 assert schema_root.joinpath("serialization-manifest.json").is_file()
 assert schema_root.joinpath("ols-result.schema.json").is_file()
 assert schema_root.joinpath("binary-logistic-result.schema.json").is_file()
 assert schema_root.joinpath("ordinal-result.schema.json").is_file()
 assert schema_root.joinpath("cox-result.schema.json").is_file()
+assert schema_root.joinpath("cox-result-v2.schema.json").is_file()
 assert schema_root.joinpath("parametric-survival-result.schema.json").is_file()
+assert schema_root.joinpath("parametric-survival-result-v2.schema.json").is_file()
 assert schema_root.joinpath("nonparametric-survival-result.schema.json").is_file()
+assert schema_root.joinpath("nonparametric-survival-result-v2.schema.json").is_file()
 print(f"artifact smoke passed: {module_path}")
 """
 

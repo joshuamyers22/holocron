@@ -46,9 +46,11 @@ from holocron.models.survival import (
     CoxResult,
     NonparametricSurvivalResult,
     ParametricSurvivalResult,
+    SurvivalResidualResult,
     fit_cph,
     fit_npsurv,
     fit_psm,
+    survival_residuals,
 )
 
 __all__ = [
@@ -72,6 +74,7 @@ __all__ = [
     "PredictionResult",
     "RandomEffectsOrdinalResult",
     "ResidualResult",
+    "SurvivalResidualResult",
     "TurnbullResult",
     "VarianceComponentTest",
     "anova",
@@ -94,4 +97,5 @@ __all__ = [
     "residuals",
     "robust_covariance",
     "summarize",
+    "survival_residuals",
 ]

@@ -276,9 +276,15 @@
         "x": {"$ref": "#/$defs/fitNumericVector"},
         "time": {"$ref": "#/$defs/positiveNumericVector"},
         "event": {"$ref": "#/$defs/binaryVector"},
+        "entry": {"$ref": "#/$defs/nonnegativeNumericVector"},
+        "strata": {"$ref": "#/$defs/stringVector"},
+        "weights": {"$ref": "#/$defs/positiveNumericVector"},
+        "offset": {"$ref": "#/$defs/fitNumericVector"},
         "knots": {"$ref": "#/$defs/knotVector"},
         "evaluation_x": {"$ref": "#/$defs/nonemptyNumericVector"},
-        "evaluation_times": {"$ref": "#/$defs/positiveNumericVector"}
+        "evaluation_times": {"$ref": "#/$defs/positiveNumericVector"},
+        "evaluation_strata": {"$ref": "#/$defs/stringVector"},
+        "evaluation_offset": {"$ref": "#/$defs/nonemptyNumericVector"}
       },
       "required": ["operation", "basis", "method", "x", "time", "event", "evaluation_x", "evaluation_times"]
     },
@@ -292,9 +298,14 @@
         "x": {"$ref": "#/$defs/fitNumericVector"},
         "time": {"$ref": "#/$defs/positiveNumericVector"},
         "event": {"$ref": "#/$defs/binaryVector"},
+        "strata": {"$ref": "#/$defs/stringVector"},
+        "weights": {"$ref": "#/$defs/positiveNumericVector"},
+        "offset": {"$ref": "#/$defs/fitNumericVector"},
         "knots": {"$ref": "#/$defs/knotVector"},
         "evaluation_x": {"$ref": "#/$defs/nonemptyNumericVector"},
-        "evaluation_times": {"$ref": "#/$defs/positiveNumericVector"}
+        "evaluation_times": {"$ref": "#/$defs/positiveNumericVector"},
+        "evaluation_strata": {"$ref": "#/$defs/stringVector"},
+        "evaluation_offset": {"$ref": "#/$defs/nonemptyNumericVector"}
       },
       "required": ["operation", "basis", "distribution", "x", "time", "event", "evaluation_x", "evaluation_times"]
     },
@@ -305,7 +316,10 @@
         "qualification_stage": {"const": "python-parity"},
         "estimator": {"const": "kaplan-meier"},
         "time": {"$ref": "#/$defs/positiveNumericVector"},
-        "event": {"$ref": "#/$defs/binaryVector"}
+        "event": {"$ref": "#/$defs/binaryVector"},
+        "entry": {"$ref": "#/$defs/nonnegativeNumericVector"},
+        "strata": {"$ref": "#/$defs/stringVector"},
+        "weights": {"$ref": "#/$defs/positiveNumericVector"}
       },
       "required": ["operation", "estimator", "time", "event"]
     }
@@ -330,6 +344,16 @@
       "type": "array",
       "minItems": 1,
       "items": {"type": "number", "exclusiveMinimum": 0}
+    },
+    "nonnegativeNumericVector": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"type": "number", "minimum": 0}
+    },
+    "stringVector": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"type": "string", "minLength": 1}
     },
     "binaryVector": {
       "type": "array",

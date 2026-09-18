@@ -86,7 +86,7 @@ The R oracle contract is:
   `778bd69d83961577be1f73fa1e36781bd3fd099f`;
 - 93 installed R/base packages and ten external-library identities; and
 - accepted image ID
-  `sha256:49f71f5cf13a89d72d5386f25ffa6dd0c369605062577f922f5253c64a33b694`.
+  `sha256:962da1a11dba7568511d04b3a62eb02680f430102946934bd27d885f49b35506`.
 
 Rebuild and qualify a candidate with:
 

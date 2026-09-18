@@ -342,7 +342,7 @@
           "properties": {
             "operation": {"const": "psm"},
             "distribution": {"enum": ["weibull", "exponential"]},
-            "scale": {"type": "number", "exclusiveMinimum": 0}
+            "scale": {"oneOf": [{"type": "null"}, {"type": "number", "exclusiveMinimum": 0}]}
           },
           "required": ["operation", "distribution", "scale"]
         }
@@ -357,6 +357,9 @@
         "estimator": {"const": "kaplan-meier"},
         "observations": {"type": "number", "minimum": 1},
         "time": {"$ref": "#/$defs/numericVector"},
+        "strata": {"$ref": "#/$defs/nameVector"},
+        "entry": {"$ref": "#/$defs/numericVector"},
+        "weights": {"$ref": "#/$defs/numericVector"},
         "n_risk": {"$ref": "#/$defs/numericVector"},
         "n_event": {"$ref": "#/$defs/numericVector"},
         "n_censor": {"$ref": "#/$defs/numericVector"},
@@ -799,7 +802,24 @@
         "evaluation_x": {"$ref": "#/$defs/numericVector"},
         "evaluation_linear_predictors": {"$ref": "#/$defs/numericVector"},
         "evaluation_times": {"$ref": "#/$defs/numericVector"},
-        "predicted_survival": {"$ref": "#/$defs/numericMatrix"}
+        "predicted_survival": {"$ref": "#/$defs/numericMatrix"},
+        "entry": {"$ref": "#/$defs/numericVector"},
+        "strata": {"$ref": "#/$defs/nameVector"},
+        "weights": {"$ref": "#/$defs/numericVector"},
+        "offset": {"$ref": "#/$defs/numericVector"},
+        "evaluation_strata": {"$ref": "#/$defs/nameVector"},
+        "evaluation_offset": {"$ref": "#/$defs/numericVector"},
+        "baseline_strata": {"$ref": "#/$defs/nameVector"},
+        "baseline_times": {"$ref": "#/$defs/numericVector"},
+        "baseline_hazard": {"$ref": "#/$defs/numericVector"},
+        "baseline_cumulative_hazard": {"$ref": "#/$defs/numericVector"},
+        "baseline_survival": {"$ref": "#/$defs/numericVector"},
+        "predicted_hazard": {"$ref": "#/$defs/numericMatrix"},
+        "scales": {"$ref": "#/$defs/numericVector"},
+        "martingale_residuals": {"$ref": "#/$defs/numericVector"},
+        "deviance_residuals": {"$ref": "#/$defs/numericVector"},
+        "normalized_residuals": {"$ref": "#/$defs/numericVector"},
+        "response_residuals": {"$ref": "#/$defs/numericVector"}
       },
       "required": ["ok", "protocol_version", "basis", "knots", "coefficient_names", "coefficients", "covariance_names", "covariance", "design_names", "design", "linear_predictors", "log_likelihood", "evaluation_x", "evaluation_linear_predictors", "evaluation_times", "predicted_survival"]
     }

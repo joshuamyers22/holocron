@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/joshuamyers22/holocron/schemas/parametric-survival-result-v2.schema.json",
+  "title": "Holocron parametric survival result v2",
+  "type": "object",
+  "properties": {
+    "schema_version": {"const": "holocron-parametric-survival-result/v2"},
+    "distribution": {"enum": ["weibull", "exponential"]},
+    "coefficient_names": {"$ref": "#/$defs/names"},
+    "coefficients": {"$ref": "#/$defs/vector"},
+    "covariance": {"$ref": "#/$defs/matrix"},
+    "scale": {"oneOf": [{"type": "null"}, {"type": "number", "exclusiveMinimum": 0}]},
+    "strata_levels": {"$ref": "#/$defs/names"},
+    "scales": {"$ref": "#/$defs/positiveVector"},
+    "linear_predictors": {"$ref": "#/$defs/vector"},
+    "log_likelihood": {"type": "array", "minItems": 2, "maxItems": 2, "items": {"type": "number"}},
+    "iterations": {"type": "integer", "minimum": 0},
+    "n_observations": {"type": "integer", "minimum": 1}
+  },
+  "required": ["schema_version", "distribution", "coefficient_names", "coefficients", "covariance", "scale", "strata_levels", "scales", "linear_predictors", "log_likelihood", "iterations", "n_observations"],
+  "additionalProperties": false,
+  "$defs": {
+    "names": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
+    "vector": {"type": "array", "minItems": 1, "items": {"type": "number"}},
+    "positiveVector": {"type": "array", "minItems": 1, "items": {"type": "number", "exclusiveMinimum": 0}},
+    "matrix": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/vector"}}
+  }
+}

@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import math
 import unittest
 from typing import Literal
 
@@ -15,6 +16,7 @@ from holocron.models import (
     fit_cph,
     fit_npsurv,
     fit_psm,
+    survival_residuals,
 )
 from reference.contracts import (
     CASES,
@@ -63,7 +65,7 @@ class SurvivalModelTests(unittest.TestCase):
             if require_object(load_json(path), name=str(path)).get("operation")
             in {"cph", "psm", "npsurv"}
         ]
-        self.assertEqual(len(case_paths), 6)
+        self.assertEqual(len(case_paths), 9)
         exact_comparisons = 0
         numeric_comparisons = 0
         for case_path in case_paths:
@@ -79,8 +81,8 @@ class SurvivalModelTests(unittest.TestCase):
                 self.assertGreater(report.numeric_comparisons, 0)
                 exact_comparisons += report.exact_comparisons
                 numeric_comparisons += report.numeric_comparisons
-        self.assertEqual(exact_comparisons, 190)
-        self.assertEqual(numeric_comparisons, 446)
+        self.assertEqual(exact_comparisons, 432)
+        self.assertEqual(numeric_comparisons, 721)
 
     def test_cox_ties_predictions_and_round_trip(self) -> None:
         features = tuple((float(value),) for value in self.x)
@@ -177,6 +179,153 @@ class SurvivalModelTests(unittest.TestCase):
         )
         validate_document(result.to_dict(), NONPARAMETRIC_SURVIVAL_RESULT_SCHEMA)
 
+    def test_cox_counting_process_strata_weights_offsets_and_residuals(self) -> None:
+        features = tuple((float(value),) for value in self.x)
+        strata = tuple("A" if index % 2 == 0 else "B" for index in range(18))
+        entry = tuple(
+            float(min(index % 3, time - 1)) for index, time in enumerate(self.times)
+        )
+        weights = tuple(1.0 + 0.5 * (index % 3) for index in range(18))
+        offsets = tuple(0.05 * (index % 4 - 1.5) for index in range(18))
+        result = fit_cph(
+            self.times,
+            self.events,
+            features,
+            feature_names=("x",),
+            entry_times=entry,
+            strata=strata,
+            weights=weights,
+            offsets=offsets,
+        )
+
+        self.assertEqual(result.strata_levels, ("A", "B"))
+        self.assertEqual(set(result.baseline_strata), {"A", "B"})
+        self.assertTrue(all(value > 0.0 for value in result.baseline_hazard))
+        self.assertEqual(
+            result.baseline_survival,
+            tuple(math.exp(-value) for value in result.baseline_cumulative_hazard),
+        )
+        survival = result.predict_survival(
+            ((-1.0,), (0.5,)),
+            (3.0, 6.0, 10.0),
+            strata=("A", "B"),
+            offsets=(0.1, -0.1),
+        )
+        cumulative = result.predict_cumulative_hazard(
+            ((-1.0,), (0.5,)),
+            (3.0, 6.0, 10.0),
+            strata=("A", "B"),
+            offsets=(0.1, -0.1),
+        )
+        self.assertEqual(len(survival), 2)
+        self.assertTrue(all(value >= 0.0 for row in cumulative for value in row))
+        martingale = survival_residuals(
+            result,
+            self.times,
+            self.events,
+            entry_times=entry,
+            strata=strata,
+        )
+        deviance = survival_residuals(
+            result,
+            self.times,
+            self.events,
+            kind="deviance",
+            entry_times=entry,
+            strata=strata,
+        )
+        self.assertEqual(len(martingale.values), len(self.times))
+        self.assertTrue(all(value == value for value in deviance.values))
+        self.assertEqual(CoxResult.from_json(result.to_json()), result)
+
+    def test_parametric_scale_strata_weights_offsets_and_residuals(self) -> None:
+        features = tuple((float(value),) for value in self.x)
+        strata = tuple("A" if index % 2 == 0 else "B" for index in range(18))
+        weights = tuple(1.0 + 0.5 * (index % 3) for index in range(18))
+        offsets = tuple(0.05 * (index % 4 - 1.5) for index in range(18))
+        result = fit_psm(
+            self.times,
+            self.events,
+            features,
+            feature_names=("x",),
+            strata=strata,
+            weights=weights,
+            offsets=offsets,
+        )
+
+        self.assertIsNone(result.scale)
+        self.assertEqual(result.strata_levels, ("A", "B"))
+        self.assertEqual(len(result.scales), 2)
+        hazard = result.predict_hazard(
+            ((-1.0,), (0.5,)),
+            (3.0, 6.0, 10.0),
+            strata=("A", "B"),
+            offsets=(0.1, -0.1),
+        )
+        self.assertTrue(all(value > 0.0 for row in hazard for value in row))
+        for kind in ("normalized", "response", "martingale", "deviance"):
+            residual = survival_residuals(
+                result, self.times, self.events, kind=kind, strata=strata
+            )
+            self.assertEqual(len(residual.values), len(self.times))
+        self.assertEqual(ParametricSurvivalResult.from_json(result.to_json()), result)
+        with self.assertRaisesRegex(InputValidationError, "scale strata"):
+            fit_psm(
+                self.times,
+                self.events,
+                features,
+                distribution="exponential",
+                strata=strata,
+            )
+
+    def test_counting_process_weighted_stratified_kaplan_meier(self) -> None:
+        result = fit_npsurv(
+            (2, 3, 4, 5, 2, 4, 5, 6),
+            (1, 0, 1, 1, 0, 1, 0, 1),
+            entry_times=(0, 1, 1, 2, 0, 0, 3, 2),
+            strata=("A", "A", "A", "A", "B", "B", "B", "B"),
+            weights=(1, 2, 1, 2, 1, 2, 1, 2),
+        )
+
+        self.assertEqual(result.strata_levels, ("A", "B"))
+        self.assertEqual(result.n_risk, (4.0, 5.0, 3.0, 2.0, 3.0, 5.0, 3.0, 2.0))
+        self.assertEqual(result.predict((0, 2, 6), stratum="A"), (1.0, 0.75, 0.0))
+        self.assertEqual(result.predict((0, 2, 6), stratum="B"), (1.0, 1.0, 0.0))
+        self.assertEqual(
+            NonparametricSurvivalResult.from_json(result.to_json()), result
+        )
+
+    def test_v1_survival_results_are_migrated_in_memory(self) -> None:
+        features = tuple((float(value),) for value in self.x)
+        cox_document = fit_cph(self.times, self.events, features).to_dict()
+        cox_document["schema_version"] = "holocron-cox-result/v1"
+        for field in (
+            "baseline_strata",
+            "baseline_hazard",
+            "baseline_survival",
+            "strata_levels",
+        ):
+            del cox_document[field]
+        self.assertEqual(CoxResult.from_dict(cox_document).strata_levels, ("__all__",))
+
+        psm_document = fit_psm(self.times, self.events, features).to_dict()
+        psm_document["schema_version"] = "holocron-parametric-survival-result/v1"
+        del psm_document["strata_levels"]
+        del psm_document["scales"]
+        self.assertEqual(
+            ParametricSurvivalResult.from_dict(psm_document).strata_levels,
+            ("__all__",),
+        )
+
+        npsurv_document = fit_npsurv(self.times, self.events).to_dict()
+        npsurv_document["schema_version"] = "holocron-nonparametric-survival-result/v1"
+        del npsurv_document["strata"]
+        del npsurv_document["strata_levels"]
+        self.assertEqual(
+            NonparametricSurvivalResult.from_dict(npsurv_document).strata_levels,
+            ("__all__",),
+        )
+
     def test_failures_are_structured_and_readers_reject_tampering(self) -> None:
         features = tuple((float(value),) for value in self.x)
         with self.assertRaisesRegex(InputValidationError, "positive"):
@@ -185,6 +334,21 @@ class SurvivalModelTests(unittest.TestCase):
             fit_npsurv((1.0, 2.0), (0, 0))
         with self.assertRaisesRegex(InputValidationError, "one row"):
             fit_cph(self.times, self.events, features[:-1])
+        with self.assertRaisesRegex(InputValidationError, "strictly below"):
+            fit_cph(
+                self.times,
+                self.events,
+                features,
+                entry_times=self.times,
+            )
+        with self.assertRaisesRegex(InputValidationError, "positive"):
+            fit_cph(self.times, self.events, features, weights=(0.0,) * len(self.times))
+        with self.assertRaisesRegex(InputValidationError, "non-empty string"):
+            fit_npsurv(
+                self.times,
+                self.events,
+                strata=("A",) * (len(self.times) - 1) + (0,),  # type: ignore[arg-type]
+            )
         with self.assertRaises(RankDeficiencyError):
             fit_psm(
                 self.times,

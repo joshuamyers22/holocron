@@ -50,12 +50,15 @@ interactions, classical full-rank ordinary least squares, bounded generalized
 linear models, binary logistic regression, cumulative-link ordinal regression,
 numeric mixed-censoring conversion, and single-cluster random-intercept ordinal
 models, plus right-censored Efron/Breslow Cox models, Weibull/exponential
-accelerated-failure-time models, and unstratified Kaplan–Meier curves. It also
+accelerated-failure-time models, and Kaplan–Meier curves with the declared
+risk-set, stratum, weight, offset, baseline-quantity, prediction, and residual
+operations. It also
 includes the accepted post-estimation
 operations, diagonal OLS/lrm penalties, and robust/bootstrap covariance. The
-implemented surfaces are checked across 49 independent parity cases against
-committed outputs from a Dockerized R oracle. The six survival cases cover
-coefficients, covariance, likelihoods, risk sets, and survival curves.
+implemented surfaces are checked across 52 independent parity cases against
+committed outputs from a Dockerized R oracle. The nine survival cases cover
+coefficients, covariance, likelihoods, risk sets, baseline quantities,
+predictions, and supported residuals.
 Interval-censored,
 random-intercept, and dual-scale random-effect ORM cases are parity-qualified;
 one-sided censoring is covered by an explicit documented parity exception.
@@ -78,10 +81,12 @@ sparsity/conditioning cases, and nine failure-mode cases on both accepted
 platforms. Its technical evidence and scoped independent statistical review
 pass, closing Phase 4 for private experimental development.
 
-The first Phase 5 deliverable is complete within its experimental envelope.
-The remaining survival work—strata, entry times, weights, offsets, broader
-censoring and distributions, residuals, richer survival quantities, and time-
-dependent validation—remains open, as does the Phase 5 exit gate.
+The first two Phase 5 deliverables are complete within their experimental
+envelope. Cox, Weibull/exponential AFT, and Kaplan–Meier paths now cover declared
+ties, strata, entry times where defined, positive weights, offsets where
+defined, baseline hazard/survival, hazard/survival prediction, and supported
+residuals. Broader censoring and distributions, richer survival quantities,
+time-dependent validation, and the Phase 5 exit gate remain open.
 
 ## Library API
 

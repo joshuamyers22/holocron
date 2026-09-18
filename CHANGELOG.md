@@ -117,3 +117,10 @@ Notable changes are recorded here using semantic versioning.
   unstratified Kaplan–Meier implementations; added typed survival prediction,
   strict result schemas, artifact smoke coverage, and six cases passing 190
   exact and 446 numeric pinned-R comparisons.
+- Completed the second Phase 5 deliverable with Cox counting-process entry,
+  strata, positive weights, offsets, per-stratum baseline hazard/survival, and
+  martingale/deviance residuals; Weibull scale strata, weights, offsets, hazard
+  prediction, and four residual kinds; and weighted stratified counting-process
+  Kaplan–Meier curves. Three new vertical cases raise survival parity to 432
+  exact and 721 numeric comparisons, while v2 result schemas retain tested v1
+  migrations and packaged historical schemas.

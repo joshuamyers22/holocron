@@ -1,0 +1,15 @@
+{
+  "schema_version": "holocron-oracle-case/v1",
+  "case_id": "npsurv-counting-stratified-weighted",
+  "description": "Weighted stratified Kaplan-Meier curves with counting-process entry.",
+  "expected_output": "npsurv-counting-stratified-weighted.json",
+  "comparison_profile": "nonparametric-survival-risk-set-v2",
+  "qualification_stage": "python-parity",
+  "operation": "npsurv",
+  "estimator": "kaplan-meier",
+  "time": [2, 3, 4, 5, 2, 4, 5, 6],
+  "event": [1, 0, 1, 0, 0, 1, 0, 0],
+  "entry": [0, 1, 1, 2, 0, 0, 3, 2],
+  "strata": ["A", "A", "A", "A", "B", "B", "B", "B"],
+  "weights": [1, 2, 1, 2, 1, 2, 1, 2]
+}

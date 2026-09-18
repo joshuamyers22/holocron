@@ -1,0 +1,31 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/joshuamyers22/holocron/schemas/nonparametric-survival-result-v2.schema.json",
+  "title": "Holocron Kaplan-Meier result v2",
+  "type": "object",
+  "properties": {
+    "schema_version": {"const": "holocron-nonparametric-survival-result/v2"},
+    "estimator": {"const": "kaplan-meier"},
+    "time": {"$ref": "#/$defs/positive"},
+    "strata": {"$ref": "#/$defs/stringVector"},
+    "strata_levels": {"$ref": "#/$defs/names"},
+    "n_risk": {"$ref": "#/$defs/nonnegative"},
+    "n_event": {"$ref": "#/$defs/nonnegative"},
+    "n_censor": {"$ref": "#/$defs/nonnegative"},
+    "survival": {"$ref": "#/$defs/probabilities"},
+    "standard_error": {"$ref": "#/$defs/nonnegative"},
+    "lower": {"$ref": "#/$defs/probabilities"},
+    "upper": {"$ref": "#/$defs/probabilities"},
+    "confidence_level": {"type": "number", "exclusiveMinimum": 0, "exclusiveMaximum": 1},
+    "n_observations": {"type": "integer", "minimum": 1}
+  },
+  "required": ["schema_version", "estimator", "time", "strata", "strata_levels", "n_risk", "n_event", "n_censor", "survival", "standard_error", "lower", "upper", "confidence_level", "n_observations"],
+  "additionalProperties": false,
+  "$defs": {
+    "names": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
+    "stringVector": {"type": "array", "minItems": 1, "items": {"type": "string", "minLength": 1}},
+    "positive": {"type": "array", "minItems": 1, "items": {"type": "number", "exclusiveMinimum": 0}},
+    "probabilities": {"type": "array", "minItems": 1, "items": {"type": "number", "minimum": 0, "maximum": 1}},
+    "nonnegative": {"type": "array", "minItems": 1, "items": {"type": "number", "minimum": 0}}
+  }
+}

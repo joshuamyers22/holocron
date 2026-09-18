@@ -92,6 +92,12 @@ def main() -> None:
         if not capability["owner"]:
             raise ValueError(f"missing owner for {identifier}")
         cases = require_list(capability["oracle_cases"], name=f"{identifier}.cases")
+        profiles = {str(capability["tolerance_profile"])}
+        additional_profiles = require_list(
+            capability.get("additional_tolerance_profiles", []),
+            name=f"{identifier}.additional_tolerance_profiles",
+        )
+        profiles.update(str(profile) for profile in additional_profiles)
         if capability["status"] in {"experimental", "implemented"}:
             if (
                 not capability["python_entry_point"]
@@ -116,10 +122,7 @@ def main() -> None:
                         f"missing oracle output for {identifier}: {case_name}"
                     )
                 case_document = load_object(case_path)
-                if (
-                    case_document["comparison_profile"]
-                    != capability["tolerance_profile"]
-                ):
+                if case_document["comparison_profile"] not in profiles:
                     raise ValueError(f"compatibility profile differs from {case_name}")
     if actual_ids != expected_ids:
         missing = sorted(expected_ids - actual_ids)

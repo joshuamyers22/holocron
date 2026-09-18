@@ -32,10 +32,10 @@ exact; approximate comparison is restricted to allowlisted numerical paths.
 
 - automatic knots or factor levels, unrestricted or higher-order interactions,
   dataframe/date-time adapters, and model-level missing-data policy;
-- Cox strata, entry times, weights, offsets, residuals, robust covariance, and
-  formula-level fitting; parametric distributions beyond Weibull/exponential
-  and parametric left/interval censoring; Kaplan–Meier strata, entry times,
-  weights, and alternate estimators;
+- Cox score/Schoenfeld/influence residuals, robust covariance, and formula-level
+  fitting; parametric distributions beyond Weibull/exponential and parametric
+  left/interval censoring; Kaplan–Meier alternate estimators and robust
+  variance;
 - adjusted-effect `summary.rms`, complete `anova.rms` partitioning, nonlinear or
   simultaneous contrasts, calibration, validation, and resampling;
 - off-diagonal penalties, `pentrace`, weighted or offset fits, bootstrap
@@ -53,11 +53,12 @@ the documented open-endpoint contract under a pinned-R parity exception. Ron
 Mexico independently approved the complete Phase 4 private experimental scope,
 including that exception, on 2026-09-18.
 
-The six right-censored survival fixtures are also parity-qualified for the
-declared first Phase 5 envelope: Efron/Breslow Cox, Weibull/exponential AFT, and
-unstratified Kaplan–Meier. They do not establish proportional hazards,
-distributional adequacy, external validity, or support for the deferred
-survival features listed above.
+Nine survival fixtures are parity-qualified for the declared first two Phase 5
+deliverables: Efron/Breslow Cox, Weibull/exponential AFT, Kaplan–Meier, and the
+supported counting-process, stratification, weight, offset, baseline-quantity,
+prediction, and residual operations. They do not establish proportional
+hazards, distributional adequacy, external validity, or support for the
+deferred survival features listed above.
 
 ## Decision boundary
 

@@ -43,6 +43,29 @@ require_numeric_vector <- function(request, name, minimum_length = 1L) {
   as.numeric(value)
 }
 
+optional_numeric_vector <- function(request, name, length, default, positive = FALSE) {
+  value <- request[[name]]
+  if (is.null(value)) return(rep(default, length))
+  value <- require_numeric_vector(request, name, length)
+  if (base::length(value) != length) stop(sprintf("%s has the wrong length", name))
+  if (positive && any(value <= 0)) stop(sprintf("%s must be positive", name))
+  value
+}
+
+optional_strata <- function(request, length) {
+  value <- request$strata
+  if (is.null(value)) return(factor(rep("__all__", length), levels = "__all__"))
+  value <- as.character(value)
+  if (base::length(value) != length || any(!nzchar(value))) {
+    stop("strata must contain one non-empty string per observation")
+  }
+  factor(value, levels = unique(value))
+}
+
+curve_strata <- function(value) {
+  sub("^[^=]*=", "", as.character(value))
+}
+
 require_censor_endpoint <- function(request, name, lower = TRUE) {
   value <- request[[name]]
   if (is.null(value) || length(value) < 3L) {
@@ -1044,24 +1067,76 @@ run_cph <- function(request) {
   basis <- require_choice(request, "basis", c("linear", "rcs"))
   method <- require_choice(request, "method", c("efron", "breslow"))
   knots <- model_knots(request, basis)
-  data <- data.frame(x = x, time = time, event = event)
-  fit <- rms::cph(
-    model_formula("", basis, survival = TRUE),
-    data = data,
-    method = method,
-    x = TRUE,
-    y = TRUE,
-    surv = TRUE
+  entry <- optional_numeric_vector(request, "entry", length(time), 0)
+  if (any(entry < 0) || any(entry >= time)) stop("entry must be in [0, time)")
+  stratum <- optional_strata(request, length(time))
+  weights <- optional_numeric_vector(request, "weights", length(time), 1, positive = TRUE)
+  offset <- optional_numeric_vector(request, "offset", length(time), 0)
+  advanced <- any(c("entry", "strata", "weights", "offset") %in% names(request))
+  response <- if ("entry" %in% names(request)) {
+    "survival::Surv(entry, time, event)"
+  } else "survival::Surv(time, event)"
+  right <- if (basis == "linear") "x" else "rms::rcs(x, knots)"
+  if ("strata" %in% names(request)) right <- paste(right, "+ strat(stratum)")
+  if ("offset" %in% names(request)) right <- paste(right, "+ offset(offset)")
+  formula <- stats::as.formula(sprintf("%s ~ %s", response, right))
+  data <- data.frame(x = x, time = time, event = event, entry = entry,
+                     stratum = stratum, offset = offset)
+  arguments <- list(
+    formula, data = data, method = method, x = TRUE, y = TRUE, surv = TRUE
   )
+  if (advanced) {
+    arguments$eps <- 1e-9
+    arguments$iter.max <- 100L
+    arguments$tol <- 1e-10
+  }
+  if ("weights" %in% names(request)) arguments$weights <- weights
+  fit <- do.call(rms::cph, arguments)
   if (isTRUE(fit$fail)) stop("cph failed to converge")
-  new_data <- data.frame(x = evaluation_x)
-  evaluation_lp <- unname(as.numeric(stats::predict(fit, newdata = new_data, type = "lp")))
-  survival_function <- rms::Survival(fit)
-  predicted_survival <- lapply(evaluation_lp, function(lp) {
-    unname(as.numeric(survival_function(evaluation_times, lp)))
-  })
+  evaluation_strata <- if (is.null(request$evaluation_strata)) {
+    rep(levels(stratum)[1L], length(evaluation_x))
+  } else as.character(request$evaluation_strata)
+  evaluation_offset <- optional_numeric_vector(
+    request, "evaluation_offset", length(evaluation_x), 0
+  )
+  new_data <- data.frame(
+    x = evaluation_x,
+    stratum = factor(evaluation_strata, levels = levels(stratum)),
+    offset = evaluation_offset
+  )
+  evaluation_lp <- if (advanced) {
+    evaluation_design <- if (basis == "linear") {
+      matrix(evaluation_x, ncol = 1L)
+    } else rms::rcspline.eval(evaluation_x, knots = knots, inclx = TRUE)
+    unname(as.numeric(evaluation_design %*% stats::coef(fit) + evaluation_offset - fit$center))
+  } else unname(as.numeric(stats::predict(fit, newdata = new_data, type = "lp")))
+  if (advanced) {
+    baseline <- survival::basehaz(fit, centered = TRUE)
+    labels <- if ("strata" %in% names(baseline)) {
+      curve_strata(baseline$strata)
+    } else rep(levels(stratum)[1L], nrow(baseline))
+    increments <- ave(baseline$hazard, labels, FUN = function(value) c(value[1L], diff(value)))
+    keep <- increments > 0
+    labels <- labels[keep]
+    baseline_times <- baseline$time[keep]
+    baseline_cumulative <- baseline$hazard[keep]
+    baseline_hazard <- increments[keep]
+    predicted_survival <- lapply(seq_along(evaluation_lp), function(index) {
+      mask <- labels == evaluation_strata[index]
+      cumulative <- vapply(evaluation_times, function(value) {
+        available <- baseline_cumulative[mask & baseline_times <= value]
+        if (length(available)) tail(available, 1L) else 0
+      }, numeric(1L))
+      exp(-cumulative * exp(evaluation_lp[index]))
+    })
+  } else {
+    survival_function <- rms::Survival(fit)
+    predicted_survival <- lapply(evaluation_lp, function(lp) {
+      unname(as.numeric(survival_function(evaluation_times, lp)))
+    })
+  }
   covariance <- stats::vcov(fit)
-  list(
+  result <- list(
     protocol_version = protocol_version,
     operation = "cph",
     basis = basis,
@@ -1080,6 +1155,22 @@ run_cph <- function(request) {
     evaluation_times = evaluation_times,
     predicted_survival = predicted_survival
   )
+  if (advanced) {
+    result$entry <- entry
+    result$strata <- as.character(stratum)
+    result$weights <- weights
+    result$offset <- offset
+    result$evaluation_strata <- evaluation_strata
+    result$evaluation_offset <- evaluation_offset
+    result$baseline_strata <- labels
+    result$baseline_times <- unname(as.numeric(baseline_times))
+    result$baseline_hazard <- unname(as.numeric(baseline_hazard))
+    result$baseline_cumulative_hazard <- unname(as.numeric(baseline_cumulative))
+    result$baseline_survival <- unname(as.numeric(exp(-baseline_cumulative)))
+    result$martingale_residuals <- unname(as.numeric(stats::residuals(fit, type = "martingale")))
+    result$deviance_residuals <- unname(as.numeric(stats::residuals(fit, type = "deviance")))
+  }
+  result
 }
 
 run_psm <- function(request) {
@@ -1093,23 +1184,53 @@ run_psm <- function(request) {
   basis <- require_choice(request, "basis", c("linear", "rcs"))
   distribution <- require_choice(request, "distribution", c("weibull", "exponential"))
   knots <- model_knots(request, basis)
-  data <- data.frame(x = x, time = time, event = event)
-  fit <- rms::psm(
-    model_formula("", basis, survival = TRUE),
-    data = data,
-    dist = distribution,
-    x = TRUE,
-    y = TRUE
-  )
+  stratum <- optional_strata(request, length(time))
+  weights <- optional_numeric_vector(request, "weights", length(time), 1, positive = TRUE)
+  offset <- optional_numeric_vector(request, "offset", length(time), 0)
+  advanced <- any(c("strata", "weights", "offset") %in% names(request))
+  strata <- survival::strata
+  right <- if (basis == "linear") "x" else "rms::rcs(x, knots)"
+  if ("strata" %in% names(request)) right <- paste(right, "+ strata(stratum)")
+  if ("offset" %in% names(request)) right <- paste(right, "+ offset(offset)")
+  formula <- stats::as.formula(sprintf("survival::Surv(time, event) ~ %s", right))
+  data <- data.frame(x = x, time = time, event = event, stratum = stratum, offset = offset)
+  arguments <- list(formula, data = data, dist = distribution, x = TRUE, y = TRUE)
+  if ("weights" %in% names(request)) arguments$weights <- weights
+  fit <- if (advanced) {
+    do.call(survival::survreg, arguments)
+  } else do.call(rms::psm, arguments)
   if (isTRUE(fit$fail)) stop("psm failed to converge")
-  new_data <- data.frame(x = evaluation_x)
-  evaluation_lp <- unname(as.numeric(stats::predict(fit, newdata = new_data, type = "lp")))
-  survival_function <- rms::Survival(fit)
-  predicted_survival <- lapply(evaluation_lp, function(lp) {
-    unname(as.numeric(survival_function(evaluation_times, lp)))
+  evaluation_strata <- if (is.null(request$evaluation_strata)) {
+    rep(levels(stratum)[1L], length(evaluation_x))
+  } else as.character(request$evaluation_strata)
+  evaluation_offset <- optional_numeric_vector(
+    request, "evaluation_offset", length(evaluation_x), 0
+  )
+  new_data <- data.frame(
+    x = evaluation_x,
+    stratum = factor(evaluation_strata, levels = levels(stratum)),
+    offset = evaluation_offset
+  )
+  evaluation_lp <- if (advanced && basis == "linear") {
+    coefficients <- stats::coef(fit)
+    unname(as.numeric(coefficients[1L] + evaluation_x * coefficients[2L] + evaluation_offset))
+  } else unname(as.numeric(stats::predict(fit, newdata = new_data, type = "lp")))
+  scales <- unname(as.numeric(fit$scale))
+  scale_names <- if (length(scales) == 1L) {
+    levels(stratum)[1L]
+  } else curve_strata(names(fit$scale))
+  scale_by_stratum <- stats::setNames(scales, scale_names)
+  evaluation_scales <- unname(scale_by_stratum[evaluation_strata])
+  predicted_survival <- lapply(seq_along(evaluation_lp), function(index) {
+    exponent <- (log(evaluation_times) - evaluation_lp[index]) / evaluation_scales[index]
+    exp(-exp(exponent))
   })
   covariance <- stats::vcov(fit)
-  list(
+  if (advanced) {
+    coefficient_count <- length(stats::coef(fit))
+    covariance <- covariance[seq_len(coefficient_count), seq_len(coefficient_count), drop = FALSE]
+  }
+  result <- list(
     protocol_version = protocol_version,
     operation = "psm",
     basis = basis,
@@ -1119,16 +1240,40 @@ run_psm <- function(request) {
     coefficients = named_numbers(stats::coef(fit)),
     covariance_names = covariance_names(fit, covariance),
     covariance = matrix_rows(covariance),
-    design_names = name_vector(colnames(fit$x)),
-    design = matrix_rows(fit$x),
+    design_names = if (advanced) name_vector("x") else name_vector(colnames(fit$x)),
+    design = if (advanced) matrix_rows(matrix(x, ncol = 1L)) else matrix_rows(fit$x),
     linear_predictors = unname(as.numeric(fit$linear.predictors)),
     log_likelihood = unname(as.numeric(fit$loglik)),
-    scale = unname(as.numeric(fit$scale)),
+    scale = if (length(scales) == 1L) scales else NULL,
     evaluation_x = evaluation_x,
     evaluation_linear_predictors = evaluation_lp,
     evaluation_times = evaluation_times,
     predicted_survival = predicted_survival
   )
+  if (advanced) {
+    response_residuals <- log(time) - unname(as.numeric(fit$linear.predictors))
+    row_scales <- unname(scale_by_stratum[as.character(stratum)])
+    normalized <- response_residuals / row_scales
+    martingale <- event - exp(normalized)
+    deviance <- sign(martingale) * sqrt(pmax(
+      -2 * (martingale + event * log(pmax(1 - martingale, 1e-300))), 0
+    ))
+    result$strata <- as.character(stratum)
+    result$weights <- weights
+    result$offset <- offset
+    result$evaluation_strata <- evaluation_strata
+    result$evaluation_offset <- evaluation_offset
+    result$scales <- scales
+    result$predicted_hazard <- lapply(seq_along(evaluation_lp), function(index) {
+      exponent <- (log(evaluation_times) - evaluation_lp[index]) / evaluation_scales[index]
+      exp(exponent) / (evaluation_scales[index] * evaluation_times)
+    })
+    result$normalized_residuals <- unname(as.numeric(normalized))
+    result$response_residuals <- unname(as.numeric(response_residuals))
+    result$martingale_residuals <- unname(as.numeric(martingale))
+    result$deviance_residuals <- unname(as.numeric(deviance))
+  }
+  result
 }
 
 run_npsurv <- function(request) {
@@ -1137,15 +1282,25 @@ run_npsurv <- function(request) {
   require_equal_lengths(list(time, event), c("time", "event"))
   if (any(time <= 0)) stop("survival times must be positive")
   estimator <- require_choice(request, "estimator", c("kaplan-meier"))
-  data <- data.frame(time = time, event = event)
-  fit <- rms::npsurv(
-    survival::Surv(time, event) ~ 1, data = data
-  )
-  list(
+  entry <- optional_numeric_vector(request, "entry", length(time), 0)
+  if (any(entry < 0) || any(entry >= time)) stop("entry must be in [0, time)")
+  stratum <- optional_strata(request, length(time))
+  weights <- optional_numeric_vector(request, "weights", length(time), 1, positive = TRUE)
+  advanced <- any(c("entry", "strata", "weights") %in% names(request))
+  response <- if ("entry" %in% names(request)) {
+    "survival::Surv(entry, time, event)"
+  } else "survival::Surv(time, event)"
+  right <- if ("strata" %in% names(request)) "stratum" else "1"
+  formula <- stats::as.formula(sprintf("%s ~ %s", response, right))
+  data <- data.frame(time = time, event = event, entry = entry, stratum = stratum)
+  arguments <- list(formula, data = data)
+  if ("weights" %in% names(request)) arguments$weights <- weights
+  fit <- do.call(rms::npsurv, arguments)
+  result <- list(
     protocol_version = protocol_version,
     operation = "npsurv",
     estimator = estimator,
-    observations = unname(as.numeric(fit$n)),
+    observations = if (advanced) sum(as.numeric(fit$n)) else unname(as.numeric(fit$n)),
     time = unname(as.numeric(fit$time)),
     n_risk = unname(as.numeric(fit$n.risk)),
     n_event = unname(as.numeric(fit$n.event)),
@@ -1155,6 +1310,14 @@ run_npsurv <- function(request) {
     lower = unname(as.numeric(fit$lower)),
     upper = unname(as.numeric(fit$upper))
   )
+  if (advanced) {
+    result$entry <- entry
+    result$weights <- weights
+    result$strata <- if (is.null(fit$strata)) {
+      rep(levels(stratum)[1L], length(fit$time))
+    } else curve_strata(rep(names(fit$strata), fit$strata))
+  }
+  result
 }
 
 dispatch <- function(request) {

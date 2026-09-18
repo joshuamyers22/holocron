@@ -173,6 +173,11 @@ def _render_capability_table(capabilities: Sequence[Mapping[str, object]]) -> li
         if not isinstance(raw_cases, list):
             raise TypeError("oracle_cases must be a list")
         cases = cast(list[object], raw_cases)
+        profiles = [capability["tolerance_profile"]]
+        raw_additional_profiles = capability.get("additional_tolerance_profiles", [])
+        if not isinstance(raw_additional_profiles, list):
+            raise TypeError("additional_tolerance_profiles must be a list")
+        profiles.extend(cast(list[object], raw_additional_profiles))
         lines.append(
             "| "
             + " | ".join(
@@ -183,7 +188,7 @@ def _render_capability_table(capabilities: Sequence[Mapping[str, object]]) -> li
                     _markdown_text(capability["status"]),
                     _markdown_text(capability["milestone"]),
                     str(len(cases)),
-                    _code(capability["tolerance_profile"]),
+                    ", ".join(_code(profile) for profile in profiles),
                     _markdown_text(capability["known_differences"]),
                 )
             )

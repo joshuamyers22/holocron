@@ -28,6 +28,7 @@ from holocron.models import (
     residuals,
     robust_covariance,
     summarize,
+    survival_residuals,
 )
 from reference.contracts import JsonValue
 
@@ -56,9 +57,13 @@ def build_python_output(case: dict[str, JsonValue]) -> dict[str, JsonValue]:
     operation = case["operation"]
     if operation == "npsurv":
         result = fit_npsurv(
-            cast(list[float], case["time"]), cast(list[int], case["event"])
+            cast(list[float], case["time"]),
+            cast(list[int], case["event"]),
+            entry_times=cast(list[float] | None, case.get("entry")),
+            strata=cast(list[str] | None, case.get("strata")),
+            weights=cast(list[float] | None, case.get("weights")),
         )
-        return {
+        output: dict[str, JsonValue] = {
             "ok": True,
             "protocol_version": "1",
             "operation": "npsurv",
@@ -73,6 +78,13 @@ def build_python_output(case: dict[str, JsonValue]) -> dict[str, JsonValue]:
             "lower": cast(JsonValue, list(result.lower)),
             "upper": cast(JsonValue, list(result.upper)),
         }
+        if any(name in case for name in ("entry", "strata", "weights")):
+            output.update(
+                entry=case.get("entry"),
+                strata=cast(JsonValue, list(result.strata)),
+                weights=case.get("weights"),
+            )
+        return output
     if operation == "design":
         specification = DesignSpec.from_formula(cast(str, case["formula"]))
         raw_variables = cast(list[JsonValue], case["variables"])
@@ -377,12 +389,20 @@ def build_python_output(case: dict[str, JsonValue]) -> dict[str, JsonValue]:
         }
 
     if operation == "cph":
+        entry = cast(list[float] | None, case.get("entry"))
+        strata = cast(list[str] | None, case.get("strata"))
+        weights = cast(list[float] | None, case.get("weights"))
+        offset = cast(list[float] | None, case.get("offset"))
         result = fit_cph(
             cast(list[float], case["time"]),
             cast(list[int], case["event"]),
             basis,
             method=cast(Literal["efron", "breslow"], case["method"]),
             feature_names=design_names,
+            entry_times=entry,
+            strata=strata,
+            weights=weights,
+            offsets=offset,
         )
         evaluation_x = cast(list[float], case["evaluation_x"])
         evaluation_basis = (
@@ -390,11 +410,18 @@ def build_python_output(case: dict[str, JsonValue]) -> dict[str, JsonValue]:
             if spec is None
             else [list(row) for row in spec.transform(evaluation_x)]
         )
-        evaluation_linear = result.predict_linear(evaluation_basis)
-        survival = result.predict_survival(
-            evaluation_basis, cast(list[float], case["evaluation_times"])
+        evaluation_strata = cast(list[str] | None, case.get("evaluation_strata"))
+        evaluation_offset = cast(list[float] | None, case.get("evaluation_offset"))
+        evaluation_linear = result.predict_linear(
+            evaluation_basis, offsets=evaluation_offset
         )
-        return {
+        survival = result.predict_survival(
+            evaluation_basis,
+            cast(list[float], case["evaluation_times"]),
+            strata=evaluation_strata,
+            offsets=evaluation_offset,
+        )
+        output = {
             "ok": True,
             "protocol_version": "1",
             "operation": "cph",
@@ -419,14 +446,72 @@ def build_python_output(case: dict[str, JsonValue]) -> dict[str, JsonValue]:
             "evaluation_times": case["evaluation_times"],
             "predicted_survival": cast(JsonValue, [list(row) for row in survival]),
         }
+        if any(
+            name in case
+            for name in (
+                "entry",
+                "strata",
+                "weights",
+                "offset",
+                "evaluation_strata",
+                "evaluation_offset",
+            )
+        ):
+            output.update(
+                entry=case.get("entry"),
+                strata=case.get("strata"),
+                weights=case.get("weights"),
+                offset=case.get("offset"),
+                evaluation_strata=case.get("evaluation_strata"),
+                evaluation_offset=case.get("evaluation_offset"),
+                baseline_strata=cast(JsonValue, list(result.baseline_strata)),
+                baseline_times=cast(JsonValue, list(result.baseline_times)),
+                baseline_hazard=cast(JsonValue, list(result.baseline_hazard)),
+                baseline_cumulative_hazard=cast(
+                    JsonValue, list(result.baseline_cumulative_hazard)
+                ),
+                baseline_survival=cast(JsonValue, list(result.baseline_survival)),
+                martingale_residuals=cast(
+                    JsonValue,
+                    list(
+                        survival_residuals(
+                            result,
+                            cast(list[float], case["time"]),
+                            cast(list[int], case["event"]),
+                            entry_times=entry,
+                            strata=strata,
+                        ).values
+                    ),
+                ),
+                deviance_residuals=cast(
+                    JsonValue,
+                    list(
+                        survival_residuals(
+                            result,
+                            cast(list[float], case["time"]),
+                            cast(list[int], case["event"]),
+                            kind="deviance",
+                            entry_times=entry,
+                            strata=strata,
+                        ).values
+                    ),
+                ),
+            )
+        return output
 
     if operation == "psm":
+        strata = cast(list[str] | None, case.get("strata"))
+        weights = cast(list[float] | None, case.get("weights"))
+        offset = cast(list[float] | None, case.get("offset"))
         result = fit_psm(
             cast(list[float], case["time"]),
             cast(list[int], case["event"]),
             basis,
             distribution=cast(Literal["weibull", "exponential"], case["distribution"]),
             feature_names=design_names,
+            strata=strata,
+            weights=weights,
+            offsets=offset,
         )
         evaluation_x = cast(list[float], case["evaluation_x"])
         evaluation_basis = (
@@ -434,11 +519,18 @@ def build_python_output(case: dict[str, JsonValue]) -> dict[str, JsonValue]:
             if spec is None
             else [list(row) for row in spec.transform(evaluation_x)]
         )
-        evaluation_linear = result.predict_linear(evaluation_basis)
-        survival = result.predict_survival(
-            evaluation_basis, cast(list[float], case["evaluation_times"])
+        evaluation_strata = cast(list[str] | None, case.get("evaluation_strata"))
+        evaluation_offset = cast(list[float] | None, case.get("evaluation_offset"))
+        evaluation_linear = result.predict_linear(
+            evaluation_basis, offsets=evaluation_offset
         )
-        return {
+        survival = result.predict_survival(
+            evaluation_basis,
+            cast(list[float], case["evaluation_times"]),
+            strata=evaluation_strata,
+            offsets=evaluation_offset,
+        )
+        output = {
             "ok": True,
             "protocol_version": "1",
             "operation": "psm",
@@ -464,6 +556,84 @@ def build_python_output(case: dict[str, JsonValue]) -> dict[str, JsonValue]:
             "evaluation_times": case["evaluation_times"],
             "predicted_survival": cast(JsonValue, [list(row) for row in survival]),
         }
+        if any(
+            name in case
+            for name in (
+                "strata",
+                "weights",
+                "offset",
+                "evaluation_strata",
+                "evaluation_offset",
+            )
+        ):
+            output.update(
+                strata=case.get("strata"),
+                weights=case.get("weights"),
+                offset=case.get("offset"),
+                evaluation_strata=case.get("evaluation_strata"),
+                evaluation_offset=case.get("evaluation_offset"),
+                scales=cast(JsonValue, list(result.scales)),
+                predicted_hazard=cast(
+                    JsonValue,
+                    [
+                        list(row)
+                        for row in result.predict_hazard(
+                            evaluation_basis,
+                            cast(list[float], case["evaluation_times"]),
+                            strata=evaluation_strata,
+                            offsets=evaluation_offset,
+                        )
+                    ],
+                ),
+                normalized_residuals=cast(
+                    JsonValue,
+                    list(
+                        survival_residuals(
+                            result,
+                            cast(list[float], case["time"]),
+                            cast(list[int], case["event"]),
+                            kind="normalized",
+                            strata=strata,
+                        ).values
+                    ),
+                ),
+                response_residuals=cast(
+                    JsonValue,
+                    list(
+                        survival_residuals(
+                            result,
+                            cast(list[float], case["time"]),
+                            cast(list[int], case["event"]),
+                            kind="response",
+                            strata=strata,
+                        ).values
+                    ),
+                ),
+                martingale_residuals=cast(
+                    JsonValue,
+                    list(
+                        survival_residuals(
+                            result,
+                            cast(list[float], case["time"]),
+                            cast(list[int], case["event"]),
+                            strata=strata,
+                        ).values
+                    ),
+                ),
+                deviance_residuals=cast(
+                    JsonValue,
+                    list(
+                        survival_residuals(
+                            result,
+                            cast(list[float], case["time"]),
+                            cast(list[int], case["event"]),
+                            kind="deviance",
+                            strata=strata,
+                        ).values
+                    ),
+                ),
+            )
+        return output
 
     if operation == "orm":
         y = cast(list[float], case["y"])

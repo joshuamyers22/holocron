@@ -529,10 +529,12 @@
       "owner": "joshuamyers22",
       "oracle_cases": [
         "cph-breslow-rcs",
-        "cph-efron-linear"
+        "cph-efron-linear",
+        "cph-counting-stratified-weighted-offset"
       ],
-      "tolerance_profile": "cox-model-v1",
-      "known_differences": "Right-censored, caller-supplied full-rank designs with Efron or Breslow ties, observed covariance, centered predictors, baseline cumulative hazard, and survival prediction are supported. Strata, entry times, weights, offsets, residuals, robust covariance, and formula-level fitting remain deferred."
+      "tolerance_profile": "cox-risk-set-v2",
+      "additional_tolerance_profiles": ["cox-model-v1"],
+      "known_differences": "Caller-supplied full-rank designs support Efron/Breslow ties, counting-process entry, strata, positive weights, offsets, observed covariance, per-stratum baseline hazard/survival, cumulative-hazard/survival prediction, and martingale/deviance residuals. Formula fitting, robust covariance, and other residual kinds remain deferred."
     },
     {
       "id": "export:cr.setup",
@@ -932,10 +934,12 @@
       "owner": "joshuamyers22",
       "oracle_cases": [
         "npsurv-delayed-censoring",
-        "npsurv-kaplan-meier"
+        "npsurv-kaplan-meier",
+        "npsurv-counting-stratified-weighted"
       ],
-      "tolerance_profile": "nonparametric-survival-v1",
-      "known_differences": "Unstratified right-censored Kaplan-Meier curves with risk/event/censor counts and log-scale Greenwood intervals are supported. Entry times, weights, strata, alternate estimators, and formula-level fitting remain deferred."
+      "tolerance_profile": "nonparametric-survival-risk-set-v2",
+      "additional_tolerance_profiles": ["nonparametric-survival-v1"],
+      "known_differences": "Right-censored and counting-process Kaplan-Meier curves support strata and positive frequency weights with weighted risk/event/censor counts and log-scale Greenwood intervals. Alternate estimators, robust variance, and formula-level fitting remain deferred."
     },
     {
       "id": "export:ols",
@@ -1297,10 +1301,12 @@
       "owner": "joshuamyers22",
       "oracle_cases": [
         "psm-exponential-rcs",
-        "psm-weibull-linear"
+        "psm-weibull-linear",
+        "psm-weibull-stratified-weighted-offset"
       ],
-      "tolerance_profile": "parametric-survival-v1",
-      "known_differences": "Right-censored Weibull and exponential accelerated-failure-time fits with observed covariance and survival prediction are supported for caller-supplied full-rank designs. Other distributions, left/interval censoring, weights, offsets, residuals, and formula-level fitting remain deferred."
+      "tolerance_profile": "parametric-survival-risk-set-v2",
+      "additional_tolerance_profiles": ["parametric-survival-v1"],
+      "known_differences": "Right-censored Weibull and exponential AFT fits support positive weights, offsets, observed covariance, survival/hazard prediction, and response/normalized/martingale/deviance residuals; Weibull additionally supports scale strata. Other distributions, left/interval censoring, and formula-level fitting remain deferred."
     },
     {
       "id": "export:rcs",
@@ -1690,14 +1696,14 @@
       "id": "s3_method:Hazard.psm",
       "r_symbol": "Hazard.psm",
       "kind": "s3_method",
-      "python_entry_point": null,
+      "python_entry_point": "holocron.models.ParametricSurvivalResult.predict_hazard",
       "tier": "B",
       "milestone": "Phase 4-5",
-      "status": "deferred",
+      "status": "experimental",
       "owner": "joshuamyers22",
-      "oracle_cases": [],
-      "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "oracle_cases": ["psm-weibull-stratified-weighted-offset"],
+      "tolerance_profile": "parametric-survival-risk-set-v2",
+      "known_differences": "Returns Weibull/exponential hazards for explicit feature rows, times, strata, and offsets; rms function-factory and adjustment-grid behavior remain deferred."
     },
     {
       "id": "s3_method:Initialize.corFloorExp",
@@ -1833,14 +1839,14 @@
       "id": "s3_method:Survival.cph",
       "r_symbol": "Survival.cph",
       "kind": "s3_method",
-      "python_entry_point": null,
+      "python_entry_point": "holocron.models.CoxResult.predict_survival",
       "tier": "B",
       "milestone": "Phase 4-5",
-      "status": "deferred",
+      "status": "experimental",
       "owner": "joshuamyers22",
-      "oracle_cases": [],
-      "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "oracle_cases": ["cph-counting-stratified-weighted-offset"],
+      "tolerance_profile": "cox-risk-set-v2",
+      "known_differences": "Predicts survival from the owned per-stratum baseline for explicit feature rows, times, strata, and offsets; rms function-factory and adjustment-grid behavior remain deferred."
     },
     {
       "id": "s3_method:Survival.orm",
@@ -1859,14 +1865,14 @@
       "id": "s3_method:Survival.psm",
       "r_symbol": "Survival.psm",
       "kind": "s3_method",
-      "python_entry_point": null,
+      "python_entry_point": "holocron.models.ParametricSurvivalResult.predict_survival",
       "tier": "B",
       "milestone": "Phase 4-5",
-      "status": "deferred",
+      "status": "experimental",
       "owner": "joshuamyers22",
-      "oracle_cases": [],
-      "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "oracle_cases": ["psm-weibull-stratified-weighted-offset"],
+      "tolerance_profile": "parametric-survival-risk-set-v2",
+      "known_differences": "Predicts survival for explicit feature rows, times, strata, and offsets; rms function-factory and adjustment-grid behavior remain deferred."
     },
     {
       "id": "s3_method:[.Ocens",
@@ -3289,14 +3295,14 @@
       "id": "s3_method:residuals.cph",
       "r_symbol": "residuals.cph",
       "kind": "s3_method",
-      "python_entry_point": null,
+      "python_entry_point": "holocron.models.survival_residuals",
       "tier": "D",
       "milestone": "Phase 8",
-      "status": "deferred",
+      "status": "experimental",
       "owner": "joshuamyers22",
-      "oracle_cases": [],
-      "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "oracle_cases": ["cph-counting-stratified-weighted-offset"],
+      "tolerance_profile": "cox-risk-set-v2",
+      "known_differences": "Supports martingale and deviance residuals for the explicit fitted response, entry times, and strata; score, Schoenfeld, influence, partial, and robust variants remain deferred."
     },
     {
       "id": "s3_method:residuals.lrm",
@@ -3341,14 +3347,14 @@
       "id": "s3_method:residuals.psm",
       "r_symbol": "residuals.psm",
       "kind": "s3_method",
-      "python_entry_point": null,
+      "python_entry_point": "holocron.models.survival_residuals",
       "tier": "D",
       "milestone": "Phase 8",
-      "status": "deferred",
+      "status": "experimental",
       "owner": "joshuamyers22",
-      "oracle_cases": [],
-      "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "oracle_cases": ["psm-weibull-stratified-weighted-offset"],
+      "tolerance_profile": "parametric-survival-risk-set-v2",
+      "known_differences": "Supports response, normalized, martingale, and deviance residuals for the explicit fitted response and strata; censored-normalized plotting and influence variants remain deferred."
     },
     {
       "id": "s3_method:specs.rms",
