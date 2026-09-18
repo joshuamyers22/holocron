@@ -10,7 +10,25 @@
     "quadrature": {"type": "object", "required": ["grid", "tolerance", "maximum_last_step_scaled_difference"]},
     "sparsity": {"type": "object", "required": ["levels", "maximum_covariance_condition", "maximum_simplex_error"]},
     "platforms": {"type": "array", "const": ["ubuntu-24.04", "macos-15"]},
-    "independent_review": {"type": "object", "required": ["required", "scope", "status"]}
+    "independent_review": {
+      "type": "object",
+      "properties": {
+        "required": {"const": true},
+        "scope": {"type": "string", "minLength": 1},
+        "status": {"enum": ["pending", "approved"]},
+        "reviewer": {"type": "string", "minLength": 1},
+        "approved_at": {"type": "string", "format": "date"},
+        "disposition": {"type": "string", "minLength": 1}
+      },
+      "required": ["required", "scope", "status"],
+      "allOf": [
+        {
+          "if": {"properties": {"status": {"const": "approved"}}, "required": ["status"]},
+          "then": {"required": ["reviewer", "approved_at", "disposition"]}
+        }
+      ],
+      "additionalProperties": false
+    }
   },
   "required": ["schema_version", "plan_id", "parity_operations", "simulation_scenarios", "quadrature", "sparsity", "platforms", "independent_review"],
   "additionalProperties": false

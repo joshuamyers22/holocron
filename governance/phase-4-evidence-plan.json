@@ -51,6 +51,9 @@
   "independent_review": {
     "required": true,
     "scope": "Phase 4 ordinal, censoring, random-effects, simulations, and numerical limits",
-    "status": "pending"
+    "status": "approved",
+    "reviewer": "Ron Mexico",
+    "approved_at": "2026-09-18",
+    "disposition": "Approved for private experimental development, including the documented one-sided-censoring parity exception"
   }
 }

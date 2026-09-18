@@ -1,6 +1,6 @@
 # Project Brief
 
-- Status and scope: Phases 0–3 complete for private experimental development as of 2026-09-18; Phase 4 ordinal/censoring implementation and technical exit evidence pass, with scoped independent statistical approval still required; Ron Mexico independently approved only the Phase 3 alpha scope, and capability promotion, consequential use, and external distribution remain blocked by their separate reviews
+- Status and scope: Phases 0–4 complete for private experimental development as of 2026-09-18; Ron Mexico independently approved the Phase 3 alpha and Phase 4 ordinal/censoring/random-effects scopes; capability promotion, consequential use, and external distribution remain blocked by their separate reviews
 - Problem and affected users: Python lacks an integrated equivalent of R's `rms`; biostatisticians, epidemiologists, statistical programmers, and scientific-library authors must assemble incomplete workflows across packages.
 - Measurable success criteria: Every claimed compatible capability is linked to a pinned R 8.2-0 oracle case, method-specific numerical tolerances, statistical simulation evidence, typed public results, executable documentation, and a reproducible release artifact.
 - Explicit non-goals: Runtime delegation to R; a thin `rpy2` wrapper; initial implementation of the separate `rmsb` package; silent method substitutions; claiming drop-in or full parity without manifest-backed evidence.

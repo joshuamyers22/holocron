@@ -88,8 +88,9 @@ three exact-response, one interval-censored, one random-intercept, and one
 dual-scale `mix_re` case. The locked Phase 4 simulations, quadrature checks,
 sparsity measurements, and failure corpus also pass on the accepted platform
 matrix. One-sided censoring keeps the documented open-endpoint semantics under
-an explicit pinned-R parity exception. Independent statistical review is the
-remaining Phase 4 exit criterion.
+an explicit pinned-R parity exception. Ron Mexico independently approved the
+complete Phase 4 private experimental scope, including that exception, on
+2026-09-18; the exit gate is closed.
 
 Weights, offsets, penalties, partial proportional odds, arbitrary character or
 factor censoring endpoints, missing-row reinsertion, y-dependent effects,

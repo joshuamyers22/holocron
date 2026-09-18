@@ -46,8 +46,9 @@ freeze future comparison targets and do not imply a Python implementation.
 Exact-response, interval-censored, random-intercept, and dual-scale `mix_re`
 ordinal fixtures are parity-qualified. Phase 4 simulations, quadrature,
 sparsity, failure-mode, and platform evidence pass. One-sided censoring follows
-the documented open-endpoint contract under a pinned-R parity exception, and
-the Phase 4 scope still awaits independent statistical approval.
+the documented open-endpoint contract under a pinned-R parity exception. Ron
+Mexico independently approved the complete Phase 4 private experimental scope,
+including that exception, on 2026-09-18.
 
 ## Decision boundary
 

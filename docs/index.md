@@ -26,10 +26,10 @@ The current experimental surface supports only:
 
 The core estimator envelope is also checked by seven seeded simulation
 scenarios totaling 2,620 outer replications and a 16-case numerical edge corpus.
-Phase 3 is complete for private experimental development following independent
-statistical review of its alpha scope. The Phase 4 ordinal/censoring functional
-surface and technical exit evidence are complete and passing; scoped independent
-statistical review remains open. Capability promotion,
+Phases 3 and 4 are complete for private experimental development following
+their scoped independent statistical reviews. The Phase 4 approval covers the
+ordinal, censoring, random-effects, and documented parity-exception evidence.
+Capability promotion,
 consequential use, and external distribution remain separately blocked.
 
 The design, Phase 3, and ordinal APIs are checked against 43

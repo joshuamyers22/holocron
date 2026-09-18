@@ -74,7 +74,9 @@ the declared failure corpus. It writes a schema-valid aggregate report to
 `.work/phase-4-evidence/phase-4-exit.json`. Use `make phase-4-evidence-clean`
 for review evidence. CI runs the same package on Ubuntu and macOS and retains
 both platform reports. A passing report establishes technical evidence; it does
-not substitute for the required independent statistical approval.
+not substitute for independent statistical approval. Ron Mexico approved the
+registered Phase 4 private experimental scope on 2026-09-18, so a passing report
+now records the exit gate as closed.
 
 ## Compatibility changes
 

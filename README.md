@@ -13,7 +13,7 @@ The project is distributed internally as `holocron-rms` and imported as
 Holocron is experimental and incomplete. Do not use it for consequential
 analysis, inference, prediction, or clinical decisions.
 
-Phases 0–3 are complete for private experimental development. The Phase 3
+Phases 0–4 are complete for private experimental development. The Phase 3
 deliverables cover experimental `ols`,
 Gaussian/identity and binomial/logit `Glm`, and binary `lrm` estimators plus
 their covariance,
@@ -24,9 +24,12 @@ corpus and a complete executable getting-started workflow. Ron Mexico
 independently reviewed and approved the Phase 3 alpha scope on 2026-09-18; the
 evidence-backed disposition is recorded in the
 [Phase 3 completion record](https://github.com/joshuamyers22/holocron/blob/main/governance/PHASE_3_COMPLETION.md).
-Every capability remains experimental pending its separate promotion reviews,
-and the Phase 4 ordinal/censoring functional deliverable and technical exit
-evidence are complete. Its independent statistical review remains open. The Phase 1 exit
+Every capability remains experimental pending its separate promotion reviews.
+Ron Mexico also independently reviewed and approved the Phase 4 ordinal,
+censoring, random-effects, and parity-exception scope on 2026-09-18; its exit
+gate is recorded in the
+[Phase 4 completion record](https://github.com/joshuamyers22/holocron/blob/main/governance/PHASE_4_COMPLETION.md).
+The Phase 1 exit
 gate is recorded in the
 [completion record](https://github.com/joshuamyers22/holocron/blob/main/governance/PHASE_1_COMPLETION.md);
 the evidence-backed Phase 2 disposition is recorded in its
@@ -70,8 +73,8 @@ nine failure and stability categories.
 The Phase 4 package additionally runs 232 seeded fixed, censored, and clustered
 ordinal replications, two quadrature-stability checks, three response-support
 sparsity/conditioning cases, and nine failure-mode cases on both accepted
-platforms. Its technical evidence passes; independent statistical approval is
-still required to close Phase 4.
+platforms. Its technical evidence and scoped independent statistical review
+pass, closing Phase 4 for private experimental development.
 
 ## Library API
 

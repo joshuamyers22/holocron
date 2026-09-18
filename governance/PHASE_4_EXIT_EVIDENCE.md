@@ -4,8 +4,9 @@
 - Scope: private experimental development
 - Accountable owner: joshuamyers22
 - Technical evidence: passed
-- Independent statistical review: pending
-- Phase 4 exit gate: awaiting independent review
+- Independent statistical reviewer: Ron Mexico
+- Review disposition: approved on 2026-09-18
+- Phase 4 exit gate: closed
 
 ## Reproducible package
 
@@ -61,9 +62,13 @@ tolerance.
 
 ## Gate disposition
 
-The technical evidence package is complete and passing. The repository cannot
-self-approve the required independent statistical review. Phase 4 closes only
-after a qualified reviewer approves the scope above and the approval is added
-to this record and the governance ledger. Capability promotion, consequential
-use, license review, external verification, and external distribution remain
-separate gates.
+The technical evidence package is complete and passing. Ron Mexico independently
+reviewed the ordinal, censoring, random-effects, simulation, numerical-limit,
+and parity-exception evidence and approved the Phase 4 private experimental
+scope on 2026-09-18. The machine-readable evidence report therefore records the
+Phase 4 exit gate as closed.
+
+This approval includes the documented one-sided-censoring parity exception. It
+does not promote capabilities beyond `experimental` or authorize consequential
+use, external verification, license approval, or external distribution; those
+remain separate gates.

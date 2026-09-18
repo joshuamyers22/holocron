@@ -1,6 +1,6 @@
 # Independent Python Implementation of `rms`: Production Project Plan
 
-**Status:** Active — Phases 0–3 complete; Phase 4 technical evidence passed with independent review open
+**Status:** Active — Phases 0–4 complete for private experimental development
 **Plan date:** 2026-09-17  
 **Reference implementation:** Frank Harrell's R package `rms`  
 **Project name:** `holocron`  
@@ -724,8 +724,9 @@ tests, diagnostics, strict result serialization, and a 64-level stress case are
 implemented. Six exact, interval-censored, and clustered cases pass the pinned
 R oracle; the locked simulations, quadrature, sparsity, conditioning, failure,
 and platform evidence pass. The one-sided-censoring difference is published as
-a parity exception. Scoped independent statistical review is the sole remaining
-Phase 4 exit criterion; see `governance/PHASE_4_EXIT_EVIDENCE.md`.
+a parity exception. Ron Mexico independently reviewed and approved the complete
+Phase 4 private experimental scope, including that exception, on 2026-09-18.
+The exit gate is closed; see `governance/PHASE_4_COMPLETION.md`.
 
 ### Phase 5 — Survival models (24–36 weeks)
 
@@ -910,8 +911,9 @@ Every epic should be decomposed into vertical, reviewable capabilities rather th
 ## 17. Approval record
 
 - Product owner: joshuamyers22
-- Statistical reviewer: Ron Mexico for the Phase 3 alpha scope; approval
-  recorded 2026-09-18; future phases and broader promotion require scoped review
+- Statistical reviewer: Ron Mexico for the Phase 3 alpha and Phase 4 private
+  experimental scopes; approvals recorded 2026-09-18; future phases and broader
+  promotion require scoped review
 - Numerical lead: vacant; required before capability promotion
 - Python/API lead: joshuamyers22 (acting)
 - Verification owner: vacant; must be independent before capability promotion

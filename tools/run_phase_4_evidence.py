@@ -413,6 +413,14 @@ def main() -> None:
         for section in (parity, simulations, quadrature, sparsity, failure_modes)
     )
     review = require_object(plan["independent_review"], name="independent_review")
+    review_approved = (
+        review.get("required") is True
+        and review.get("status") == "approved"
+        and isinstance(review.get("reviewer"), str)
+        and bool(review["reviewer"])
+        and isinstance(review.get("approved_at"), str)
+        and bool(review["approved_at"])
+    )
     report: dict[str, JsonValue] = {
         "schema_version": "holocron-phase-4-evidence-report/v1",
         "generated_at": datetime.now(UTC).isoformat(),
@@ -438,15 +446,22 @@ def main() -> None:
         },
         "independent_review": review,
         "technical_status": "pass" if technical_pass else "fail",
-        "phase_4_exit_gate": "awaiting-independent-review"
-        if technical_pass
-        else "failed",
+        "phase_4_exit_gate": (
+            "closed"
+            if technical_pass and review_approved
+            else "awaiting-independent-review"
+            if technical_pass
+            else "failed"
+        ),
     }
     validate_document(report, REPORT_SCHEMA)
     output = args.output if args.output.is_absolute() else ROOT / args.output
     output.parent.mkdir(parents=True, exist_ok=True)
     output.write_text(json.dumps(report, allow_nan=False, indent=2) + "\n")
-    print(f"wrote {output.relative_to(ROOT)}: {report['technical_status']}")
+    print(
+        f"wrote {output.relative_to(ROOT)}: technical={report['technical_status']}, "
+        f"gate={report['phase_4_exit_gate']}"
+    )
     if not technical_pass:
         raise SystemExit("Phase 4 technical evidence failed")
 

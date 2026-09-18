@@ -15,7 +15,25 @@
     "sparsity": {"type": "object", "required": ["passed", "fits"]},
     "failure_modes": {"type": "object", "required": ["passed", "cases"]},
     "platform_policy": {"type": "object", "required": ["required_platforms", "ci_artifacts"]},
-    "independent_review": {"type": "object", "required": ["required", "status", "scope"]},
+    "independent_review": {
+      "type": "object",
+      "properties": {
+        "required": {"const": true},
+        "scope": {"type": "string", "minLength": 1},
+        "status": {"enum": ["pending", "approved"]},
+        "reviewer": {"type": "string", "minLength": 1},
+        "approved_at": {"type": "string", "format": "date"},
+        "disposition": {"type": "string", "minLength": 1}
+      },
+      "required": ["required", "status", "scope"],
+      "allOf": [
+        {
+          "if": {"properties": {"status": {"const": "approved"}}, "required": ["status"]},
+          "then": {"required": ["reviewer", "approved_at", "disposition"]}
+        }
+      ],
+      "additionalProperties": false
+    },
     "technical_status": {"enum": ["pass", "fail"]},
     "phase_4_exit_gate": {"enum": ["awaiting-independent-review", "closed", "failed"]}
   },

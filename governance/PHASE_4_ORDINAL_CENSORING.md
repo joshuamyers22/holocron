@@ -3,7 +3,8 @@
 - Implementation date: 2026-09-18
 - Scope: private experimental development
 - Accountable owner: joshuamyers22
-- Phase 4 exit gate: open
+- Independent statistical reviewer: Ron Mexico
+- Phase 4 exit gate: closed on 2026-09-18
 
 ## Implemented contract
 
@@ -63,6 +64,7 @@ are unsupported and fail or remain absent rather than being approximated.
 
 The technical exit evidence is complete and passing; see
 `PHASE_4_EXIT_EVIDENCE.md`. One-sided censoring retains documented exact-grid
-semantics under an explicit pinned-R parity exception. Scoped independent
-statistical approval is the only remaining Phase 4 exit criterion. Capability
-promotion and external use remain separate gates.
+semantics under an explicit pinned-R parity exception. Ron Mexico independently
+reviewed and approved this Phase 4 private experimental scope, including that
+exception, on 2026-09-18. The Phase 4 exit gate is closed; capability promotion
+and external use remain separate gates.
