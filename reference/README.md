@@ -68,7 +68,7 @@ make reference-source-check RMS_SOURCE=/absolute/path/to/rms-master
 `make oracle-check` discovers every committed case, validates its case and output
 schemas, executes it through the live container, applies its named comparison
 profile, and emits validated evidence. Normal Python tests independently compute
-the 12 implemented spline-design and spline-OLS results and use the same
+the 16 implemented data-distribution, spline-design, and spline-OLS results and use the same
 profiles against those outputs; they do not invoke Docker or R. The remaining
 13 statistical cases are oracle baselines for deferred logistic, ordinal, and
 survival implementations. `make reference-metadata` validates every schema,

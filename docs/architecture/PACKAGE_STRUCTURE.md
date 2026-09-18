@@ -8,7 +8,7 @@ package metadata.
 
 | Namespace | Responsibility | Current public objects |
 |---|---|---|
-| `holocron.design` | Immutable design specifications and deterministic transformations | `RestrictedCubicSplineSpec` |
+| `holocron.design` | Immutable predictor metadata, design specifications, and deterministic transformations | `DataDistribution`, `VariableDistribution`, `DistributionRange`, `RestrictedCubicSplineSpec` |
 | `holocron.models` | Estimators and immutable fitted-result contracts | `fit_ols`, `OlsResult` |
 | `holocron.exceptions` | Stable failure categories at public boundaries | `HolocronError` and specific subclasses |
 
@@ -18,9 +18,8 @@ in the nearest package's `__all__`; implementation modules may change without
 notice while the project is experimental.
 
 New domains will receive a namespace only with a working vertical capability.
-Planned areas such as formulas, data-distribution metadata, inference,
-survival, validation, graphics, reporting, and serialization are not represented
-by empty placeholder packages.
+Planned areas such as formulas, inference, survival, validation, graphics, and
+reporting are not represented by empty placeholder packages.
 
 ## Dependency direction
 
@@ -33,10 +32,10 @@ holocron.models -----> holocron.exceptions
 
 Public result and specification objects are owned by Holocron. Third-party
 model-result objects and dataframe implementations must not leak through public
-contracts. The current slice accepts Python iterables and returns owned objects
-or NumPy arrays. The canonical table boundary and estimator backend remain
-blocking decisions in ADR-006 and ADR-007; unused dataframe and modeling
-dependencies are therefore not installed preemptively.
+contracts. The current slice accepts named Python iterables and returns owned
+objects or NumPy arrays. ADR-006 establishes the canonical data boundary; the
+estimator backend remains a blocking decision in ADR-007. Unused dataframe and
+modeling dependencies are therefore not installed preemptively.
 
 ## Runtime and test boundaries
 

@@ -75,7 +75,7 @@
           "type": "array",
           "minItems": 1,
           "uniqueItems": true,
-          "items": {"enum": ["deterministic-transform-v1", "well-conditioned-ols-v1"]}
+          "items": {"enum": ["data-distribution-v1", "deterministic-transform-v1", "well-conditioned-ols-v1"]}
         }
       },
       "required": ["path", "sha256", "accepted_profiles"],

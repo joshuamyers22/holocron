@@ -26,7 +26,7 @@ from pathlib import Path
 import numpy as np
 
 import holocron
-from holocron.design import RestrictedCubicSplineSpec
+from holocron.design import DataDistribution, RestrictedCubicSplineSpec
 from holocron.models import fit_ols
 
 source_root = Path(os.environ["HOLOCRON_SMOKE_SOURCE_ROOT"]).resolve()
@@ -41,12 +41,15 @@ assert importlib.util.find_spec("holocron.cli") is None
 
 x = (-2.0, -1.0, 0.0, 1.0, 2.0, 3.0)
 y = (0.2, 0.8, 1.1, 1.7, 2.5, 3.6)
+metadata = DataDistribution.from_data({"x": x}, labels={"x": "Predictor"})
 spec = RestrictedCubicSplineSpec((-2.0, 0.0, 1.5, 3.0))
 design = spec.transform(x)
 fit = fit_ols(y, design, feature_names=("x", "x'", "x''"))
 predictions = fit.predict(design)
 
 assert design.shape == (6, 3)
+assert metadata.adjustments == {"x": 0.5}
+assert DataDistribution.from_json(metadata.to_json()) == metadata
 assert fit.coefficient_names == ("Intercept", "x", "x'", "x''")
 assert fit.rank == 4
 assert fit.residual_degrees_of_freedom == 2

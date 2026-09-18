@@ -46,6 +46,17 @@
         }
       ]
     },
+    "data-distribution-v1": {
+      "description": "Exact metadata with machine-precision tolerance for numeric predictor summaries.",
+      "default": {"mode": "exact"},
+      "rules": [
+        {"path": "/variables/*/adjustment", "rule": {"mode": "numeric", "absolute": 1e-12, "relative": 1e-12}},
+        {"path": "/variables/*/effect_range/*", "rule": {"mode": "numeric", "absolute": 1e-12, "relative": 1e-12}},
+        {"path": "/variables/*/display_range/*", "rule": {"mode": "numeric", "absolute": 1e-12, "relative": 1e-12}},
+        {"path": "/variables/*/overall_range/*", "rule": {"mode": "numeric", "absolute": 1e-12, "relative": 1e-12}},
+        {"path": "/variables/*/values/*", "rule": {"mode": "numeric", "absolute": 1e-12, "relative": 1e-12}}
+      ]
+    },
     "binary-logistic-v1": {
       "description": "Field-aware tolerances for binary logistic coefficients, covariance, predictors, and probabilities.",
       "default": {"mode": "exact"},

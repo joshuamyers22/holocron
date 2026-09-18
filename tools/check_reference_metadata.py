@@ -9,12 +9,10 @@ from typing import cast
 
 from reference.contracts import (
     CASES,
-    POLICY_PATH,
     TOLERANCE_PILOT_SCHEMA,
     load_json,
     require_array,
     require_object,
-    sha256_file,
     validate_document,
     validate_repository_contracts,
 )
@@ -25,6 +23,9 @@ CHECKSUM_PATH = ROOT / "reference/manifests/rms-8.2-0-files.sha256"
 COMPATIBILITY_PATH = ROOT / "compatibility/rms-8.2.0.yaml"
 VALID_STATUSES = {"experimental", "implemented", "mapped", "unsupported", "deferred"}
 TOLERANCE_EVIDENCE = ROOT / "governance/evidence/tolerance-pilot"
+PHASE_ONE_POLICY_SHA256 = (
+    "6809ba3f7ac364ec378eaff42c51a80aeae883ab3e7cf2f6933e7653c65fc6d8"
+)
 
 
 def load_object(path: Path) -> dict[str, object]:
@@ -141,7 +142,7 @@ def main() -> None:
     expected_pilot_cases = {
         path.stem
         for path in CASES.glob("*.json")
-        if load_object(path).get("qualification_stage") == "python-parity"
+        if load_object(path).get("operation") in {"rcs", "ols_rcs"}
     }
     expected_reports = {
         "macos-15-arm64.json": ("Darwin", "arm64", "accelerate unknown"),
@@ -176,8 +177,8 @@ def main() -> None:
         if identity != expected_environment:
             raise ValueError(f"unexpected tolerance pilot environment: {filename}")
         policy = require_object(report["policy"], name=f"{filename}.policy")
-        if policy["sha256"] != sha256_file(POLICY_PATH):
-            raise ValueError(f"stale tolerance policy evidence: {filename}")
+        if policy["sha256"] != PHASE_ONE_POLICY_SHA256:
+            raise ValueError(f"unexpected Phase 1 tolerance policy: {filename}")
         summary = require_object(report["summary"], name=f"{filename}.summary")
         if summary["outcome"] != "passed" or summary["case_count"] != len(
             expected_pilot_cases

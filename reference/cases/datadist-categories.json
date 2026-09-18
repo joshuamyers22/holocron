@@ -1,0 +1,31 @@
+{
+  "schema_version": "holocron-oracle-case/v1",
+  "case_id": "datadist-categories",
+  "description": "Declared categorical order, modal tie-breaking, and ordered numeric levels.",
+  "expected_output": "datadist-categories.json",
+  "comparison_profile": "data-distribution-v1",
+  "qualification_stage": "python-parity",
+  "operation": "datadist",
+  "variables": [
+    {
+      "name": "group",
+      "kind": "categorical",
+      "values": ["A", "B", "A", "B", "C", "A", "B", "A", "B", "C", "A", "B"],
+      "levels": ["B", "A", "C"],
+      "label": "Treatment group",
+      "unit": null
+    },
+    {
+      "name": "stage",
+      "kind": "ordered",
+      "values": [1, 2, 3, 2, 1, 3, 2, 1, 2, 3, 2, 1],
+      "levels": [1, 2, 3],
+      "label": "Disease stage",
+      "unit": null
+    }
+  ],
+  "effect_quantiles": [0.25, 0.75],
+  "display_quantiles": null,
+  "categorical_adjustment": "mode",
+  "discrete_threshold": 10
+}

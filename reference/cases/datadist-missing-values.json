@@ -1,0 +1,22 @@
+{
+  "schema_version": "holocron-oracle-case/v1",
+  "case_id": "datadist-missing-values",
+  "description": "Numeric missing observations are counted and excluded from summaries.",
+  "expected_output": "datadist-missing-values.json",
+  "comparison_profile": "data-distribution-v1",
+  "qualification_stage": "python-parity",
+  "operation": "datadist",
+  "variables": [
+    {
+      "name": "x",
+      "kind": "numeric",
+      "values": [1, null, 2, 3, null, 4, 5, 6],
+      "label": "Incomplete predictor",
+      "unit": null
+    }
+  ],
+  "effect_quantiles": [0.25, 0.75],
+  "display_quantiles": null,
+  "categorical_adjustment": "mode",
+  "discrete_threshold": 10
+}

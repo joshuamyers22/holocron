@@ -174,6 +174,108 @@ run_ols_rcs <- function(request) {
   )
 }
 
+distribution_specs <- function(value) {
+  if (!is.data.frame(value)) return(value)
+  lapply(seq_len(nrow(value)), function(index) {
+    lapply(value, function(column) column[[index]])
+  })
+}
+
+distribution_scalar <- function(value) {
+  if (length(value) != 1L || is.na(value)) return(NA)
+  if (is.factor(value) || is.character(value)) as.character(value) else as.numeric(value)
+}
+
+distribution_range <- function(limits, lower, upper) {
+  unname(list(distribution_scalar(limits[lower]), distribution_scalar(limits[upper])))
+}
+
+run_datadist <- function(request) {
+  specs <- distribution_specs(request$variables)
+  if (!length(specs)) stop("variables must not be empty")
+  columns <- list()
+  seen <- character()
+  for (spec in specs) {
+    name <- spec$name
+    kind <- require_choice(spec, "kind", c("numeric", "categorical", "ordered"))
+    if (is.null(name) || length(name) != 1L || !is.character(name) || !nzchar(name)) {
+      stop("distribution variable name must be one non-empty string")
+    }
+    if (name %in% seen) stop(sprintf("duplicate distribution variable: %s", name))
+    seen <- c(seen, name)
+    values <- spec$values
+    if (kind == "numeric") {
+      if (!is.numeric(values)) stop(sprintf("%s values must be numeric", name))
+      columns[[name]] <- as.numeric(values)
+    } else {
+      levels <- unlist(spec$levels, use.names = FALSE)
+      if (length(levels) < 2L) stop(sprintf("%s requires at least two levels", name))
+      columns[[name]] <- factor(
+        unlist(values, use.names = FALSE),
+        levels = levels,
+        ordered = kind == "ordered"
+      )
+    }
+  }
+  require_equal_lengths(columns, names(columns))
+  data <- as.data.frame(columns, check.names = FALSE, optional = TRUE)
+  effect <- require_numeric_vector(request, "effect_quantiles", 2L)
+  if (length(effect) != 2L) stop("effect_quantiles must contain two values")
+  adjustment <- require_choice(request, "categorical_adjustment", c("mode", "first"))
+  threshold <- request$discrete_threshold
+  if (is.null(threshold) || length(threshold) != 1L || !is.numeric(threshold) ||
+      threshold < 1L || threshold != as.integer(threshold)) {
+    stop("discrete_threshold must be a positive integer")
+  }
+  arguments <- list(
+    data,
+    q.effect = effect,
+    adjto.cat = adjustment,
+    n.unique = as.integer(threshold)
+  )
+  display <- request$display_quantiles
+  if (!is.null(display)) {
+    if (!is.numeric(display) || length(display) != 2L) {
+      stop("display_quantiles must be null or contain two values")
+    }
+    arguments$q.display <- as.numeric(display)
+  }
+  result <- do.call(rms::datadist, arguments)
+  variables <- lapply(seq_along(specs), function(index) {
+    spec <- specs[[index]]
+    name <- spec$name
+    input_kind <- spec$kind
+    limits <- result$limits[[name]]
+    retained <- result$values[[name]]
+    kind <- if (input_kind == "numeric") {
+      if (is.null(retained)) "continuous" else "discrete"
+    } else input_kind
+    list(
+      name = name,
+      kind = kind,
+      adjustment = distribution_scalar(limits[2]),
+      effect_range = if (kind == "categorical") NA else distribution_range(limits, 1, 3),
+      display_range = distribution_range(limits, 4, 5),
+      overall_range = distribution_range(limits, 6, 7),
+      values = if (is.null(retained)) list() else unname(as.list(retained)),
+      label = spec$label,
+      unit = if (is.null(spec$unit)) NA_character_ else spec$unit,
+      nonmissing_count = as.integer(sum(!is.na(columns[[name]]))),
+      missing_count = as.integer(sum(is.na(columns[[name]])))
+    )
+  })
+  list(
+    protocol_version = protocol_version,
+    operation = "datadist",
+    observation_count = as.integer(nrow(data)),
+    effect_quantiles = unname(as.list(effect)),
+    display_quantiles = if (is.null(display)) NA else unname(as.list(display)),
+    categorical_adjustment = adjustment,
+    discrete_threshold = as.integer(threshold),
+    variables = variables
+  )
+}
+
 run_lrm <- function(request) {
   x <- require_numeric_vector(request, "x", 3L)
   y <- require_binary_vector(request, "y")
@@ -356,6 +458,7 @@ dispatch <- function(request) {
     health = run_health(),
     rcs = run_rcs(request),
     ols_rcs = run_ols_rcs(request),
+    datadist = run_datadist(request),
     lrm = run_lrm(request),
     orm = run_orm(request),
     cph = run_cph(request),

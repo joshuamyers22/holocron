@@ -25,6 +25,7 @@ nav:
   - Installation: installation.md
   - Getting started: getting-started.md
   - Guides:
+      - Data distributions: guides/data-distributions.md
       - Restricted cubic splines: guides/restricted-cubic-splines.md
       - Ordinary least squares: guides/ordinary-least-squares.md
       - R migration: guides/r-migration.md
@@ -49,6 +50,8 @@ nav:
       - ADR 002 — Package identity: adr/ADR-002-project-and-package-identity.md
       - ADR 003 — Reference freeze: adr/ADR-003-reference-freeze-and-update-policy.md
       - ADR 004 — Compatibility contract: adr/ADR-004-compatibility-contract.md
+      - ADR 005 — Formula and design engine: adr/ADR-005-formula-design-engine.md
+      - ADR 006 — Canonical data boundary: adr/ADR-006-canonical-data-boundary.md
       - ADR 009 — Numerical envelope: adr/ADR-009-supported-numerical-envelope.md
       - ADR 011 — Scaffold adaptation: adr/ADR-011-production-scaffold-adaptation.md
       - ADR 012 — Frozen environments: adr/ADR-012-frozen-environment-contract.md

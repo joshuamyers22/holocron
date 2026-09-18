@@ -7,6 +7,94 @@ Model-design primitives for Holocron.
 Import public names from `holocron.design`. The signatures and docstrings below
 are generated from the installed source during `make docs-check`.
 
+## `DataDistribution`
+
+```python
+class holocron.design.distributions.DataDistribution(variables: tuple[holocron.design.distributions.VariableDistribution, ...], observation_count: int, effect_quantiles: tuple[float, float] = (0.25, 0.75), display_quantiles: tuple[float, float] | None = None, categorical_adjustment: Literal['mode', 'first'] = 'mode', discrete_threshold: int = 10) -> None
+```
+
+Immutable metadata learned from a named collection of predictor columns.
+
+Use :meth:`from_data` to snapshot caller-owned iterables. No process-wide
+option or ambient dataset is consulted. The result contains the adjustment,
+effect, display, and overall ranges needed by later design and prediction
+APIs, plus labels, units, categorical levels, and missingness counts.
+
+### Attributes
+
+| Name | Type |
+| --- | --- |
+| `variables` | `tuple[VariableDistribution, ...]` |
+| `observation_count` | `int` |
+| `effect_quantiles` | `tuple[float, float]` |
+| `display_quantiles` | `tuple[float, float] | None` |
+| `categorical_adjustment` | `CategoricalAdjustment` |
+| `discrete_threshold` | `int` |
+
+### `adjustments`
+
+Return a new mapping of variable names to adjustment values.
+
+### `fingerprint`
+
+Return the SHA-256 identity of the canonical serialized metadata.
+
+### `from_data(data: collections.abc.Mapping[str, collections.abc.Iterable[float | str | None]], *, levels: collections.abc.Mapping[str, collections.abc.Iterable[float | str]] | None = None, ordered: collections.abc.Iterable[str] = (), labels: collections.abc.Mapping[str, str] | None = None, units: collections.abc.Mapping[str, str | None] | None = None, effect_quantiles: tuple[float, float] = (0.25, 0.75), display_quantiles: tuple[float, float] | None = None, categorical_adjustment: Literal['mode', 'first'] = 'mode', discrete_threshold: int = 10) -> holocron.design.distributions.DataDistribution`
+
+Summarize named predictor columns without retaining their row values.
+
+Numeric columns may contain ``None`` or NaN, which are counted and
+excluded from summaries. Non-numeric columns require an explicit
+``levels`` entry so category order cannot depend on incidental row order.
+Columns listed in ``ordered`` use the lower middle declared level as
+their adjustment value; unordered columns use the mode or first level.
+
+### `from_dict(document: collections.abc.Mapping[str, object]) -> holocron.design.distributions.DataDistribution`
+
+Reconstruct metadata from a strictly versioned document.
+
+### `from_json(value: str) -> holocron.design.distributions.DataDistribution`
+
+Reconstruct metadata from a canonical or pretty-printed JSON object.
+
+### `names`
+
+Return variable names in caller-supplied column order.
+
+### `to_dict(self) -> dict[str, None | bool | int | float | str | list['JsonValue'] | dict[str, 'JsonValue']]`
+
+Return the versioned, deterministic metadata document.
+
+### `to_json(self) -> str`
+
+Serialize the versioned metadata with canonical JSON ordering.
+
+### `with_adjustment(self, name: str, value: float | str) -> holocron.design.distributions.DataDistribution`
+
+Return a copy with one validated adjustment value replaced.
+
+### `with_data(self, data: collections.abc.Mapping[str, collections.abc.Iterable[float | str | None]], *, levels: collections.abc.Mapping[str, collections.abc.Iterable[float | str]] | None = None, ordered: collections.abc.Iterable[str] = (), labels: collections.abc.Mapping[str, str] | None = None, units: collections.abc.Mapping[str, str | None] | None = None) -> holocron.design.distributions.DataDistribution`
+
+Return a copy extended with new columns under the same policies.
+
+Extension preserves existing metadata and column order. New columns must
+have the original row count and names that do not already exist.
+
+## `DistributionRange`
+
+```python
+class holocron.design.distributions.DistributionRange(lower: float | str, upper: float | str) -> None
+```
+
+An inclusive lower and upper metadata range.
+
+### Attributes
+
+| Name | Type |
+| --- | --- |
+| `lower` | `DistributionValue` |
+| `upper` | `DistributionValue` |
+
 ## `RestrictedCubicSplineSpec`
 
 ```python
@@ -49,3 +137,34 @@ The normalization divides nonlinear terms by the squared distance
 between the boundary knots. This matches the scale used by the `rms`
 restricted-cubic-spline design for explicit knots while retaining the
 original predictor as the first column.
+
+## `VariableDistribution`
+
+```python
+class holocron.design.distributions.VariableDistribution(name: str, kind: Literal['continuous', 'discrete', 'categorical', 'ordered'], adjustment: float | str, effect_range: holocron.design.distributions.DistributionRange | None, display_range: holocron.design.distributions.DistributionRange, overall_range: holocron.design.distributions.DistributionRange, values: tuple[float | str, ...], label: str, unit: str | None, nonmissing_count: int, missing_count: int) -> None
+```
+
+Learned distribution metadata for one predictor.
+
+``effect_range`` is absent for unordered categorical predictors because an
+unordered pair of levels has no intrinsic low-to-high effect interpretation.
+
+### Attributes
+
+| Name | Type |
+| --- | --- |
+| `name` | `str` |
+| `kind` | `VariableKind` |
+| `adjustment` | `DistributionValue` |
+| `effect_range` | `DistributionRange | None` |
+| `display_range` | `DistributionRange` |
+| `overall_range` | `DistributionRange` |
+| `values` | `tuple[DistributionValue, ...]` |
+| `label` | `str` |
+| `unit` | `str | None` |
+| `nonmissing_count` | `int` |
+| `missing_count` | `int` |
+
+### `observation_count`
+
+Return the total number of input rows, including missing values.

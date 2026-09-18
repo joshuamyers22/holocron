@@ -43,4 +43,4 @@ This completion record does not approve external distribution or promote any
 capability beyond `experimental`. The license/provenance review and specialist
 reviewer requirements remain open. The 13 logistic, ordinal, and survival
 fixtures remain oracle baselines rather than independent Python parity claims.
-Phase 2 design-system work is next.
+Phase 2 design-system work subsequently began.

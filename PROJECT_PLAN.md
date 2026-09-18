@@ -1,6 +1,6 @@
 # Independent Python Implementation of `rms`: Production Project Plan
 
-**Status:** Active — Phases 0 and 1 complete for private development; Phase 2 next
+**Status:** Active — Phases 0 and 1 complete; Phase 2 in progress for private development
 **Plan date:** 2026-09-17  
 **Reference implementation:** Frank Harrell's R package `rms`  
 **Project name:** `holocron`  
@@ -158,7 +158,8 @@ The book and documentation explain intent but do not by themselves define every 
 
 ## 4. Blocking decisions and ADRs
 
-The following ADRs are required before their dependent work begins.
+The following ADRs are required before their dependent work begins; accepted
+records remain binding implementation constraints.
 
 | ADR | Decision | Deadline | Blocks |
 |---|---|---:|---|
@@ -608,7 +609,7 @@ Independent-development and license/provenance policy is approved; the reference
 ### Phase 1 — Repository and parity laboratory (6–10 weeks)
 
 **Status:** Complete for private experimental development as of 2026-09-17
-([completion record](governance/PHASE_1_COMPLETION.md)). Phase 2 is next.
+([completion record](governance/PHASE_1_COMPLETION.md)). Phase 2 is active.
 
 **Deliverables**
 
@@ -638,14 +639,18 @@ workflow artifact. See the [Phase 1 completion record](governance/PHASE_1_COMPLE
 
 ### Phase 2 — Design system (12–18 weeks)
 
+**Status:** In progress. Data-distribution metadata is complete for the
+experimental envelope; formula AST and core transformations are next.
+
 **Deliverables**
 
-- data-distribution metadata;
-- formula AST and core transformations;
-- categorical/ordered handling and restricted interactions;
-- stable design/result schemas and serialization draft;
-- exhaustive transformation differential/property tests;
-- R migration guide for design specifications.
+- [x] data-distribution metadata
+  ([acceptance record](governance/PHASE_2_DATA_DISTRIBUTION.md));
+- [ ] formula AST and core transformations;
+- [ ] categorical/ordered handling and restricted interactions;
+- [ ] stable design/result schemas and serialization draft;
+- [ ] exhaustive transformation differential/property tests;
+- [ ] R migration guide for design specifications.
 
 **Exit gate**
 

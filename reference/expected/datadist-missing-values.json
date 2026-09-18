@@ -1,0 +1,52 @@
+{
+  "schema_version": "holocron-oracle-output/v1",
+  "case_id": "datadist-missing-values",
+  "reference": {
+    "package": "rms",
+    "version": "8.2-0",
+    "commit": "a4e4a305a029090e737562fb4d35bdb705db7d63",
+    "protocol_version": "1"
+  },
+  "ok": true,
+  "protocol_version": "1",
+  "operation": "datadist",
+  "observation_count": 8,
+  "effect_quantiles": [
+    0.25,
+    0.75
+  ],
+  "display_quantiles": null,
+  "categorical_adjustment": "mode",
+  "discrete_threshold": 10,
+  "variables": [
+    {
+      "name": "x",
+      "kind": "discrete",
+      "adjustment": 3.5,
+      "effect_range": [
+        2.25,
+        4.75
+      ],
+      "display_range": [
+        1.25,
+        5.75
+      ],
+      "overall_range": [
+        1,
+        6
+      ],
+      "values": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "label": "Incomplete predictor",
+      "unit": null,
+      "nonmissing_count": 6,
+      "missing_count": 2
+    }
+  ]
+}

@@ -543,14 +543,19 @@
       "id": "export:datadist",
       "r_symbol": "datadist",
       "kind": "export",
-      "python_entry_point": null,
+      "python_entry_point": "holocron.design.DataDistribution",
       "tier": "A",
       "milestone": "Phase 2-3",
-      "status": "deferred",
+      "status": "experimental",
       "owner": "joshuamyers22",
-      "oracle_cases": [],
-      "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "oracle_cases": [
+        "datadist-categories",
+        "datadist-custom-policy",
+        "datadist-missing-values",
+        "datadist-numeric-defaults"
+      ],
+      "tolerance_profile": "data-distribution-v1",
+      "known_differences": "Python uses immutable explicit metadata instead of R global options; categorical levels must be declared; dataframe/date-time adapters are deferred; ordered factors use the lower middle declared level when the level count is even; and default display probabilities are computed per variable when missingness differs."
     },
     {
       "id": "export:dxy.cens",

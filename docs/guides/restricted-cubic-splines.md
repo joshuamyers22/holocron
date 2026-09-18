@@ -31,10 +31,11 @@ The nonlinear columns use the explicit-knot normalization matched to the pinned
 
 ## Current boundary
 
-Automatic knot placement, data-distribution summaries, formula parsing,
-principal-component rotation, interaction restrictions, labels, and units are
-not implemented. Do not infer support for the full R `rcs` function from this
-primitive. See the [compatibility page](../compatibility.md) for the exact claim.
+Automatic knot placement, formula parsing, principal-component rotation, and
+interaction restrictions are not implemented. Data-distribution metadata can
+retain labels and units, but it is not yet connected to spline construction. Do
+not infer support for the full R `rcs` function from this primitive. See the
+[compatibility page](../compatibility.md) for the exact claim.
 
 Tests of nonlinearity and simultaneous inference require a fitted-model
 inference contract that is not part of this slice. The nonlinear mask identifies

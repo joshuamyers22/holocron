@@ -13,17 +13,20 @@ The project is distributed internally as `holocron-rms` and imported as
 Holocron is experimental and incomplete. Do not use it for consequential
 analysis, inference, prediction, or clinical decisions.
 
-Phases 0 and 1 are complete for private experimental development. The Phase 1
+Phases 0 and 1 are complete and Phase 2 is active for private experimental
+development. The Phase 1
 exit gate is recorded in the
 [completion record](https://github.com/joshuamyers22/holocron/blob/main/governance/PHASE_1_COMPLETION.md);
-Phase 2 design-system work is next. External distribution and capability
-promotion remain blocked by the governance reviews described there.
+The first Phase 2 deliverable, immutable data-distribution metadata, is complete
+within its experimental envelope. External distribution and capability promotion
+remain blocked by the governance reviews described there.
 
-The first qualified vertical slice implements explicit-knot restricted cubic
-spline design and classical full-rank ordinary least squares. Both are checked
-across 12 independent parity cases against committed outputs from a Dockerized
-R oracle. Another 13 versioned logistic, ordinal, and survival cases are frozen
-as oracle baselines for later implementation and are not current parity claims.
+The evidence-backed experimental surface implements predictor-distribution
+metadata, explicit-knot restricted cubic spline design, and classical full-rank
+ordinary least squares. These are checked across 16 independent parity cases
+against committed outputs from a Dockerized R oracle. Another 13 versioned
+logistic, ordinal, and survival cases are frozen as oracle baselines for later
+implementation and are not current parity claims.
 Compatibility is claimed
 only for capabilities and support envelopes backed by the
 [compatibility manifest](https://github.com/joshuamyers22/holocron/blob/main/compatibility/rms-8.2.0.yaml).
@@ -37,17 +40,21 @@ Its current public namespaces are `holocron.design`, `holocron.models`, and
 `holocron.exceptions`:
 
 ```python
-from holocron.design import RestrictedCubicSplineSpec
+from holocron.design import DataDistribution, RestrictedCubicSplineSpec
 from holocron.models import fit_ols
 
 x = (-2.0, -1.0, 0.0, 1.0, 2.0, 3.0)
 y = (0.2, 0.8, 1.1, 1.7, 2.5, 3.6)
 
+metadata = DataDistribution.from_data({"x": x}, labels={"x": "Predictor"})
 spec = RestrictedCubicSplineSpec((-2.0, 0.0, 1.5, 3.0))
 design = spec.transform(x)
 fit = fit_ols(y, design, feature_names=("x", "x'", "x''"))
 predictions = fit.predict(design)
 ```
+
+`metadata["x"]` retains adjustment, effect, display, and overall ranges without
+depending on global state or the original input iterable.
 
 Automatic knot placement, formula parsing, missing-data policies, aliased-fit
 handling, robust covariance, and broader model families are not supported by

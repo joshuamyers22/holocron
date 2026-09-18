@@ -28,6 +28,7 @@ OUTPUT_SCHEMA = ROOT / "schemas/oracle-output.schema.json"
 EVIDENCE_SCHEMA = ROOT / "schemas/parity-evidence.schema.json"
 POLICY_SCHEMA = ROOT / "schemas/tolerance-policy.schema.json"
 TOLERANCE_PILOT_SCHEMA = ROOT / "schemas/tolerance-pilot.schema.json"
+DATA_DISTRIBUTION_SCHEMA = ROOT / "schemas/data-distribution.schema.json"
 POLICY_PATH = ROOT / "reference/tolerances.json"
 CASES = ROOT / "reference/cases"
 EXPECTED = ROOT / "reference/expected"
@@ -459,6 +460,45 @@ def validate_case_pair(
         event = require_array(case["event"], name="case.event")
         if len(time) != len(event):
             raise ContractValidationError(f"{case_path}: time and event lengths differ")
+    if operation == "datadist":
+        raw_variables = require_array(case["variables"], name="case.variables")
+        variables = [
+            require_object(value, name="case.variables item") for value in raw_variables
+        ]
+        names = [str(variable["name"]) for variable in variables]
+        if len(set(names)) != len(names):
+            raise ContractValidationError(
+                f"{case_path}: distribution variable names must be unique"
+            )
+        lengths = {
+            len(require_array(variable["values"], name=f"case.{name}.values"))
+            for name, variable in zip(names, variables, strict=True)
+        }
+        if len(lengths) != 1:
+            raise ContractValidationError(
+                f"{case_path}: distribution variable lengths differ"
+            )
+        for field in (
+            "effect_quantiles",
+            "display_quantiles",
+            "categorical_adjustment",
+            "discrete_threshold",
+        ):
+            if case[field] != payload.get(field):
+                raise ContractValidationError(
+                    f"{case_path}: {field} does not match output"
+                )
+        output_variables = require_array(
+            payload.get("variables"), name="output.variables"
+        )
+        output_names = [
+            str(require_object(value, name="output.variables item")["name"])
+            for value in output_variables
+        ]
+        if names != output_names:
+            raise ContractValidationError(
+                f"{case_path}: distribution variable order differs from output"
+            )
     basis = case.get("basis")
     if basis == "rcs" and "knots" not in case:
         raise ContractValidationError(f"{case_path}: rcs basis requires knots")
@@ -542,6 +582,7 @@ def validate_repository_contracts() -> int:
         EVIDENCE_SCHEMA,
         POLICY_SCHEMA,
         TOLERANCE_PILOT_SCHEMA,
+        DATA_DISTRIBUTION_SCHEMA,
     ):
         schema = require_object(load_json(schema_path), name=str(schema_path))
         Draft202012Validator.check_schema(schema)

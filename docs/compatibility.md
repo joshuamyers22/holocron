@@ -22,10 +22,10 @@ an implementation claim, and an experimental capability is not production-ready.
 | Status | Count | Meaning |
 | --- | ---: | --- |
 | implemented | 0 | Implemented and accepted under the capability contract. |
-| experimental | 2 | Implemented narrowly with parity evidence; not production-ready. |
+| experimental | 3 | Implemented narrowly with parity evidence; not production-ready. |
 | mapped | 0 | Mapped to a Python design, without an accepted implementation claim. |
 | unsupported | 0 | Intentionally excluded from the compatibility target. |
-| deferred | 279 | Catalogued for a later phase; no current implementation claim. |
+| deferred | 278 | Catalogued for a later phase; no current implementation claim. |
 
 ## Evidence-backed experimental surface
 
@@ -34,6 +34,7 @@ oracle-linked parity evidence. Their documented support envelopes remain narrow.
 
 | R symbol | Kind | Python entry point | Status | Milestone | Oracle cases | Tolerance profile | Known differences |
 | --- | --- | --- | --- | --- | ---: | --- | --- |
+| `datadist` | export | `holocron.design.DataDistribution` | experimental | Phase 2-3 | 4 | `data-distribution-v1` | Python uses immutable explicit metadata instead of R global options; categorical levels must be declared; dataframe/date-time adapters are deferred; ordered factors use the lower middle declared level when the level count is even; and default display probabilities are computed per variable when missingness differs. |
 | `ols` | export | `holocron.models.fit_ols` | experimental | Phase 2-3 | 6 | `well-conditioned-ols-v1` | Initial narrow API; full rms contract remains deferred. |
 | `rcs` | export | `holocron.design.RestrictedCubicSplineSpec` | experimental | Phase 2-3 | 6 | `deterministic-transform-v1` | Initial narrow API; full rms contract remains deferred. |
 
@@ -56,7 +57,7 @@ in the pinned namespace. Counts by tier are A: 31, B: 33, C: 26, D: 191.
 | `asis` | export | — | deferred | Phase 2-3 | 0 | — | Not yet implemented. |
 | `catg` | export | — | deferred | Phase 2-3 | 0 | — | Not yet implemented. |
 | `contrast` | export | — | deferred | Phase 2-3 | 0 | — | Not yet implemented. |
-| `datadist` | export | — | deferred | Phase 2-3 | 0 | — | Not yet implemented. |
+| `datadist` | export | `holocron.design.DataDistribution` | experimental | Phase 2-3 | 4 | `data-distribution-v1` | Python uses immutable explicit metadata instead of R global options; categorical levels must be declared; dataframe/date-time adapters are deferred; ordered factors use the lower middle declared level when the level count is even; and default display probabilities are computed per variable when missingness differs. |
 | `gTrans` | export | — | deferred | Phase 2-3 | 0 | — | Not yet implemented. |
 | `interactions.containing` | export | — | deferred | Phase 2-3 | 0 | — | Not yet implemented. |
 | `lrm` | export | — | deferred | Phase 2-3 | 4 | `binary-logistic-v1` | Oracle baselines captured; independent Python implementation and parity qualification remain deferred. |

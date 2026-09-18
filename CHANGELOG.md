@@ -49,3 +49,6 @@ Notable changes are recorded here using semantic versioning.
 - Closed the private-development Phase 1 exit gate with a clean, repeatable
   design-to-fit-to-prediction workflow that compares against the pinned R
   oracle output, emits schema-valid hashed parity evidence, and retains it in CI.
+- Added immutable data-distribution metadata with documented `datadist` summary
+  and adjustment rules, explicit categorical ordering, labels and units,
+  missingness counts, canonical serialization, and four pinned-R parity cases.

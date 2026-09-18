@@ -9,7 +9,7 @@ contract, not mechanical renaming.
 | `rcs(x, knots)` | `RestrictedCubicSplineSpec(knots).transform(x)` | Explicit knots only; no formula metadata or automatic placement. |
 | `ols(y ~ x)` | `fit_ols(y, features, feature_names=...)` | Caller constructs the design; no formulas or `datadist`. |
 | `predict(fit, newdata)` | `fit.predict(features)` | Numeric columns must use the fitted order; no adjustment-value semantics. |
-| `datadist` | Deferred | No global or implicit distribution state is substituted. |
+| `datadist(...)` | `DataDistribution.from_data(...)` | Immutable explicit metadata replaces `options(datadist=...)`; categorical levels must be declared. |
 
 ## Migration checklist
 

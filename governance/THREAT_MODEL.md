@@ -15,11 +15,11 @@
 
 | Abuse case | Impact | Prevention/detection/response | Evidence | Residual risk owner |
 |---|---|---|---|---|
-| Formula or callback injection | Arbitrary code execution | Allowlisted AST, no general evaluation, parser fuzzing before exposure | ADR-005 required before Phase 2 | joshuamyers22 |
+| Formula or callback injection | Arbitrary code execution | Allowlisted AST, no general evaluation, parser fuzzing before exposure | ADR-005 accepted; parser implementation remains gated | joshuamyers22 |
 | Malicious serialized model | Code execution or silent model drift | No supported pickle interchange; versioned data-only schema with limits | ADR-008 required before persistence | joshuamyers22 |
 | Huge interaction/design request | Memory/CPU exhaustion | Column/cardinality preflight limits and explicit dense/sparse conversion | Phase 2 requirement | joshuamyers22 |
 | Pathological resampling request | Denial of service or partial evidence presented as complete | Bounded plans, explicit failures, retained completion counts | Phase 6 requirement | joshuamyers22 |
-| Crafted dataframe producer | Type confusion, row mismatch, data leakage | Canonical validated boundary, retained row identity, copy/ownership policy | ADR-006 required before Phase 2 | joshuamyers22 |
+| Crafted dataframe producer | Type confusion, row mismatch, data leakage | Canonical validated boundary, retained row identity, copy/ownership policy | ADR-006 accepted; dataframe adapters remain gated | joshuamyers22 |
 | Oracle JSON used as code channel | Build/runtime compromise | Fixed operation allowlist, no arbitrary formulas, non-root offline read-only runtime | `reference/r/oracle.R`; runner flags | joshuamyers22 |
 | Compromised oracle dependency | False reference outputs | Base digest, dated repository, pinned commits, package manifest, source checksums | ADR-003; oracle health fixture | joshuamyers22 |
 | Compromised Python dependency/action | Build or credential compromise | Lock, audits, full-SHA actions, least privileges, SBOM at release | CI workflows; `uv.lock` | joshuamyers22 |

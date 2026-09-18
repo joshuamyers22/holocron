@@ -36,9 +36,9 @@ class ParityContractTests(unittest.TestCase):
         self.payload = output_payload(self.expected)
 
     def test_all_schemas_policies_and_fixtures_are_valid(self) -> None:
-        self.assertEqual(validate_repository_contracts(), 26)
+        self.assertEqual(validate_repository_contracts(), 30)
 
-    def test_phase_one_corpus_has_declared_breadth_and_qualification(self) -> None:
+    def test_oracle_corpus_has_declared_breadth_and_qualification(self) -> None:
         cases = [
             cast(dict[str, JsonValue], load_json(path)) for path in CASES.glob("*.json")
         ]
@@ -51,6 +51,7 @@ class ParityContractTests(unittest.TestCase):
                 "health": 1,
                 "rcs": 6,
                 "ols_rcs": 6,
+                "datadist": 4,
                 "lrm": 4,
                 "orm": 3,
                 "cph": 2,
@@ -60,7 +61,7 @@ class ParityContractTests(unittest.TestCase):
         )
         self.assertEqual(
             stages,
-            {"environment": 1, "python-parity": 12, "oracle-baseline": 13},
+            {"environment": 1, "python-parity": 16, "oracle-baseline": 13},
         )
 
     def test_tolerance_pilot_covers_all_python_parity_cases(self) -> None:
@@ -69,10 +70,14 @@ class ParityContractTests(unittest.TestCase):
         policy = cast(dict[str, JsonValue], report["policy"])
 
         self.assertEqual(summary["outcome"], "passed")
-        self.assertEqual(summary["case_count"], 12)
+        self.assertEqual(summary["case_count"], 16)
         self.assertEqual(
             policy["accepted_profiles"],
-            ["deterministic-transform-v1", "well-conditioned-ols-v1"],
+            [
+                "data-distribution-v1",
+                "deterministic-transform-v1",
+                "well-conditioned-ols-v1",
+            ],
         )
 
     def test_policy_applies_field_specific_numeric_tolerances(self) -> None:

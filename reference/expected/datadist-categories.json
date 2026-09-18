@@ -1,0 +1,72 @@
+{
+  "schema_version": "holocron-oracle-output/v1",
+  "case_id": "datadist-categories",
+  "reference": {
+    "package": "rms",
+    "version": "8.2-0",
+    "commit": "a4e4a305a029090e737562fb4d35bdb705db7d63",
+    "protocol_version": "1"
+  },
+  "ok": true,
+  "protocol_version": "1",
+  "operation": "datadist",
+  "observation_count": 12,
+  "effect_quantiles": [
+    0.25,
+    0.75
+  ],
+  "display_quantiles": null,
+  "categorical_adjustment": "mode",
+  "discrete_threshold": 10,
+  "variables": [
+    {
+      "name": "group",
+      "kind": "categorical",
+      "adjustment": "B",
+      "effect_range": null,
+      "display_range": [
+        "B",
+        "C"
+      ],
+      "overall_range": [
+        "B",
+        "C"
+      ],
+      "values": [
+        "B",
+        "A",
+        "C"
+      ],
+      "label": "Treatment group",
+      "unit": null,
+      "nonmissing_count": 12,
+      "missing_count": 0
+    },
+    {
+      "name": "stage",
+      "kind": "ordered",
+      "adjustment": 2,
+      "effect_range": [
+        1,
+        3
+      ],
+      "display_range": [
+        1,
+        3
+      ],
+      "overall_range": [
+        1,
+        3
+      ],
+      "values": [
+        1,
+        2,
+        3
+      ],
+      "label": "Disease stage",
+      "unit": null,
+      "nonmissing_count": 12,
+      "missing_count": 0
+    }
+  ]
+}

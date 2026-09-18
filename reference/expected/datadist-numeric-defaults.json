@@ -1,0 +1,120 @@
+{
+  "schema_version": "holocron-oracle-output/v1",
+  "case_id": "datadist-numeric-defaults",
+  "reference": {
+    "package": "rms",
+    "version": "8.2-0",
+    "commit": "a4e4a305a029090e737562fb4d35bdb705db7d63",
+    "protocol_version": "1"
+  },
+  "ok": true,
+  "protocol_version": "1",
+  "operation": "datadist",
+  "observation_count": 20,
+  "effect_quantiles": [
+    0.25,
+    0.75
+  ],
+  "display_quantiles": null,
+  "categorical_adjustment": "mode",
+  "discrete_threshold": 10,
+  "variables": [
+    {
+      "name": "continuous",
+      "kind": "continuous",
+      "adjustment": 10.5,
+      "effect_range": [
+        5.75,
+        15.25
+      ],
+      "display_range": [
+        1.9500000000000002,
+        19.05
+      ],
+      "overall_range": [
+        1,
+        20
+      ],
+      "values": [],
+      "label": "Continuous predictor",
+      "unit": "years",
+      "nonmissing_count": 20,
+      "missing_count": 0
+    },
+    {
+      "name": "binary",
+      "kind": "discrete",
+      "adjustment": 0,
+      "effect_range": [
+        0,
+        1
+      ],
+      "display_range": [
+        0,
+        1
+      ],
+      "overall_range": [
+        0,
+        1
+      ],
+      "values": [
+        0,
+        1
+      ],
+      "label": "Binary predictor",
+      "unit": null,
+      "nonmissing_count": 20,
+      "missing_count": 0
+    },
+    {
+      "name": "three",
+      "kind": "discrete",
+      "adjustment": 20,
+      "effect_range": [
+        10,
+        30
+      ],
+      "display_range": [
+        10,
+        30
+      ],
+      "overall_range": [
+        10,
+        30
+      ],
+      "values": [
+        10,
+        20,
+        30
+      ],
+      "label": "Three-level predictor",
+      "unit": null,
+      "nonmissing_count": 20,
+      "missing_count": 0
+    },
+    {
+      "name": "constant",
+      "kind": "discrete",
+      "adjustment": 4,
+      "effect_range": [
+        4,
+        4
+      ],
+      "display_range": [
+        4,
+        4
+      ],
+      "overall_range": [
+        4,
+        4
+      ],
+      "values": [
+        4
+      ],
+      "label": "Constant predictor",
+      "unit": null,
+      "nonmissing_count": 20,
+      "missing_count": 0
+    }
+  ]
+}

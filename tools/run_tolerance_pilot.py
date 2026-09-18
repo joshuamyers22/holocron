@@ -30,7 +30,11 @@ from reference.contracts import (
 )
 from reference.python_parity import build_python_output
 
-ACCEPTED_PROFILES = ("deterministic-transform-v1", "well-conditioned-ols-v1")
+ACCEPTED_PROFILES = (
+    "data-distribution-v1",
+    "deterministic-transform-v1",
+    "well-conditioned-ols-v1",
+)
 
 
 def parse_args() -> argparse.Namespace:

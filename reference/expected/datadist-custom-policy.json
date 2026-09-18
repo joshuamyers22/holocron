@@ -1,0 +1,82 @@
+{
+  "schema_version": "holocron-oracle-output/v1",
+  "case_id": "datadist-custom-policy",
+  "reference": {
+    "package": "rms",
+    "version": "8.2-0",
+    "commit": "a4e4a305a029090e737562fb4d35bdb705db7d63",
+    "protocol_version": "1"
+  },
+  "ok": true,
+  "protocol_version": "1",
+  "operation": "datadist",
+  "observation_count": 10,
+  "effect_quantiles": [
+    0.1,
+    0.9
+  ],
+  "display_quantiles": [
+    0,
+    1
+  ],
+  "categorical_adjustment": "first",
+  "discrete_threshold": 20,
+  "variables": [
+    {
+      "name": "x",
+      "kind": "discrete",
+      "adjustment": 4.5,
+      "effect_range": [
+        0.8999999999999999,
+        8.1
+      ],
+      "display_range": [
+        0,
+        9
+      ],
+      "overall_range": [
+        0,
+        9
+      ],
+      "values": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "label": "Numeric score",
+      "unit": "points",
+      "nonmissing_count": 10,
+      "missing_count": 0
+    },
+    {
+      "name": "group",
+      "kind": "categorical",
+      "adjustment": "C",
+      "effect_range": null,
+      "display_range": [
+        "C",
+        "A"
+      ],
+      "overall_range": [
+        "C",
+        "A"
+      ],
+      "values": [
+        "C",
+        "B",
+        "A"
+      ],
+      "label": "Group",
+      "unit": null,
+      "nonmissing_count": 10,
+      "missing_count": 0
+    }
+  ]
+}

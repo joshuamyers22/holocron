@@ -62,7 +62,11 @@ def _public_members(value: type[object]) -> Iterable[tuple[str, object]]:
     for name, member in inspect.getmembers(value):
         if name.startswith("_"):
             continue
-        if isinstance(member, property) or inspect.isfunction(member):
+        if (
+            isinstance(member, property)
+            or inspect.isfunction(member)
+            or inspect.ismethod(member)
+        ):
             yield name, member
 
 

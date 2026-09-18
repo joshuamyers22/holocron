@@ -1,8 +1,8 @@
 # Interpretation and limitations
 
-Holocron currently proves a narrow engineering claim: for explicit-knot spline
-design and well-conditioned full-rank OLS fixtures, its selected outputs match a
-pinned R `rms` oracle under accepted field-aware tolerances on two platforms.
+Holocron currently proves narrow engineering claims: predictor-distribution
+summaries, explicit-knot spline design, and selected outputs from well-conditioned
+full-rank OLS match a pinned R `rms` oracle under field-aware tolerances.
 That is not evidence of package-wide equivalence, model validity, or fitness for
 a consequential decision.
 
@@ -15,7 +15,8 @@ exact; approximate comparison is restricted to allowlisted numerical paths.
 
 ## Not yet supported
 
-- automatic knots, formulas, `datadist`, labels, units, and missing-data policy;
+- automatic knots, formulas, dataframe/date-time adapters, and model-level
+  missing-data policy;
 - binary logistic, ordinal, Cox, parametric survival, and nonparametric survival
   Python estimators;
 - inference tables, ANOVA, contrasts, calibration, validation, and resampling;

@@ -8,7 +8,7 @@ from pathlib import Path
 from typing import cast
 
 import holocron
-from holocron import exceptions
+from holocron import design, exceptions
 
 
 class PublicApiTests(unittest.TestCase):
@@ -29,6 +29,17 @@ class PublicApiTests(unittest.TestCase):
 
     def test_distribution_is_marked_as_typed(self) -> None:
         self.assertTrue(files("holocron").joinpath("py.typed").is_file())
+
+    def test_design_namespace_exports_only_supported_objects(self) -> None:
+        self.assertEqual(
+            design.__all__,
+            [
+                "DataDistribution",
+                "DistributionRange",
+                "RestrictedCubicSplineSpec",
+                "VariableDistribution",
+            ],
+        )
 
     def test_public_errors_preserve_builtin_catch_categories(self) -> None:
         with self.assertRaises(ValueError):

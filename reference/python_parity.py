@@ -2,9 +2,9 @@
 
 from __future__ import annotations
 
-from typing import cast
+from typing import Literal, cast
 
-from holocron.design import RestrictedCubicSplineSpec
+from holocron.design import DataDistribution, RestrictedCubicSplineSpec
 from holocron.models import fit_ols
 from reference.contracts import JsonValue
 
@@ -17,6 +17,49 @@ def spline_column_names(column_count: int) -> list[str]:
 def build_python_output(case: dict[str, JsonValue]) -> dict[str, JsonValue]:
     """Compute an implemented case without invoking or importing the R oracle."""
     operation = case["operation"]
+    if operation == "datadist":
+        raw_variables = cast(list[JsonValue], case["variables"])
+        data: dict[str, list[float | str | None]] = {}
+        levels: dict[str, list[float | str]] = {}
+        ordered: list[str] = []
+        labels: dict[str, str] = {}
+        units: dict[str, str | None] = {}
+        for raw_variable in raw_variables:
+            variable = cast(dict[str, JsonValue], raw_variable)
+            name = cast(str, variable["name"])
+            data[name] = cast(list[float | str | None], variable["values"])
+            labels[name] = cast(str, variable["label"])
+            units[name] = cast(str | None, variable["unit"])
+            if variable["kind"] in {"categorical", "ordered"}:
+                levels[name] = cast(list[float | str], variable["levels"])
+            if variable["kind"] == "ordered":
+                ordered.append(name)
+        raw_effect = cast(list[float], case["effect_quantiles"])
+        raw_display = cast(list[float] | None, case["display_quantiles"])
+        distribution = DataDistribution.from_data(
+            data,
+            levels=levels,
+            ordered=ordered,
+            labels=labels,
+            units=units,
+            effect_quantiles=(raw_effect[0], raw_effect[1]),
+            display_quantiles=(
+                None if raw_display is None else (raw_display[0], raw_display[1])
+            ),
+            categorical_adjustment=cast(
+                Literal["mode", "first"], case["categorical_adjustment"]
+            ),
+            discrete_threshold=cast(int, case["discrete_threshold"]),
+        )
+        document = distribution.to_dict()
+        document.pop("schema_version")
+        return {
+            "ok": True,
+            "protocol_version": "1",
+            "operation": "datadist",
+            **document,
+        }
+
     x = cast(list[float], case["x"])
     knots = tuple(cast(list[float], case["knots"]))
     spec = RestrictedCubicSplineSpec(knots)

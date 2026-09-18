@@ -1,0 +1,43 @@
+{
+  "schema_version": "holocron-oracle-case/v1",
+  "case_id": "datadist-numeric-defaults",
+  "description": "Default continuous, binary, three-level, and constant numeric summaries.",
+  "expected_output": "datadist-numeric-defaults.json",
+  "comparison_profile": "data-distribution-v1",
+  "qualification_stage": "python-parity",
+  "operation": "datadist",
+  "variables": [
+    {
+      "name": "continuous",
+      "kind": "numeric",
+      "values": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20],
+      "label": "Continuous predictor",
+      "unit": "years"
+    },
+    {
+      "name": "binary",
+      "kind": "numeric",
+      "values": [1, 0, 1, 0, 1, 1, 0, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0],
+      "label": "Binary predictor",
+      "unit": null
+    },
+    {
+      "name": "three",
+      "kind": "numeric",
+      "values": [30, 10, 20, 30, 20, 10, 30, 10, 20, 30, 20, 10, 30, 10, 20, 30, 20, 10, 30, 10],
+      "label": "Three-level predictor",
+      "unit": null
+    },
+    {
+      "name": "constant",
+      "kind": "numeric",
+      "values": [4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4],
+      "label": "Constant predictor",
+      "unit": null
+    }
+  ],
+  "effect_quantiles": [0.25, 0.75],
+  "display_quantiles": null,
+  "categorical_adjustment": "mode",
+  "discrete_threshold": 10
+}
