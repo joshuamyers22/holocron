@@ -1,6 +1,6 @@
 # Independent Python Implementation of `rms`: Production Project Plan
 
-**Status:** Active — Phases 0–2 complete; the first four Phase 3 deliverables are accepted for private development
+**Status:** Active — Phases 0–2 complete; all five Phase 3 deliverables are accepted for private development, with the Phase 3 exit gate pending independent review
 **Plan date:** 2026-09-17  
 **Reference implementation:** Frank Harrell's R package `rms`  
 **Project name:** `holocron`  
@@ -671,8 +671,8 @@ design fingerprint, and confirms that no estimator was promoted. See the
 
 ### Phase 3 — Linear, generalized, and binary logistic core (16–24 weeks)
 
-**Status:** In progress. The first four deliverables are complete for the
-private experimental envelope; the complete getting-started workflow is next.
+**Status:** Deliverables complete for the private experimental envelope. The
+exit gate remains open pending independent statistical review of alpha scope.
 
 **Deliverables**
 
@@ -685,11 +685,18 @@ private experimental envelope; the complete getting-started workflow is next.
   ([acceptance record](governance/PHASE_3_REGULARIZATION_COVARIANCE.md));
 - [x] simulation reports and numerical edge-case corpus
   ([acceptance record](governance/PHASE_3_SIMULATION_EDGES.md));
-- complete getting-started workflow.
+- [x] complete getting-started workflow
+  ([acceptance record](governance/PHASE_3_GETTING_STARTED.md)).
 
 **Exit gate**
 
 Registered parity and simulation thresholds pass; convergence/rank/separation failures are structured and documented; independent statistical review approves alpha scope.
+
+**Current disposition:** The implementation-controlled portions pass. Registered
+parity and simulation gates are green, and convergence, rank, separation, and
+numerical edge outcomes are structured and documented. Independent statistical
+review remains unassigned and cannot be self-approved, so Phase 3 is not closed
+and no capability advances beyond `experimental`.
 
 ### Phase 4 — Ordinal regression and censoring model (20–32 weeks)
 

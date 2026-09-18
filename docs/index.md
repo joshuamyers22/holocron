@@ -36,7 +36,7 @@ surface and evidence links.
 - [Install the private development checkout](installation.md).
 - [Define predictor distributions and adjustment values](guides/data-distributions.md).
 - [Build safe formulas and reconstructible numeric designs](guides/formulas-and-designs.md).
-- [Run the first spline-and-OLS model](getting-started.md).
+- [Run the complete Phase 3 getting-started workflow](getting-started.md).
 - [Fit the supported generalized and logistic models](guides/generalized-models.md).
 - [Use the supported post-estimation operations](guides/post-estimation.md).
 - [Use penalties and alternative covariance estimators](guides/regularization-and-covariance.md).

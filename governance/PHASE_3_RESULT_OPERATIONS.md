@@ -57,5 +57,7 @@ Penalties and alternative covariance are now accepted separately in the
 [regularization/covariance record](PHASE_3_REGULARIZATION_COVARIANCE.md).
 Simulation and numerical edge-case evidence is now accepted in the
 [simulation/edge record](PHASE_3_SIMULATION_EDGES.md). The complete getting-
-started workflow, specialist review, the Phase 3 exit gate, capability promotion
-beyond experimental, consequential use, and external distribution remain open.
+started workflow is now accepted in the
+[workflow record](PHASE_3_GETTING_STARTED.md). Specialist review, the Phase 3
+exit gate, capability promotion beyond experimental, consequential use, and
+external distribution remain open.

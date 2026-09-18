@@ -1,8 +1,9 @@
 # End-to-end vertical slice
 
-This example combines the two experimental capabilities. It uses fixed knots and
-a tiny synthetic dataset so that the documentation remains deterministic and
-offline.
+This historical Phase 1 example combines the initial spline and OLS
+capabilities. It uses fixed knots and a tiny synthetic dataset so that the
+documentation remains deterministic and offline. For the current end-to-end
+surface, use the [complete Phase 3 workflow](../getting-started.md).
 
 ```python
 # holocron: execute

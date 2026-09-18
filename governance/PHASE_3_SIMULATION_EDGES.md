@@ -55,6 +55,7 @@ utility, or support beyond the accepted estimator and covariance envelope.
 
 The committed report is a clean macOS arm64 result. Platform CI artifacts are
 required runtime evidence but are not promoted to immutable historical
-cross-platform calibration records by this acceptance. Independent statistical
-review, the complete getting-started workflow, the Phase 3 exit gate,
-consequential use, and external distribution remain open.
+cross-platform calibration records by this acceptance. The getting-started
+workflow is now accepted separately in the
+[workflow record](PHASE_3_GETTING_STARTED.md). Independent statistical review,
+the Phase 3 exit gate, consequential use, and external distribution remain open.

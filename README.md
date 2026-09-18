@@ -13,13 +13,16 @@ The project is distributed internally as `holocron-rms` and imported as
 Holocron is experimental and incomplete. Do not use it for consequential
 analysis, inference, prediction, or clinical decisions.
 
-Phases 0–2 are complete for private experimental development, and Phase 3 is
-active. Its first four deliverables—experimental `ols`, Gaussian/identity and
-binomial/logit `Glm`, and binary `lrm` estimators plus their covariance,
+Phases 0–2 are complete for private experimental development, and all five
+Phase 3 deliverables are complete. The deliverables cover experimental `ols`,
+Gaussian/identity and binomial/logit `Glm`, and binary `lrm` estimators plus
+their covariance,
 likelihood, residual, prediction, coefficient-summary, ANOVA, and linear-
 contrast operations, diagonal OLS/lrm quadratic penalties, and robust and
 bootstrap covariance, plus locked simulation reports and a numerical edge-case
-corpus—are complete. The Phase 1 exit
+corpus and a complete executable getting-started workflow. The Phase 3 exit gate
+still awaits independent statistical review, so every capability remains
+experimental. The Phase 1 exit
 gate is recorded in the
 [completion record](https://github.com/joshuamyers22/holocron/blob/main/governance/PHASE_1_COMPLETION.md);
 the evidence-backed Phase 2 disposition is recorded in its
@@ -146,7 +149,7 @@ reports and interpretation are described in the
 `make build` uses the locked build backend offline and without isolation, then
 inspects and independently installs both wheel and source distribution into
 fresh environments. Each installation runs dependency validation and the
-supported RCS-to-OLS workflow from outside the checkout. `make clean-build`
+supported Phase 3 public workflow from outside the checkout. `make clean-build`
 additionally rejects source-tree changes and is the required CI/release gate.
 
 The project scope and delivery gates are defined in
@@ -157,7 +160,7 @@ and the independent-development policy.
 
 ## Documentation
 
-The initial documentation site includes executable getting-started examples,
+The documentation site includes a complete executable Phase 3 workflow,
 generated public API reference, and a generated inventory of every compatibility
 disposition. Build or preview it locally with:
 

@@ -95,3 +95,8 @@ Notable changes are recorded here using semantic versioning.
   discrimination, type-I-error, robust-covariance, bootstrap, and penalization
   reports; and a 16-case numerical edge corpus with clean revision-bound
   evidence and cross-platform CI execution.
+- Completed the fifth Phase 3 deliverable with one CI-executed getting-started
+  workflow spanning explicit metadata and design, OLS and binary `lrm`, named
+  inference and future prediction, robust/bootstrap covariance, penalization,
+  and strict JSON reconstruction, with adjacent interpretation and stop
+  boundaries.

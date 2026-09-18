@@ -49,5 +49,6 @@ coefficients, and bootstrap confidence intervals are absent.
 
 Simulation reports and the numerical edge-case corpus are now accepted in the
 [simulation/edge record](PHASE_3_SIMULATION_EDGES.md). The complete getting-
-started workflow, specialist review, the Phase 3 exit gate, consequential use,
-and external distribution remain open.
+started workflow is now accepted in the
+[workflow record](PHASE_3_GETTING_STARTED.md). Specialist review, the Phase 3
+exit gate, consequential use, and external distribution remain open.
