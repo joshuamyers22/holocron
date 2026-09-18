@@ -17,12 +17,12 @@ Phases 0 and 1 are complete and Phase 2 is active for private experimental
 development. The Phase 1
 exit gate is recorded in the
 [completion record](https://github.com/joshuamyers22/holocron/blob/main/governance/PHASE_1_COMPLETION.md);
-The first four Phase 2 deliverables—immutable data-distribution metadata, the
+The first five Phase 2 deliverables—immutable data-distribution metadata, the
 allowlisted formula/core design engine, and explicit factor/restricted-
 interaction handling, plus stable design/result schemas and a serialization
-policy—are complete within their
-experimental envelopes. External distribution and capability promotion remain
-blocked by the governance reviews described there.
+policy, plus exhaustive transformation differential/property tests—are complete
+within their experimental envelopes. External distribution and capability
+promotion remain blocked by the governance reviews described there.
 
 The evidence-backed experimental surface implements predictor-distribution
 metadata, safe formulas, numeric and factor transformations, restricted
@@ -36,6 +36,10 @@ only for capabilities and support envelopes backed by the
 [compatibility manifest](https://github.com/joshuamyers22/holocron/blob/main/compatibility/rms-8.2.0.yaml).
 The current numerical envelope is CPython 3.12.14 with NumPy 2.5.3 on macOS 15
 arm64/Accelerate and Ubuntu 24.04 x86_64/OpenBLAS, as defined by ADR-009.
+
+Transformation breadth is additionally checked by deterministic generative
+tests covering every supported degree, knot-count, level-count, and ordered pair
+of restricted-interaction component kinds.
 
 ## Library API
 

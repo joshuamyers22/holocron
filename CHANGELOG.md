@@ -64,3 +64,7 @@ Notable changes are recorded here using semantic versioning.
   realized design matrices, and OLS results; added strict bounded canonical JSON,
   design/result fingerprints, wrong-design prediction rejection, packaged schema
   assets, and the initial cross-version migration policy in ADR-008.
+- Added deterministic exhaustive transformation tests with an independent scalar
+  reference, full supported degree/knot/level cardinality coverage, all 36
+  ordered restricted-interaction kind pairs, permutation/batching and spline-tail
+  properties, and systematic fail-closed invalid-value checks.

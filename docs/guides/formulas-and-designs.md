@@ -99,6 +99,18 @@ and restricted cubic splines at least three. Formulas are limited to 64 terms,
 Automatic knots or levels, offsets, strata, matrices, three-way interactions,
 and dataframe adapters are deferred.
 
+## Verification envelope
+
+Pinned R differential cases cover every main-effect kind, standalone restricted
+cubic splines, adversarial names, and representative linear-by-factor and
+nonlinear-by-nonlinear restricted interactions. A deterministic generative suite
+fills the space between those fixtures with an independent scalar basis: it
+covers every supported polynomial degree, knot and level cardinality, all 36
+ordered pairs of interaction component kinds, row permutation and batching,
+linear spline tails, reconstruction, and invalid-value rejection. See the
+[acceptance record](https://github.com/joshuamyers22/holocron/blob/main/governance/PHASE_2_TRANSFORMATION_TESTS.md)
+for counts and boundaries.
+
 See the [acceptance record](https://github.com/joshuamyers22/holocron/blob/main/governance/PHASE_2_FORMULA_DESIGN.md)
 and [categorical/interactions record](https://github.com/joshuamyers22/holocron/blob/main/governance/PHASE_2_CATEGORICAL_INTERACTIONS.md),
 and generated [compatibility inventory](../compatibility.md) for the exact
