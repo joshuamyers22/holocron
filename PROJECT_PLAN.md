@@ -642,8 +642,8 @@ workflow artifact. See the [Phase 1 completion record](governance/PHASE_1_COMPLE
 **Status:** In progress. Data-distribution metadata, the formula AST and core
 transformations, categorical/ordered handling with restricted interactions,
 stable design/result schemas with a serialization draft, and exhaustive
-transformation tests are complete for the experimental envelope; the R design-
-specification migration guide is next.
+transformation tests and the R design-specification migration guide are complete
+for the experimental envelope; Phase 2 exit-gate review is next.
 
 **Deliverables**
 
@@ -657,7 +657,8 @@ specification migration guide is next.
   ([acceptance record](governance/PHASE_2_SERIALIZATION.md));
 - [x] exhaustive transformation differential/property tests
   ([acceptance record](governance/PHASE_2_TRANSFORMATION_TESTS.md));
-- [ ] R migration guide for design specifications.
+- [x] R migration guide for design specifications
+  ([acceptance record](governance/PHASE_2_R_MIGRATION_GUIDE.md)).
 
 **Exit gate**
 

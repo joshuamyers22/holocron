@@ -17,12 +17,13 @@ Phases 0 and 1 are complete and Phase 2 is active for private experimental
 development. The Phase 1
 exit gate is recorded in the
 [completion record](https://github.com/joshuamyers22/holocron/blob/main/governance/PHASE_1_COMPLETION.md);
-The first five Phase 2 deliverables—immutable data-distribution metadata, the
+All six Phase 2 deliverables—immutable data-distribution metadata, the
 allowlisted formula/core design engine, and explicit factor/restricted-
 interaction handling, plus stable design/result schemas and a serialization
-policy, plus exhaustive transformation differential/property tests—are complete
-within their experimental envelopes. External distribution and capability
-promotion remain blocked by the governance reviews described there.
+policy, exhaustive transformation differential/property tests, and the R
+design-specification migration guide—are complete within their experimental
+envelopes. Phase 2 exit-gate review is next. External distribution and
+capability promotion remain blocked by the governance reviews described there.
 
 The evidence-backed experimental surface implements predictor-distribution
 metadata, safe formulas, numeric and factor transformations, restricted

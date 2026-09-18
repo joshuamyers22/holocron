@@ -68,3 +68,7 @@ Notable changes are recorded here using semantic versioning.
   reference, full supported degree/knot/level cardinality coverage, all 36
   ordered restricted-interaction kind pairs, permutation/batching and spline-tail
   properties, and systematic fail-closed invalid-value checks.
+- Completed the R design-specification migration guide with executable
+  `datadist`-to-design-to-OLS reconstruction, a comprehensive concept map,
+  matrix-level verification procedure, serialization guidance, and explicit
+  stop conditions for unsupported `rms` behavior.
