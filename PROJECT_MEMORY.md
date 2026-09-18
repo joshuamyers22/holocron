@@ -26,6 +26,7 @@ Git history provides the audit trail.
 | `package-identity` | Holocron uses repository/project name `holocron`, import name `holocron`, and prospective distribution name `holocron-rms` because `holocron` is occupied on PyPI. | `docs/adr/ADR-002-project-and-package-identity.md`; `pyproject.toml` | 2026-09-17 |
 | `compatibility-contract` | Compatibility is claimed per manifest entry; all 121 exports and 160 S3 methods have an owner/status, and only evidence-backed entries may advance beyond experimental. | `docs/adr/ADR-004-compatibility-contract.md`; `compatibility/rms-8.2.0.yaml` | 2026-09-17 |
 | `release-gate` | Tag-triggered release jobs fail closed unless the repository variable `EXTERNAL_DISTRIBUTION_APPROVED` is exactly `true`; setting it requires the distribution review recorded by governance. | `.github/workflows/release.yml`; `governance/GOVERNANCE.md` | 2026-09-17 |
+| `numerical-envelope` | ADR-009 accepts the current RCS-design and well-conditioned OLS profiles for float64 under CPython 3.12.14/NumPy 2.5.3 on macOS 15 arm64 with Accelerate and Ubuntu 24.04 x86_64 with OpenBLAS. Other model-family profiles remain provisional, and installability outside the matrix is not a parity claim. | `docs/adr/ADR-009-supported-numerical-envelope.md`; `governance/evidence/tolerance-pilot/`; `.github/workflows/ci.yml` | 2026-09-17 |
 
 ## Non-obvious current state
 

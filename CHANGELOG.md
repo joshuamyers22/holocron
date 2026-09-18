@@ -34,3 +34,7 @@ Notable changes are recorded here using semantic versioning.
   design, OLS, binary logistic, ordinal, Cox, parametric survival, and
   Kaplan–Meier workflows; 12 design/OLS cases run independent Python parity and
   13 later-family cases are labeled frozen oracle baselines.
+- Accepted ADR-009's float64 numerical envelope for RCS design and
+  well-conditioned OLS after all 12 independent cases passed on macOS
+  arm64/Accelerate and Ubuntu x86_64/OpenBLAS; added schema-validated pilot
+  reports and a required cross-platform CI matrix.

@@ -46,10 +46,9 @@ provided.
 
 ## Boundaries
 
-This accepts the parity-laboratory infrastructure and Phase 1 corpus breadth,
-not final numerical tolerances or parity for unimplemented model families. The
-current numeric rules are named pilot profiles. Cross-platform and conditioning
-evidence plus an approved tolerance ADR remain required before those thresholds
-become capability acceptance criteria. The R oracle and contract code are
+This accepts the parity-laboratory infrastructure and Phase 1 corpus breadth.
+ADR-009 separately accepts the design and well-conditioned OLS tolerances within
+its exact cross-platform numerical envelope. It does not accept parity or final
+tolerances for unimplemented model families. The R oracle and contract code are
 development assets and are excluded from Holocron distributions and runtime
 behavior.

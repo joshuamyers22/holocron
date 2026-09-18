@@ -33,9 +33,10 @@ is not silently accepted even when statistical fixtures happen to pass.
 
 The canonical environment is not the public support matrix. Package metadata
 currently permits Python 3.11 and later, but the frozen development/CI/release
-environment is CPython 3.12.14. Supported Python, OS, architecture, NumPy, BLAS,
-and SciPy combinations remain a separate ADR-009 decision and compatibility
-matrix.
+environment is CPython 3.12.14. ADR-009 defines the narrower numerical parity
+envelope for the currently implemented design and OLS capabilities, including
+the accepted OS, architecture, NumPy, and BLAS/LAPACK combinations. Broader
+installation metadata does not imply broader numerical qualification.
 
 ## Python environment
 

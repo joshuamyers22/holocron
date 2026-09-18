@@ -175,8 +175,9 @@ The following ADRs are required before their dependent work begins.
 
 The licensing ADR must also decide how the template's GPL-denying dependency check is adapted. Test-only R oracle components must be isolated from Python runtime distributions, and their licenses and notices must remain visible in the reference environment.
 
-ADRs 001–004 are accepted for private development. The distribution gate in
-ADR-001 remains binding; acceptance is not legal clearance for publication.
+ADRs 001–004 and ADR-009 are accepted for private development. The distribution
+gate in ADR-001 remains binding; acceptance is not legal clearance for
+publication.
 
 ## 5. Scope and compatibility tiers
 
@@ -607,8 +608,7 @@ Independent-development and license/provenance policy is approved; the reference
 ### Phase 1 — Repository and parity laboratory (6–10 weeks)
 
 **Status:** In progress. The production-repository adaptation is complete; the
-remaining tolerance, documentation-site, and end-to-end evidence deliverables
-remain open.
+remaining documentation-site and end-to-end evidence deliverables remain open.
 
 **Deliverables**
 
@@ -620,7 +620,8 @@ remain open.
 - [x] 25 statistical oracle cases covering design, OLS, logistic, ordinal, and
   survival examples (12 independently implemented Python parity cases and 13
   frozen oracle baselines for later model-family implementation);
-- [ ] tolerance ADR based on a cross-platform pilot;
+- [x] tolerance ADR based on a cross-platform pilot
+  ([ADR-009](docs/adr/ADR-009-supported-numerical-envelope.md));
 - [ ] initial docs site and generated compatibility page;
 - [ ] clean artifact build and smoke tests.
 

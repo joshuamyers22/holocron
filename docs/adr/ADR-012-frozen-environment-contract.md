@@ -13,9 +13,9 @@ health response already captured much of this state, but the Python patch versio
 was not exact, build isolation performed a second dependency resolution, and no
 single check tied both environment records together.
 
-ADR-009 remains reserved for the eventual supported platform and numerical
-compatibility matrix. This decision defines only the canonical environments used
-to generate current evidence.
+ADR-009 defines the supported platform and numerical compatibility matrix for
+the implemented Phase 1 capabilities. This decision defines the canonical
+environments used to generate evidence.
 
 ## Decision
 
@@ -43,9 +43,8 @@ uv version, package graph, and build backend. An unexpected tool, installed
 package, lock change, or oracle-input change fails the environment gate.
 
 The accepted R image identity is architecture-specific. This Phase 1 freeze does
-not establish the public support matrix or guarantee byte-identical Docker layer
-rebuilds. Cross-platform numerical equivalence and supported BLAS combinations
-remain work for ADR-009 and the tolerance pilot.
+not guarantee byte-identical Docker layer rebuilds. ADR-009 separately records
+the cross-platform Python numerical envelope and its tolerance-pilot evidence.
 
 ## Verification
 

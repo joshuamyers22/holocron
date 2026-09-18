@@ -32,8 +32,12 @@ Named field-aware policies live in `tolerances.json` and validate against
 and unlisted values compare exactly. Approximate comparison is enabled only for
 explicit JSON Pointer-like paths, where `*` matches one object key or array
 index. The profiles distinguish deterministic design values, model coefficients
-and predictions, covariance matrices, survival estimates, and exact oracle identity.
-They remain Phase 1 pilot tolerances pending the cross-platform tolerance ADR.
+and predictions, covariance matrices, survival estimates, and exact oracle
+identity. ADR-009 accepts the deterministic-transform and well-conditioned OLS
+profiles within its exact Python/NumPy/platform/BLAS envelope. Profiles for
+model families that remain oracle baselines are provisional until their
+independent Python implementations receive equivalent cross-platform
+calibration.
 
 `contracts.py` is the shared implementation used by both the independent Python
 fixture tests and the live R oracle check. A comparison produces a structured
@@ -56,6 +60,7 @@ in `../docs/reproducibility/FROZEN_ENVIRONMENTS.md`.
 make oracle-build RMS_SOURCE=/absolute/path/to/rms-master
 make frozen-environments-live
 make oracle-check
+make tolerance-pilot
 make reference-source-check RMS_SOURCE=/absolute/path/to/rms-master
 ```
 
@@ -72,6 +77,12 @@ policy, fixture, and cross-document link without Docker and runs in ordinary CI.
 and R environment contracts. `make frozen-environments-live` additionally fails
 unless the local oracle tag resolves to the accepted image ID and Linux/arm64
 platform.
+
+`make tolerance-pilot` independently recomputes all cases labeled
+`python-parity`, records the local Python, NumPy, OS, architecture, and
+BLAS/LAPACK identity, and validates a report against
+`../schemas/tolerance-pilot.schema.json`. CI runs this gate on the two platforms
+accepted by ADR-009.
 
 The runtime container is non-root, offline, read-only, capability-free, and
 resource-limited. The protocol accepts data-only operations rather than

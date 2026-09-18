@@ -7,13 +7,24 @@ import json
 from pathlib import Path
 from typing import cast
 
-from reference.contracts import CASES, validate_repository_contracts
+from reference.contracts import (
+    CASES,
+    POLICY_PATH,
+    TOLERANCE_PILOT_SCHEMA,
+    load_json,
+    require_array,
+    require_object,
+    sha256_file,
+    validate_document,
+    validate_repository_contracts,
+)
 
 ROOT = Path(__file__).resolve().parents[1]
 INVENTORY_PATH = ROOT / "reference/manifests/rms-8.2-0-inventory.json"
 CHECKSUM_PATH = ROOT / "reference/manifests/rms-8.2-0-files.sha256"
 COMPATIBILITY_PATH = ROOT / "compatibility/rms-8.2.0.yaml"
 VALID_STATUSES = {"experimental", "implemented", "mapped", "unsupported", "deferred"}
+TOLERANCE_EVIDENCE = ROOT / "governance/evidence/tolerance-pilot"
 
 
 def load_object(path: Path) -> dict[str, object]:
@@ -126,6 +137,59 @@ def main() -> None:
         )
     if compatibility["capability_count"] != len(capabilities):
         raise ValueError("capability count does not match entries")
+
+    expected_pilot_cases = {
+        path.stem
+        for path in CASES.glob("*.json")
+        if load_object(path).get("qualification_stage") == "python-parity"
+    }
+    expected_reports = {
+        "macos-15-arm64.json": ("Darwin", "arm64", "accelerate unknown"),
+        "ubuntu-24.04-x86_64.json": (
+            "Linux",
+            "x86_64",
+            "scipy-openblas 0.3.34.106.0",
+        ),
+    }
+    actual_reports = {path.name for path in TOLERANCE_EVIDENCE.glob("*.json")}
+    if actual_reports != set(expected_reports):
+        raise ValueError("tolerance pilot platform evidence is incomplete")
+    pilot_revision: object | None = None
+    for filename, expected_environment in expected_reports.items():
+        report_path = TOLERANCE_EVIDENCE / filename
+        report = require_object(load_json(report_path), name=str(report_path))
+        validate_document(report, TOLERANCE_PILOT_SCHEMA)
+        if report["source_is_dirty"] is not False:
+            raise ValueError(f"dirty tolerance pilot evidence: {filename}")
+        if pilot_revision is None:
+            pilot_revision = report["source_revision"]
+        elif report["source_revision"] != pilot_revision:
+            raise ValueError("tolerance pilot reports use different revisions")
+        environment = require_object(
+            report["environment"], name=f"{filename}.environment"
+        )
+        identity = (
+            environment["operating_system"],
+            environment["machine"],
+            environment["blas"],
+        )
+        if identity != expected_environment:
+            raise ValueError(f"unexpected tolerance pilot environment: {filename}")
+        policy = require_object(report["policy"], name=f"{filename}.policy")
+        if policy["sha256"] != sha256_file(POLICY_PATH):
+            raise ValueError(f"stale tolerance policy evidence: {filename}")
+        summary = require_object(report["summary"], name=f"{filename}.summary")
+        if summary["outcome"] != "passed" or summary["case_count"] != len(
+            expected_pilot_cases
+        ):
+            raise ValueError(f"failed or incomplete tolerance pilot: {filename}")
+        results = require_array(report["cases"], name=f"{filename}.cases")
+        reported_cases = {
+            str(require_object(result, name=f"{filename}.case")["case_id"])
+            for result in results
+        }
+        if reported_cases != expected_pilot_cases:
+            raise ValueError(f"tolerance pilot case coverage differs: {filename}")
 
     print(
         "reference metadata verified: "

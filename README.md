@@ -21,6 +21,8 @@ as oracle baselines for later implementation and are not current parity claims.
 Compatibility is claimed
 only for capabilities and support envelopes backed by the
 [compatibility manifest](https://github.com/joshuamyers22/holocron/blob/main/compatibility/rms-8.2.0.yaml).
+The current numerical envelope is CPython 3.12.14 with NumPy 2.5.3 on macOS 15
+arm64/Accelerate and Ubuntu 24.04 x86_64/OpenBLAS, as defined by ADR-009.
 
 ## Library API
 

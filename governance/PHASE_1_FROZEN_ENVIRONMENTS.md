@@ -46,7 +46,8 @@ a public support matrix, external distribution, or promotion of statistical
 capabilities beyond experimental. The R image identity is platform-specific,
 and a rebuild is accepted only through the migration procedure in ADR-012.
 
-ADR-009 must still define supported Python, OS, architecture, NumPy/SciPy, and
-BLAS combinations before public alpha. Vacant statistical, numerical,
+ADR-009 defines the current Python, OS, architecture, NumPy, and BLAS/LAPACK
+evidence envelope; future capabilities and platform additions require new
+calibration. Vacant statistical, numerical,
 independent-verification, and license reviewers remain blocking under the Phase
 0 governance record.
