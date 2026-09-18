@@ -34,7 +34,7 @@ jobs:
         env:
           RELEASE_TAG: ${{ github.ref_name }}
         run: uv run python tools/verify_release.py --tag "$RELEASE_TAG"
-      - run: make check phase-1-exit-gate audit clean-build
+      - run: make check phase-1-exit-gate phase-2-exit-gate audit clean-build
       - uses: anchore/sbom-action@e22c389904149dbc22b58101806040fa8d37a610 # v0.24.0
         with:
           path: ./dist

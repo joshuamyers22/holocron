@@ -35,6 +35,7 @@ FORMULA_SCHEMA = ROOT / "schemas/formula.schema.json"
 DESIGN_SPEC_SCHEMA = ROOT / "schemas/design-spec.schema.json"
 DESIGN_MATRIX_SCHEMA = ROOT / "schemas/design-matrix.schema.json"
 OLS_RESULT_SCHEMA = ROOT / "schemas/ols-result.schema.json"
+PHASE_2_EXIT_EVIDENCE_SCHEMA = ROOT / "schemas/phase-2-exit-evidence.schema.json"
 POLICY_PATH = ROOT / "reference/tolerances.json"
 CASES = ROOT / "reference/cases"
 EXPECTED = ROOT / "reference/expected"
@@ -670,6 +671,7 @@ def validate_repository_contracts() -> int:
         DESIGN_SPEC_SCHEMA,
         DESIGN_MATRIX_SCHEMA,
         OLS_RESULT_SCHEMA,
+        PHASE_2_EXIT_EVIDENCE_SCHEMA,
     ):
         schema = require_object(load_json(schema_path), name=str(schema_path))
         Draft202012Validator.check_schema(schema)

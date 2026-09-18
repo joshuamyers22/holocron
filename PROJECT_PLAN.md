@@ -1,6 +1,6 @@
 # Independent Python Implementation of `rms`: Production Project Plan
 
-**Status:** Active — Phases 0 and 1 complete; Phase 2 in progress for private development
+**Status:** Active — Phases 0–2 complete for private development; Phase 3 is next
 **Plan date:** 2026-09-17  
 **Reference implementation:** Frank Harrell's R package `rms`  
 **Project name:** `holocron`  
@@ -609,7 +609,7 @@ Independent-development and license/provenance policy is approved; the reference
 ### Phase 1 — Repository and parity laboratory (6–10 weeks)
 
 **Status:** Complete for private experimental development as of 2026-09-17
-([completion record](governance/PHASE_1_COMPLETION.md)). Phase 2 is active.
+([completion record](governance/PHASE_1_COMPLETION.md)). Phase 2 is complete.
 
 **Deliverables**
 
@@ -639,11 +639,9 @@ workflow artifact. See the [Phase 1 completion record](governance/PHASE_1_COMPLE
 
 ### Phase 2 — Design system (12–18 weeks)
 
-**Status:** In progress. Data-distribution metadata, the formula AST and core
-transformations, categorical/ordered handling with restricted interactions,
-stable design/result schemas with a serialization draft, and exhaustive
-transformation tests and the R design-specification migration guide are complete
-for the experimental envelope; Phase 2 exit-gate review is next.
+**Status:** Complete for private experimental development. All six deliverables
+and the evidence-emitting exit gate are accepted; capability promotion and
+external distribution remain separately blocked.
 
 **Deliverables**
 
@@ -663,6 +661,13 @@ for the experimental envelope; Phase 2 exit-gate review is next.
 **Exit gate**
 
 Tier A design cases, including adversarial naming and prediction reconstruction, pass the approved exact/tolerance contracts. No estimator is promoted while its design metadata is unstable.
+
+**Disposition:** Passed. All 18 independently implemented data-distribution,
+transformation, and formula-design cases pass 472 exact and 456 numeric checks
+against the pinned R oracle. The gate requires adversarial names, exactly
+reconstructs new-data predictions after strict JSON round trips, preserves the
+design fingerprint, and confirms that no estimator was promoted. See the
+[Phase 2 completion record](governance/PHASE_2_COMPLETION.md).
 
 ### Phase 3 — Linear, generalized, and binary logistic core (16–24 weeks)
 

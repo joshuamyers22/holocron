@@ -13,17 +13,20 @@ The project is distributed internally as `holocron-rms` and imported as
 Holocron is experimental and incomplete. Do not use it for consequential
 analysis, inference, prediction, or clinical decisions.
 
-Phases 0 and 1 are complete and Phase 2 is active for private experimental
-development. The Phase 1
-exit gate is recorded in the
+Phases 0–2 are complete for private experimental development, and Phase 3 is
+next. The Phase 1 exit gate is recorded in the
 [completion record](https://github.com/joshuamyers22/holocron/blob/main/governance/PHASE_1_COMPLETION.md);
+the evidence-backed Phase 2 disposition is recorded in its
+[completion record](https://github.com/joshuamyers22/holocron/blob/main/governance/PHASE_2_COMPLETION.md).
 All six Phase 2 deliverables—immutable data-distribution metadata, the
 allowlisted formula/core design engine, and explicit factor/restricted-
 interaction handling, plus stable design/result schemas and a serialization
 policy, exhaustive transformation differential/property tests, and the R
 design-specification migration guide—are complete within their experimental
-envelopes. Phase 2 exit-gate review is next. External distribution and
-capability promotion remain blocked by the governance reviews described there.
+envelopes. The exit gate checks all 18 design-system parity cases, adversarial
+names, and exact serialized prediction reconstruction. External distribution
+and capability promotion remain blocked by the governance reviews described
+there.
 
 The evidence-backed experimental surface implements predictor-distribution
 metadata, safe formulas, numeric and factor transformations, restricted

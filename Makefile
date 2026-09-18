@@ -1,4 +1,4 @@
-.PHONY: setup lock-check format lint typecheck test docs docs-generate docs-check frozen-environments frozen-environments-live reference-metadata tolerance-pilot phase-1-e2e phase-1-exit-gate check audit build clean-build oracle-build oracle-health oracle-check reference-source-check
+.PHONY: setup lock-check format lint typecheck test docs docs-generate docs-check frozen-environments frozen-environments-live reference-metadata tolerance-pilot phase-1-e2e phase-1-exit-gate phase-2-evidence phase-2-exit-gate check audit build clean-build oracle-build oracle-health oracle-check reference-source-check
 setup:
 	uv lock --check
 	uv sync --frozen --dev --no-install-project
@@ -34,7 +34,11 @@ phase-1-e2e:
 	uv run --frozen python -m tools.run_phase_1_vertical_slice
 phase-1-exit-gate:
 	uv run --frozen python -m tools.run_phase_1_vertical_slice --require-clean
-check: lock-check lint typecheck test docs-check frozen-environments reference-metadata phase-1-e2e
+phase-2-evidence:
+	uv run --frozen python -m tools.run_phase_2_exit_gate
+phase-2-exit-gate:
+	uv run --frozen python -m tools.run_phase_2_exit_gate --require-clean
+check: lock-check lint typecheck test docs-check frozen-environments reference-metadata phase-1-e2e phase-2-evidence
 audit:
 	uv audit --preview-features audit-command --locked --no-dev
 	uv run --frozen python tools/check_licenses.py

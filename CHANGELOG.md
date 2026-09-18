@@ -72,3 +72,7 @@ Notable changes are recorded here using semantic versioning.
   `datadist`-to-design-to-OLS reconstruction, a comprehensive concept map,
   matrix-level verification procedure, serialization guidance, and explicit
   stop conditions for unsupported `rms` behavior.
+- Closed the private-development Phase 2 exit gate across all 18 independently
+  implemented design-system parity cases, with aggregate schema-valid evidence,
+  an adversarial-name requirement, exact serialized prediction reconstruction,
+  estimator-promotion enforcement, and retained clean-CI evidence.

@@ -52,6 +52,20 @@ and writes schema-valid evidence to `.work/phase-1-evidence/`. Use
 `make phase-1-exit-gate` from a clean checkout when producing acceptance
 evidence. CI runs that clean form and retains its artifact for 30 days.
 
+## Phase 2 evidence workflow
+
+`make phase-2-evidence` checks every independently implemented data-
+distribution, transformation, and formula-design case against its pinned R
+output. It also requires the adversarial-name case, round-trips a design
+specification, matrix, and fitted result before reconstructing new-data
+predictions, and verifies that no Phase 3 estimator has been promoted in the
+compatibility manifest.
+
+The command writes one schema-valid aggregate record to
+`.work/phase-2-evidence/phase-2-exit.json`. Use `make phase-2-exit-gate` from a
+clean checkout for acceptance evidence. CI and the gated release workflow run
+the clean form; CI retains its artifact for 30 days.
+
 ## Compatibility changes
 
 Update the authoritative compatibility manifest in the same change as a public
