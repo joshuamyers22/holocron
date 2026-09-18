@@ -65,11 +65,26 @@ class PublicApiTests(unittest.TestCase):
         self.assertEqual(
             models.__all__,
             [
+                "AnovaResult",
+                "AnovaTest",
                 "BinaryLogisticResult",
+                "CovarianceResult",
+                "InferenceEstimate",
+                "LikelihoodResult",
+                "ModelSummary",
                 "OlsResult",
+                "PredictionResult",
+                "ResidualResult",
+                "anova",
+                "contrast",
+                "covariance",
                 "fit_glm",
                 "fit_lrm",
                 "fit_ols",
+                "likelihood",
+                "predict",
+                "residuals",
+                "summarize",
             ],
         )
 

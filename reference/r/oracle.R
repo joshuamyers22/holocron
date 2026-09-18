@@ -582,6 +582,195 @@ run_glm <- function(request) {
   )
 }
 
+inference_contract <- function(name, estimate, variance, distribution,
+                               degrees_of_freedom, confidence_level) {
+  standard_error <- sqrt(variance)
+  statistic <- estimate / standard_error
+  probability <- (1 + confidence_level) / 2
+  if (distribution == "t") {
+    critical <- stats::qt(probability, degrees_of_freedom)
+    p_value <- 2 * stats::pt(-abs(statistic), degrees_of_freedom)
+    reported_degrees <- as.integer(degrees_of_freedom)
+  } else {
+    critical <- stats::qnorm(probability)
+    p_value <- 2 * stats::pnorm(-abs(statistic))
+    reported_degrees <- NULL
+  }
+  list(
+    name = name,
+    estimate = unname(as.numeric(estimate)),
+    standard_error = unname(as.numeric(standard_error)),
+    statistic = unname(as.numeric(statistic)),
+    distribution = distribution,
+    degrees_of_freedom = reported_degrees,
+    p_value = unname(as.numeric(p_value)),
+    lower = unname(as.numeric(estimate - critical * standard_error)),
+    upper = unname(as.numeric(estimate + critical * standard_error))
+  )
+}
+
+run_model_operations <- function(request) {
+  x <- require_numeric_vector(request, "x", 3L)
+  y <- require_numeric_vector(request, "y", 3L)
+  evaluation_x <- require_numeric_vector(request, "evaluation_x", 1L)
+  require_equal_lengths(list(x, y), c("x", "y"))
+  estimator <- require_choice(
+    request, "estimator", c("ols", "glm-binomial", "lrm-binary")
+  )
+  if (estimator != "ols") y <- require_binary_vector(request, "y")
+  confidence_level <- request$confidence_level
+  if (is.null(confidence_level) || length(confidence_level) != 1L ||
+      !is.numeric(confidence_level) || !is.finite(confidence_level) ||
+      confidence_level <= 0 || confidence_level >= 1) {
+    stop("confidence_level must be between 0 and 1")
+  }
+  weights <- require_numeric_vector(request, "contrast_weights", 2L)
+  if (length(weights) != 2L || !identical(as.numeric(weights), c(0, 1))) {
+    stop("contrast_weights must declare the one-unit x contrast [0, 1]")
+  }
+  data <- data.frame(x = x, y = y)
+  fit <- switch(
+    estimator,
+    ols = rms::ols(y ~ x, data = data, x = TRUE, y = TRUE),
+    `glm-binomial` = rms::Glm(
+      y ~ x, data = data, family = stats::binomial(), x = TRUE, y = TRUE
+    ),
+    `lrm-binary` = rms::lrm(y ~ x, data = data, x = TRUE, y = TRUE)
+  )
+  coefficients <- stats::coef(fit)
+  covariance <- stats::vcov(fit)
+  coefficient_names <- name_vector(names(coefficients))
+  maximum <- unname(as.numeric(stats::logLik(fit)))
+  if (estimator == "ols") {
+    null_maximum <- unname(as.numeric(stats::logLik(stats::lm(y ~ 1, data = data))))
+    null_parameters <- 2L
+  } else if (estimator == "glm-binomial") {
+    null_maximum <- -0.5 * unname(as.numeric(fit$null.deviance))
+    null_parameters <- 1L
+  } else {
+    null_maximum <- -0.5 * unname(as.numeric(fit$deviance[1]))
+    null_parameters <- 1L
+  }
+  parameter_count <- as.integer(attr(stats::logLik(fit), "df"))
+  likelihood_degrees <- parameter_count - null_parameters
+  likelihood_ratio <- max(0, 2 * (maximum - null_maximum))
+  likelihood <- list(
+    log_likelihood = maximum,
+    null_log_likelihood = null_maximum,
+    parameter_count = parameter_count,
+    aic = 2 * parameter_count - 2 * maximum,
+    likelihood_ratio = likelihood_ratio,
+    degrees_of_freedom = likelihood_degrees,
+    p_value = stats::pchisq(
+      likelihood_ratio, likelihood_degrees, lower.tail = FALSE
+    )
+  )
+
+  if (estimator == "ols") {
+    ordinary <- unname(as.numeric(stats::residuals(fit)))
+    residual_output <- list(
+      ordinary = ordinary,
+      standardized = ordinary / unname(as.numeric(fit$stats["Sigma"]))
+    )
+  } else if (estimator == "glm-binomial") {
+    residual_output <- list(
+      ordinary = unname(as.numeric(stats::residuals(fit, type = "response"))),
+      pearson = unname(as.numeric(stats::residuals(fit, type = "pearson"))),
+      deviance = unname(as.numeric(stats::residuals(fit, type = "deviance")))
+    )
+  } else {
+    residual_output <- list(
+      ordinary = unname(as.numeric(stats::residuals(fit, type = "ordinary"))),
+      pearson = unname(as.numeric(stats::residuals(fit, type = "pearson"))),
+      deviance = unname(as.numeric(stats::residuals(fit, type = "deviance")))
+    )
+  }
+
+  predicted <- stats::predict(
+    fit,
+    newdata = data.frame(x = evaluation_x),
+    type = "lp",
+    se.fit = TRUE,
+    conf.int = confidence_level
+  )
+  prediction <- list(
+    scale = "linear",
+    interval = "mean",
+    confidence_level = confidence_level,
+    values = unname(as.numeric(predicted$linear.predictors)),
+    standard_errors = unname(as.numeric(predicted$se.fit)),
+    lower = unname(as.numeric(predicted$lower)),
+    upper = unname(as.numeric(predicted$upper))
+  )
+
+  distribution <- if (estimator == "lrm-binary") "normal" else "t"
+  inference_degrees <- if (distribution == "t") fit$df.residual else NULL
+  coefficient_summary <- lapply(seq_along(coefficients), function(index) {
+    inference_contract(
+      names(coefficients)[index], coefficients[index], covariance[index, index],
+      distribution, inference_degrees, confidence_level
+    )
+  })
+
+  slope_indices <- seq.int(2L, length(coefficients))
+  anova_reference <- stats::anova(fit, x)
+  if (estimator == "ols") {
+    anova_statistic <- unname(as.numeric(anova_reference[1, "F"]))
+    anova_distribution <- "f"
+    denominator_degrees <- as.integer(fit$df.residual)
+  } else {
+    anova_statistic <- unname(as.numeric(anova_reference[1, "Chi-Square"]))
+    anova_distribution <- "chi-square"
+    denominator_degrees <- NULL
+  }
+  anova_p <- unname(as.numeric(anova_reference[1, "P"]))
+  anova_output <- list(list(
+    term = "x",
+    coefficient_names = name_vector(names(coefficients)[slope_indices]),
+    statistic = anova_statistic,
+    distribution = anova_distribution,
+    degrees_of_freedom = length(slope_indices),
+    denominator_degrees_of_freedom = denominator_degrees,
+    p_value = unname(as.numeric(anova_p))
+  ))
+
+  contrast_reference <- rms::contrast(
+    fit, list(x = 1), list(x = 0), conf.int = confidence_level
+  )
+  contrast_output <- list(
+    name = "declared contrast",
+    estimate = unname(as.numeric(contrast_reference$Contrast)),
+    standard_error = unname(as.numeric(contrast_reference$SE)),
+    statistic = unname(as.numeric(
+      contrast_reference$Contrast / contrast_reference$SE
+    )),
+    distribution = distribution,
+    degrees_of_freedom = if (distribution == "t") {
+      as.integer(contrast_reference$df.residual)
+    } else NULL,
+    p_value = unname(as.numeric(contrast_reference$Pvalue)),
+    lower = unname(as.numeric(contrast_reference$Lower)),
+    upper = unname(as.numeric(contrast_reference$Upper))
+  )
+
+  list(
+    protocol_version = protocol_version,
+    operation = "model_operations",
+    estimator = estimator,
+    evaluation_x = evaluation_x,
+    contrast_weights = weights,
+    confidence_level = confidence_level,
+    coefficient_names = coefficient_names,
+    covariance = matrix_rows(covariance),
+    likelihood = likelihood,
+    residuals = residual_output,
+    prediction = prediction,
+    summary = coefficient_summary,
+    anova = anova_output,
+    contrast = contrast_output
+  )
+}
+
 run_orm <- function(request) {
   x <- require_numeric_vector(request, "x", 3L)
   y <- require_numeric_vector(request, "y", 3L)
@@ -748,6 +937,7 @@ dispatch <- function(request) {
     design = run_design(request),
     lrm = run_lrm(request),
     glm = run_glm(request),
+    model_operations = run_model_operations(request),
     orm = run_orm(request),
     cph = run_cph(request),
     psm = run_psm(request),

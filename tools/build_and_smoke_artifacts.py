@@ -29,7 +29,19 @@ import numpy as np
 import holocron
 from holocron.design import DataDistribution, DesignSpec, RestrictedCubicSplineSpec
 from holocron.formula import Formula
-from holocron.models import BinaryLogisticResult, OlsResult, fit_lrm, fit_ols
+from holocron.models import (
+    BinaryLogisticResult,
+    OlsResult,
+    anova,
+    contrast,
+    covariance,
+    fit_lrm,
+    fit_ols,
+    likelihood,
+    predict,
+    residuals,
+    summarize,
+)
 
 source_root = Path(os.environ["HOLOCRON_SMOKE_SOURCE_ROOT"]).resolve()
 environment_root = Path(os.environ["HOLOCRON_SMOKE_ENVIRONMENT_ROOT"]).resolve()
@@ -68,6 +80,13 @@ assert OlsResult.from_json(fit.to_json()) == fit
 assert fit.rank == 4
 assert fit.residual_degrees_of_freedom == 2
 assert np.allclose(predictions, fit.fitted_values)
+assert covariance(fit).coefficient_names == fit.coefficient_names
+assert likelihood(fit).parameter_count == fit.rank + 1
+assert len(residuals(fit, kind="standardized").values) == len(y)
+assert summarize(fit).model_type == "ols"
+assert len(anova(fit, formula_spec).tests) == 1
+assert contrast(fit, {"rcs(x,linear)": 1.0}).estimate == fit.coefficients[1]
+assert len(predict(fit, formula_design).values) == len(y)
 
 binary_x = (-3.0, -2.0, -1.0, 0.0, 1.0, 2.0, 3.0) * 2
 binary_y = (0, 0, 0, 0, 1, 1, 1, 0, 1, 0, 1, 0, 1, 1)
@@ -80,6 +99,9 @@ assert (
     binary_restored.predict_probability(binary_design)
     == binary_fit.fitted_probabilities
 )
+assert len(residuals(binary_fit, response=binary_y).values) == len(binary_y)
+assert predict(binary_fit, binary_design).scale == "response"
+assert likelihood(binary_fit).parameter_count == binary_fit.rank
 schema_root = importlib.resources.files("holocron").joinpath("schemas")
 assert schema_root.joinpath("serialization-manifest.json").is_file()
 assert schema_root.joinpath("ols-result.schema.json").is_file()

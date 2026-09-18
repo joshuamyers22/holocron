@@ -5,13 +5,40 @@ from __future__ import annotations
 from typing import Literal, cast
 
 from holocron.design import DataDistribution, DesignSpec, RestrictedCubicSplineSpec
-from holocron.models import BinaryLogisticResult, fit_glm, fit_lrm, fit_ols
+from holocron.models import (
+    BinaryLogisticResult,
+    InferenceEstimate,
+    anova,
+    contrast,
+    covariance,
+    fit_glm,
+    fit_lrm,
+    fit_ols,
+    likelihood,
+    predict,
+    residuals,
+    summarize,
+)
 from reference.contracts import JsonValue
 
 
 def spline_column_names(column_count: int) -> list[str]:
     """Return the normalized rms-style names for a univariate spline basis."""
     return ["x" + "'" * index for index in range(column_count)]
+
+
+def _inference_output(value: InferenceEstimate) -> dict[str, JsonValue]:
+    return {
+        "name": value.name,
+        "estimate": value.estimate,
+        "standard_error": value.standard_error,
+        "statistic": value.statistic,
+        "distribution": value.distribution,
+        "degrees_of_freedom": value.degrees_of_freedom,
+        "p_value": value.p_value,
+        "lower": value.lower,
+        "upper": value.upper,
+    }
 
 
 def build_python_output(case: dict[str, JsonValue]) -> dict[str, JsonValue]:
@@ -84,6 +111,107 @@ def build_python_output(case: dict[str, JsonValue]) -> dict[str, JsonValue]:
             "protocol_version": "1",
             "operation": "datadist",
             **document,
+        }
+
+    if operation == "model_operations":
+        x = cast(list[float], case["x"])
+        y = cast(list[float], case["y"])
+        estimator = cast(str, case["estimator"])
+        features = tuple((value,) for value in x)
+        if estimator == "ols":
+            result = fit_ols(y, features, feature_names=("x",))
+        elif estimator == "glm-binomial":
+            result = fit_glm(y, features, family="binomial", feature_names=("x",))
+        else:
+            result = fit_lrm(y, features, feature_names=("x",))
+        confidence_level = cast(float, case["confidence_level"])
+        fit_likelihood = likelihood(result)
+        prediction = predict(
+            result,
+            tuple((value,) for value in cast(list[float], case["evaluation_x"])),
+            scale="linear",
+            confidence_level=confidence_level,
+        )
+        fit_summary = summarize(result, confidence_level=confidence_level)
+        fit_anova = anova(result, {"x": ("x",)})
+        fit_contrast = contrast(
+            result,
+            cast(list[float], case["contrast_weights"]),
+            name="declared contrast",
+            confidence_level=confidence_level,
+        )
+        residual_output: dict[str, JsonValue] = {
+            "ordinary": list(
+                residuals(
+                    result,
+                    response=y if isinstance(result, BinaryLogisticResult) else None,
+                ).values
+            )
+        }
+        if isinstance(result, BinaryLogisticResult):
+            residual_output["pearson"] = list(
+                residuals(result, kind="pearson", response=y).values
+            )
+            residual_output["deviance"] = list(
+                residuals(result, kind="deviance", response=y).values
+            )
+        else:
+            residual_output["standardized"] = list(
+                residuals(result, kind="standardized").values
+            )
+        return {
+            "ok": True,
+            "protocol_version": "1",
+            "operation": "model_operations",
+            "estimator": estimator,
+            "evaluation_x": case["evaluation_x"],
+            "contrast_weights": case["contrast_weights"],
+            "confidence_level": confidence_level,
+            "coefficient_names": cast(JsonValue, list(result.coefficient_names)),
+            "covariance": cast(
+                JsonValue, [list(row) for row in covariance(result).matrix]
+            ),
+            "likelihood": {
+                "log_likelihood": fit_likelihood.log_likelihood,
+                "null_log_likelihood": fit_likelihood.null_log_likelihood,
+                "parameter_count": fit_likelihood.parameter_count,
+                "aic": fit_likelihood.aic,
+                "likelihood_ratio": fit_likelihood.likelihood_ratio,
+                "degrees_of_freedom": fit_likelihood.degrees_of_freedom,
+                "p_value": fit_likelihood.p_value,
+            },
+            "residuals": residual_output,
+            "prediction": {
+                "scale": prediction.scale,
+                "interval": prediction.interval,
+                "confidence_level": prediction.confidence_level,
+                "values": list(prediction.values),
+                "standard_errors": list(prediction.standard_errors),
+                "lower": list(prediction.lower),
+                "upper": list(prediction.upper),
+            },
+            "summary": cast(
+                JsonValue,
+                [_inference_output(value) for value in fit_summary.coefficients],
+            ),
+            "anova": cast(
+                JsonValue,
+                [
+                    {
+                        "term": value.term,
+                        "coefficient_names": list(value.coefficient_names),
+                        "statistic": value.statistic,
+                        "distribution": value.distribution,
+                        "degrees_of_freedom": value.degrees_of_freedom,
+                        "denominator_degrees_of_freedom": (
+                            value.denominator_degrees_of_freedom
+                        ),
+                        "p_value": value.p_value,
+                    }
+                    for value in fit_anova.tests
+                ],
+            ),
+            "contrast": _inference_output(fit_contrast),
         }
 
     x = cast(list[float], case["x"])

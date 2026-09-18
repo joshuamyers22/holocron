@@ -13,6 +13,37 @@
         {"path": "/response/*", "rule": {"mode": "numeric", "absolute": 0, "relative": 0}},
         {"path": "/fitted_mean/*", "rule": {"mode": "numeric", "absolute": 1e-8, "relative": 1e-7}}
       ]
+    },
+    "postfit-inference-v1": {
+      "description": "Field-aware tolerances for covariance, likelihood, residual, prediction, coefficient summary, Wald ANOVA, and linear contrast operations.",
+      "default": {"mode": "exact"},
+      "rules": [
+        {"path": "/covariance/*/*", "rule": {"mode": "numeric", "absolute": 1e-7, "relative": 1e-6}},
+        {"path": "/likelihood/log_likelihood", "rule": {"mode": "numeric", "absolute": 1e-8, "relative": 1e-7}},
+        {"path": "/likelihood/null_log_likelihood", "rule": {"mode": "numeric", "absolute": 1e-8, "relative": 1e-7}},
+        {"path": "/likelihood/aic", "rule": {"mode": "numeric", "absolute": 1e-8, "relative": 1e-7}},
+        {"path": "/likelihood/likelihood_ratio", "rule": {"mode": "numeric", "absolute": 1e-8, "relative": 1e-7}},
+        {"path": "/likelihood/p_value", "rule": {"mode": "numeric", "absolute": 1e-8, "relative": 1e-7}},
+        {"path": "/residuals/*/*", "rule": {"mode": "numeric", "absolute": 1e-8, "relative": 1e-7}},
+        {"path": "/prediction/values/*", "rule": {"mode": "numeric", "absolute": 1e-8, "relative": 1e-7}},
+        {"path": "/prediction/standard_errors/*", "rule": {"mode": "numeric", "absolute": 1e-8, "relative": 1e-7}},
+        {"path": "/prediction/lower/*", "rule": {"mode": "numeric", "absolute": 1e-8, "relative": 1e-7}},
+        {"path": "/prediction/upper/*", "rule": {"mode": "numeric", "absolute": 1e-8, "relative": 1e-7}},
+        {"path": "/summary/*/estimate", "rule": {"mode": "numeric", "absolute": 1e-8, "relative": 1e-7}},
+        {"path": "/summary/*/standard_error", "rule": {"mode": "numeric", "absolute": 1e-8, "relative": 1e-7}},
+        {"path": "/summary/*/statistic", "rule": {"mode": "numeric", "absolute": 1e-8, "relative": 1e-7}},
+        {"path": "/summary/*/p_value", "rule": {"mode": "numeric", "absolute": 1e-8, "relative": 1e-7}},
+        {"path": "/summary/*/lower", "rule": {"mode": "numeric", "absolute": 1e-8, "relative": 1e-7}},
+        {"path": "/summary/*/upper", "rule": {"mode": "numeric", "absolute": 1e-8, "relative": 1e-7}},
+        {"path": "/anova/*/statistic", "rule": {"mode": "numeric", "absolute": 1e-8, "relative": 1e-7}},
+        {"path": "/anova/*/p_value", "rule": {"mode": "numeric", "absolute": 1e-8, "relative": 1e-7}},
+        {"path": "/contrast/estimate", "rule": {"mode": "numeric", "absolute": 1e-8, "relative": 1e-7}},
+        {"path": "/contrast/standard_error", "rule": {"mode": "numeric", "absolute": 1e-8, "relative": 1e-7}},
+        {"path": "/contrast/statistic", "rule": {"mode": "numeric", "absolute": 1e-8, "relative": 1e-7}},
+        {"path": "/contrast/p_value", "rule": {"mode": "numeric", "absolute": 1e-8, "relative": 1e-7}},
+        {"path": "/contrast/lower", "rule": {"mode": "numeric", "absolute": 1e-8, "relative": 1e-7}},
+        {"path": "/contrast/upper", "rule": {"mode": "numeric", "absolute": 1e-8, "relative": 1e-7}}
+      ]
     }
   }
 }

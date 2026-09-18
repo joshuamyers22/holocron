@@ -80,3 +80,8 @@ Notable changes are recorded here using semantic versioning.
   binomial/logit `Glm`, binary unpenalized `lrm`, structured convergence/rank/
   separation failures, strict binary-result serialization, seven direct new or
   promoted pinned-R parity cases, and the accepted numerical-backend policy.
+- Completed the second Phase 3 deliverable with typed covariance, likelihood,
+  residual, prediction, coefficient-summary, declared-term ANOVA, and linear-
+  contrast operations; added three vertical OLS/Glm/lrm oracle cases, a named
+  field-aware inference policy, installed-artifact smoke coverage, and explicit
+  compatibility boundaries for broader `rms` behavior.

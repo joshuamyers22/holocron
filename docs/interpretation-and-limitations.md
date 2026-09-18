@@ -2,9 +2,9 @@
 
 Holocron currently proves narrow engineering claims: predictor-distribution
 summaries, allowlisted numeric/factor/restricted-interaction formula designs,
-and selected outputs from well-conditioned full-rank OLS, Gaussian/binomial
-`Glm`, and binary `lrm` match a pinned R `rms` oracle under field-aware
-tolerances.
+and selected estimator and post-estimation outputs from well-conditioned full-
+rank OLS, Gaussian/binomial `Glm`, and binary `lrm` match a pinned R `rms`
+oracle under field-aware tolerances.
 That is not evidence of package-wide equivalence, model validity, or fitness for
 a consequential decision.
 
@@ -21,7 +21,8 @@ exact; approximate comparison is restricted to allowlisted numerical paths.
   dataframe/date-time adapters, and model-level missing-data policy;
 - ordinal, Cox, parametric-survival, and nonparametric-survival Python
   estimators;
-- inference tables, ANOVA, contrasts, calibration, validation, and resampling;
+- adjusted-effect `summary.rms`, complete `anova.rms` partitioning, nonlinear or
+  simultaneous contrasts, calibration, validation, and resampling;
 - robust covariance, clustered errors, penalization, and aliased fits;
 - GLM families/links outside Gaussian/identity and binomial/logit, ordinal
   `lrm`, plotting, nomograms, and a dataframe adapter contract.

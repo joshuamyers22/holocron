@@ -1,6 +1,6 @@
 # Project Brief
 
-- Status and scope: Phases 0–2 complete and Phase 3 active for private experimental development as of 2026-09-18; Phase 3 core `ols`, Gaussian/binomial `Glm`, and binary `lrm` estimators are complete within their experimental envelope, result operations are next, and external distribution and non-experimental statistical claims remain blocked
+- Status and scope: Phases 0–2 complete and Phase 3 active for private experimental development as of 2026-09-18; Phase 3 core `ols`, Gaussian/binomial `Glm`, and binary `lrm` estimators plus covariance, likelihood, residual, prediction, coefficient-summary, ANOVA, and linear-contrast operations are complete within their experimental envelope, penalties and robust/bootstrap covariance are next, and external distribution and non-experimental statistical claims remain blocked
 - Problem and affected users: Python lacks an integrated equivalent of R's `rms`; biostatisticians, epidemiologists, statistical programmers, and scientific-library authors must assemble incomplete workflows across packages.
 - Measurable success criteria: Every claimed compatible capability is linked to a pinned R 8.2-0 oracle case, method-specific numerical tolerances, statistical simulation evidence, typed public results, executable documentation, and a reproducible release artifact.
 - Explicit non-goals: Runtime delegation to R; a thin `rpy2` wrapper; initial implementation of the separate `rmsb` package; silent method substitutions; claiming drop-in or full parity without manifest-backed evidence.

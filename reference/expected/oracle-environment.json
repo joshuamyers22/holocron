@@ -8,7 +8,7 @@
     "protocol_version": "1"
   },
   "oracle_image": "holocron-rms-oracle:8.2-0",
-  "oracle_image_digest": "sha256:98f03964f0cd7bb713a27a745adab4ef5e44a466f782270a7ee5c1c8877d6704",
+  "oracle_image_digest": "sha256:e76a30e3fa19c8cdd2a54d4fde6971228dcb8f0d8584b79eade6561a914c138c",
   "rms_commit": "a4e4a305a029090e737562fb4d35bdb705db7d63",
   "rms_file_manifest_sha256": "40a3805d92ecd6bd1318db842c8c78e05595e48345b46c5e9e21ef01cd7a0bce",
   "rms_description_sha256": "0528cd8378601f0b05a6e6fb3daa89e8dfc6211adb82246c2f4eb7dec12ae23b",

@@ -7,6 +7,40 @@ Statistical model estimators and owned result types.
 Import public names from `holocron.models`. The signatures and docstrings below
 are generated from the installed source during `make docs-check`.
 
+## `AnovaResult`
+
+```python
+class holocron.models.postfit.AnovaResult(tests: tuple[holocron.models.postfit.AnovaTest, ...]) -> None
+```
+
+Joint Wald tests in stable formula-term order.
+
+### Attributes
+
+| Name | Type |
+| --- | --- |
+| `tests` | `tuple[AnovaTest, ...]` |
+
+## `AnovaTest`
+
+```python
+class holocron.models.postfit.AnovaTest(term: str, coefficient_names: tuple[str, ...], statistic: float, distribution: Literal['chi-square', 'f'], degrees_of_freedom: int, denominator_degrees_of_freedom: int | None, p_value: float) -> None
+```
+
+One joint Wald test over a declared formula term.
+
+### Attributes
+
+| Name | Type |
+| --- | --- |
+| `term` | `str` |
+| `coefficient_names` | `tuple[str, ...]` |
+| `statistic` | `float` |
+| `distribution` | `Literal['chi-square', 'f']` |
+| `degrees_of_freedom` | `int` |
+| `denominator_degrees_of_freedom` | `int | None` |
+| `p_value` | `float` |
+
 ## `BinaryLogisticResult`
 
 ```python
@@ -61,6 +95,82 @@ Return the versioned binary-logistic result document.
 
 Serialize this result as canonical non-executable JSON.
 
+## `CovarianceResult`
+
+```python
+class holocron.models.postfit.CovarianceResult(coefficient_names: tuple[str, ...], matrix: tuple[tuple[float, ...], ...]) -> None
+```
+
+A named covariance matrix, optionally restricted to selected terms.
+
+### Attributes
+
+| Name | Type |
+| --- | --- |
+| `coefficient_names` | `tuple[str, ...]` |
+| `matrix` | `tuple[tuple[float, ...], ...]` |
+
+## `InferenceEstimate`
+
+```python
+class holocron.models.postfit.InferenceEstimate(name: str, estimate: float, standard_error: float, statistic: float, distribution: Literal['normal', 't'], degrees_of_freedom: int | None, p_value: float, lower: float, upper: float) -> None
+```
+
+One estimate with a Wald statistic, p-value, and confidence interval.
+
+### Attributes
+
+| Name | Type |
+| --- | --- |
+| `name` | `str` |
+| `estimate` | `float` |
+| `standard_error` | `float` |
+| `statistic` | `float` |
+| `distribution` | `Literal['normal', 't']` |
+| `degrees_of_freedom` | `int | None` |
+| `p_value` | `float` |
+| `lower` | `float` |
+| `upper` | `float` |
+
+## `LikelihoodResult`
+
+```python
+class holocron.models.postfit.LikelihoodResult(log_likelihood: float, null_log_likelihood: float, parameter_count: int, aic: float, likelihood_ratio: float, degrees_of_freedom: int, p_value: float) -> None
+```
+
+Maximized and null likelihood statistics for a fitted model.
+
+### Attributes
+
+| Name | Type |
+| --- | --- |
+| `log_likelihood` | `float` |
+| `null_log_likelihood` | `float` |
+| `parameter_count` | `int` |
+| `aic` | `float` |
+| `likelihood_ratio` | `float` |
+| `degrees_of_freedom` | `int` |
+| `p_value` | `float` |
+
+## `ModelSummary`
+
+```python
+class holocron.models.postfit.ModelSummary(model_type: Literal['ols', 'glm-binomial', 'lrm-binary'], n_observations: int, rank: int, confidence_level: float, coefficients: tuple[holocron.models.postfit.InferenceEstimate, ...], likelihood: holocron.models.postfit.LikelihoodResult) -> None
+```
+
+Coefficient-level inference and likelihood metadata for one model.
+
+### Attributes
+
+| Name | Type |
+| --- | --- |
+| `model_type` | `Literal['ols', 'glm-binomial', 'lrm-binary']` |
+| `n_observations` | `int` |
+| `rank` | `int` |
+| `confidence_level` | `float` |
+| `coefficients` | `tuple[InferenceEstimate, ...]` |
+| `likelihood` | `LikelihoodResult` |
+
 ## `OlsResult`
 
 ```python
@@ -113,6 +223,53 @@ Return the versioned fitted-result document.
 
 Serialize the fitted result as canonical non-executable JSON.
 
+## `PredictionResult`
+
+```python
+class holocron.models.postfit.PredictionResult(scale: Literal['linear', 'response'], interval: Literal['mean', 'individual'], confidence_level: float, values: tuple[float, ...], standard_errors: tuple[float, ...], lower: tuple[float, ...], upper: tuple[float, ...]) -> None
+```
+
+Predictions with model-based standard errors and confidence limits.
+
+### Attributes
+
+| Name | Type |
+| --- | --- |
+| `scale` | `Literal['linear', 'response']` |
+| `interval` | `Literal['mean', 'individual']` |
+| `confidence_level` | `float` |
+| `values` | `tuple[float, ...]` |
+| `standard_errors` | `tuple[float, ...]` |
+| `lower` | `tuple[float, ...]` |
+| `upper` | `tuple[float, ...]` |
+
+## `ResidualResult`
+
+```python
+class holocron.models.postfit.ResidualResult(kind: str, values: tuple[float, ...]) -> None
+```
+
+A named residual vector in original training-row order.
+
+### Attributes
+
+| Name | Type |
+| --- | --- |
+| `kind` | `str` |
+| `values` | `tuple[float, ...]` |
+
+## `anova(result: holocron.models.linear.OlsResult | holocron.models.logistic.BinaryLogisticResult, terms: holocron.design.formula.DesignSpec | collections.abc.Mapping[str, collections.abc.Iterable[str]]) -> holocron.models.postfit.AnovaResult`
+
+Compute joint Wald tests from a design specification or explicit groups.
+
+## `contrast(result: holocron.models.linear.OlsResult | holocron.models.logistic.BinaryLogisticResult, weights: collections.abc.Mapping[str, float] | collections.abc.Iterable[float], *, name: str = 'contrast', confidence_level: float = 0.95) -> holocron.models.postfit.InferenceEstimate`
+
+Evaluate one linear coefficient contrast with model-based uncertainty.
+
+## `covariance(result: holocron.models.linear.OlsResult | holocron.models.logistic.BinaryLogisticResult, names: collections.abc.Iterable[str] | None = None) -> holocron.models.postfit.CovarianceResult`
+
+Return the full covariance matrix or a named principal submatrix.
+
 ## `fit_glm(response: collections.abc.Iterable[float], features: collections.abc.Iterable[collections.abc.Iterable[float]] | holocron.design.formula.DesignMatrix, *, family: Literal['gaussian', 'binomial'] = 'gaussian', link: Optional[Literal['identity', 'logit']] = None, feature_names: collections.abc.Iterable[str] | None = None, include_intercept: bool | None = None, design_fingerprint: str | None = None, max_iterations: int = 100, tolerance: float = 1e-08) -> holocron.models.linear.OlsResult | holocron.models.logistic.BinaryLogisticResult`
 
 Fit the supported Gaussian/identity or binomial/logit GLM envelope.
@@ -129,3 +286,23 @@ This deliberately narrow first slice accepts an already constructed design
 matrix. Rank-deficient fits are rejected instead of silently dropping
 columns; an explicit alias policy will be added before formula-level OLS is
 declared complete.
+
+## `likelihood(result: holocron.models.linear.OlsResult | holocron.models.logistic.BinaryLogisticResult) -> holocron.models.postfit.LikelihoodResult`
+
+Return maximized/null log likelihood, AIC, and the model LR test.
+
+## `predict(result: holocron.models.linear.OlsResult | holocron.models.logistic.BinaryLogisticResult, features: collections.abc.Iterable[collections.abc.Iterable[float]] | holocron.design.formula.DesignMatrix, *, scale: Literal['linear', 'response'] = 'response', interval: Literal['mean', 'individual'] = 'mean', confidence_level: float = 0.95) -> holocron.models.postfit.PredictionResult`
+
+Predict with covariance-based standard errors and confidence limits.
+
+## `residuals(result: holocron.models.linear.OlsResult | holocron.models.logistic.BinaryLogisticResult, *, kind: Literal['ordinary', 'standardized', 'pearson', 'deviance'] = 'ordinary', response: collections.abc.Iterable[int | float] | None = None) -> holocron.models.postfit.ResidualResult`
+
+Compute supported training residuals without reconstructing hidden inputs.
+
+Binary results deliberately do not persist the training response, so callers
+must provide it explicitly. OLS supports ordinary and standardized residuals;
+binary models support ordinary, Pearson, and deviance residuals.
+
+## `summarize(result: holocron.models.linear.OlsResult | holocron.models.logistic.BinaryLogisticResult, *, confidence_level: float = 0.95) -> holocron.models.postfit.ModelSummary`
+
+Summarize coefficient-level inference for a supported fitted model.

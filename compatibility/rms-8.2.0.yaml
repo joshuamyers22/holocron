@@ -483,14 +483,14 @@
       "id": "export:contrast",
       "r_symbol": "contrast",
       "kind": "export",
-      "python_entry_point": null,
+      "python_entry_point": "holocron.models.contrast",
       "tier": "A",
       "milestone": "Phase 2-3",
-      "status": "deferred",
+      "status": "experimental",
       "owner": "joshuamyers22",
-      "oracle_cases": [],
-      "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "oracle_cases": ["postfit-ols-linear", "postfit-glm-binomial-linear", "postfit-lrm-linear"],
+      "tolerance_profile": "postfit-inference-v1",
+      "known_differences": "Supports one declared linear coefficient contrast with model-based uncertainty; rms design-setting expansion, simultaneous intervals, joint contrasts, profile intervals, and Bayesian paths remain deferred."
     },
     {
       "id": "export:corFloorExp",
@@ -1898,14 +1898,14 @@
       "id": "s3_method:anova.rms",
       "r_symbol": "anova.rms",
       "kind": "s3_method",
-      "python_entry_point": null,
+      "python_entry_point": "holocron.models.anova",
       "tier": "D",
       "milestone": "Phase 8",
-      "status": "deferred",
+      "status": "experimental",
       "owner": "joshuamyers22",
-      "oracle_cases": [],
-      "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "oracle_cases": ["postfit-ols-linear", "postfit-glm-binomial-linear", "postfit-lrm-linear"],
+      "tolerance_profile": "postfit-inference-v1",
+      "known_differences": "Supports formula-term or explicitly grouped joint Wald F/chi-square tests; rms nonlinear/main-effect decomposition, interaction pooling, LR tests, and presentation methods remain deferred."
     },
     {
       "id": "s3_method:as.data.frame.Ocens",
@@ -2015,14 +2015,14 @@
       "id": "s3_method:contrast.rms",
       "r_symbol": "contrast.rms",
       "kind": "s3_method",
-      "python_entry_point": null,
+      "python_entry_point": "holocron.models.contrast",
       "tier": "A",
       "milestone": "Phase 2-3",
-      "status": "deferred",
+      "status": "experimental",
       "owner": "joshuamyers22",
-      "oracle_cases": [],
-      "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "oracle_cases": ["postfit-ols-linear", "postfit-glm-binomial-linear", "postfit-lrm-linear"],
+      "tolerance_profile": "postfit-inference-v1",
+      "known_differences": "Python accepts explicit coefficient weights rather than rms data-setting lists; multirow, joint, simultaneous, profile, and Bayesian contrasts remain deferred."
     },
     {
       "id": "s3_method:corMatrix.corFloorExp",
@@ -2340,27 +2340,27 @@
       "id": "s3_method:logLik.ols",
       "r_symbol": "logLik.ols",
       "kind": "s3_method",
-      "python_entry_point": null,
+      "python_entry_point": "holocron.models.likelihood",
       "tier": "D",
       "milestone": "Phase 8",
-      "status": "deferred",
+      "status": "experimental",
       "owner": "joshuamyers22",
-      "oracle_cases": [],
-      "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "oracle_cases": ["postfit-ols-linear"],
+      "tolerance_profile": "postfit-inference-v1",
+      "known_differences": "Returns a typed likelihood record including null likelihood, AIC, and LR test; arbitrary alternative-model comparisons remain deferred."
     },
     {
       "id": "s3_method:logLik.rms",
       "r_symbol": "logLik.rms",
       "kind": "s3_method",
-      "python_entry_point": null,
+      "python_entry_point": "holocron.models.likelihood",
       "tier": "D",
       "milestone": "Phase 8",
-      "status": "deferred",
+      "status": "experimental",
       "owner": "joshuamyers22",
-      "oracle_cases": [],
-      "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "oracle_cases": ["postfit-glm-binomial-linear", "postfit-lrm-linear"],
+      "tolerance_profile": "postfit-inference-v1",
+      "known_differences": "Supported only for the current Gaussian and binary-logit result types; other rms model families and arbitrary nested-model comparisons remain deferred."
     },
     {
       "id": "s3_method:makepredictcall.rms",
@@ -2704,14 +2704,14 @@
       "id": "s3_method:predict.Glm",
       "r_symbol": "predict.Glm",
       "kind": "s3_method",
-      "python_entry_point": null,
+      "python_entry_point": "holocron.models.predict",
       "tier": "D",
       "milestone": "Phase 8",
-      "status": "deferred",
+      "status": "experimental",
       "owner": "joshuamyers22",
-      "oracle_cases": [],
-      "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "oracle_cases": ["postfit-glm-binomial-linear"],
+      "tolerance_profile": "postfit-inference-v1",
+      "known_differences": "Supports explicit design rows on linear or response scale with mean confidence limits; terms, adjustment-frame, simultaneous, and generated-grid modes remain deferred."
     },
     {
       "id": "s3_method:predict.Gls",
@@ -2769,27 +2769,27 @@
       "id": "s3_method:predict.lrm",
       "r_symbol": "predict.lrm",
       "kind": "s3_method",
-      "python_entry_point": null,
+      "python_entry_point": "holocron.models.predict",
       "tier": "D",
       "milestone": "Phase 8",
-      "status": "deferred",
+      "status": "experimental",
       "owner": "joshuamyers22",
-      "oracle_cases": [],
-      "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "oracle_cases": ["postfit-lrm-linear"],
+      "tolerance_profile": "postfit-inference-v1",
+      "known_differences": "Supports binary-logit linear predictors and probabilities with mean confidence limits; ordinal, terms, generated-grid, and simultaneous modes remain deferred."
     },
     {
       "id": "s3_method:predict.ols",
       "r_symbol": "predict.ols",
       "kind": "s3_method",
-      "python_entry_point": null,
+      "python_entry_point": "holocron.models.predict",
       "tier": "D",
       "milestone": "Phase 8",
-      "status": "deferred",
+      "status": "experimental",
       "owner": "joshuamyers22",
-      "oracle_cases": [],
-      "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "oracle_cases": ["postfit-ols-linear"],
+      "tolerance_profile": "postfit-inference-v1",
+      "known_differences": "Supports explicit design rows with mean or individual t intervals; terms, adjustment-frame, simultaneous, and generated-grid modes remain deferred."
     },
     {
       "id": "s3_method:predict.orm",
@@ -3263,14 +3263,14 @@
       "id": "s3_method:residuals.Glm",
       "r_symbol": "residuals.Glm",
       "kind": "s3_method",
-      "python_entry_point": null,
+      "python_entry_point": "holocron.models.residuals",
       "tier": "D",
       "milestone": "Phase 8",
-      "status": "deferred",
+      "status": "experimental",
       "owner": "joshuamyers22",
-      "oracle_cases": [],
-      "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "oracle_cases": ["postfit-glm-binomial-linear"],
+      "tolerance_profile": "postfit-inference-v1",
+      "known_differences": "Supports ordinary, Pearson, and deviance residuals for binomial Glm; score, working, partial, influence, and other-family residuals remain deferred."
     },
     {
       "id": "s3_method:residuals.bj",
@@ -3302,27 +3302,27 @@
       "id": "s3_method:residuals.lrm",
       "r_symbol": "residuals.lrm",
       "kind": "s3_method",
-      "python_entry_point": null,
+      "python_entry_point": "holocron.models.residuals",
       "tier": "D",
       "milestone": "Phase 8",
-      "status": "deferred",
+      "status": "experimental",
       "owner": "joshuamyers22",
-      "oracle_cases": [],
-      "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "oracle_cases": ["postfit-lrm-linear"],
+      "tolerance_profile": "postfit-inference-v1",
+      "known_differences": "Supports ordinary, Pearson, and deviance residuals for binary lrm with an explicitly supplied response; score, partial, influence, GOF, and ordinal residuals remain deferred."
     },
     {
       "id": "s3_method:residuals.ols",
       "r_symbol": "residuals.ols",
       "kind": "s3_method",
-      "python_entry_point": null,
+      "python_entry_point": "holocron.models.residuals",
       "tier": "D",
       "milestone": "Phase 8",
-      "status": "deferred",
+      "status": "experimental",
       "owner": "joshuamyers22",
-      "oracle_cases": [],
-      "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "oracle_cases": ["postfit-ols-linear"],
+      "tolerance_profile": "postfit-inference-v1",
+      "known_differences": "Supports ordinary and residual-scale-standardized values; leverage-adjusted studentized, score, influence, DFBETA, DFFIT, and hat diagnostics remain deferred."
     },
     {
       "id": "s3_method:residuals.orm",
@@ -3601,14 +3601,14 @@
       "id": "s3_method:vcov.Glm",
       "r_symbol": "vcov.Glm",
       "kind": "s3_method",
-      "python_entry_point": null,
+      "python_entry_point": "holocron.models.covariance",
       "tier": "D",
       "milestone": "Phase 8",
-      "status": "deferred",
+      "status": "experimental",
       "owner": "joshuamyers22",
-      "oracle_cases": [],
-      "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "oracle_cases": ["postfit-glm-binomial-linear"],
+      "tolerance_profile": "postfit-inference-v1",
+      "known_differences": "Returns the full named covariance matrix or a named principal submatrix for the supported Glm envelope."
     },
     {
       "id": "s3_method:vcov.Gls",
@@ -3640,27 +3640,27 @@
       "id": "s3_method:vcov.lrm",
       "r_symbol": "vcov.lrm",
       "kind": "s3_method",
-      "python_entry_point": null,
+      "python_entry_point": "holocron.models.covariance",
       "tier": "D",
       "milestone": "Phase 8",
-      "status": "deferred",
+      "status": "experimental",
       "owner": "joshuamyers22",
-      "oracle_cases": [],
-      "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "oracle_cases": ["postfit-lrm-linear"],
+      "tolerance_profile": "postfit-inference-v1",
+      "known_differences": "Returns the full named covariance matrix or a named principal submatrix for binary lrm; ordinal intercept selection remains deferred."
     },
     {
       "id": "s3_method:vcov.ols",
       "r_symbol": "vcov.ols",
       "kind": "s3_method",
-      "python_entry_point": null,
+      "python_entry_point": "holocron.models.covariance",
       "tier": "D",
       "milestone": "Phase 8",
-      "status": "deferred",
+      "status": "experimental",
       "owner": "joshuamyers22",
-      "oracle_cases": [],
-      "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "oracle_cases": ["postfit-ols-linear"],
+      "tolerance_profile": "postfit-inference-v1",
+      "known_differences": "Returns the classical full-rank covariance matrix or a named principal submatrix; robust and bootstrap covariance are later deliverables."
     },
     {
       "id": "s3_method:vcov.orm",
@@ -3705,14 +3705,14 @@
       "id": "s3_method:vcov.rms",
       "r_symbol": "vcov.rms",
       "kind": "s3_method",
-      "python_entry_point": null,
+      "python_entry_point": "holocron.models.covariance",
       "tier": "D",
       "milestone": "Phase 8",
-      "status": "deferred",
+      "status": "experimental",
       "owner": "joshuamyers22",
-      "oracle_cases": [],
-      "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "oracle_cases": ["postfit-ols-linear", "postfit-glm-binomial-linear", "postfit-lrm-linear"],
+      "tolerance_profile": "postfit-inference-v1",
+      "known_differences": "Mapped only for the currently supported OLS, Gaussian Glm, binomial Glm, and binary lrm result types."
     }
   ]
 }

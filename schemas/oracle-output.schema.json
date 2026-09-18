@@ -214,6 +214,35 @@
       ]
     },
     {
+      "title": "Core model post-estimation operations output",
+      "properties": {
+        "ok": {"const": true},
+        "protocol_version": {"const": "1"},
+        "operation": {"const": "model_operations"},
+        "estimator": {"enum": ["ols", "glm-binomial", "lrm-binary"]},
+        "evaluation_x": {"$ref": "#/$defs/numericVector"},
+        "contrast_weights": {"$ref": "#/$defs/numericVector"},
+        "confidence_level": {"type": "number", "exclusiveMinimum": 0, "exclusiveMaximum": 1},
+        "coefficient_names": {"$ref": "#/$defs/nameVector"},
+        "covariance": {"$ref": "#/$defs/numericMatrix"},
+        "likelihood": {"$ref": "#/$defs/likelihoodResult"},
+        "residuals": {"$ref": "#/$defs/residualResult"},
+        "prediction": {"$ref": "#/$defs/predictionResult"},
+        "summary": {
+          "type": "array",
+          "minItems": 1,
+          "items": {"$ref": "#/$defs/inferenceEstimate"}
+        },
+        "anova": {
+          "type": "array",
+          "minItems": 1,
+          "items": {"$ref": "#/$defs/anovaTest"}
+        },
+        "contrast": {"$ref": "#/$defs/inferenceEstimate"}
+      },
+      "required": ["ok", "protocol_version", "operation", "estimator", "evaluation_x", "contrast_weights", "confidence_level", "coefficient_names", "covariance", "likelihood", "residuals", "prediction", "summary", "anova", "contrast"]
+    },
+    {
       "title": "Ordinal regression output",
       "allOf": [
         {"$ref": "#/$defs/modelFitOutput"},
@@ -494,6 +523,81 @@
       "type": "array",
       "minItems": 1,
       "items": {"type": "integer"}
+    },
+    "nullableInteger": {
+      "oneOf": [
+        {"type": "null"},
+        {"type": "integer"}
+      ]
+    },
+    "likelihoodResult": {
+      "type": "object",
+      "properties": {
+        "log_likelihood": {"type": "number"},
+        "null_log_likelihood": {"type": "number"},
+        "parameter_count": {"type": "integer", "minimum": 1},
+        "aic": {"type": "number"},
+        "likelihood_ratio": {"type": "number", "minimum": 0},
+        "degrees_of_freedom": {"type": "integer", "minimum": 0},
+        "p_value": {"type": "number", "minimum": 0, "maximum": 1}
+      },
+      "required": ["log_likelihood", "null_log_likelihood", "parameter_count", "aic", "likelihood_ratio", "degrees_of_freedom", "p_value"],
+      "additionalProperties": false
+    },
+    "residualResult": {
+      "type": "object",
+      "properties": {
+        "ordinary": {"$ref": "#/$defs/numericVector"},
+        "standardized": {"$ref": "#/$defs/numericVector"},
+        "pearson": {"$ref": "#/$defs/numericVector"},
+        "deviance": {"$ref": "#/$defs/numericVector"}
+      },
+      "required": ["ordinary"],
+      "additionalProperties": false
+    },
+    "predictionResult": {
+      "type": "object",
+      "properties": {
+        "scale": {"const": "linear"},
+        "interval": {"const": "mean"},
+        "confidence_level": {"type": "number", "exclusiveMinimum": 0, "exclusiveMaximum": 1},
+        "values": {"$ref": "#/$defs/numericVector"},
+        "standard_errors": {"$ref": "#/$defs/numericVector"},
+        "lower": {"$ref": "#/$defs/numericVector"},
+        "upper": {"$ref": "#/$defs/numericVector"}
+      },
+      "required": ["scale", "interval", "confidence_level", "values", "standard_errors", "lower", "upper"],
+      "additionalProperties": false
+    },
+    "inferenceEstimate": {
+      "type": "object",
+      "properties": {
+        "name": {"type": "string", "minLength": 1},
+        "estimate": {"type": "number"},
+        "standard_error": {"type": "number", "exclusiveMinimum": 0},
+        "statistic": {"type": "number"},
+        "distribution": {"enum": ["normal", "t"]},
+        "degrees_of_freedom": {"$ref": "#/$defs/nullableInteger"},
+        "p_value": {"type": "number", "minimum": 0, "maximum": 1},
+        "lower": {"type": "number"},
+        "upper": {"type": "number"}
+      },
+      "required": ["name", "estimate", "standard_error", "statistic", "distribution", "degrees_of_freedom", "p_value", "lower", "upper"],
+      "additionalProperties": false
+    },
+    "anovaTest": {
+      "type": "object",
+      "properties": {
+        "term": {"type": "string", "minLength": 1},
+        "coefficient_names": {"$ref": "#/$defs/nameVector"},
+        "statistic": {"type": "number", "minimum": 0},
+        "distribution": {"enum": ["chi-square", "f"]},
+        "degrees_of_freedom": {"type": "integer", "minimum": 1},
+        "denominator_degrees_of_freedom": {"$ref": "#/$defs/nullableInteger"},
+        "p_value": {"type": "number", "minimum": 0, "maximum": 1}
+      },
+      "required": ["term", "coefficient_names", "statistic", "distribution", "degrees_of_freedom", "denominator_degrees_of_freedom", "p_value"],
+      "additionalProperties": false
     },
     "distributionValue": {
       "oneOf": [

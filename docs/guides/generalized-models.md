@@ -62,6 +62,7 @@ returns a plausible-looking fitted result.
 Only Gaussian/identity and binomial/logit `Glm` are supported. Poisson, Gamma,
 inverse-Gaussian and quasi families; alternate links; weights; offsets;
 penalties; aliased columns; robust covariance; and formula-level fitting fail
-closed or remain absent. Summary, ANOVA, contrast, residual, and likelihood
-operations are later Phase 3 deliverables. The current parity evidence does not
-establish calibration, coverage, or production suitability.
+closed or remain absent. The supported covariance, likelihood, residual,
+prediction, coefficient-summary, ANOVA, and contrast surface is documented in
+the [post-estimation guide](post-estimation.md). Its narrow parity evidence does
+not establish calibration, coverage, or production suitability.

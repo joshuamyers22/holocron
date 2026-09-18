@@ -22,10 +22,10 @@ an implementation claim, and an experimental capability is not production-ready.
 | Status | Count | Meaning |
 | --- | ---: | --- |
 | implemented | 0 | Implemented and accepted under the capability contract. |
-| experimental | 13 | Implemented narrowly with parity evidence; not production-ready. |
+| experimental | 28 | Implemented narrowly with parity evidence; not production-ready. |
 | mapped | 0 | Mapped to a Python design, without an accepted implementation claim. |
 | unsupported | 0 | Intentionally excluded from the compatibility target. |
-| deferred | 268 | Catalogued for a later phase; no current implementation claim. |
+| deferred | 253 | Catalogued for a later phase; no current implementation claim. |
 
 ## Evidence-backed experimental surface
 
@@ -39,6 +39,7 @@ oracle-linked parity evidence. Their documented support envelopes remain narrow.
 | `Glm` | export | `holocron.models.fit_glm` | experimental | Phase 2-3 | 3 | `generalized-linear-v1` | Initial envelope supports Gaussian/identity and binomial/logit only; weights, offsets, other families/links, penalties, dispersion options, formula-level fitting, and the broader R Glm method surface remain deferred. |
 | `asis` | export | `holocron.formula.IdentityTerm` | experimental | Phase 2-3 | 1 | `formula-design-v1` | Numeric one-dimensional predictors only; labels and units are retained separately by DataDistribution. |
 | `catg` | export | `holocron.formula.CategoricalTerm` | experimental | Phase 2-3 | 1 | `formula-design-v1` | Levels and their reference order must be explicit; missing and unseen levels fail closed instead of using ambient factor metadata. |
+| `contrast` | export | `holocron.models.contrast` | experimental | Phase 2-3 | 3 | `postfit-inference-v1` | Supports one declared linear coefficient contrast with model-based uncertainty; rms design-setting expansion, simultaneous intervals, joint contrasts, profile intervals, and Bayesian paths remain deferred. |
 | `datadist` | export | `holocron.design.DataDistribution` | experimental | Phase 2-3 | 4 | `data-distribution-v1` | Python uses immutable explicit metadata instead of R global options; categorical levels must be declared; dataframe/date-time adapters are deferred; ordered factors use the lower middle declared level when the level count is even; and default display probabilities are computed per variable when missingness differs. |
 | `interactions.containing` | export | `holocron.design.DesignSpec.interactions_containing` | experimental | Phase 2-3 | 1 | `formula-design-v1` | Returns zero-based term indices from an immutable DesignSpec; it does not inspect an R Design attribute. |
 | `lrm` | export | `holocron.models.fit_lrm` | experimental | Phase 2-3 | 4 | `binary-logistic-v1` | Binary, unpenalized, full-rank logit fits only; ordinal responses, weights, offsets, penalties, formula-level fitting, and the broader R lrm method surface remain deferred. |
@@ -47,6 +48,20 @@ oracle-linked parity evidence. Their documented support envelopes remain narrow.
 | `pol` | export | `holocron.formula.PolynomialTerm` | experimental | Phase 2-3 | 1 | `formula-design-v1` | Raw powers of explicit degree 2 through 10 only; no ambient option supplies a default degree. |
 | `rcs` | export | `holocron.design.RestrictedCubicSplineSpec` | experimental | Phase 2-3 | 6 | `deterministic-transform-v1` | Initial narrow API; full rms contract remains deferred. |
 | `scored` | export | `holocron.formula.OrderedTerm` | experimental | Phase 2-3 | 1 | `formula-design-v1` | Three or more strictly increasing numeric levels must be explicit; missing and unseen levels fail closed. |
+| `anova.rms` | s3_method | `holocron.models.anova` | experimental | Phase 8 | 3 | `postfit-inference-v1` | Supports formula-term or explicitly grouped joint Wald F/chi-square tests; rms nonlinear/main-effect decomposition, interaction pooling, LR tests, and presentation methods remain deferred. |
+| `contrast.rms` | s3_method | `holocron.models.contrast` | experimental | Phase 2-3 | 3 | `postfit-inference-v1` | Python accepts explicit coefficient weights rather than rms data-setting lists; multirow, joint, simultaneous, profile, and Bayesian contrasts remain deferred. |
+| `logLik.ols` | s3_method | `holocron.models.likelihood` | experimental | Phase 8 | 1 | `postfit-inference-v1` | Returns a typed likelihood record including null likelihood, AIC, and LR test; arbitrary alternative-model comparisons remain deferred. |
+| `logLik.rms` | s3_method | `holocron.models.likelihood` | experimental | Phase 8 | 2 | `postfit-inference-v1` | Supported only for the current Gaussian and binary-logit result types; other rms model families and arbitrary nested-model comparisons remain deferred. |
+| `predict.Glm` | s3_method | `holocron.models.predict` | experimental | Phase 8 | 1 | `postfit-inference-v1` | Supports explicit design rows on linear or response scale with mean confidence limits; terms, adjustment-frame, simultaneous, and generated-grid modes remain deferred. |
+| `predict.lrm` | s3_method | `holocron.models.predict` | experimental | Phase 8 | 1 | `postfit-inference-v1` | Supports binary-logit linear predictors and probabilities with mean confidence limits; ordinal, terms, generated-grid, and simultaneous modes remain deferred. |
+| `predict.ols` | s3_method | `holocron.models.predict` | experimental | Phase 8 | 1 | `postfit-inference-v1` | Supports explicit design rows with mean or individual t intervals; terms, adjustment-frame, simultaneous, and generated-grid modes remain deferred. |
+| `residuals.Glm` | s3_method | `holocron.models.residuals` | experimental | Phase 8 | 1 | `postfit-inference-v1` | Supports ordinary, Pearson, and deviance residuals for binomial Glm; score, working, partial, influence, and other-family residuals remain deferred. |
+| `residuals.lrm` | s3_method | `holocron.models.residuals` | experimental | Phase 8 | 1 | `postfit-inference-v1` | Supports ordinary, Pearson, and deviance residuals for binary lrm with an explicitly supplied response; score, partial, influence, GOF, and ordinal residuals remain deferred. |
+| `residuals.ols` | s3_method | `holocron.models.residuals` | experimental | Phase 8 | 1 | `postfit-inference-v1` | Supports ordinary and residual-scale-standardized values; leverage-adjusted studentized, score, influence, DFBETA, DFFIT, and hat diagnostics remain deferred. |
+| `vcov.Glm` | s3_method | `holocron.models.covariance` | experimental | Phase 8 | 1 | `postfit-inference-v1` | Returns the full named covariance matrix or a named principal submatrix for the supported Glm envelope. |
+| `vcov.lrm` | s3_method | `holocron.models.covariance` | experimental | Phase 8 | 1 | `postfit-inference-v1` | Returns the full named covariance matrix or a named principal submatrix for binary lrm; ordinal intercept selection remains deferred. |
+| `vcov.ols` | s3_method | `holocron.models.covariance` | experimental | Phase 8 | 1 | `postfit-inference-v1` | Returns the classical full-rank covariance matrix or a named principal submatrix; robust and bootstrap covariance are later deliverables. |
+| `vcov.rms` | s3_method | `holocron.models.covariance` | experimental | Phase 8 | 3 | `postfit-inference-v1` | Mapped only for the currently supported OLS, Gaussian Glm, binomial Glm, and binary lrm result types. |
 
 ## Complete inventory
 
@@ -67,7 +82,7 @@ in the pinned namespace. Counts by tier are A: 32, B: 33, C: 26, D: 190.
 | `Xcontrast` | export | — | deferred | Phase 2-3 | 0 | — | Not yet implemented. |
 | `asis` | export | `holocron.formula.IdentityTerm` | experimental | Phase 2-3 | 1 | `formula-design-v1` | Numeric one-dimensional predictors only; labels and units are retained separately by DataDistribution. |
 | `catg` | export | `holocron.formula.CategoricalTerm` | experimental | Phase 2-3 | 1 | `formula-design-v1` | Levels and their reference order must be explicit; missing and unseen levels fail closed instead of using ambient factor metadata. |
-| `contrast` | export | — | deferred | Phase 2-3 | 0 | — | Not yet implemented. |
+| `contrast` | export | `holocron.models.contrast` | experimental | Phase 2-3 | 3 | `postfit-inference-v1` | Supports one declared linear coefficient contrast with model-based uncertainty; rms design-setting expansion, simultaneous intervals, joint contrasts, profile intervals, and Bayesian paths remain deferred. |
 | `datadist` | export | `holocron.design.DataDistribution` | experimental | Phase 2-3 | 4 | `data-distribution-v1` | Python uses immutable explicit metadata instead of R global options; categorical levels must be declared; dataframe/date-time adapters are deferred; ordered factors use the lower middle declared level when the level count is even; and default display probabilities are computed per variable when missingness differs. |
 | `gTrans` | export | — | deferred | Phase 2-3 | 0 | — | Not yet implemented. |
 | `interactions.containing` | export | `holocron.design.DesignSpec.interactions_containing` | experimental | Phase 2-3 | 1 | `formula-design-v1` | Returns zero-based term indices from an immutable DesignSpec; it does not inspect an R Design attribute. |
@@ -86,7 +101,7 @@ in the pinned namespace. Counts by tier are A: 32, B: 33, C: 26, D: 190.
 | `strat` | export | — | deferred | Phase 2-3 | 0 | — | Not yet implemented. |
 | `Newlabels.rms` | s3_method | — | deferred | Phase 2-3 | 0 | — | Not yet implemented. |
 | `Newlevels.rms` | s3_method | — | deferred | Phase 2-3 | 0 | — | Not yet implemented. |
-| `contrast.rms` | s3_method | — | deferred | Phase 2-3 | 0 | — | Not yet implemented. |
+| `contrast.rms` | s3_method | `holocron.models.contrast` | experimental | Phase 2-3 | 3 | `postfit-inference-v1` | Python accepts explicit coefficient weights rather than rms data-setting lists; multirow, joint, simultaneous, profile, and Bayesian contrasts remain deferred. |
 | `specs.rms` | s3_method | — | deferred | Phase 2-3 | 0 | — | Not yet implemented. |
 | `summary.rms` | s3_method | — | deferred | Phase 2-3 | 0 | — | Not yet implemented. |
 
@@ -232,7 +247,7 @@ in the pinned namespace. Counts by tier are A: 32, B: 33, C: 26, D: 190.
 | `Initialize.corFloorExp` | s3_method | — | deferred | Phase 8 | 0 | — | Not yet implemented. |
 | `[.Ocens` | s3_method | — | deferred | Phase 8 | 0 | — | Not yet implemented. |
 | `[.rms` | s3_method | — | deferred | Phase 8 | 0 | — | Not yet implemented. |
-| `anova.rms` | s3_method | — | deferred | Phase 8 | 0 | — | Not yet implemented. |
+| `anova.rms` | s3_method | `holocron.models.anova` | experimental | Phase 8 | 3 | `postfit-inference-v1` | Supports formula-term or explicitly grouped joint Wald F/chi-square tests; rms nonlinear/main-effect decomposition, interaction pooling, LR tests, and presentation methods remain deferred. |
 | `as.data.frame.Ocens` | s3_method | — | deferred | Phase 8 | 0 | — | Not yet implemented. |
 | `as.data.frame.rms` | s3_method | — | deferred | Phase 8 | 0 | — | Not yet implemented. |
 | `coef.corFloorExp` | s3_method | — | deferred | Phase 8 | 0 | — | Not yet implemented. |
@@ -261,8 +276,8 @@ in the pinned namespace. Counts by tier are A: 32, B: 33, C: 26, D: 190.
 | `latex.validate` | s3_method | — | deferred | Phase 7 | 0 | — | Not yet implemented. |
 | `lines.residuals.psm.censored.normalized` | s3_method | — | deferred | Phase 8 | 0 | — | Not yet implemented. |
 | `logLik.Gls` | s3_method | — | deferred | Phase 8 | 0 | — | Not yet implemented. |
-| `logLik.ols` | s3_method | — | deferred | Phase 8 | 0 | — | Not yet implemented. |
-| `logLik.rms` | s3_method | — | deferred | Phase 8 | 0 | — | Not yet implemented. |
+| `logLik.ols` | s3_method | `holocron.models.likelihood` | experimental | Phase 8 | 1 | `postfit-inference-v1` | Returns a typed likelihood record including null likelihood, AIC, and LR test; arbitrary alternative-model comparisons remain deferred. |
+| `logLik.rms` | s3_method | `holocron.models.likelihood` | experimental | Phase 8 | 2 | `postfit-inference-v1` | Supported only for the current Gaussian and binary-logit result types; other rms model families and arbitrary nested-model comparisons remain deferred. |
 | `makepredictcall.rms` | s3_method | — | deferred | Phase 8 | 0 | — | Not yet implemented. |
 | `nobs.rms` | s3_method | — | deferred | Phase 8 | 0 | — | Not yet implemented. |
 | `oos.loglik.Glm` | s3_method | — | deferred | Phase 8 | 0 | — | Not yet implemented. |
@@ -289,13 +304,13 @@ in the pinned namespace. Counts by tier are A: 32, B: 33, C: 26, D: 190.
 | `plot.validate.rpart` | s3_method | — | deferred | Phase 7 | 0 | — | Not yet implemented. |
 | `plot.xmean.ordinaly` | s3_method | — | deferred | Phase 7 | 0 | — | Not yet implemented. |
 | `plotp.Predict` | s3_method | — | deferred | Phase 7 | 0 | — | Not yet implemented. |
-| `predict.Glm` | s3_method | — | deferred | Phase 8 | 0 | — | Not yet implemented. |
+| `predict.Glm` | s3_method | `holocron.models.predict` | experimental | Phase 8 | 1 | `postfit-inference-v1` | Supports explicit design rows on linear or response scale with mean confidence limits; terms, adjustment-frame, simultaneous, and generated-grid modes remain deferred. |
 | `predict.Gls` | s3_method | — | deferred | Phase 8 | 0 | — | Not yet implemented. |
 | `predict.Rq` | s3_method | — | deferred | Phase 8 | 0 | — | Not yet implemented. |
 | `predict.bj` | s3_method | — | deferred | Phase 8 | 0 | — | Not yet implemented. |
 | `predict.cph` | s3_method | — | deferred | Phase 8 | 0 | — | Not yet implemented. |
-| `predict.lrm` | s3_method | — | deferred | Phase 8 | 0 | — | Not yet implemented. |
-| `predict.ols` | s3_method | — | deferred | Phase 8 | 0 | — | Not yet implemented. |
+| `predict.lrm` | s3_method | `holocron.models.predict` | experimental | Phase 8 | 1 | `postfit-inference-v1` | Supports binary-logit linear predictors and probabilities with mean confidence limits; ordinal, terms, generated-grid, and simultaneous modes remain deferred. |
+| `predict.ols` | s3_method | `holocron.models.predict` | experimental | Phase 8 | 1 | `postfit-inference-v1` | Supports explicit design rows with mean or individual t intervals; terms, adjustment-frame, simultaneous, and generated-grid modes remain deferred. |
 | `predict.orm` | s3_method | — | deferred | Phase 8 | 0 | — | Not yet implemented. |
 | `predict.psm` | s3_method | — | deferred | Phase 8 | 0 | — | Not yet implemented. |
 | `print.Glm` | s3_method | — | deferred | Phase 8 | 0 | — | Not yet implemented. |
@@ -332,11 +347,11 @@ in the pinned namespace. Counts by tier are A: 32, B: 33, C: 26, D: 190.
 | `print.validate.rpart` | s3_method | — | deferred | Phase 8 | 0 | — | Not yet implemented. |
 | `processMI.fit.mult.impute` | s3_method | — | deferred | Phase 8 | 0 | — | Not yet implemented. |
 | `rbind.Predict` | s3_method | — | deferred | Phase 8 | 0 | — | Not yet implemented. |
-| `residuals.Glm` | s3_method | — | deferred | Phase 8 | 0 | — | Not yet implemented. |
+| `residuals.Glm` | s3_method | `holocron.models.residuals` | experimental | Phase 8 | 1 | `postfit-inference-v1` | Supports ordinary, Pearson, and deviance residuals for binomial Glm; score, working, partial, influence, and other-family residuals remain deferred. |
 | `residuals.bj` | s3_method | — | deferred | Phase 8 | 0 | — | Not yet implemented. |
 | `residuals.cph` | s3_method | — | deferred | Phase 8 | 0 | — | Not yet implemented. |
-| `residuals.lrm` | s3_method | — | deferred | Phase 8 | 0 | — | Not yet implemented. |
-| `residuals.ols` | s3_method | — | deferred | Phase 8 | 0 | — | Not yet implemented. |
+| `residuals.lrm` | s3_method | `holocron.models.residuals` | experimental | Phase 8 | 1 | `postfit-inference-v1` | Supports ordinary, Pearson, and deviance residuals for binary lrm with an explicitly supplied response; score, partial, influence, GOF, and ordinal residuals remain deferred. |
+| `residuals.ols` | s3_method | `holocron.models.residuals` | experimental | Phase 8 | 1 | `postfit-inference-v1` | Supports ordinary and residual-scale-standardized values; leverage-adjusted studentized, score, influence, DFBETA, DFFIT, and hat diagnostics remain deferred. |
 | `residuals.orm` | s3_method | — | deferred | Phase 8 | 0 | — | Not yet implemented. |
 | `residuals.psm` | s3_method | — | deferred | Phase 8 | 0 | — | Not yet implemented. |
 | `survplot.npsurv` | s3_method | — | deferred | Phase 7 | 0 | — | Not yet implemented. |
@@ -344,12 +359,12 @@ in the pinned namespace. Counts by tier are A: 32, B: 33, C: 26, D: 190.
 | `survplot.residuals.psm.censored.normalized` | s3_method | — | deferred | Phase 7 | 0 | — | Not yet implemented. |
 | `survplot.rms` | s3_method | — | deferred | Phase 7 | 0 | — | Not yet implemented. |
 | `survplotp.npsurv` | s3_method | — | deferred | Phase 7 | 0 | — | Not yet implemented. |
-| `vcov.Glm` | s3_method | — | deferred | Phase 8 | 0 | — | Not yet implemented. |
+| `vcov.Glm` | s3_method | `holocron.models.covariance` | experimental | Phase 8 | 1 | `postfit-inference-v1` | Returns the full named covariance matrix or a named principal submatrix for the supported Glm envelope. |
 | `vcov.Gls` | s3_method | — | deferred | Phase 8 | 0 | — | Not yet implemented. |
 | `vcov.cph` | s3_method | — | deferred | Phase 8 | 0 | — | Not yet implemented. |
-| `vcov.lrm` | s3_method | — | deferred | Phase 8 | 0 | — | Not yet implemented. |
-| `vcov.ols` | s3_method | — | deferred | Phase 8 | 0 | — | Not yet implemented. |
+| `vcov.lrm` | s3_method | `holocron.models.covariance` | experimental | Phase 8 | 1 | `postfit-inference-v1` | Returns the full named covariance matrix or a named principal submatrix for binary lrm; ordinal intercept selection remains deferred. |
+| `vcov.ols` | s3_method | `holocron.models.covariance` | experimental | Phase 8 | 1 | `postfit-inference-v1` | Returns the classical full-rank covariance matrix or a named principal submatrix; robust and bootstrap covariance are later deliverables. |
 | `vcov.orm` | s3_method | — | deferred | Phase 8 | 0 | — | Not yet implemented. |
 | `vcov.pphsm` | s3_method | — | deferred | Phase 8 | 0 | — | Not yet implemented. |
 | `vcov.psm` | s3_method | — | deferred | Phase 8 | 0 | — | Not yet implemented. |
-| `vcov.rms` | s3_method | — | deferred | Phase 8 | 0 | — | Not yet implemented. |
+| `vcov.rms` | s3_method | `holocron.models.covariance` | experimental | Phase 8 | 3 | `postfit-inference-v1` | Mapped only for the currently supported OLS, Gaussian Glm, binomial Glm, and binary lrm result types. |

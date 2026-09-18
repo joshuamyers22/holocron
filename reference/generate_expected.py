@@ -33,6 +33,12 @@ def parse_args() -> argparse.Namespace:
         action="store_true",
         help="write the generated fixtures to reference/expected",
     )
+    parser.add_argument(
+        "--case",
+        action="append",
+        dest="case_ids",
+        help="generate only this case ID; may be supplied more than once",
+    )
     return parser.parse_args()
 
 
@@ -56,7 +62,14 @@ def main() -> None:
         "hmisc_commit",
     )
 
-    for case_path in sorted(CASES.glob("*.json")):
+    case_paths = sorted(CASES.glob("*.json"))
+    if args.case_ids:
+        requested = set(args.case_ids)
+        case_paths = [path for path in case_paths if path.stem in requested]
+        missing = requested - {path.stem for path in case_paths}
+        if missing:
+            raise ValueError(f"unknown case IDs: {', '.join(sorted(missing))}")
+    for case_path in case_paths:
         case = require_object(load_json(case_path), name=str(case_path))
         validate_document(case, CASE_SCHEMA)
         actual = run_case(case)

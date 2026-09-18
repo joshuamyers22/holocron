@@ -446,6 +446,8 @@ def validate_case_pair(
         "estimator",
         "evaluation_x",
         "evaluation_times",
+        "contrast_weights",
+        "confidence_level",
     ):
         if field in case and case[field] != payload.get(field):
             raise ContractValidationError(f"{case_path}: {field} does not match output")
@@ -457,7 +459,7 @@ def validate_case_pair(
     if reference["protocol_version"] != payload.get("protocol_version"):
         raise ContractValidationError(f"{case_path}: protocol versions do not match")
     operation = case["operation"]
-    if operation in {"ols_rcs", "glm", "lrm", "orm"}:
+    if operation in {"ols_rcs", "glm", "lrm", "orm", "model_operations"}:
         x = require_array(case["x"], name="case.x")
         y = require_array(case["y"], name="case.y")
         if len(x) != len(y):

@@ -154,6 +154,28 @@
       ]
     },
     {
+      "title": "Core model post-estimation operations case",
+      "properties": {
+        "operation": {"const": "model_operations"},
+        "qualification_stage": {"const": "python-parity"},
+        "estimator": {"enum": ["ols", "glm-binomial", "lrm-binary"]},
+        "x": {"$ref": "#/$defs/fitNumericVector"},
+        "y": {"$ref": "#/$defs/fitNumericVector"},
+        "evaluation_x": {"$ref": "#/$defs/nonemptyNumericVector"},
+        "contrast_weights": {
+          "const": [0, 1]
+        },
+        "confidence_level": {"type": "number", "exclusiveMinimum": 0, "exclusiveMaximum": 1}
+      },
+      "required": ["operation", "estimator", "x", "y", "evaluation_x", "contrast_weights", "confidence_level"],
+      "allOf": [
+        {
+          "if": {"properties": {"estimator": {"enum": ["glm-binomial", "lrm-binary"]}}},
+          "then": {"properties": {"y": {"$ref": "#/$defs/binaryVector"}}}
+        }
+      ]
+    },
+    {
       "title": "Ordinal regression case",
       "properties": {
         "operation": {"const": "orm"},

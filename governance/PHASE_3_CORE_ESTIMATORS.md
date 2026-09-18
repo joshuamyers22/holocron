@@ -53,8 +53,9 @@ penalties, alias handling, or formula-level fitting. Binary `lrm` does not yet
 support ordinal outcomes, penalties, weights, offsets, or its broader method
 surface. `lrm.fit` remains deferred.
 
-The next Phase 3 deliverable owns the broader covariance, likelihood, residual,
-prediction, summary, ANOVA, and contrast operations. Simulation and numerical
-edge-case evidence, specialist review, the Phase 3 exit gate, capability
-promotion beyond experimental, consequential use, and external distribution
-all remain open.
+The broader covariance, likelihood, residual, prediction, coefficient-summary,
+ANOVA, and contrast operations are now accepted in the separate
+[result-operations record](PHASE_3_RESULT_OPERATIONS.md). Simulation and
+numerical edge-case evidence, specialist review, the Phase 3 exit gate,
+capability promotion beyond experimental, consequential use, and external
+distribution all remain open.

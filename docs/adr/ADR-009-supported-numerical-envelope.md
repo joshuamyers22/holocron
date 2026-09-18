@@ -69,10 +69,11 @@ profiles use the pre-specified deterministic `1e-12` budget. These are
 engineering gates for experimental parity, not thresholds for statistical
 significance or clinical materiality.
 
-The profiles for generalized linear, binary logistic, ordinal, Cox, parametric
-survival, and nonparametric survival remain provisional oracle-repeatability
-policies. Each must receive its own cross-platform calibration and profile
-revision or explicit acceptance before its Python capability can advance.
+The profiles for generalized linear, binary logistic, post-estimation
+inference, ordinal, Cox, parametric survival, and nonparametric survival remain
+provisional oracle-repeatability policies. Each must receive its own cross-
+platform calibration and profile revision or explicit acceptance before its
+Python capability can advance.
 
 ## Evidence and enforcement
 
@@ -98,8 +99,8 @@ the Phase 1 acceptance evidence; each later Phase 2 acceptance record identifies
 its additional cases and policy. Static repository checks reject missing Phase
 1 platforms, dirty or failed evidence, differing pilot revisions, or an altered
 historical policy identity. The same platform job separately executes the Phase
-3 core-estimator differential tests without treating that execution as accepted
-cross-platform calibration evidence.
+3 estimator and result-operation differential tests without treating that
+execution as accepted cross-platform calibration evidence.
 
 ## Consequences and boundaries
 

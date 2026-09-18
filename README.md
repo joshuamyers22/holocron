@@ -14,8 +14,10 @@ Holocron is experimental and incomplete. Do not use it for consequential
 analysis, inference, prediction, or clinical decisions.
 
 Phases 0–2 are complete for private experimental development, and Phase 3 is
-active. Its first deliverable—experimental `ols`, Gaussian/identity and
-binomial/logit `Glm`, and binary `lrm` estimators—is complete. The Phase 1 exit
+active. Its first two deliverables—experimental `ols`, Gaussian/identity and
+binomial/logit `Glm`, and binary `lrm` estimators plus their covariance,
+likelihood, residual, prediction, coefficient-summary, ANOVA, and linear-
+contrast operations—are complete. The Phase 1 exit
 gate is recorded in the
 [completion record](https://github.com/joshuamyers22/holocron/blob/main/governance/PHASE_1_COMPLETION.md);
 the evidence-backed Phase 2 disposition is recorded in its
@@ -33,8 +35,9 @@ there.
 The evidence-backed experimental surface implements predictor-distribution
 metadata, safe formulas, numeric and factor transformations, restricted
 interactions, classical full-rank ordinary least squares, bounded generalized
-linear models, and unpenalized binary logistic regression. These are checked
-across 31 independent parity cases against committed outputs from a Dockerized
+linear models, unpenalized binary logistic regression, and the accepted post-
+estimation operations. These are checked across 34 independent parity cases
+against committed outputs from a Dockerized
 R oracle. Another nine ordinal and survival cases are frozen as oracle baselines
 for later implementation and are not current parity claims.
 Compatibility is claimed

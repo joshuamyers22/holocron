@@ -1,0 +1,15 @@
+{
+  "schema_version": "holocron-oracle-case/v1",
+  "case_id": "postfit-glm-binomial-linear",
+  "description": "Binomial Glm covariance, likelihood, residual, prediction, summary, ANOVA, and slope-contrast operations.",
+  "expected_output": "postfit-glm-binomial-linear.json",
+  "comparison_profile": "postfit-inference-v1",
+  "qualification_stage": "python-parity",
+  "operation": "model_operations",
+  "estimator": "glm-binomial",
+  "x": [-3, -2, -1, 0, 1, 2, 3, -3, -2, -1, 0, 1, 2, 3],
+  "y": [0, 0, 0, 0, 1, 1, 1, 0, 1, 0, 1, 0, 1, 1],
+  "evaluation_x": [-2.5, 0.5, 2.5],
+  "contrast_weights": [0, 1],
+  "confidence_level": 0.95
+}

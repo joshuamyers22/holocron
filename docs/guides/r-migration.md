@@ -99,6 +99,13 @@ for later effect or display operations.
 | `Glm(..., family=binomial())` | `fit_glm(response, design, family="binomial")` | Logit link and binary response only. |
 | binary `lrm(...)` | `fit_lrm(response, design)` | Unpenalized full-rank binary response only. |
 | `predict(fit, newdata=...)` | `fit.predict(specification.transform(data))` | Transform with the original specification; unseen or missing values fail closed. |
+| `vcov(fit)` | `covariance(fit)` | Full named covariance or a named principal submatrix. |
+| `logLik(fit)` | `likelihood(fit)` | Includes maximized/null likelihood, AIC, and the overall LR test. |
+| `residuals(fit, type=...)` | `residuals(fit, kind=..., response=...)` | Binary residuals require the original response explicitly. |
+| interval `predict(...)` | `predict(fit, design, ...)` | Mean uncertainty for every supported model; individual intervals for OLS only. |
+| coefficient table | `summarize(fit)` | Coefficient-level Wald inference only; this is not adjusted-effect `summary.rms`. |
+| `anova(fit)` | `anova(fit, specification)` | Joint Wald tests for declared formula-term blocks only. |
+| `contrast(fit, ...)` | `contrast(fit, weights)` | One explicit linear coefficient contrast; no R expression evaluation. |
 
 ## 1. Freeze the R-side contract
 
@@ -249,8 +256,9 @@ following:
   semantics;
 - complete R `DesignAssign`, `modelData`, `Newlevels`, `Newlabels`, or `specs`
   behavior;
-- aliased OLS columns, weights, penalties, robust/clustered covariance, ANOVA,
-  contrasts, or inference tables; or
+- aliased OLS columns, weights, penalties, robust/clustered covariance,
+  adjusted-effect summaries, complete `anova.rms` partitions, or nonlinear,
+  simultaneous, grid-based, or expression-driven contrasts; or
 - logistic behavior outside the supported unpenalized binary/logit envelope, or
   ordinal, Cox, parametric-survival, Kaplan–Meier, validation, calibration, or
   nomogram execution in Python.

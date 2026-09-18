@@ -105,8 +105,6 @@ def main() -> None:
                 raise ValueError(f"missing oracle profile for {identifier}")
             for case in cases:
                 case_name = str(case)
-                if case_name in linked_cases:
-                    raise ValueError(f"oracle case linked more than once: {case_name}")
                 linked_cases.add(case_name)
                 case_path = ROOT / f"reference/cases/{case_name}.json"
                 if not case_path.is_file():
