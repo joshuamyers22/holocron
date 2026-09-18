@@ -9,8 +9,8 @@
 ## Scope
 
 This record accepts the initial MkDocs site and generated compatibility page as
-the Phase 1 documentation deliverable. It does not approve external publication,
-promote an experimental statistical capability, or accept the Phase 1 exit gate.
+the Phase 1 documentation deliverable. It does not approve external publication
+or promote an experimental statistical capability.
 
 ## Acceptance evidence
 
@@ -36,7 +36,7 @@ Changes to public exports or `compatibility/rms-8.2.0.yaml` must run
 `make docs-generate` and commit the result. Generated files are identified in
 their first line. Authored examples remain deterministic, synthetic, and offline.
 
-## Remaining Phase 1 work
+## Subsequent disposition
 
-The minimal evidence-emitting end-to-end slice remains a separate Phase 1
-deliverable.
+The separate end-to-end slice subsequently passed. Its evidence and remaining
+boundaries are recorded in `governance/PHASE_1_COMPLETION.md`.

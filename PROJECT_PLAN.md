@@ -1,6 +1,6 @@
 # Independent Python Implementation of `rms`: Production Project Plan
 
-**Status:** Active — Phase 0 complete for private development
+**Status:** Active — Phases 0 and 1 complete for private development; Phase 2 next
 **Plan date:** 2026-09-17  
 **Reference implementation:** Frank Harrell's R package `rms`  
 **Project name:** `holocron`  
@@ -607,9 +607,8 @@ Independent-development and license/provenance policy is approved; the reference
 
 ### Phase 1 — Repository and parity laboratory (6–10 weeks)
 
-**Status:** In progress. The repository, parity laboratory, documentation, and
-clean artifact gates are complete; the end-to-end evidence deliverable remains
-open.
+**Status:** Complete for private experimental development as of 2026-09-17
+([completion record](governance/PHASE_1_COMPLETION.md)). Phase 2 is next.
 
 **Deliverables**
 
@@ -631,6 +630,11 @@ open.
 **Exit gate**
 
 A minimal end-to-end slice generates a design, fits one simple model, predicts, emits evidence, and compares to R through repeatable CI.
+
+**Disposition:** Passed. The clean CI gate executes the public RCS-to-OLS
+prediction path, compares it to the pinned R output with the accepted
+field-aware policy, writes schema-valid evidence, and retains that evidence as a
+workflow artifact. See the [Phase 1 completion record](governance/PHASE_1_COMPLETION.md).
 
 ### Phase 2 — Design system (12–18 weeks)
 

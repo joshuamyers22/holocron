@@ -21,11 +21,11 @@ model = fit_ols(
     design,
     feature_names=("age", "age nonlinear 1", "age nonlinear 2"),
 )
-fitted = np.asarray(model.fitted_values)
+predictions = np.asarray(model.predict(design))
 
 assert model.rank == 4
 assert model.residual_degrees_of_freedom == 4
-assert np.isfinite(fitted).all()
+assert np.isfinite(predictions).all()
 ```
 
 The model describes this synthetic sample only. A useful scientific workflow
@@ -36,3 +36,13 @@ boundary. Those concerns cannot be recovered from a fitted coefficient vector.
 The parity laboratory evaluates design values, coefficients, covariance, fitted
 values, residuals, scale, rank, and metadata under named tolerances. It does not
 establish that this example is an appropriate model for any real decision.
+
+The Phase 1 acceptance workflow runs the same design, fit, and public prediction
+path against a versioned oracle case:
+
+```sh
+make phase-1-e2e
+```
+
+It compares with the committed output from the pinned R oracle and writes
+schema-valid, hashed evidence under `.work/phase-1-evidence/`.

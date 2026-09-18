@@ -10,8 +10,8 @@
 
 This record accepts clean wheel/source-distribution builds and independent
 installation smoke tests as the Phase 1 artifact deliverable. It does not
-authorize external distribution, accept the Phase 1 exit gate, or promote any
-statistical capability beyond its manifest status.
+authorize external distribution or promote any statistical capability beyond
+its manifest status.
 
 ## Build contract
 
@@ -51,8 +51,7 @@ statistical capability beyond its manifest status.
 - `.github/workflows/release.yml` runs the same gate before any authorized
   release artifact can be attached.
 
-## Remaining Phase 1 work
+## Subsequent disposition
 
-The minimal vertical slice must still emit a schema-valid evidence artifact and
-compare it to the pinned R oracle through repeatable CI before the Phase 1 exit
-gate is accepted.
+The separate evidence-emitting vertical slice subsequently passed. Its evidence
+and remaining boundaries are recorded in `governance/PHASE_1_COMPLETION.md`.

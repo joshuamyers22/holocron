@@ -44,6 +44,14 @@ Use `make clean-build` for release-style evidence. It rejects tracked or
 untracked source changes before building; CI and the gated release workflow use
 this target. Temporary installation environments are removed after the checks.
 
+## Phase 1 evidence workflow
+
+`make phase-1-e2e` executes the accepted RCS-design, OLS-fit, and prediction case,
+compares it with the pinned R oracle output under the named field-aware policy,
+and writes schema-valid evidence to `.work/phase-1-evidence/`. Use
+`make phase-1-exit-gate` from a clean checkout when producing acceptance
+evidence. CI runs that clean form and retains its artifact for 30 days.
+
 ## Compatibility changes
 
 Update the authoritative compatibility manifest in the same change as a public

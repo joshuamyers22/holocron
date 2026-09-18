@@ -46,3 +46,6 @@ Notable changes are recorded here using semantic versioning.
   distributions offline, independently installs both into fresh environments,
   validates dependencies and checkout isolation, and smoke-tests the supported
   RCS-to-OLS workflow in CI and release jobs.
+- Closed the private-development Phase 1 exit gate with a clean, repeatable
+  design-to-fit-to-prediction workflow that compares against the pinned R
+  oracle output, emits schema-valid hashed parity evidence, and retains it in CI.

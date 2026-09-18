@@ -61,6 +61,7 @@ make oracle-build RMS_SOURCE=/absolute/path/to/rms-master
 make frozen-environments-live
 make oracle-check
 make tolerance-pilot
+make phase-1-e2e
 make reference-source-check RMS_SOURCE=/absolute/path/to/rms-master
 ```
 
@@ -83,6 +84,13 @@ platform.
 BLAS/LAPACK identity, and validates a report against
 `../schemas/tolerance-pilot.schema.json`. CI runs this gate on the two platforms
 accepted by ADR-009.
+
+`make phase-1-e2e` runs the accepted `ols-rcs-explicit` exit case through the
+public design, fit, and prediction APIs; validates the Python output; compares it
+with the pinned R output under `well-conditioned-ols-v1`; and writes validated,
+hashed evidence to `.work/phase-1-evidence/`. CI uses
+`make phase-1-exit-gate`, which additionally requires clean source provenance,
+and retains the evidence artifact for 30 days.
 
 The runtime container is non-root, offline, read-only, capability-free, and
 resource-limited. The protocol accepts data-only operations rather than

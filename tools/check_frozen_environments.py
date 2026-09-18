@@ -123,6 +123,7 @@ def check_python_environment() -> None:
         "uv sync --frozen --dev --no-build-isolation",
         "uv run --frozen",
         "tools/build_and_smoke_artifacts.py",
+        "tools.run_phase_1_vertical_slice",
     )
     if any(command not in makefile for command in required_make_commands):
         raise ValueError("Makefile does not enforce the frozen build sequence")
@@ -145,8 +146,19 @@ def check_python_environment() -> None:
             'version: "0.12.7"' not in workflow
             or "run: make setup" not in workflow
             or "clean-build" not in workflow
+            or "phase-1-exit-gate" not in workflow
         ):
-            raise ValueError(f"{relative_workflow} does not use the frozen setup")
+            raise ValueError(
+                f"{relative_workflow} does not use the frozen acceptance gates"
+            )
+    ci_workflow = (ROOT / ".github/workflows/ci.yml").read_text()
+    required_evidence_controls = (
+        "actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a",
+        ".work/phase-1-evidence/*.json",
+        "if-no-files-found: error",
+    )
+    if any(control not in ci_workflow for control in required_evidence_controls):
+        raise ValueError("CI does not retain the required Phase 1 parity evidence")
 
     lock_path = ROOT / str(lock["path"])
     if sha256(lock_path) != lock["sha256"]:

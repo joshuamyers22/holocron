@@ -39,6 +39,7 @@ def build_python_output(case: dict[str, JsonValue]) -> dict[str, JsonValue]:
     if operation == "ols_rcs":
         y = cast(list[float], case["y"])
         result = fit_ols(y, basis, feature_names=design_names)
+        predictions = result.predict(basis)
         return {
             "ok": True,
             "protocol_version": "1",
@@ -55,7 +56,7 @@ def build_python_output(case: dict[str, JsonValue]) -> dict[str, JsonValue]:
             "covariance": cast(JsonValue, [list(row) for row in result.covariance]),
             "design_names": cast(JsonValue, design_names),
             "design": cast(JsonValue, basis.tolist()),
-            "fitted": cast(JsonValue, list(result.fitted_values)),
+            "fitted": cast(JsonValue, list(predictions)),
             "residuals": cast(JsonValue, list(result.residuals)),
             "degrees_of_freedom": result.residual_degrees_of_freedom,
             "sigma": result.residual_scale,

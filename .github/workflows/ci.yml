@@ -16,6 +16,15 @@ jobs:
           version: "0.12.7"
       - run: make setup
       - run: make check
+      - run: make phase-1-exit-gate
+      - name: Retain Phase 1 parity evidence
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: phase-1-parity-evidence-${{ github.sha }}
+          path: .work/phase-1-evidence/*.json
+          if-no-files-found: error
+          retention-days: 30
       - run: make audit clean-build
   tolerance-pilot:
     strategy:

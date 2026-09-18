@@ -13,6 +13,12 @@ The project is distributed internally as `holocron-rms` and imported as
 Holocron is experimental and incomplete. Do not use it for consequential
 analysis, inference, prediction, or clinical decisions.
 
+Phases 0 and 1 are complete for private experimental development. The Phase 1
+exit gate is recorded in the
+[completion record](https://github.com/joshuamyers22/holocron/blob/main/governance/PHASE_1_COMPLETION.md);
+Phase 2 design-system work is next. External distribution and capability
+promotion remain blocked by the governance reviews described there.
+
 The first qualified vertical slice implements explicit-knot restricted cubic
 spline design and classical full-rank ordinary least squares. Both are checked
 across 12 independent parity cases against committed outputs from a Dockerized
@@ -82,12 +88,16 @@ dependency/build graph are frozen and checked as described in the
 ```sh
 make setup
 make check
+make phase-1-e2e
 make build
 make audit
 ```
 
 `make check` runs formatting, linting, strict type checking, unit and parity
 fixture tests, frozen-environment checks, and reference-metadata validation.
+It also executes the Phase 1 design-to-fit-to-prediction slice and writes
+schema-valid parity evidence under `.work/phase-1-evidence/`. CI reruns its
+clean-checkout form and retains the evidence for 30 days.
 `make build` uses the locked build backend offline and without isolation, then
 inspects and independently installs both wheel and source distribution into
 fresh environments. Each installation runs dependency validation and the

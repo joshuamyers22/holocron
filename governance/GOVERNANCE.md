@@ -40,7 +40,9 @@ independent review.
 
 ## Resourcing assumption
 
-Phase 1 is bounded to the parity laboratory and 20–30 representative cases.
-There is no approved monetary budget or staffing commitment for the multi-year
-full-parity program. Scope and dates must be re-estimated after the Phase 1
-pilot; lack of specialist review pauses promotion rather than lowering gates.
+Phase 1 was bounded to the parity laboratory and 20–30 representative cases and
+is complete for private experimental development. There is no approved monetary
+budget or staffing commitment for the multi-year full-parity program. Scope and
+dates must be re-estimated before expanding beyond the accepted pilot; lack of
+specialist review pauses promotion rather than lowering gates. See
+`governance/PHASE_1_COMPLETION.md`.
