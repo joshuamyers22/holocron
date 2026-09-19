@@ -35,6 +35,11 @@ an effective contributor count. Parametric calibration curves use the same
 identity pointwise and are not clipped after correction. Partial resample
 executions are rejected by default; explicitly allowing them preserves the
 partial status and failure rate but does not prove that failures are ignorable.
+`report_resample_execution` makes that disposition machine-readable and groups
+bounded failure reasons, but it cannot determine whether convergence, rank, or
+class-composition failures are informative. Its metric coverage separates
+undefined successful-pair metrics from failed refits; neither category may be
+silently treated as a zero or successful contribution.
 
 Influence flags use declared heuristics, not universal decision rules. OLS
 coefficient changes are exact case-deletion identities; binary-logistic changes
@@ -120,6 +125,21 @@ known-data-generating-process recovery and coverage evidence. Ron Mexico's
 scoped independent numerical/statistical approval closes the Phase 5 private-
 development exit gate, but does not promote these capabilities beyond
 experimental.
+
+The Phase 6 private-development exit gate passes its technical review of exact
+plan replay, whole-procedure callback execution, fixed-design convenience
+refits, failure policies, optimism correction, diagnostics, and failure
+reporting. That decision is not an independent statistical approval and does
+not establish R method parity for the deferred `validate.*`, `calibrate.*`,
+`pentrace`, `fastbw`, or `vif` entries.
+
+Plot specifications preserve declared source values and semantic intent; they
+do not validate the statistical procedure that produced those values. Typed
+adapters do not recompute estimates. The SVG backend preserves required
+alternative text in linked title/description elements and uses semantic layer
+groups, but this is not browser or assistive-technology certification. No
+pixel-baseline visual-regression evidence, interactive renderer, custom theme,
+or R graphics parity is currently supported.
 
 ## Decision boundary
 

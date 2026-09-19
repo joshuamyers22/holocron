@@ -29,6 +29,14 @@ import numpy as np
 import holocron
 from holocron.design import DataDistribution, DesignSpec, RestrictedCubicSplineSpec
 from holocron.formula import Formula
+from holocron.graphics import (
+    AxisSpec,
+    BandLayer,
+    LineLayer,
+    PlotSpec,
+    effect_plot_spec,
+    render_svg,
+)
 from holocron.models import (
     BinaryLogisticResult,
     CensoredResponse,
@@ -69,6 +77,7 @@ from holocron.validation import (
     calibrate_model,
     optimism_correct_calibration,
     optimism_correct_validation,
+    report_resample_execution,
     run_resample_plan,
     take_rows,
     validate_model,
@@ -86,6 +95,9 @@ assert importlib.metadata.version("holocron-rms") == holocron.__version__
 assert importlib.util.find_spec("holocron.cli") is None
 assert importlib.resources.files("holocron").joinpath(
     "schemas/resample-plan.schema.json"
+).is_file()
+assert importlib.resources.files("holocron").joinpath(
+    "schemas/plot-spec.schema.json"
 ).is_file()
 
 x = (-2.0, -1.0, 0.0, 1.0, 2.0, 3.0)
@@ -121,7 +133,8 @@ assert len(residuals(fit, kind="standardized").values) == len(y)
 assert summarize(fit).model_type == "ols"
 assert len(anova(fit, formula_spec).tests) == 1
 assert contrast(fit, {"rcs(x,linear)": 1.0}).estimate == fit.coefficients[1]
-assert len(predict(fit, formula_design).values) == len(y)
+prediction_result = predict(fit, formula_design)
+assert len(prediction_result.values) == len(y)
 
 linear_spec = DesignSpec.from_formula("y ~ x")
 linear_design = linear_spec.transform({"x": x})
@@ -164,6 +177,26 @@ assert robustness.covariance == robust
 assert penalty_trace.selected_point in penalty_trace.points
 assert selection.selected_terms == ("x",)
 
+plot_spec = PlotSpec(
+    plot_id="artifact-calibration",
+    kind="calibration",
+    title="Calibration",
+    alt_text="Estimated calibration line with an uncertainty interval.",
+    x_axis=AxisSpec("Predicted", scale="probability"),
+    y_axis=AxisSpec("Observed", scale="probability"),
+    layers=(
+        BandLayer("interval", (0.1, 0.5, 0.9), (0.0, 0.4, 0.8),
+                  (0.2, 0.6, 1.0), label="Interval"),
+        LineLayer("estimate", (0.1, 0.5, 0.9), (0.1, 0.5, 0.9),
+                  label="Estimate"),
+    ),
+    legend_order=("estimate", "interval"),
+)
+assert PlotSpec.from_json(plot_spec.to_json()) == plot_spec
+effect_spec = effect_plot_spec(prediction_result, x, predictor_label="x")
+effect_svg = render_svg(effect_spec)
+assert 'role="img"' in effect_svg and "holocron-plot-spec/v1" in effect_svg
+
 resample_plan = ResamplePlan.k_fold(6, folds=3, repeats=2, seed=7)
 assert ResamplePlan.from_json(resample_plan.to_json()) == resample_plan
 resample_execution = run_resample_plan(
@@ -182,10 +215,20 @@ assert model_calibration.status == "complete"
 assert len(model_calibration.apparent_curve) == 5
 corrected_validation = optimism_correct_validation(model_validation)
 corrected_calibration = optimism_correct_calibration(model_calibration)
+resample_report = report_resample_execution(
+    corrected_validation.resamples,
+    metric_contributors={
+        metric.name: metric.contributing_resamples
+        for metric in corrected_validation.metrics
+    },
+)
 assert corrected_validation.status == "complete"
 assert corrected_validation.metric("mean_squared_error").corrected is not None
 assert corrected_calibration.status == "complete"
 assert len(corrected_calibration.corrected_curve) == 5
+assert resample_report.aggregation_permitted
+assert resample_report.failure_rate == 0.0
+assert len(resample_report.metric_coverage) == 4
 
 binary_x = (-3.0, -2.0, -1.0, 0.0, 1.0, 2.0, 3.0) * 2
 binary_y = (0, 0, 0, 0, 1, 1, 1, 0, 1, 0, 1, 0, 1, 1)

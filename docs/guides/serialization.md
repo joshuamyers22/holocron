@@ -7,6 +7,7 @@ formula, callback, or expression.
 ```python
 # holocron: execute
 from holocron.design import DesignMatrix, DesignSpec
+from holocron.graphics import AxisSpec, LineLayer, PlotSpec
 from holocron.models import OlsResult, fit_ols
 from holocron.validation import ResamplePlan
 
@@ -19,6 +20,16 @@ restored_matrix = DesignMatrix.from_json(matrix.to_json())
 restored_fit = OlsResult.from_json(fit.to_json())
 plan = ResamplePlan.k_fold(5, folds=5, seed=17)
 restored_plan = ResamplePlan.from_json(plan.to_json())
+plot = PlotSpec(
+    "serialized-plot",
+    "custom",
+    "Serialized plot",
+    "A straight line from zero to one.",
+    AxisSpec("x"),
+    AxisSpec("y"),
+    (LineLayer("line", (0.0, 1.0), (0.0, 1.0)),),
+)
+restored_plot = PlotSpec.from_json(plot.to_json())
 
 assert restored_specification == specification
 assert restored_matrix == matrix
@@ -26,6 +37,7 @@ assert restored_fit == fit
 assert restored_fit.design_fingerprint == specification.fingerprint
 assert restored_fit.predict(restored_matrix) == restored_fit.fitted_values
 assert restored_plan == plan
+assert restored_plot == plot
 ```
 
 `to_dict()` returns the schema document, `to_json()` returns its canonical JSON,

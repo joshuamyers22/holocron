@@ -176,3 +176,24 @@ Notable changes are recorded here using semantic versioning.
   backward selection over caller-declared coefficient groups. These owned
   Python contracts remain separate from deferred R `vif`, `pentrace`, and
   `fastbw` compatibility claims.
+- Completed the sixth Phase 6 deliverable with typed resample reports that
+  retain exact successful/failed split IDs, counts and rates, grouped bounded
+  failure reasons, optional per-metric planned/successful coverage, and an
+  explicit complete-only or allow-partial aggregation disposition. Partial
+  executions remain partial, and all-failed executions never permit aggregation.
+- Closed the Phase 6 private-development exit gate after an accountable
+  technical review passed whole-procedure refitting, exact materialized-plan
+  replay, failure-policy, leakage-warning, focused-test, full-check, and
+  installed-artifact criteria. The decision claims no independent approval and
+  does not promote capabilities beyond experimental.
+- Completed the first Phase 7 deliverable with a new `holocron.graphics`
+  namespace for immutable backend-neutral plot specifications: numeric and
+  categorical axes, line/point/band/bar/interval layers, semantic annotations
+  and metadata, legend ordering, required alternative text, and strict
+  canonical JSON. No renderer, graphics dependency, or R graphics parity is
+  introduced.
+- Completed the second Phase 7 deliverable with typed adapters for effects,
+  contrasts, ANOVA, probability/survival validation, calibration, survival
+  curves, and current diagnostics, plus a dependency-free renderer for bounded
+  accessible inline SVG. Semantic and accessibility-contract tests do not yet
+  constitute pixel-baseline, browser-certification, or R graphics parity.

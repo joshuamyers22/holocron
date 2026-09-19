@@ -13,7 +13,7 @@ The project is distributed internally as `holocron-rms` and imported as
 Holocron is experimental and incomplete. Do not use it for consequential
 analysis, inference, prediction, or clinical decisions.
 
-Phases 0–5 are complete for private experimental development. The Phase 3
+Phases 0–6 are complete for private experimental development. The Phase 3
 deliverables cover experimental `ols`,
 Gaussian/identity and binomial/logit `Glm`, and binary `lrm` estimators plus
 their covariance,
@@ -104,7 +104,8 @@ replication. Additional distributions, independent numerical/statistical
 review for capability promotion, and broader survival functionality remain
 deferred. The Phase 5 private-development exit gate is closed.
 
-Phase 6 is underway. Its first five deliverables provide immutable exact
+All six Phase 6 deliverables are implemented within their experimental
+envelopes. They provide immutable exact
 bootstrap, repeated K-fold, and caller-declared resample plans plus
 model-specific fixed-design validation and parametric calibration for OLS and
 binary-logistic results. Every split refits a fresh model, retains separate
@@ -117,14 +118,29 @@ assessment gap, with pairwise contributor counts and fail-closed partial-
 execution behavior. OLS and binary-logistic diagnostics now provide influence
 measures, covariance-correlation VIFs, robust/model uncertainty comparisons,
 bounded explicit penalty traces, and fresh-refit backward selection over
-caller-declared term groups. Failure-rate and partial-resample reporting is
-next; Phase 6 remains open.
+caller-declared term groups. Typed resample reports preserve exact outcome IDs,
+failure rates and grouped reasons, per-metric contributor coverage, and an
+explicit complete-only or allow-partial aggregation disposition. The accountable
+technical completion review passes the Phase 6 private-development exit gate;
+it does not claim independent approval or promote any capability beyond
+experimental. See the
+[Phase 6 completion record](https://github.com/joshuamyers22/holocron/blob/main/governance/PHASE_6_COMPLETION.md).
+
+Phase 7 is underway. Its first two deliverables add immutable backend-neutral plot
+specifications for numeric lines, points, interval bands, categorical bars and
+estimate intervals, semantic annotations and metadata, explicit axis scales,
+legend order, and required alternative text. Plot specifications use strict
+versioned JSON. Typed adapters cover effects, contrasts, ANOVA, validation,
+calibration, survival, and diagnostics; a dependency-free backend renders the
+same specifications as bounded accessible inline SVG. Nomograms and broader
+reporting remain deferred.
 
 ## Library API
 
 Holocron is a typed library and intentionally installs no command-line tools.
 Its current public namespaces are `holocron.design`, `holocron.formula`,
-`holocron.models`, `holocron.validation`, and `holocron.exceptions`:
+`holocron.graphics`, `holocron.models`, `holocron.validation`, and
+`holocron.exceptions`:
 
 ```python
 from holocron.design import DataDistribution, DesignSpec
@@ -146,8 +162,8 @@ restored_fit = type(fit).from_json(fit.to_json())
 depending on global state or the original input iterable.
 
 Design specifications, realized matrices, OLS results, binary-logistic results,
-ordinal results, all three survival result types, and exact resample plans use
-strict versioned data-only JSON. Fitting from a `DesignMatrix`
+ordinal results, all three survival result types, exact resample plans, and plot
+specifications use strict versioned data-only JSON. Fitting from a `DesignMatrix`
 carries its specification fingerprint into the result and checks that identity
 during prediction. The public schemas ship under `holocron/schemas`; arbitrary
 pickle interchange is not supported.

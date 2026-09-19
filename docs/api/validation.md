@@ -2,7 +2,7 @@
 
 # Validation API
 
-Exact resampling, validation metrics, calibration, and optimism correction.
+Resampling, validation, calibration, optimism correction, and reporting.
 
 Import public names from `holocron.validation`. The signatures and docstrings below
 are generated from the installed source during `make docs-check`.
@@ -358,6 +358,42 @@ A bounded failure record for one resample.
 | `exception_type` | `str` |
 | `message` | `str` |
 
+## `ResampleFailureReason`
+
+```python
+class holocron.validation.reporting.ResampleFailureReason(exception_type: str, message: str, count: int, planned_rate: float, split_ids: tuple[str, ...]) -> None
+```
+
+One exact exception-type/message category in a resample execution.
+
+### Attributes
+
+| Name | Type |
+| --- | --- |
+| `exception_type` | `str` |
+| `message` | `str` |
+| `count` | `int` |
+| `planned_rate` | `float` |
+| `split_ids` | `tuple[str, ...]` |
+
+## `ResampleMetricCoverage`
+
+```python
+class holocron.validation.reporting.ResampleMetricCoverage(metric_name: str, contributing_resamples: int, omitted_successes: int, planned_coverage: float, successful_coverage: float | None) -> None
+```
+
+Defined-result coverage for one metric across successful resamples.
+
+### Attributes
+
+| Name | Type |
+| --- | --- |
+| `metric_name` | `str` |
+| `contributing_resamples` | `int` |
+| `omitted_successes` | `int` |
+| `planned_coverage` | `float` |
+| `successful_coverage` | `float | None` |
+
 ## `ResamplePlan`
 
 ```python
@@ -411,6 +447,36 @@ Return the exact versioned resample-plan document.
 ### `to_json(self) -> str`
 
 Serialize the exact plan as canonical non-executable JSON.
+
+## `ResampleReport`
+
+```python
+class holocron.validation.reporting.ResampleReport(plan_fingerprint: str, status: Literal['complete', 'partial', 'failed'], aggregation_policy: Literal['complete-only', 'allow-partial'], aggregation_permitted: bool, planned_resamples: int, successful_resamples: int, failed_resamples: int, success_rate: float, failure_rate: float, successful_split_ids: tuple[str, ...], failed_split_ids: tuple[str, ...], failure_reasons: tuple[holocron.validation.reporting.ResampleFailureReason, ...], metric_coverage: tuple[holocron.validation.reporting.ResampleMetricCoverage, ...]) -> None
+```
+
+Exact execution counts, failure reasons, and aggregation disposition.
+
+### Attributes
+
+| Name | Type |
+| --- | --- |
+| `plan_fingerprint` | `str` |
+| `status` | `ExecutionStatus` |
+| `aggregation_policy` | `AggregationPolicy` |
+| `aggregation_permitted` | `bool` |
+| `planned_resamples` | `int` |
+| `successful_resamples` | `int` |
+| `failed_resamples` | `int` |
+| `success_rate` | `float` |
+| `failure_rate` | `float` |
+| `successful_split_ids` | `tuple[str, ...]` |
+| `failed_split_ids` | `tuple[str, ...]` |
+| `failure_reasons` | `tuple[ResampleFailureReason, ...]` |
+| `metric_coverage` | `tuple[ResampleMetricCoverage, ...]` |
+
+### `is_partial`
+
+Return whether the report covers only a successful subset.
 
 ## `ResampleSplit`
 
@@ -540,6 +606,15 @@ Subtract the mean training-assessment gap from apparent performance.
 Metrics that are undefined on either side of a successful split are omitted
 from that metric's pairwise mean. The contributing count therefore belongs
 to each metric rather than to the result as a whole.
+
+## `report_resample_execution(execution: holocron.validation.resampling.ResampleExecution[~ReportT], *, allow_partial: bool = False, metric_contributors: collections.abc.Mapping[str, int] | None = None) -> holocron.validation.reporting.ResampleReport`
+
+Summarize exact outcomes without treating partial execution as complete.
+
+Reporting never aggregates callback values. ``allow_partial`` records an
+explicit aggregation disposition for downstream callers; it cannot permit
+aggregation when every resample failed. Optional metric contributor counts
+distinguish undefined successful-pair metrics from failed resamples.
 
 ## `run_resample_plan(plan: holocron.validation.resampling.ResamplePlan, procedure: collections.abc.Callable[[holocron.validation.resampling.ResampleSplit], ~ResultT], *, failure_policy: Literal['raise', 'record'] = 'raise') -> holocron.validation.resampling.ResampleExecution[~ResultT]`
 

@@ -1,6 +1,6 @@
 # Independent Python Implementation of `rms`: Production Project Plan
 
-**Status:** Active — Phases 0–5 complete for private experimental development; Phase 6 is underway with its first five deliverables complete, including bounded OLS/binary diagnostics, penalty tracing, and selection helpers
+**Status:** Active — Phases 0–6 complete for private experimental development; Phase 7 is underway with plot specifications plus model adapters and SVG rendering complete
 **Plan date:** 2026-09-17  
 **Reference implementation:** Frank Harrell's R package `rms`  
 **Project name:** `holocron`  
@@ -768,6 +768,9 @@ simulation evidence on 2026-09-18. The Phase 5 exit gate is closed; see
 
 ### Phase 6 — Validation, calibration, diagnostics, and model summaries (18–28 weeks)
 
+**Status:** Complete for the private experimental envelope. See the
+[Phase 6 completion record](governance/PHASE_6_COMPLETION.md).
+
 **Deliverables**
 
 - common resampling engine with exact resample plans;
@@ -781,7 +784,7 @@ simulation evidence on 2026-09-18. The Phase 5 exit gate is closed; see
 
 Whole-procedure refitting is proven inside each resample; stochastic equivalence and failure policies pass; examples prevent common leakage and apparent-calibration errors.
 
-**Implementation progress:** The first five deliverables are complete within
+**Implementation progress:** All six deliverables are complete within
 their experimental envelopes. `ResamplePlan` provides bounded, immutable, canonical
 bootstrap, repeated K-fold, and caller-declared exact schedules with stable
 split identity and strict JSON reconstruction. `run_resample_plan` invokes a
@@ -810,15 +813,34 @@ VIFs and robust/model standard-error comparisons cover the same families.
 and selects a declared constant-free AIC or BIC, while `backward_select`
 performs bounded fresh-refit Wald elimination over a complete caller-declared
 partition of slope coefficients. These are owned Python contracts and do not
-advance R `vif`, `pentrace`, or `fastbw` compatibility dispositions. Failure-
-rate and partial-resample reporting and the exit gate stay open. See
+advance R `vif`, `pentrace`, or `fastbw` compatibility dispositions.
+`report_resample_execution` now preserves exact success/failure IDs, counts and
+rates, grouped exception-type/message reasons, optional metric contributor
+coverage, and a machine-readable complete-only or allow-partial aggregation
+disposition. Allowing partial aggregation never changes a partial status or
+permits an all-failed execution. The accountable technical completion review
+passes the private-development exit gate without claiming independent approval
+or capability promotion. See
 `governance/PHASE_6_RESAMPLING.md`,
 `governance/PHASE_6_MODEL_VALIDATION.md`, and
 `governance/PHASE_6_VALIDATION_METRICS.md`, and
 `governance/PHASE_6_OPTIMISM_CORRECTION.md`, and
-`governance/PHASE_6_DIAGNOSTICS_SELECTION.md`.
+`governance/PHASE_6_DIAGNOSTICS_SELECTION.md`, and
+`governance/PHASE_6_FAILURE_REPORTING.md`, and
+`governance/PHASE_6_COMPLETION.md`.
 
 ### Phase 7 — Graphics, nomograms, reporting, and documentation (16–24 weeks)
+
+**Implementation progress:** The first two deliverables are complete within
+their experimental envelopes. `holocron.graphics.PlotSpec` provides bounded numeric
+and categorical axes and layers, interval bands, categorical estimate
+intervals, semantic roles, annotations, metadata, legend ordering, required
+alternative text, canonical JSON, and stable fingerprints without importing a
+rendering backend. Typed adapters now cover effects, contrasts, ANOVA,
+validation, calibration, survival, and diagnostics, and the owned renderer
+emits bounded accessible inline SVG from `PlotSpec`. The next deliverable is
+nomogram geometry and rendering. See `governance/PHASE_7_PLOT_SPECIFICATIONS.md`
+and `governance/PHASE_7_ADAPTERS_RENDERERS.md`.
 
 **Deliverables**
 

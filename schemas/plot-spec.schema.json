@@ -1,0 +1,201 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/joshuamyers22/holocron/schemas/plot-spec.schema.json",
+  "type": "object",
+  "properties": {
+    "schema_version": {"const": "holocron-plot-spec/v1"},
+    "plot_id": {"$ref": "#/$defs/identifier"},
+    "kind": {"enum": ["effect", "contrast", "anova", "validation", "calibration", "survival", "diagnostic", "nomogram", "custom"]},
+    "title": {"$ref": "#/$defs/text"},
+    "subtitle": {"$ref": "#/$defs/nullableText"},
+    "caption": {"$ref": "#/$defs/nullableText"},
+    "alt_text": {"$ref": "#/$defs/text"},
+    "x_axis": {"$ref": "#/$defs/axis"},
+    "y_axis": {"$ref": "#/$defs/axis"},
+    "layers": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 256,
+      "items": {"$ref": "#/$defs/layer"}
+    },
+    "annotations": {
+      "type": "array",
+      "maxItems": 256,
+      "items": {"$ref": "#/$defs/annotation"}
+    },
+    "metadata": {
+      "type": "array",
+      "maxItems": 128,
+      "items": {"$ref": "#/$defs/metadata"}
+    },
+    "show_legend": {"type": "boolean"},
+    "legend_order": {
+      "type": "array",
+      "maxItems": 256,
+      "uniqueItems": true,
+      "items": {"$ref": "#/$defs/identifier"}
+    }
+  },
+  "required": ["schema_version", "plot_id", "kind", "title", "subtitle", "caption", "alt_text", "x_axis", "y_axis", "layers", "annotations", "metadata", "show_legend", "legend_order"],
+  "additionalProperties": false,
+  "$defs": {
+    "identifier": {"type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,127}$"},
+    "text": {"type": "string", "minLength": 1, "maxLength": 4096},
+    "nullableText": {
+      "oneOf": [
+        {"type": "null"},
+        {"$ref": "#/$defs/text"}
+      ]
+    },
+    "numbers": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 100000,
+      "items": {"type": "number"}
+    },
+    "categories": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 100000,
+      "uniqueItems": true,
+      "items": {"$ref": "#/$defs/text"}
+    },
+    "axis": {
+      "type": "object",
+      "properties": {
+        "label": {"$ref": "#/$defs/text"},
+        "scale": {"enum": ["linear", "log", "logit", "probability", "categorical"]},
+        "limits": {
+          "oneOf": [
+            {"type": "null"},
+            {"type": "array", "minItems": 2, "maxItems": 2, "items": {"type": "number"}}
+          ]
+        },
+        "ticks": {"type": "array", "maxItems": 100000, "items": {"type": "number"}},
+        "tick_labels": {"type": "array", "maxItems": 100000, "items": {"$ref": "#/$defs/text"}},
+        "unit": {"$ref": "#/$defs/nullableText"}
+      },
+      "required": ["label", "scale", "limits", "ticks", "tick_labels", "unit"],
+      "additionalProperties": false
+    },
+    "role": {"enum": ["estimate", "interval", "observed", "reference", "comparison", "diagnostic"]},
+    "orientation": {"enum": ["vertical", "horizontal"]},
+    "lineLayer": {
+      "type": "object",
+      "properties": {
+        "layer_type": {"const": "line"},
+        "layer_id": {"$ref": "#/$defs/identifier"},
+        "label": {"$ref": "#/$defs/nullableText"},
+        "role": {"$ref": "#/$defs/role"},
+        "x": {"$ref": "#/$defs/numbers"},
+        "y": {"$ref": "#/$defs/numbers"},
+        "interpolation": {"enum": ["linear", "step"]}
+      },
+      "required": ["layer_type", "layer_id", "label", "role", "x", "y", "interpolation"],
+      "additionalProperties": false
+    },
+    "pointLayer": {
+      "type": "object",
+      "properties": {
+        "layer_type": {"const": "point"},
+        "layer_id": {"$ref": "#/$defs/identifier"},
+        "label": {"$ref": "#/$defs/nullableText"},
+        "role": {"$ref": "#/$defs/role"},
+        "x": {"$ref": "#/$defs/numbers"},
+        "y": {"$ref": "#/$defs/numbers"}
+      },
+      "required": ["layer_type", "layer_id", "label", "role", "x", "y"],
+      "additionalProperties": false
+    },
+    "bandLayer": {
+      "type": "object",
+      "properties": {
+        "layer_type": {"const": "band"},
+        "layer_id": {"$ref": "#/$defs/identifier"},
+        "label": {"$ref": "#/$defs/nullableText"},
+        "role": {"$ref": "#/$defs/role"},
+        "x": {"$ref": "#/$defs/numbers"},
+        "lower": {"$ref": "#/$defs/numbers"},
+        "upper": {"$ref": "#/$defs/numbers"}
+      },
+      "required": ["layer_type", "layer_id", "label", "role", "x", "lower", "upper"],
+      "additionalProperties": false
+    },
+    "barLayer": {
+      "type": "object",
+      "properties": {
+        "layer_type": {"const": "bar"},
+        "layer_id": {"$ref": "#/$defs/identifier"},
+        "label": {"$ref": "#/$defs/nullableText"},
+        "role": {"$ref": "#/$defs/role"},
+        "categories": {"$ref": "#/$defs/categories"},
+        "values": {"$ref": "#/$defs/numbers"},
+        "orientation": {"$ref": "#/$defs/orientation"}
+      },
+      "required": ["layer_type", "layer_id", "label", "role", "categories", "values", "orientation"],
+      "additionalProperties": false
+    },
+    "intervalLayer": {
+      "type": "object",
+      "properties": {
+        "layer_type": {"const": "interval"},
+        "layer_id": {"$ref": "#/$defs/identifier"},
+        "label": {"$ref": "#/$defs/nullableText"},
+        "role": {"$ref": "#/$defs/role"},
+        "categories": {"$ref": "#/$defs/categories"},
+        "estimates": {"$ref": "#/$defs/numbers"},
+        "lower": {"$ref": "#/$defs/numbers"},
+        "upper": {"$ref": "#/$defs/numbers"},
+        "orientation": {"$ref": "#/$defs/orientation"}
+      },
+      "required": ["layer_type", "layer_id", "label", "role", "categories", "estimates", "lower", "upper", "orientation"],
+      "additionalProperties": false
+    },
+    "layer": {
+      "oneOf": [
+        {"$ref": "#/$defs/lineLayer"},
+        {"$ref": "#/$defs/pointLayer"},
+        {"$ref": "#/$defs/bandLayer"},
+        {"$ref": "#/$defs/barLayer"},
+        {"$ref": "#/$defs/intervalLayer"}
+      ]
+    },
+    "referenceLine": {
+      "type": "object",
+      "properties": {
+        "annotation_type": {"const": "reference-line"},
+        "axis": {"enum": ["x", "y"]},
+        "value": {"type": "number"},
+        "label": {"$ref": "#/$defs/nullableText"}
+      },
+      "required": ["annotation_type", "axis", "value", "label"],
+      "additionalProperties": false
+    },
+    "textAnnotation": {
+      "type": "object",
+      "properties": {
+        "annotation_type": {"const": "text"},
+        "x": {"type": "number"},
+        "y": {"type": "number"},
+        "text": {"$ref": "#/$defs/text"}
+      },
+      "required": ["annotation_type", "x", "y", "text"],
+      "additionalProperties": false
+    },
+    "annotation": {
+      "oneOf": [
+        {"$ref": "#/$defs/referenceLine"},
+        {"$ref": "#/$defs/textAnnotation"}
+      ]
+    },
+    "metadata": {
+      "type": "object",
+      "properties": {
+        "key": {"$ref": "#/$defs/identifier"},
+        "value": {"$ref": "#/$defs/text"}
+      },
+      "required": ["key", "value"],
+      "additionalProperties": false
+    }
+  }
+}

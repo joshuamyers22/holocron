@@ -59,5 +59,6 @@ part of the learned procedure.
 
 Ordinal, survival, and penalized-fit influence; exact binary case deletion;
 dense or adaptive penalty search; hierarchy inference; and penalized selection
-remain deferred. Failure-rate and partial-resample reporting is the final Phase
-6 deliverable. Phase 6 and its exit gate remain open.
+remain deferred. The final failure-rate and partial-resample reporting
+deliverable is accepted in `PHASE_6_FAILURE_REPORTING.md`. The Phase 6
+completion review subsequently passes in `PHASE_6_COMPLETION.md`.

@@ -1,4 +1,4 @@
-"""Exact resampling, validation metrics, calibration, and optimism correction."""
+"""Resampling, validation, calibration, optimism correction, and reporting."""
 
 from holocron.models.survival_validation import (
     SurvivalCalibrationGroup,
@@ -30,6 +30,12 @@ from holocron.validation.probability import (
     ProbabilityValidationResult,
     validate_probabilities,
 )
+from holocron.validation.reporting import (
+    ResampleFailureReason,
+    ResampleMetricCoverage,
+    ResampleReport,
+    report_resample_execution,
+)
 from holocron.validation.resampling import (
     ResampleExecution,
     ResampleFailure,
@@ -56,7 +62,10 @@ __all__ = [
     "ProbabilityValidationResult",
     "ResampleExecution",
     "ResampleFailure",
+    "ResampleFailureReason",
+    "ResampleMetricCoverage",
     "ResamplePlan",
+    "ResampleReport",
     "ResampleSplit",
     "ResampleSuccess",
     "SurvivalCalibrationGroup",
@@ -65,6 +74,7 @@ __all__ = [
     "calibrate_model",
     "optimism_correct_calibration",
     "optimism_correct_validation",
+    "report_resample_execution",
     "run_resample_plan",
     "take_rows",
     "validate_model",

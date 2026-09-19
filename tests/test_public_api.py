@@ -8,7 +8,7 @@ from pathlib import Path
 from typing import cast
 
 import holocron
-from holocron import design, exceptions, formula, models, validation
+from holocron import design, exceptions, formula, graphics, models, validation
 
 
 class PublicApiTests(unittest.TestCase):
@@ -20,6 +20,7 @@ class PublicApiTests(unittest.TestCase):
                 "design",
                 "exceptions",
                 "formula",
+                "graphics",
                 "models",
                 "validation",
             ),
@@ -139,6 +140,31 @@ class PublicApiTests(unittest.TestCase):
             ],
         )
 
+    def test_graphics_namespace_exports_supported_plot_contracts(self) -> None:
+        self.assertEqual(
+            graphics.__all__,
+            [
+                "AxisSpec",
+                "BandLayer",
+                "BarLayer",
+                "IntervalLayer",
+                "LineLayer",
+                "PlotMetadata",
+                "PlotSpec",
+                "PointLayer",
+                "ReferenceLine",
+                "TextAnnotation",
+                "anova_plot_spec",
+                "calibration_plot_spec",
+                "contrast_plot_spec",
+                "diagnostic_plot_spec",
+                "effect_plot_spec",
+                "render_svg",
+                "survival_plot_spec",
+                "validation_plot_spec",
+            ],
+        )
+
     def test_validation_namespace_exports_only_supported_objects(self) -> None:
         self.assertEqual(
             validation.__all__,
@@ -158,7 +184,10 @@ class PublicApiTests(unittest.TestCase):
                 "ProbabilityValidationResult",
                 "ResampleExecution",
                 "ResampleFailure",
+                "ResampleFailureReason",
+                "ResampleMetricCoverage",
                 "ResamplePlan",
+                "ResampleReport",
                 "ResampleSplit",
                 "ResampleSuccess",
                 "SurvivalCalibrationGroup",
@@ -167,6 +196,7 @@ class PublicApiTests(unittest.TestCase):
                 "calibrate_model",
                 "optimism_correct_calibration",
                 "optimism_correct_validation",
+                "report_resample_execution",
                 "run_resample_plan",
                 "take_rows",
                 "validate_model",

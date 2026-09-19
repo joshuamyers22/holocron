@@ -75,6 +75,60 @@ The default failure policy stops on the first failed whole-procedure refit.
 Callers must declare an acceptable failure policy before evaluation rather than
 discarding failed resamples after inspecting results.
 
+## Report failures and partial coverage
+
+`report_resample_execution` turns retained outcomes into a typed, auditable
+summary. It preserves exact successful and failed split IDs, groups equal
+exception-type/message pairs, reports each reason as a fraction of all planned
+resamples, and optionally records per-metric contributor coverage.
+
+```python
+# holocron: execute
+from holocron.validation import (
+    ResamplePlan,
+    report_resample_execution,
+    run_resample_plan,
+)
+
+plan = ResamplePlan.exact(
+    4,
+    (
+        ((0, 1, 2), (3,)),
+        ((0, 1, 3), (2,)),
+        ((0, 2, 3), (1,)),
+    ),
+)
+
+
+def sometimes_fails(split):
+    if split.split_id == "exact-2":
+        raise ValueError("single-class assessment")
+    return split.split_id
+
+
+execution = run_resample_plan(plan, sometimes_fails, failure_policy="record")
+strict_report = report_resample_execution(
+    execution,
+    metric_contributors={"brier_score": 2, "dxy": 1},
+)
+partial_report = report_resample_execution(execution, allow_partial=True)
+
+assert strict_report.status == "partial"
+assert strict_report.failure_rate == 1.0 / 3.0
+assert not strict_report.aggregation_permitted
+assert partial_report.aggregation_permitted
+assert strict_report.failure_reasons[0].exception_type == "ValueError"
+assert strict_report.metric_coverage[0].metric_name == "brier_score"
+```
+
+Reporting and permission are separate. The default `complete-only` policy marks
+a partial run ineligible for downstream aggregation. `allow_partial=True`
+records a deliberate opt-in but leaves the status `partial`, preserves the
+failure rate, and never permits aggregation when every resample failed.
+`metric_contributors` counts defined metric pairs among successful resamples;
+the report separately exposes planned coverage and coverage among successes so
+undefined metrics cannot be mistaken for refit failures.
+
 ## Validate a supported fixed design
 
 `validate_model` applies the exact plan to an existing OLS or binary-logistic
@@ -145,4 +199,6 @@ smooth calibration, parallel or distributed execution, stratified/grouped/
 time-series generators, or serialization of arbitrary callback results. Exact
 custom plans can carry externally constructed schedules, but callers remain
 responsible for proving their sampling semantics and for keeping every learned
-step inside the callback.
+step inside the callback. A partial-report opt-in does not establish that
+failures are random or harmless and does not repair selection bias from omitted
+resamples.

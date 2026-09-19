@@ -28,7 +28,8 @@ The current experimental surface supports only:
   accelerated-failure-time, and Kaplan–Meier estimators with typed curves,
   means, and event-time quantiles; and
 - immutable exact bootstrap, repeated K-fold, and caller-declared resample
-  plans with whole-procedure execution and explicit partial-failure status.
+  plans with whole-procedure execution, explicit partial-failure status, and
+  typed failure-rate/reason and metric-coverage reporting.
 - model-independent weighted binary-probability metrics and right-censored
   fixed-horizon survival validation with grouped calibration, threshold
   classification, and integrated summaries.
@@ -36,13 +37,21 @@ The current experimental surface supports only:
   correction over retained OLS/binary training-assessment pairs.
 - OLS/binary influence, covariance-correlation VIF, robust/model uncertainty,
   bounded scalar penalty-trace, and declared-group backward-selection helpers.
+- immutable backend-neutral numeric and categorical plot specifications with
+  semantic layers, annotations, metadata, and required alternative text.
+- typed model/result adapters and dependency-free accessible inline SVG for
+  effects, contrasts, ANOVA, validation, calibration, survival, and diagnostics.
 
 The core estimator envelope is also checked by seven seeded simulation
 scenarios totaling 2,620 outer replications and a 16-case numerical edge corpus.
-Phases 3, 4, and 5 are complete for private experimental development following
-their scoped independent statistical reviews. The Phase 4 approval covers the
+Phases 3, 4, 5, and 6 are complete for private experimental development. Phases
+3–5 passed their scoped independent statistical reviews; Phase 6 passed its
+accountable technical exit review without claiming independent approval. The Phase 4 approval covers the
 ordinal, censoring, random-effects, and documented parity-exception evidence;
-the Phase 5 approval covers the declared survival scope.
+the Phase 5 approval covers the declared survival scope, and Phase 6 covers its
+declared resampling, validation, diagnostics, and failure-reporting envelope.
+Phase 7 is underway with plot specifications, typed result adapters, and its
+owned SVG renderer complete; nomogram geometry and later reporting remain open.
 Capability promotion,
 consequential use, and external distribution remain separately blocked.
 
@@ -78,6 +87,7 @@ surface and evidence links.
 - [Create and execute exact resample plans](guides/resampling.md).
 - [Validate binary probabilities and survival predictions](guides/validation-metrics.md).
 - [Diagnose and compare supported fitted models](guides/diagnostics-and-selection.md).
+- [Build backend-neutral plot specifications](guides/plot-specifications.md).
 - [Understand the interpretation boundary](interpretation-and-limitations.md).
 - [Compare Python and R concepts](guides/r-migration.md).
 - [Contribute through the frozen development environment](development.md).
