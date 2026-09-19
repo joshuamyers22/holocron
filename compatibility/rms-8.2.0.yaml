@@ -2579,7 +2579,7 @@
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "An owned SVG renderer exists for Holocron NomogramGeometry, but it is not mapped to plot.nomogram because R geometry/styling parity and visual-regression evidence remain absent."
+      "known_differences": "An owned SVG renderer and canonical Holocron snapshot corpus exist for NomogramGeometry, but it is not mapped to plot.nomogram because R geometry/styling parity and cross-implementation visual-regression evidence remain absent."
     },
     {
       "id": "s3_method:plot.pentrace",

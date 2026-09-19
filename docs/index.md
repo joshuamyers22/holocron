@@ -51,16 +51,20 @@ The current experimental surface supports only:
 
 The core estimator envelope is also checked by seven seeded simulation
 scenarios totaling 2,620 outer replications and a 16-case numerical edge corpus.
-Phases 3, 4, 5, and 6 are complete for private experimental development. Phases
-3–5 passed their scoped independent statistical reviews; Phase 6 passed its
-accountable technical exit review without claiming independent approval. The Phase 4 approval covers the
+Phases 3–7 are complete for private experimental development. Phases
+3–5 passed their scoped independent statistical reviews; Phases 6–7 passed
+accountable technical exit reviews without claiming independent approval. The
+Phase 4 approval covers the
 ordinal, censoring, random-effects, and documented parity-exception evidence;
-the Phase 5 approval covers the declared survival scope, and Phase 6 covers its
-declared resampling, validation, diagnostics, and failure-reporting envelope.
+the Phase 5 approval covers the declared survival scope, Phase 6 covers its
+declared resampling, validation, diagnostics, and failure-reporting envelope,
+and Phase 7 covers its owned presentation and documentation envelope.
 All six Phase 7 deliverables are implemented within their experimental
 envelopes: plot specifications, typed result adapters/SVG, additive nomogram
 geometry/rendering, structured table/LaTeX reporting, five tested galleries,
-and deterministic SVG assurance. Its completion review remains open.
+and deterministic SVG assurance. Its accountable technical exit review passes
+without claiming independent approval or R presentation-method parity. Phase 8
+is next.
 Capability promotion,
 consequential use, and external distribution remain separately blocked.
 

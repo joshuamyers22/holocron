@@ -102,7 +102,8 @@ exact; approximate comparison is restricted to allowlisted numerical paths.
   confidence intervals, resampled transformation learning, and aliased fits;
 - GLM families/links outside Gaussian/identity and binomial/logit, ordinal
   weights/offsets/partial proportional odds, marginal random-effects
-  prediction, plotting, nomograms, and a dataframe adapter contract.
+  prediction, R plotting/nomogram method parity, and a dataframe adapter
+  contract.
 
 Some unsupported families already have committed R oracle outputs. Those files
 freeze future comparison targets and do not imply a Python implementation.
@@ -137,9 +138,10 @@ Plot specifications preserve declared source values and semantic intent; they
 do not validate the statistical procedure that produced those values. Typed
 adapters do not recompute estimates. The SVG backend preserves required
 alternative text in linked title/description elements and uses semantic layer
-groups, but this is not browser or assistive-technology certification. No
-pixel-baseline visual-regression evidence, interactive renderer, custom theme,
-or R graphics parity is currently supported.
+groups. Five exact canonical SVG fixtures provide document-level renderer
+regression evidence, but this is not pixel/raster equivalence, browser or
+assistive-technology certification, an interactive renderer, a custom theme,
+or R graphics parity.
 
 Nomogram points are exact only within the declared additive model geometry.
 They vary each predictor while holding all others at `DataDistribution`

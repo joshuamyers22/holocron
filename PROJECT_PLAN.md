@@ -1,6 +1,6 @@
 # Independent Python Implementation of `rms`: Production Project Plan
 
-**Status:** Active — Phases 0–6 complete for private experimental development; all six Phase 7 deliverables are implemented and its completion review remains open
+**Status:** Active — Phases 0–7 complete for private experimental development; Phase 8 is next
 **Plan date:** 2026-09-17  
 **Reference implementation:** Frank Harrell's R package `rms`  
 **Project name:** `holocron`  
@@ -847,13 +847,17 @@ cover effects/inference, validation/calibration, survival, diagnostics, and
 nomogram/reporting tasks with explicit interpretation boundaries. Structural
 accessibility audits and five exact, human-reviewable SVG fixtures now cover all
 supported plot layers, scales/orientations, and nomogram rendering. The next
-project-plan item is the Phase 7 completion review and exit-gate decision. See
+project-plan item is Phase 8 extended models and namespace completion. The
+accountable technical completion review passes the Phase 7 private-development
+exit gate without claiming independent approval, R presentation-method parity,
+or capability promotion. See
 `governance/PHASE_7_PLOT_SPECIFICATIONS.md`,
 `governance/PHASE_7_ADAPTERS_RENDERERS.md`,
 `governance/PHASE_7_NOMOGRAMS.md`,
 `governance/PHASE_7_STRUCTURED_REPORTING.md`,
-`governance/PHASE_7_DOCUMENTATION_GALLERIES.md`, and
-`governance/PHASE_7_SVG_ASSURANCE.md`.
+`governance/PHASE_7_DOCUMENTATION_GALLERIES.md`,
+`governance/PHASE_7_SVG_ASSURANCE.md`, and
+`governance/PHASE_7_COMPLETION.md`.
 
 **Deliverables**
 

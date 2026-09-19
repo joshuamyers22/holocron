@@ -222,3 +222,11 @@ Notable changes are recorded here using semantic versioning.
   orientations, annotations/legends, and nomograms. The gate is canonical SVG
   assurance, not browser, rasterization, assistive-technology, WCAG, or R
   graphics certification.
+- Closed the Phase 7 private-development exit gate after an accountable
+  technical review passed plot-source preservation within capability-level
+  parity boundaries, renderer semantics/accessibility, five canonical SVG
+  fixtures, five manifest-bound executable galleries, the 31-test focused
+  suite, the 189-test full gate, and clean wheel/sdist installation. The
+  decision claims no independent approval, R presentation-method parity,
+  browser/WCAG certification, capability promotion, consequential-use
+  authority, or external-distribution approval.

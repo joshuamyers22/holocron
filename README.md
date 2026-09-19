@@ -13,7 +13,7 @@ The project is distributed internally as `holocron-rms` and imported as
 Holocron is experimental and incomplete. Do not use it for consequential
 analysis, inference, prediction, or clinical decisions.
 
-Phases 0–6 are complete for private experimental development. The Phase 3
+Phases 0–7 are complete for private experimental development. The Phase 3
 deliverables cover experimental `ols`,
 Gaussian/identity and binomial/logit `Glm`, and binary `lrm` estimators plus
 their covariance,
@@ -143,7 +143,10 @@ and inference, validation and calibration, survival, diagnostics, and combined
 nomogram/reporting workflows. Accessibility and visual-regression assurance
 now combines a fail-closed structural SVG audit with five exact,
 human-reviewable golden fixtures spanning supported plot layers, axes,
-orientations, and nomograms. The Phase 7 completion review remains open.
+orientations, and nomograms. The accountable technical completion review passes
+the Phase 7 private-development exit gate without claiming independent approval
+or R presentation-method parity. See the
+[Phase 7 completion record](https://github.com/joshuamyers22/holocron/blob/main/governance/PHASE_7_COMPLETION.md).
 
 ## Library API
 

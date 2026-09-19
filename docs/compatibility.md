@@ -315,7 +315,7 @@ in the pinned namespace. Counts by tier are A: 32, B: 33, C: 26, D: 190.
 | `plot.contrast.rms` | s3_method | — | deferred | Phase 7 | 0 | — | Not yet implemented. |
 | `plot.gIndex` | s3_method | — | deferred | Phase 7 | 0 | — | Not yet implemented. |
 | `plot.lrm.partial` | s3_method | — | deferred | Phase 7 | 0 | — | Not yet implemented. |
-| `plot.nomogram` | s3_method | — | deferred | Phase 7 | 0 | — | An owned SVG renderer exists for Holocron NomogramGeometry, but it is not mapped to plot.nomogram because R geometry/styling parity and visual-regression evidence remain absent. |
+| `plot.nomogram` | s3_method | — | deferred | Phase 7 | 0 | — | An owned SVG renderer and canonical Holocron snapshot corpus exist for NomogramGeometry, but it is not mapped to plot.nomogram because R geometry/styling parity and cross-implementation visual-regression evidence remain absent. |
 | `plot.pentrace` | s3_method | — | deferred | Phase 7 | 0 | — | Not yet implemented. |
 | `plot.rexVar` | s3_method | — | deferred | Phase 7 | 0 | — | Not yet implemented. |
 | `plot.sensuc` | s3_method | — | deferred | Phase 7 | 0 | — | Not yet implemented. |

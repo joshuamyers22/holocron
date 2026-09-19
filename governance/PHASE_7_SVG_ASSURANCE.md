@@ -48,7 +48,7 @@ page-level accessibility testing, WCAG certification, publication-quality
 review, or R graphics parity. Exact snapshots intentionally cover owned SVG
 serialization rather than platform-dependent pixels.
 
-All six Phase 7 deliverables are now implemented within their declared
-experimental envelopes. The next project-plan item is the Phase 7 completion
-review and exit-gate decision; that review remains open and is not implied by
-this deliverable acceptance.
+All six Phase 7 deliverables are implemented within their declared experimental
+envelopes. The subsequent completion review is recorded in
+`governance/PHASE_7_COMPLETION.md`; it passes the private-development exit gate
+without changing this deliverable's boundaries.
