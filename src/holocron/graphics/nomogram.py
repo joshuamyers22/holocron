@@ -899,7 +899,9 @@ def render_nomogram_svg(
             "height": str(effective_height),
             "viewBox": f"0 0 {width} {effective_height}",
             "role": "img",
+            "aria-roledescription": "nomogram",
             "aria-labelledby": f"{title_id} {description_id}",
+            "focusable": "false",
         },
     )
     _element(root, "title", {"id": title_id}, geometry.title)

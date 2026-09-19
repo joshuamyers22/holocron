@@ -26,12 +26,20 @@ from holocron.graphics.specification import (
 
 _SVG = "http://www.w3.org/2000/svg"
 _COLORS = {
-    "estimate": "#0072B2",
-    "interval": "#56B4E9",
-    "observed": "#009E73",
+    "estimate": "#005A8C",
+    "interval": "#236A8D",
+    "observed": "#007A5A",
     "reference": "#4D4D4D",
-    "comparison": "#D55E00",
-    "diagnostic": "#CC79A7",
+    "comparison": "#A63F00",
+    "diagnostic": "#8F4B78",
+}
+_DASH_PATTERNS = {
+    "estimate": "none",
+    "interval": "3 2",
+    "observed": "2 3",
+    "reference": "6 4",
+    "comparison": "8 3",
+    "diagnostic": "10 3 2 3",
 }
 
 
@@ -248,7 +256,14 @@ def _draw_numeric_layers(
             _element(
                 group,
                 "polygon",
-                {"points": points, "fill": color, "fill-opacity": "0.24"},
+                {
+                    "points": points,
+                    "fill": color,
+                    "fill-opacity": "0.18",
+                    "stroke": color,
+                    "stroke-width": "1.25",
+                    "stroke-dasharray": _DASH_PATTERNS[layer.role],
+                },
             )
         elif isinstance(layer, LineLayer):
             _element(
@@ -265,7 +280,7 @@ def _draw_numeric_layers(
                     "fill": "none",
                     "stroke": color,
                     "stroke-width": "2.25",
-                    "stroke-dasharray": "6 4" if layer.role == "reference" else "none",
+                    "stroke-dasharray": _DASH_PATTERNS[layer.role],
                 },
             )
         elif isinstance(layer, PointLayer):
@@ -331,7 +346,16 @@ def _draw_categorical_layers(
                         "height": _coordinate(max(0.5, abs(endpoint - baseline))),
                     }
                 _element(
-                    group, "rect", {**attrs, "fill": color, "fill-opacity": "0.82"}
+                    group,
+                    "rect",
+                    {
+                        **attrs,
+                        "fill": color,
+                        "fill-opacity": "0.78",
+                        "stroke": color,
+                        "stroke-width": "1",
+                        "stroke-dasharray": _DASH_PATTERNS[layer.role],
+                    },
                 )
         elif isinstance(layer, IntervalLayer):
             count = len(interval_layers)
@@ -366,6 +390,7 @@ def _draw_categorical_layers(
                             "y2": _coordinate(center),
                             "stroke": color,
                             "stroke-width": "2",
+                            "stroke-dasharray": _DASH_PATTERNS[layer.role],
                         },
                     )
                     _element(
@@ -394,6 +419,7 @@ def _draw_categorical_layers(
                             "y2": _coordinate(y2),
                             "stroke": color,
                             "stroke-width": "2",
+                            "stroke-dasharray": _DASH_PATTERNS[layer.role],
                         },
                     )
                     _element(
@@ -488,6 +514,7 @@ def _draw_legend(root: ET.Element, spec: PlotSpec, frame: _Frame) -> None:
                 "y2": _coordinate(row_y),
                 "stroke": _COLORS[layer.role],
                 "stroke-width": "4",
+                "stroke-dasharray": _DASH_PATTERNS[layer.role],
             },
         )
         _element(
@@ -529,7 +556,9 @@ def render_svg(spec: PlotSpec, *, width: int = 800, height: int = 520) -> str:
             "height": str(height),
             "viewBox": f"0 0 {width} {height}",
             "role": "img",
+            "aria-roledescription": "chart",
             "aria-labelledby": f"{title_id} {description_id}",
+            "focusable": "false",
         },
     )
     _element(root, "title", {"id": title_id}, spec.title)

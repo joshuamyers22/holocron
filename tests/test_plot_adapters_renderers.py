@@ -226,6 +226,8 @@ class SvgRendererTests(unittest.TestCase):
 
         self.assertEqual(svg, render_svg(spec))
         self.assertEqual(root.attrib["role"], "img")
+        self.assertEqual(root.attrib["aria-roledescription"], "chart")
+        self.assertEqual(root.attrib["focusable"], "false")
         self.assertEqual(title.text, "Terms < effects")
         self.assertEqual(description.text, spec.alt_text)
         self.assertNotIn("<script", svg.lower())

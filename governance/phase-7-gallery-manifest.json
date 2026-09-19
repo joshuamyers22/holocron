@@ -1,0 +1,100 @@
+{
+  "schema_version": "holocron-documentation-gallery/v1",
+  "galleries": [
+    {
+      "gallery_id": "effects-inference",
+      "path": "docs/examples/gallery/effects-and-inference.md",
+      "task": "Fit an adjusted model and communicate effects, contrasts, and term tests.",
+      "required_outputs": [
+        "design_spec",
+        "fitted_model",
+        "prediction_result",
+        "effect_spec",
+        "effect_svg",
+        "contrast_result",
+        "contrast_spec",
+        "contrast_svg",
+        "anova_result",
+        "anova_spec",
+        "anova_svg",
+        "summary_table",
+        "summary_latex"
+      ]
+    },
+    {
+      "gallery_id": "validation-calibration",
+      "path": "docs/examples/gallery/validation-and-calibration.md",
+      "task": "Run exact-plan validation and communicate optimism-corrected performance and calibration.",
+      "required_outputs": [
+        "plan",
+        "validation",
+        "calibration",
+        "corrected_validation",
+        "corrected_calibration",
+        "validation_spec",
+        "calibration_spec",
+        "validation_svg",
+        "calibration_svg",
+        "validation_table_spec",
+        "validation_latex",
+        "resample_report",
+        "resample_table",
+        "resample_latex"
+      ]
+    },
+    {
+      "gallery_id": "survival",
+      "path": "docs/examples/gallery/survival.md",
+      "task": "Estimate survival curves and communicate fixed-horizon accuracy and calibration.",
+      "required_outputs": [
+        "km_fit",
+        "curve_result",
+        "survival_spec",
+        "survival_svg",
+        "survival_validation",
+        "survival_validation_spec",
+        "survival_calibration_spec",
+        "validation_svg",
+        "calibration_svg",
+        "survival_table",
+        "survival_latex"
+      ]
+    },
+    {
+      "gallery_id": "diagnostics",
+      "path": "docs/examples/gallery/diagnostics.md",
+      "task": "Inspect influence, uncertainty robustness, collinearity, and a declared penalty path.",
+      "required_outputs": [
+        "fitted_model",
+        "influence",
+        "robustness",
+        "penalty_trace",
+        "vifs",
+        "influence_spec",
+        "robustness_spec",
+        "penalty_spec",
+        "vif_spec",
+        "influence_svg",
+        "robustness_svg",
+        "penalty_svg",
+        "vif_svg",
+        "diagnostic_table_spec",
+        "diagnostic_latex"
+      ]
+    },
+    {
+      "gallery_id": "nomogram-reporting",
+      "path": "docs/examples/gallery/nomogram-and-reporting.md",
+      "task": "Build an additive nomogram and a publication-oriented coefficient table from one identity-bound model.",
+      "required_outputs": [
+        "distribution",
+        "design_spec",
+        "fitted_model",
+        "geometry",
+        "nomogram_svg",
+        "summary_table",
+        "summary_latex"
+      ]
+    }
+  ]
+}

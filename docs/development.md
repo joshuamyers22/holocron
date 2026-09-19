@@ -28,9 +28,25 @@ content, executes marked Python examples, validates internal links and anchors,
 and builds with warnings treated as errors. `make docs` starts the local preview
 server.
 
+The Phase 7 gallery inventory in
+`governance/phase-7-gallery-manifest.json` is also enforced. Gallery pages must
+match the manifest and navigation exactly, contain one coherent executable
+workflow plus goal/interpretation/boundary sections, and produce every declared
+model, result, plot, SVG, table, and LaTeX output.
+
 Documentation examples must remain deterministic and offline. Mark a Python
 fence with `# holocron: execute` when it should be executed by the quality gate.
 Generated pages carry a header and should never be edited directly.
+
+## SVG assurance workflow
+
+Run `make svg-check` to audit the structural accessibility contract and compare
+all supported plot and nomogram renderers with their committed golden SVGs.
+The fixtures are reviewable text files under `tests/snapshots/svg/`. After an
+intentional renderer change, inspect the SVG diff before running
+`uv run --frozen python -m tools.check_svg_snapshots --update`; snapshot refresh
+is never an automatic response to a failed gate. The
+[SVG assurance guide](guides/svg-assurance.md) defines coverage and boundaries.
 
 ## Artifact workflow
 

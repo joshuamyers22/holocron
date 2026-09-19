@@ -40,11 +40,18 @@ nav:
       - Diagnostics and selection: guides/diagnostics-and-selection.md
       - Backend-neutral plot specifications: guides/plot-specifications.md
       - Nomogram geometry and SVG: guides/nomograms.md
+      - SVG accessibility and visual assurance: guides/svg-assurance.md
       - Structured tables and LaTeX: guides/reporting.md
       - Serialization and reconstruction: guides/serialization.md
       - R migration: guides/r-migration.md
   - Examples:
       - End-to-end vertical slice: examples/vertical-slice.md
+      - Gallery:
+          - Adjusted effects and inference: examples/gallery/effects-and-inference.md
+          - Validation and calibration: examples/gallery/validation-and-calibration.md
+          - Survival curves and validation: examples/gallery/survival.md
+          - Diagnostics and robustness: examples/gallery/diagnostics.md
+          - Nomogram and reporting: examples/gallery/nomogram-and-reporting.md
   - Compatibility: compatibility.md
   - API reference:
       - Design: api/design.md

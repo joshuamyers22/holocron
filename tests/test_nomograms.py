@@ -160,6 +160,8 @@ class NomogramRendererTests(unittest.TestCase):
 
         self.assertEqual(svg, render_nomogram_svg(geometry))
         self.assertEqual(root.attrib["role"], "img")
+        self.assertEqual(root.attrib["aria-roledescription"], "nomogram")
+        self.assertEqual(root.attrib["focusable"], "false")
         self.assertEqual(title.text, geometry.title)
         self.assertEqual(description.text, geometry.alt_text)
         self.assertIn("Dose &lt; level", svg)

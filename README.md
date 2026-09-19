@@ -126,8 +126,9 @@ it does not claim independent approval or promote any capability beyond
 experimental. See the
 [Phase 6 completion record](https://github.com/joshuamyers22/holocron/blob/main/governance/PHASE_6_COMPLETION.md).
 
-Phase 7 is underway. Its first four deliverables add immutable backend-neutral plot
-specifications for numeric lines, points, interval bands, categorical bars and
+All six Phase 7 deliverables are implemented within their experimental
+envelopes. They add immutable backend-neutral plot specifications for numeric
+lines, points, interval bands, categorical bars and
 estimate intervals, semantic annotations and metadata, explicit axis scales,
 legend order, and required alternative text. Plot specifications use strict
 versioned JSON. Typed adapters cover effects, contrasts, ANOVA, validation,
@@ -137,8 +138,12 @@ nomogram geometry and accessible SVG cover additive identity-bound OLS and
 binary-logistic models, with interactions rejected explicitly. Immutable typed
 tables retain raw result values in strict canonical JSON, and typed adapters
 feed a deterministic dependency-free LaTeX renderer that escapes all
-caller-controlled text. Task-oriented galleries and broader renderer assurance
-remain deferred.
+caller-controlled text. Five manifest-bound executable galleries cover effects
+and inference, validation and calibration, survival, diagnostics, and combined
+nomogram/reporting workflows. Accessibility and visual-regression assurance
+now combines a fail-closed structural SVG audit with five exact,
+human-reviewable golden fixtures spanning supported plot layers, axes,
+orientations, and nomograms. The Phase 7 completion review remains open.
 
 ## Library API
 
@@ -248,8 +253,9 @@ and the independent-development policy.
 
 ## Documentation
 
-The documentation site includes a complete executable Phase 3 workflow,
-generated public API reference, and a generated inventory of every compatibility
+The documentation site includes a complete executable Phase 3 workflow, five
+tested task-oriented Phase 7 galleries, the SVG assurance workflow, generated
+public API reference, and a generated inventory of every compatibility
 disposition. Build or preview it locally with:
 
 ```sh
@@ -260,4 +266,7 @@ make docs
 Edit the authoritative compatibility manifest or public Python source, then run
 `make docs-generate` to refresh generated pages. The ordinary `make check` gate
 rejects stale generated content, failed examples, invalid internal links, and
-MkDocs warnings.
+MkDocs warnings. The gallery manifest additionally binds each gallery to its
+required model, result, plot, SVG, table, and LaTeX outputs.
+`make svg-check` audits owned SVG semantics and compares every supported
+renderer fixture with its committed canonical output.

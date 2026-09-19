@@ -208,3 +208,17 @@ Notable changes are recorded here using semantic versioning.
   identity, result adapters spanning supported inference, validation,
   resampling, and diagnostic objects, and safe deterministic dependency-free
   LaTeX output. No R `latex.*` layout or oracle parity is claimed.
+- Completed the fifth Phase 7 deliverable with five deterministic offline
+  galleries for effects/inference, validation/calibration, survival,
+  diagnostics, and nomogram/reporting tasks. A strict manifest and docs gate
+  require exact gallery/navigation coverage, one coherent executable workflow,
+  interpretation and boundary sections, and every declared result/rendering
+  output. Structural accessibility and renderer regression were intentionally
+  left to the subsequent assurance deliverable.
+- Completed the sixth Phase 7 deliverable with a fail-closed structural SVG
+  accessibility audit, higher-contrast semantic colors, stable non-color dash
+  cues, outlined translucent marks, and five exact human-reviewable golden SVGs
+  spanning every plot layer, all axis scale kinds, both categorical
+  orientations, annotations/legends, and nomograms. The gate is canonical SVG
+  assurance, not browser, rasterization, assistive-technology, WCAG, or R
+  graphics certification.

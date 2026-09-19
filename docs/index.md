@@ -44,6 +44,10 @@ The current experimental surface supports only:
 - strict additive OLS/logit nomogram points geometry and accessible inline SVG.
 - typed raw-value tables, result adapters, strict JSON, and safe deterministic
   dependency-free LaTeX output.
+- five manifest-bound executable galleries spanning effects/inference,
+  validation/calibration, survival, diagnostics, and nomogram/reporting tasks.
+- deterministic structural SVG accessibility audits and exact golden fixtures
+  for every supported plot layer, axis-scale kind, orientation, and nomogram.
 
 The core estimator envelope is also checked by seven seeded simulation
 scenarios totaling 2,620 outer replications and a 16-case numerical edge corpus.
@@ -53,9 +57,10 @@ accountable technical exit review without claiming independent approval. The Pha
 ordinal, censoring, random-effects, and documented parity-exception evidence;
 the Phase 5 approval covers the declared survival scope, and Phase 6 covers its
 declared resampling, validation, diagnostics, and failure-reporting envelope.
-Phase 7 is underway with plot specifications, typed result adapters/SVG,
-additive nomogram geometry/rendering, and structured table/LaTeX reporting
-complete; task-oriented galleries and later assurance remain open.
+All six Phase 7 deliverables are implemented within their experimental
+envelopes: plot specifications, typed result adapters/SVG, additive nomogram
+geometry/rendering, structured table/LaTeX reporting, five tested galleries,
+and deterministic SVG assurance. Its completion review remains open.
 Capability promotion,
 consequential use, and external distribution remain separately blocked.
 
@@ -92,7 +97,13 @@ surface and evidence links.
 - [Validate binary probabilities and survival predictions](guides/validation-metrics.md).
 - [Diagnose and compare supported fitted models](guides/diagnostics-and-selection.md).
 - [Build backend-neutral plot specifications](guides/plot-specifications.md).
+- [Audit accessible SVG and review renderer snapshots](guides/svg-assurance.md).
 - [Build structured tables and safe LaTeX output](guides/reporting.md).
+- [Follow the adjusted-effects and inference gallery](examples/gallery/effects-and-inference.md).
+- [Follow the validation and calibration gallery](examples/gallery/validation-and-calibration.md).
+- [Follow the survival gallery](examples/gallery/survival.md).
+- [Follow the diagnostics gallery](examples/gallery/diagnostics.md).
+- [Follow the nomogram and reporting gallery](examples/gallery/nomogram-and-reporting.md).
 - [Understand the interpretation boundary](interpretation-and-limitations.md).
 - [Compare Python and R concepts](guides/r-migration.md).
 - [Contribute through the frozen development environment](development.md).
