@@ -10,17 +10,22 @@ package metadata.
 |---|---|---|
 | `holocron.design` | Immutable predictor metadata, compiled design specifications, and deterministic transformations | `DataDistribution`, `DesignSpec`, `DesignMatrix`, `GeneratedColumn`, `RestrictedCubicSplineSpec`, distribution records |
 | `holocron.formula` | Allowlisted formula AST, bounded parsing, and canonical serialization | `Formula`, `Variable`, identity/polynomial/linear-spline/RCS term nodes |
-| `holocron.models` | Estimators and immutable fitted-result contracts | `fit_ols`, `fit_cph`, `OlsResult`, `CoxResult` |
+| `holocron.models` | Estimators, immutable fitted-result contracts, post-fit operations, and bounded diagnostics/selection | `fit_ols`, `fit_cph`, `influence_diagnostics`, `trace_penalty`, `backward_select`, `OlsResult`, `CoxResult` |
+| `holocron.validation` | Exact resampling, model-specific refit validation/calibration and optimism correction, and model-independent probability/survival metrics | `ResamplePlan`, `validate_model`, `calibrate_model`, `optimism_correct_validation`, `optimism_correct_calibration`, `validate_probabilities`, `validate_survival_predictions` |
 | `holocron.exceptions` | Stable failure categories at public boundaries | `HolocronError` and specific subclasses |
 
-The package root exports the four namespaces and `__version__`. Statistical
+The package root exports the five namespaces and `__version__`. Statistical
 objects are not duplicated at the root. A name is public only when it is listed
 in the nearest package's `__all__`; implementation modules may change without
 notice while the project is experimental.
 
 New domains will receive a namespace only with a working vertical capability.
-Planned areas such as inference, survival, validation, graphics, and
-reporting are not represented by empty placeholder packages.
+Models owns diagnostics that directly inspect or refit supported model
+families, including influence, VIF, robustness, explicit penalty grids, and
+declared-group selection. Validation owns exact resampling, current fixed-design OLS/binary refits and
+optimism correction, and model-independent binary/right-censored survival
+metrics; planned areas such as graphics and reporting are not represented by
+empty placeholder packages.
 
 ## Dependency direction
 
@@ -31,6 +36,9 @@ holocron.formula -----> holocron.exceptions
 holocron.design -----------------+
        |                         ^
        +-----> NumPy <----- holocron.models
+                  ^              |
+                  |              v
+                  +----- holocron.validation
 ```
 
 Public result and specification objects are owned by Holocron. Third-party

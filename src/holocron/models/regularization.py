@@ -21,6 +21,7 @@ from holocron.exceptions import (
 from holocron.models.glm import fit_glm, fit_lrm
 from holocron.models.linear import OlsResult, fit_ols
 from holocron.models.logistic import BinaryLogisticResult
+from holocron.validation import ResamplePlan
 
 FloatMatrix = npt.NDArray[np.float64]
 FloatVector = npt.NDArray[np.float64]
@@ -645,9 +646,13 @@ def _bootstrap_schedule(
     ):
         raise InputValidationError("seed must be an integer between 0 and 2^63 - 1")
     if resample_indices is None:
-        generator = np.random.default_rng(seed)
-        generated = generator.integers(0, count, size=(replicates, count))
-        return tuple(tuple(int(value) for value in row) for row in generated)
+        plan = ResamplePlan.bootstrap(
+            count,
+            replicates=replicates,
+            seed=seed,
+            plan_id="bootstrap-covariance",
+        )
+        return tuple(split.analysis_indices for split in plan.splits)
     schedule = tuple(tuple(row) for row in resample_indices)
     if len(schedule) != replicates or any(len(row) != count for row in schedule):
         raise InputValidationError(
@@ -661,7 +666,12 @@ def _bootstrap_schedule(
         for value in row
     ):
         raise InputValidationError("resample indices are outside the observation range")
-    return schedule
+    plan = ResamplePlan.exact(
+        count,
+        ((row, range(count)) for row in schedule),
+        plan_id="bootstrap-covariance-exact",
+    )
+    return tuple(split.analysis_indices for split in plan.splits)
 
 
 def bootstrap_covariance(

@@ -42,7 +42,7 @@ provided.
   independent Python implementation and the 13 later-family cases were frozen
   oracle baselines. Subsequent phases implemented the binary-logistic, ordinal,
   and survival targets; every original statistical case is now labeled
-  `python-parity`. The expanded corpus contains 52 Python-parity cases plus the
+  `python-parity`. The expanded corpus contains 60 Python-parity cases plus the
   environment-health case.
 
 ## Boundaries

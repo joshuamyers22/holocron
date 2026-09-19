@@ -1155,6 +1155,23 @@ run_cph <- function(request) {
     evaluation_times = evaluation_times,
     predicted_survival = predicted_survival
   )
+  if ("evaluation_probabilities" %in% names(request)) {
+    probabilities <- require_numeric_vector(request, "evaluation_probabilities", 1L)
+    if (any(probabilities <= 0) || any(probabilities >= 1)) {
+      stop("evaluation probabilities must be in (0, 1)")
+    }
+    restricted_time <- require_numeric_vector(request, "restricted_time", 1L)[1L]
+    quantile_function <- getS3method("Quantile", "cph")(fit)
+    mean_function <- getS3method("Mean", "cph")(fit, method = "exact")
+    result$evaluation_probabilities <- probabilities
+    result$restricted_time <- restricted_time
+    result$predicted_quantiles <- lapply(evaluation_lp, function(lp) {
+      unname(as.numeric(quantile_function(1 - probabilities, lp)))
+    })
+    result$predicted_mean <- unname(as.numeric(
+      mean_function(evaluation_lp, tmax = restricted_time)
+    ))
+  }
   if (advanced) {
     result$entry <- entry
     result$strata <- as.character(stratum)
@@ -1175,12 +1192,29 @@ run_cph <- function(request) {
 
 run_psm <- function(request) {
   x <- require_numeric_vector(request, "x", 3L)
-  time <- require_numeric_vector(request, "time", 3L)
-  event <- require_binary_vector(request, "event")
+  censored <- all(c("lower", "upper") %in% names(request))
+  if (censored) {
+    lower <- require_censor_endpoint(request, "lower", TRUE)
+    upper <- require_censor_endpoint(request, "upper", FALSE)
+    require_equal_lengths(list(x, lower, upper), c("x", "lower", "upper"))
+    if (any(lower > upper) || any(is.finite(lower) & lower <= 0) ||
+        any(is.finite(upper) & upper <= 0) ||
+        any(is.infinite(lower) & is.infinite(upper))) {
+      stop("survival censoring intervals are invalid")
+    }
+    lower_bound <- lower
+    upper_bound <- upper
+    lower_bound[is.infinite(lower_bound)] <- NA_real_
+    upper_bound[is.infinite(upper_bound)] <- NA_real_
+  } else {
+    time <- require_numeric_vector(request, "time", 3L)
+    event <- require_binary_vector(request, "event")
+    require_equal_lengths(list(x, time, event), c("x", "time", "event"))
+    if (any(time <= 0)) stop("survival times must be positive")
+  }
   evaluation_x <- require_numeric_vector(request, "evaluation_x", 1L)
   evaluation_times <- require_numeric_vector(request, "evaluation_times", 1L)
-  require_equal_lengths(list(x, time, event), c("x", "time", "event"))
-  if (any(time <= 0) || any(evaluation_times <= 0)) stop("survival times must be positive")
+  if (any(evaluation_times <= 0)) stop("survival times must be positive")
   basis <- require_choice(request, "basis", c("linear", "rcs"))
   distribution <- require_choice(request, "distribution", c("weibull", "exponential"))
   knots <- model_knots(request, basis)
@@ -1192,8 +1226,21 @@ run_psm <- function(request) {
   right <- if (basis == "linear") "x" else "rms::rcs(x, knots)"
   if ("strata" %in% names(request)) right <- paste(right, "+ strata(stratum)")
   if ("offset" %in% names(request)) right <- paste(right, "+ offset(offset)")
-  formula <- stats::as.formula(sprintf("survival::Surv(time, event) ~ %s", right))
-  data <- data.frame(x = x, time = time, event = event, stratum = stratum, offset = offset)
+  response <- if (censored) {
+    "survival::Surv(lower_bound, upper_bound, type = 'interval2')"
+  } else "survival::Surv(time, event)"
+  formula <- stats::as.formula(sprintf("%s ~ %s", response, right))
+  data <- if (censored) {
+    data.frame(
+      x = x,
+      lower_bound = lower_bound,
+      upper_bound = upper_bound,
+      stratum = stratum,
+      offset = offset
+    )
+  } else {
+    data.frame(x = x, time = time, event = event, stratum = stratum, offset = offset)
+  }
   arguments <- list(formula, data = data, dist = distribution, x = TRUE, y = TRUE)
   if ("weights" %in% names(request)) arguments$weights <- weights
   fit <- if (advanced) {
@@ -1250,14 +1297,29 @@ run_psm <- function(request) {
     evaluation_times = evaluation_times,
     predicted_survival = predicted_survival
   )
+  if (censored) {
+    kinds <- ifelse(
+      lower == upper,
+      "exact",
+      ifelse(is.infinite(lower), "left", ifelse(is.infinite(upper), "right", "interval"))
+    )
+    result$censoring_types <- name_vector(kinds)
+  }
+  if ("evaluation_probabilities" %in% names(request)) {
+    probabilities <- require_numeric_vector(request, "evaluation_probabilities", 1L)
+    if (any(probabilities <= 0) || any(probabilities >= 1)) {
+      stop("evaluation probabilities must be in (0, 1)")
+    }
+    quantile_function <- if (advanced) NULL else getS3method("Quantile", "psm")(fit)
+    mean_function <- if (advanced) NULL else getS3method("Mean", "psm")(fit)
+    if (advanced) stop("rich parametric predictions require an rms::psm oracle fit")
+    result$evaluation_probabilities <- probabilities
+    result$predicted_quantiles <- lapply(evaluation_lp, function(lp) {
+      unname(as.numeric(quantile_function(probabilities, lp)))
+    })
+    result$predicted_mean <- unname(as.numeric(mean_function(evaluation_lp)))
+  }
   if (advanced) {
-    response_residuals <- log(time) - unname(as.numeric(fit$linear.predictors))
-    row_scales <- unname(scale_by_stratum[as.character(stratum)])
-    normalized <- response_residuals / row_scales
-    martingale <- event - exp(normalized)
-    deviance <- sign(martingale) * sqrt(pmax(
-      -2 * (martingale + event * log(pmax(1 - martingale, 1e-300))), 0
-    ))
     result$strata <- as.character(stratum)
     result$weights <- weights
     result$offset <- offset
@@ -1268,10 +1330,19 @@ run_psm <- function(request) {
       exponent <- (log(evaluation_times) - evaluation_lp[index]) / evaluation_scales[index]
       exp(exponent) / (evaluation_scales[index] * evaluation_times)
     })
-    result$normalized_residuals <- unname(as.numeric(normalized))
-    result$response_residuals <- unname(as.numeric(response_residuals))
-    result$martingale_residuals <- unname(as.numeric(martingale))
-    result$deviance_residuals <- unname(as.numeric(deviance))
+    if (!censored) {
+      response_residuals <- log(time) - unname(as.numeric(fit$linear.predictors))
+      row_scales <- unname(scale_by_stratum[as.character(stratum)])
+      normalized <- response_residuals / row_scales
+      martingale <- event - exp(normalized)
+      deviance <- sign(martingale) * sqrt(pmax(
+        -2 * (martingale + event * log(pmax(1 - martingale, 1e-300))), 0
+      ))
+      result$normalized_residuals <- unname(as.numeric(normalized))
+      result$response_residuals <- unname(as.numeric(response_residuals))
+      result$martingale_residuals <- unname(as.numeric(martingale))
+      result$deviance_residuals <- unname(as.numeric(deviance))
+    }
   }
   result
 }
@@ -1310,6 +1381,28 @@ run_npsurv <- function(request) {
     lower = unname(as.numeric(fit$lower)),
     upper = unname(as.numeric(fit$upper))
   )
+  if ("evaluation_probabilities" %in% names(request)) {
+    evaluation_times <- require_numeric_vector(request, "evaluation_times", 1L)
+    probabilities <- require_numeric_vector(request, "evaluation_probabilities", 1L)
+    restricted_time <- require_numeric_vector(request, "restricted_time", 1L)[1L]
+    if (any(probabilities <= 0) || any(probabilities >= 1)) {
+      stop("evaluation probabilities must be in (0, 1)")
+    }
+    if (advanced) stop("rich nonparametric predictions require one oracle stratum")
+    predicted <- summary(fit, times = evaluation_times, extend = TRUE)$surv
+    quantiles <- stats::quantile(fit, probs = probabilities)$quantile
+    interior <- fit$time[fit$time < restricted_time]
+    support_times <- c(0, interior, restricted_time)
+    indices <- findInterval(support_times, fit$time)
+    support_survival <- ifelse(indices > 0, fit$surv[pmax(indices, 1L)], 1)
+    restricted_mean <- sum(diff(support_times) * head(support_survival, -1L))
+    result$evaluation_times <- evaluation_times
+    result$predicted_survival <- list(unname(as.numeric(predicted)))
+    result$evaluation_probabilities <- probabilities
+    result$restricted_time <- restricted_time
+    result$predicted_quantiles <- list(unname(as.numeric(quantiles)))
+    result$predicted_mean <- list(unname(as.numeric(restricted_mean)))
+  }
   if (advanced) {
     result$entry <- entry
     result$weights <- weights
@@ -1318,6 +1411,139 @@ run_npsurv <- function(request) {
     } else curve_strata(rep(names(fit$strata), fit$strata))
   }
   result
+}
+
+survival_step_at <- function(fit, values, before = FALSE) {
+  vapply(values, function(value) {
+    index <- if (before) which(fit$time < value) else which(fit$time <= value)
+    if (!length(index)) 1 else fit$surv[max(index)]
+  }, numeric(1L))
+}
+
+run_survival_validation <- function(request) {
+  time <- require_numeric_vector(request, "time", 3L)
+  event <- require_binary_vector(request, "event")
+  horizons <- require_numeric_vector(request, "horizons", 1L)
+  require_equal_lengths(list(time, event), c("time", "event"))
+  if (any(time <= 0) || any(horizons <= 0) || is.unsorted(horizons, strictly = TRUE)) {
+    stop("survival validation times and horizons are invalid")
+  }
+  weights <- optional_numeric_vector(request, "weights", length(time), 1, TRUE)
+  predictions <- as.matrix(request$predicted_survival)
+  if (!is.numeric(predictions) || nrow(predictions) != length(time) ||
+      ncol(predictions) != length(horizons) || any(!is.finite(predictions)) ||
+      any(predictions < 0) || any(predictions > 1)) {
+    stop("predicted survival matrix is invalid")
+  }
+  censor_fit <- survival::survfit(
+    survival::Surv(time, 1L - event) ~ 1,
+    weights = weights
+  )
+  observed_fit <- survival::survfit(
+    survival::Surv(time, event) ~ 1,
+    weights = weights
+  )
+  censor_at_horizon <- survival_step_at(censor_fit, horizons)
+  censor_before <- survival_step_at(censor_fit, time, before = TRUE)
+  observed_survival <- survival_step_at(observed_fit, horizons)
+  total_weight <- sum(weights)
+  brier <- auc <- rep(NA_real_, length(horizons))
+  case_counts <- control_counts <- integer(length(horizons))
+  for (column in seq_along(horizons)) {
+    horizon <- horizons[column]
+    cases <- event == 1L & time <= horizon
+    controls <- time > horizon
+    case_counts[column] <- sum(cases)
+    control_counts[column] <- sum(controls)
+    if (!any(cases | controls)) stop("horizon has no evaluable observations")
+    contribution <- numeric(length(time))
+    contribution[cases] <- weights[cases] * predictions[cases, column]^2 /
+      censor_before[cases]
+    contribution[controls] <- weights[controls] *
+      (1 - predictions[controls, column])^2 / censor_at_horizon[column]
+    brier[column] <- sum(contribution) / total_weight
+    if (any(cases) && any(controls)) {
+      case_weight <- weights[cases] / censor_before[cases]
+      control_weight <- weights[controls]
+      pair_value <- outer(
+        predictions[cases, column],
+        predictions[controls, column],
+        function(case, control) (case < control) + 0.5 * (case == control)
+      )
+      auc[column] <- sum(pair_value * outer(case_weight, control_weight)) /
+        (sum(case_weight) * sum(control_weight))
+    }
+  }
+  mean_prediction <- as.numeric(crossprod(weights, predictions) / total_weight)
+  integrated <- if (length(horizons) == 1L) NULL else {
+    sum(diff(horizons) * (head(brier, -1L) + tail(brier, -1L)) / 2) /
+      (tail(horizons, 1L) - horizons[1L])
+  }
+  list(
+    protocol_version = protocol_version,
+    operation = "survival_validation",
+    horizons = horizons,
+    brier_scores = brier,
+    aucs = unname(as.list(auc)),
+    dxy = unname(as.list(2 * auc - 1)),
+    observed_survival = observed_survival,
+    mean_predicted_survival = mean_prediction,
+    calibration_errors = observed_survival - mean_prediction,
+    censoring_survival = censor_at_horizon,
+    case_counts = case_counts,
+    control_counts = control_counts,
+    integrated_brier_score = integrated,
+    observations = length(time),
+    total_weight = total_weight
+  )
+}
+
+run_probability_validation <- function(request) {
+  outcomes <- require_binary_vector(request, "outcomes")
+  probabilities <- require_numeric_vector(request, "probabilities", 3L)
+  require_equal_lengths(
+    list(outcomes, probabilities), c("outcomes", "probabilities")
+  )
+  if (any(probabilities <= 0) || any(probabilities >= 1)) {
+    stop("probabilities must be strictly between zero and one")
+  }
+  stats <- rms::val.prob(p = probabilities, y = outcomes, pl = FALSE)
+  prevalence <- mean(outcomes)
+  brier <- unname(stats["Brier"])
+  log_loss <- -mean(
+    outcomes * log(probabilities) +
+      (1 - outcomes) * log1p(-probabilities)
+  )
+  null_log_loss <- -mean(
+    outcomes * log(prevalence) +
+      (1 - outcomes) * log1p(-prevalence)
+  )
+  list(
+    protocol_version = protocol_version,
+    operation = "probability_validation",
+    auc = unname(stats["C (ROC)"]),
+    dxy = unname(stats["Dxy"]),
+    brier_score = brier,
+    scaled_brier_score = 1 - brier / (prevalence * (1 - prevalence)),
+    log_loss = log_loss,
+    null_log_loss = null_log_loss,
+    nagelkerke_r_squared = unname(stats["R2"]),
+    discrimination_index = unname(stats["D"]),
+    unreliability_index = unname(stats["U"]),
+    quality_index = unname(stats["Q"]),
+    likelihood_ratio_chi_square = unname(stats["D:Chi-sq"]),
+    likelihood_ratio_p_value = unname(stats["D:p"]),
+    unreliability_chi_square = unname(stats["U:Chi-sq"]),
+    unreliability_p_value = unname(stats["U:p"]),
+    calibration_intercept = unname(stats["Intercept"]),
+    calibration_slope = unname(stats["Slope"]),
+    spiegelhalter_z = unname(stats["S:z"]),
+    spiegelhalter_p_value = unname(stats["S:p"]),
+    prevalence = prevalence,
+    mean_prediction = mean(probabilities),
+    calibration_in_the_large = prevalence - mean(probabilities),
+    observations = length(outcomes)
+  )
 }
 
 dispatch <- function(request) {
@@ -1342,6 +1568,8 @@ dispatch <- function(request) {
     cph = run_cph(request),
     psm = run_psm(request),
     npsurv = run_npsurv(request),
+    probability_validation = run_probability_validation(request),
+    survival_validation = run_survival_validation(request),
     stop(sprintf("unsupported operation: %s", operation))
   )
 }

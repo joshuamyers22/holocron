@@ -1,0 +1,66 @@
+{
+  "schema_version": "holocron-oracle-output/v1",
+  "case_id": "survival-validation-horizons",
+  "reference": {
+    "package": "rms",
+    "version": "8.2-0",
+    "commit": "a4e4a305a029090e737562fb4d35bdb705db7d63",
+    "protocol_version": "1"
+  },
+  "ok": true,
+  "protocol_version": "1",
+  "operation": "survival_validation",
+  "horizons": [
+    3,
+    6,
+    9
+  ],
+  "brier_scores": [
+    0.14219500000000002,
+    0.17345166666666667,
+    0.16472064285714286
+  ],
+  "aucs": [
+    0.5899470899470899,
+    0.9813034188034188,
+    0.8654434250764524
+  ],
+  "dxy": [
+    0.17989417989417977,
+    0.9626068376068375,
+    0.7308868501529049
+  ],
+  "observed_survival": [
+    0.825,
+    0.6285714285714284,
+    0.3771428571428571
+  ],
+  "mean_predicted_survival": [
+    0.8258333333333333,
+    0.5666666666666668,
+    0.33749999999999997
+  ],
+  "calibration_errors": [
+    -0.0008333333333333526,
+    0.061904761904761685,
+    0.039642857142857146
+  ],
+  "censoring_survival": [
+    0.9090909090909091,
+    0.7954545454545454,
+    0.6628787878787878
+  ],
+  "case_counts": [
+    2,
+    4,
+    6
+  ],
+  "control_counts": [
+    9,
+    6,
+    3
+  ],
+  "integrated_brier_score": 0.16345474404761906,
+  "observations": 12,
+  "total_weight": 12
+}

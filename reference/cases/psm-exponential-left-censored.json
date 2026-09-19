@@ -1,0 +1,16 @@
+{
+  "schema_version": "holocron-oracle-case/v1",
+  "case_id": "psm-exponential-left-censored",
+  "description": "Exponential AFT fit with exact, left-, and right-censored observations.",
+  "expected_output": "psm-exponential-left-censored.json",
+  "comparison_profile": "parametric-survival-censoring-v1",
+  "qualification_stage": "python-parity",
+  "operation": "psm",
+  "basis": "linear",
+  "distribution": "exponential",
+  "x": [-2, -1.5, -1, -0.5, 0, 0.5, 1, 1.5, 2, -1.8, -0.8, 0.2, 1.2, 2.2, -2.2, -1.2, 0.8, 1.8],
+  "lower": [12, 9, 12, 7, 10, "neg_inf", 8, "neg_inf", 5, 8, 13, 7, "neg_inf", 6, 12, 9, 5, "neg_inf"],
+  "upper": [12, 9, "pos_inf", 7, "pos_inf", 7, 8, 5, 5, "pos_inf", 13, 7, 4, 6, "pos_inf", 9, 5, 3],
+  "evaluation_x": [-1.5, 0, 1.5],
+  "evaluation_times": [2, 4, 7, 10]
+}

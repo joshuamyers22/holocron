@@ -495,7 +495,7 @@ def validate_case_pair(
             raise ContractValidationError(
                 f"{case_path}: bootstrap rows must match observation count"
             )
-    if operation in {"cph", "psm"}:
+    if operation == "cph" or (operation == "psm" and "time" in case):
         lengths = {
             name: len(require_array(case[name], name=f"case.{name}"))
             for name in ("x", "time", "event")
@@ -504,11 +504,51 @@ def validate_case_pair(
             raise ContractValidationError(
                 f"{case_path}: x, time, and event lengths differ"
             )
+    if operation == "psm" and "lower" in case:
+        lengths = {
+            name: len(require_array(case[name], name=f"case.{name}"))
+            for name in ("x", "lower", "upper")
+        }
+        if len(set(lengths.values())) != 1:
+            raise ContractValidationError(
+                f"{case_path}: x, lower, and upper lengths differ"
+            )
     if operation == "npsurv":
         time = require_array(case["time"], name="case.time")
         event = require_array(case["event"], name="case.event")
         if len(time) != len(event):
             raise ContractValidationError(f"{case_path}: time and event lengths differ")
+    if operation == "survival_validation":
+        time = require_array(case["time"], name="case.time")
+        event = require_array(case["event"], name="case.event")
+        horizons = require_array(case["horizons"], name="case.horizons")
+        predictions = require_array(
+            case["predicted_survival"], name="case.predicted_survival"
+        )
+        if len(time) != len(event) or len(predictions) != len(time):
+            raise ContractValidationError(
+                f"{case_path}: survival validation row counts differ"
+            )
+        if any(
+            len(require_array(row, name="case.predicted_survival row")) != len(horizons)
+            for row in predictions
+        ):
+            raise ContractValidationError(
+                f"{case_path}: survival prediction widths differ"
+            )
+        if "weights" in case and len(
+            require_array(case["weights"], name="case.weights")
+        ) != len(time):
+            raise ContractValidationError(
+                f"{case_path}: survival validation weight count differs"
+            )
+    if operation == "probability_validation":
+        outcomes = require_array(case["outcomes"], name="case.outcomes")
+        probabilities = require_array(case["probabilities"], name="case.probabilities")
+        if len(outcomes) != len(probabilities):
+            raise ContractValidationError(
+                f"{case_path}: probability validation row counts differ"
+            )
     if operation == "datadist":
         raw_variables = require_array(case["variables"], name="case.variables")
         variables = [

@@ -1,6 +1,6 @@
 # Independent Python Implementation of `rms`: Production Project Plan
 
-**Status:** Active — Phases 0–4 complete for private experimental development
+**Status:** Active — Phases 0–5 complete for private experimental development; Phase 6 is underway with its first five deliverables complete, including bounded OLS/binary diagnostics, penalty tracing, and selection helpers
 **Plan date:** 2026-09-17  
 **Reference implementation:** Frank Harrell's R package `rms`  
 **Project name:** `holocron`  
@@ -742,16 +742,29 @@ The exit gate is closed; see `governance/PHASE_4_COMPLETION.md`.
 
 Survival parity suite and simulations pass across censoring/tie/strata regimes; numerical reviewers approve likelihood and information implementations.
 
-**Implementation progress:** The first two deliverables are complete for the
+**Implementation progress:** All five deliverables are implemented for the
 private experimental envelope. Independent `fit_cph`, `fit_psm`, and
 `fit_npsurv` implementations now cover ties, counting-process entry,
 stratification, positive weights, offsets, per-stratum baseline quantities,
-hazard/survival prediction, and supported survival residuals. Nine registered
-cases pass 432 exact and 721 numeric pinned-R comparisons, and v2 result schemas
-ship beside tested v1 migrations. Richer prediction, broader censoring,
-time-dependent validation, simulations, review, and the Phase 5 exit gate
-remain open; see `governance/PHASE_5_SURVIVAL_ESTIMATORS.md` and
-`governance/PHASE_5_RISK_SETS.md`.
+hazard/survival prediction, supported survival residuals, typed curves,
+event-time quantiles, parametric means, restricted Cox/Kaplan–Meier means, and
+exact/left/right/interval-censored Weibull/exponential AFT likelihoods.
+Model-independent fixed-horizon validation adds IPCW Brier scores,
+cumulative/dynamic AUC and Dxy, marginal calibration, and integrated Brier
+scores. Sixteen registered cases pass 599 exact and 1,071 numeric pinned-R
+comparisons, and v2 result schemas ship beside tested v1 migrations.
+The locked seven-scenario, 1,280-replication simulation package passes all
+recovery, coverage, censoring, tie, strata/offset, Kaplan–Meier, and validation
+thresholds with no failed replication. Ron Mexico independently approved the
+likelihood, information, risk-set, censoring, prediction, validation, and
+simulation evidence on 2026-09-18. The Phase 5 exit gate is closed; see
+`governance/PHASE_5_COMPLETION.md`,
+`governance/PHASE_5_SURVIVAL_ESTIMATORS.md`,
+`governance/PHASE_5_RISK_SETS.md`, and
+`governance/PHASE_5_PREDICTION_APIS.md`,
+`governance/PHASE_5_CENSORING.md`,
+`governance/PHASE_5_SURVIVAL_VALIDATION.md`, and
+`governance/PHASE_5_SIMULATIONS.md`.
 
 ### Phase 6 — Validation, calibration, diagnostics, and model summaries (18–28 weeks)
 
@@ -767,6 +780,43 @@ remain open; see `governance/PHASE_5_SURVIVAL_ESTIMATORS.md` and
 **Exit gate**
 
 Whole-procedure refitting is proven inside each resample; stochastic equivalence and failure policies pass; examples prevent common leakage and apparent-calibration errors.
+
+**Implementation progress:** The first five deliverables are complete within
+their experimental envelopes. `ResamplePlan` provides bounded, immutable, canonical
+bootstrap, repeated K-fold, and caller-declared exact schedules with stable
+split identity and strict JSON reconstruction. `run_resample_plan` invokes a
+fresh caller-owned procedure for every split, binds outcomes to the plan
+fingerprint, and distinguishes complete, partial, and failed execution. The
+existing bootstrap-covariance path now uses the shared plan contract.
+`validate_model` and `calibrate_model` add fresh per-split OLS and binary-logistic
+refits over fixed realized designs, family-specific indices, parametric
+calibration relationships, retained training/assessment results, row-identity
+checks, and the engine's explicit failure semantics. They do not claim that an
+externally learned design was rebuilt. `validate_probabilities` adds weighted
+binary discrimination, accuracy, likelihood-quality, logistic-recalibration,
+grouped-calibration, and threshold metrics backed by a pinned `val.prob` case.
+Right-censored `validate_survival_predictions` now also provides grouped
+Kaplan--Meier calibration, IPCW threshold classification, integrated AUC, and
+integrated absolute calibration error. `optimism_correct_validation` now
+subtracts the mean retained training-assessment gap from each apparent metric,
+with pairwise contributor counts for undefined metrics.
+`optimism_correct_calibration` applies the same identity pointwise to the
+declared parametric calibration grid. Both reject incomplete executions unless
+partial aggregation is explicitly requested and retain the exact source
+execution and failure status. `influence_diagnostics` reports exact OLS
+case-deletion and one-step binary-logistic influence; covariance-correlation
+VIFs and robust/model standard-error comparisons cover the same families.
+`trace_penalty` refits a bounded explicit scalar grid for OLS and binary `lrm`
+and selects a declared constant-free AIC or BIC, while `backward_select`
+performs bounded fresh-refit Wald elimination over a complete caller-declared
+partition of slope coefficients. These are owned Python contracts and do not
+advance R `vif`, `pentrace`, or `fastbw` compatibility dispositions. Failure-
+rate and partial-resample reporting and the exit gate stay open. See
+`governance/PHASE_6_RESAMPLING.md`,
+`governance/PHASE_6_MODEL_VALIDATION.md`, and
+`governance/PHASE_6_VALIDATION_METRICS.md`, and
+`governance/PHASE_6_OPTIMISM_CORRECTION.md`, and
+`governance/PHASE_6_DIAGNOSTICS_SELECTION.md`.
 
 ### Phase 7 — Graphics, nomograms, reporting, and documentation (16–24 weeks)
 

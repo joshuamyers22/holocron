@@ -69,9 +69,10 @@ make reference-source-check RMS_SOURCE=/absolute/path/to/rms-master
 `make oracle-check` discovers every committed case, validates its case and output
 schemas, executes it through the live container, applies its named comparison
 profile, and emits validated evidence. Normal Python tests independently compute
-all 49 statistical cases across data-distribution, formula/design, OLS,
+all 60 statistical cases across data-distribution, formula/design, OLS,
 generalized-linear, binary-logistic, post-estimation, regularization, ordinal,
-censoring, random-effects, Cox, parametric-survival, and Kaplan–Meier operations
+censoring, random-effects, Cox, parametric-survival, Kaplan–Meier, and
+probability- and fixed-horizon survival-validation operations
 and use the same profiles against those outputs; they do not invoke Docker or R.
 No statistical case remains only an oracle baseline. `make reference-metadata`
 validates every schema, policy, fixture, and cross-document link without Docker

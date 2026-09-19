@@ -1,0 +1,57 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/joshuamyers22/holocron/schemas/resample-plan.schema.json",
+  "type": "object",
+  "properties": {
+    "schema_version": {"const": "holocron-resample-plan/v1"},
+    "plan_id": {"type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,127}$"},
+    "strategy": {"enum": ["bootstrap", "k-fold", "exact"]},
+    "observation_count": {"type": "integer", "minimum": 2, "maximum": 1000000},
+    "row_ids": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 1000000,
+      "uniqueItems": true,
+      "items": {"type": "string", "minLength": 1, "maxLength": 256}
+    },
+    "seed": {
+      "oneOf": [
+        {"type": "null"},
+        {"type": "integer", "minimum": 0, "maximum": 9223372036854775807}
+      ]
+    },
+    "splits": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 10000,
+      "items": {"$ref": "#/$defs/split"}
+    }
+  },
+  "required": ["schema_version", "plan_id", "strategy", "observation_count", "row_ids", "seed", "splits"],
+  "additionalProperties": false,
+  "$defs": {
+    "indices": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 1000000,
+      "items": {"type": "integer", "minimum": 0, "maximum": 999999}
+    },
+    "split": {
+      "type": "object",
+      "properties": {
+        "split_id": {"type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,127}$"},
+        "repeat": {"type": "integer", "minimum": 0, "maximum": 10000},
+        "fold": {
+          "oneOf": [
+            {"type": "null"},
+            {"type": "integer", "minimum": 0, "maximum": 10000}
+          ]
+        },
+        "analysis_indices": {"$ref": "#/$defs/indices"},
+        "assessment_indices": {"$ref": "#/$defs/indices"}
+      },
+      "required": ["split_id", "repeat", "fold", "analysis_indices", "assessment_indices"],
+      "additionalProperties": false
+    }
+  }
+}

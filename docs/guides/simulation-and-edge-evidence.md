@@ -58,7 +58,30 @@ binomial `Glm` and binary `lrm`, including when IRLS first reaches a non-finite
 intermediate state. Singular or single-class declared bootstrap resamples raise
 `NumericalError`; failed replicates are never silently discarded.
 
-## Reproduce the evidence
+## Phase 5 survival simulations
+
+The separate `phase-5-survival-models-v1` plan runs seven deterministic
+scenarios totaling 1,280 replications. It covers continuous and tied Cox
+recovery, stratified Cox with offsets, right-censored and mixed-censored
+Weibull AFT recovery, Kaplan–Meier recovery and interval coverage, and IPCW
+validation metrics against complete latent-event-time targets. Every threshold
+passes with no failed replication. Ron Mexico independently approved the
+scoped numerical/statistical evidence on 2026-09-18, closing the Phase 5
+private-development exit gate.
+
+Run it with:
+
+```sh
+make phase-5-evidence
+```
+
+The report is written under `.work/phase-5-evidence/`, binds the plan hash,
+revision, environment, aggregate metrics, failed IDs, and replication-detail
+digests, and validates against its JSON Schema. CI uses
+`make phase-5-evidence-clean`, retains the clean report, and repeats the same
+plan on macOS 15 and Ubuntu 24.04.
+
+## Reproduce the Phase 3 evidence
 
 From the frozen development environment, run:
 
@@ -83,7 +106,9 @@ and [numerical-edge report](https://github.com/joshuamyers22/holocron/blob/main/
 ## Interpretation boundary
 
 These are deliberately small synthetic studies for the current Phase 3 core.
-They do not assess model misspecification, missing data, weights or offsets,
-nonlinear effect selection, external validity, subgroup performance, ordinal or
-survival estimators, calibration correction, or an end-user analysis process.
+They do not assess model misspecification, missing data, nonlinear effect
+selection, external validity, subgroup performance, calibration correction, or
+an end-user analysis process. Phase 3 does not assess ordinal or survival
+estimators; the Phase 5 suite covers only the declared synthetic survival
+regimes and does not remove those broader limits.
 Passing them supports the stated experimental engineering contract only.

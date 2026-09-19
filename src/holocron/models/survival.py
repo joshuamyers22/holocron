@@ -1,4 +1,4 @@
-"""Owned right-censored survival estimators and result contracts."""
+"""Owned survival estimators, censoring inputs, and result contracts."""
 
 from __future__ import annotations
 
@@ -8,7 +8,7 @@ from collections.abc import Iterable
 from dataclasses import dataclass
 from numbers import Integral, Real
 from statistics import NormalDist
-from typing import Literal, TypeAlias, cast
+from typing import Literal, TypeAlias, cast, overload
 
 import numpy as np
 import numpy.typing as npt
@@ -26,6 +26,8 @@ IntVector = npt.NDArray[np.int64]
 CoxMethod = Literal["efron", "breslow"]
 ParametricDistribution = Literal["weibull", "exponential"]
 SurvivalResidualKind = Literal["martingale", "deviance", "normalized", "response"]
+SurvivalInterpolation = Literal["step", "linear"]
+SurvivalCensoringType = Literal["exact", "left", "right", "interval"]
 JsonValue: TypeAlias = (
     None | bool | int | float | str | list["JsonValue"] | dict[str, "JsonValue"]
 )
@@ -39,6 +41,10 @@ COX_V1_SCHEMA_VERSION = "holocron-cox-result/v1"
 PARAMETRIC_V1_SCHEMA_VERSION = "holocron-parametric-survival-result/v1"
 NONPARAMETRIC_V1_SCHEMA_VERSION = "holocron-nonparametric-survival-result/v1"
 BASELINE_STRATUM = "__all__"
+EXACT_CENSORING = 0
+LEFT_CENSORING = 1
+RIGHT_CENSORING = 2
+INTERVAL_CENSORING = 3
 
 
 def _finite_number(value: object) -> bool:
@@ -133,6 +139,160 @@ def _validate_prediction_times(values: Iterable[float]) -> FloatVector:
     return np.asarray(times, dtype=np.float64)
 
 
+def _validate_probabilities(values: Iterable[float]) -> FloatVector:
+    probabilities = tuple(float(value) for value in values)
+    if not probabilities or not all(
+        math.isfinite(value) and 0.0 < value < 1.0 for value in probabilities
+    ):
+        raise InputValidationError(
+            "prediction probabilities must be finite and strictly between zero and one"
+        )
+    return np.asarray(probabilities, dtype=np.float64)
+
+
+def _validate_interpolation(value: str) -> SurvivalInterpolation:
+    if value not in {"step", "linear"}:
+        raise InputValidationError("survival interpolation must be 'step' or 'linear'")
+    return cast(SurvivalInterpolation, value)
+
+
+def _validate_restricted_time(value: float) -> float:
+    restricted_time = float(value)
+    if not math.isfinite(restricted_time) or restricted_time <= 0.0:
+        raise InputValidationError("restricted_time must be finite and positive")
+    return restricted_time
+
+
+def _curve_quantiles(
+    times: FloatVector,
+    survival: FloatVector,
+    probabilities: FloatVector,
+    interpolation: SurvivalInterpolation,
+) -> tuple[float | None, ...]:
+    support_times = np.empty(times.size + 1, dtype=np.float64)
+    support_times[0] = 0.0
+    support_times[1:] = times
+    support_survival = np.empty(survival.size + 1, dtype=np.float64)
+    support_survival[0] = 1.0
+    support_survival[1:] = survival
+    values: list[float | None] = []
+    for probability in probabilities:
+        target = 1.0 - float(probability)
+        reached = np.flatnonzero(  # pyright: ignore[reportUnknownMemberType]
+            support_survival <= target
+        )
+        if reached.size == 0:
+            values.append(None)
+        elif interpolation == "step":
+            values.append(float(support_times[int(reached[0])]))
+        else:
+            index = int(reached[0])
+            if index == 0:
+                values.append(0.0)
+            else:
+                left_survival = float(support_survival[index - 1])
+                right_survival = float(support_survival[index])
+                left_time = float(support_times[index - 1])
+                right_time = float(support_times[index])
+                fraction = (left_survival - target) / (left_survival - right_survival)
+                values.append(left_time + fraction * (right_time - left_time))
+    return tuple(values)
+
+
+def _kaplan_meier_quantiles(
+    times: FloatVector,
+    survival: FloatVector,
+    probabilities: FloatVector,
+    interpolation: SurvivalInterpolation,
+) -> tuple[float | None, ...]:
+    """Match quantile.survfit, including exact-threshold plateau midpoints."""
+    if interpolation == "linear":
+        return _curve_quantiles(times, survival, probabilities, interpolation)
+    values: list[float | None] = []
+    for probability in probabilities:
+        target = 1.0 - float(probability)
+        reached = np.flatnonzero(  # pyright: ignore[reportUnknownMemberType]
+            survival <= target
+        )
+        if reached.size == 0:
+            values.append(None)
+            continue
+        index = int(reached[0])
+        if math.isclose(float(survival[index]), target, rel_tol=1e-12, abs_tol=1e-12):
+            endpoint = index
+            while endpoint + 1 < times.size and math.isclose(
+                float(survival[endpoint + 1]),
+                target,
+                rel_tol=1e-12,
+                abs_tol=1e-12,
+            ):
+                endpoint += 1
+            if endpoint + 1 < times.size:
+                endpoint += 1
+            values.append((float(times[index]) + float(times[endpoint])) / 2.0)
+        else:
+            values.append(float(times[index]))
+    return tuple(values)
+
+
+def _restricted_curve_mean(
+    times: FloatVector,
+    survival: FloatVector,
+    restricted_time: float,
+    interpolation: SurvivalInterpolation,
+) -> float:
+    if times.size == 0 or restricted_time > float(times[-1]):
+        raise InputValidationError(
+            "restricted_time must not exceed the fitted curve support"
+        )
+    interior = times[times < restricted_time]
+    support_times = np.empty(interior.size + 2, dtype=np.float64)
+    support_times[0] = 0.0
+    support_times[1:-1] = interior
+    support_times[-1] = restricted_time
+    indices = (
+        np.searchsorted(  # pyright: ignore[reportUnknownMemberType]
+            times, support_times, side="right"
+        )
+        - 1
+    )
+    support_survival = np.where(  # pyright: ignore[reportUnknownMemberType]
+        indices >= 0, survival[np.maximum(indices, 0)], 1.0
+    )
+    widths = support_times[1:] - support_times[:-1]
+    if interpolation == "step":
+        return float(np.sum(widths * support_survival[:-1]))
+    return float(np.sum(widths * (support_survival[:-1] + support_survival[1:]) / 2.0))
+
+
+def _cox_restricted_mean(
+    times: FloatVector,
+    survival: FloatVector,
+    restricted_time: float,
+    interpolation: SurvivalInterpolation,
+) -> float:
+    """Reproduce the pinned rms Mean.cph event-grid integration contract."""
+    if times.size == 0 or restricted_time > float(times[-1]):
+        raise InputValidationError(
+            "restricted_time must not exceed the fitted curve support"
+        )
+    included = times <= restricted_time
+    included_times = times[included]
+    included_survival = survival[included]
+    support_times = np.empty(included_times.size + 1, dtype=np.float64)
+    support_times[0] = 0.0
+    support_times[1:] = included_times
+    support_survival = np.empty(included_survival.size + 1, dtype=np.float64)
+    support_survival[0] = 1.0
+    support_survival[1:] = included_survival
+    if support_times.size < 2:
+        return 0.0
+    widths = support_times[1:] - support_times[:-1]
+    if interpolation == "step":
+        return float(np.sum(widths * support_survival[:-1]))
+    return float(np.sum(widths * (support_survival[:-1] + support_survival[1:]) / 2.0))
+
+
 def _as_optional_numeric(
     values: Iterable[float] | None,
     rows: int,
@@ -212,11 +372,119 @@ def _deviance_residual(event: int, martingale: float) -> float:
 
 
 @dataclass(frozen=True, slots=True)
+class SurvivalResponse:
+    """Positive-time exact, left-, right-, or interval-censored response."""
+
+    lower: tuple[float, ...]
+    upper: tuple[float, ...]
+
+    def __post_init__(self) -> None:
+        if not self.lower or len(self.lower) != len(self.upper):
+            raise InputValidationError(
+                "survival censoring endpoints must have equal nonzero length"
+            )
+        if len(self.lower) > MAX_OBSERVATIONS:
+            raise InputValidationError(
+                "survival response exceeds the observation limit"
+            )
+        has_finite_upper = False
+        for lower, upper in zip(self.lower, self.upper, strict=True):
+            if (
+                isinstance(lower, bool)
+                or isinstance(upper, bool)
+                or not isinstance(lower, Real)
+                or not isinstance(upper, Real)
+                or math.isnan(float(lower))
+                or math.isnan(float(upper))
+                or lower == math.inf
+                or upper == -math.inf
+                or float(lower) > float(upper)
+                or (lower == -math.inf and upper == math.inf)
+                or (math.isfinite(lower) and float(lower) <= 0.0)
+                or (math.isfinite(upper) and float(upper) <= 0.0)
+            ):
+                raise InputValidationError("invalid survival censoring interval")
+            has_finite_upper = has_finite_upper or math.isfinite(float(upper))
+        if not has_finite_upper:
+            raise InputValidationError(
+                "survival response requires at least one finite event bound"
+            )
+        object.__setattr__(self, "lower", tuple(float(value) for value in self.lower))
+        object.__setattr__(self, "upper", tuple(float(value) for value in self.upper))
+
+    @classmethod
+    def from_intervals(
+        cls, lower: Iterable[float], upper: Iterable[float] | None = None
+    ) -> SurvivalResponse:
+        """Construct a response; omitted upper endpoints declare exact times."""
+        lower_values = tuple(lower)
+        upper_values = lower_values if upper is None else tuple(upper)
+        return cls(lower_values, upper_values)
+
+    @property
+    def censoring_types(self) -> tuple[SurvivalCensoringType, ...]:
+        """Return the censoring contribution represented by each interval."""
+        result: list[SurvivalCensoringType] = []
+        for lower, upper in zip(self.lower, self.upper, strict=True):
+            if lower == upper:
+                result.append("exact")
+            elif lower == -math.inf:
+                result.append("left")
+            elif upper == math.inf:
+                result.append("right")
+            else:
+                result.append("interval")
+        return tuple(result)
+
+
+@dataclass(frozen=True, slots=True)
 class SurvivalResidualResult:
     """A named survival residual vector in original training-row order."""
 
     kind: SurvivalResidualKind
     values: tuple[float, ...]
+
+
+@dataclass(frozen=True, slots=True)
+class SurvivalCurveResult:
+    """Structured survival curves with one row per prediction subject."""
+
+    times: tuple[float, ...]
+    strata: tuple[str, ...]
+    survival: tuple[tuple[float, ...], ...]
+    linear_predictors: tuple[float, ...] | None
+
+    def __post_init__(self) -> None:
+        if (
+            not self.times
+            or any(not math.isfinite(value) or value < 0.0 for value in self.times)
+            or any(
+                later <= earlier
+                for earlier, later in zip(self.times, self.times[1:], strict=False)
+            )
+            or not self.survival
+            or len(self.strata) != len(self.survival)
+            or any(not value for value in self.strata)
+            or any(len(row) != len(self.times) for row in self.survival)
+            or any(
+                not math.isfinite(value) or not 0.0 <= value <= 1.0
+                for row in self.survival
+                for value in row
+            )
+            or any(
+                later > earlier
+                for row in self.survival
+                for earlier, later in zip(row, row[1:], strict=False)
+            )
+            or (
+                self.linear_predictors is not None
+                and (
+                    len(self.linear_predictors) != len(self.survival)
+                    or any(not math.isfinite(value) for value in self.linear_predictors)
+                )
+            )
+        ):
+            raise InputValidationError("inconsistent survival curve result")
 
 
 @dataclass(frozen=True, slots=True)
@@ -327,6 +595,134 @@ class CoxResult:
             dtype=np.float64,
         )
         return _matrix_rows(np.exp(-cumulative))
+
+    def predict_curve(
+        self,
+        features: Iterable[Iterable[float]],
+        times: Iterable[float] | None = None,
+        *,
+        strata: Iterable[str] | None = None,
+        offsets: Iterable[float] | None = None,
+    ) -> SurvivalCurveResult:
+        """Return structured Cox survival curves on an explicit or fitted grid."""
+        matrix = _validate_prediction_features(features, len(self.coefficients))
+        requested = (
+            np.asarray((0.0, *sorted(set(self.baseline_times))), dtype=np.float64)
+            if times is None
+            else _validate_prediction_times(times)
+        )
+        if any(
+            later <= earlier
+            for earlier, later in zip(requested[:-1], requested[1:], strict=True)
+        ):
+            raise InputValidationError(
+                "curve prediction times must be strictly increasing"
+            )
+        prediction_strata = _prediction_strata(
+            strata, matrix.shape[0], self.strata_levels
+        )
+        offset = _prediction_offsets(offsets, matrix.shape[0])
+        predictors = self.predict_linear(matrix, offsets=offset)
+        survival = self.predict_survival(
+            matrix,
+            requested,
+            strata=prediction_strata,
+            offsets=offset,
+        )
+        return SurvivalCurveResult(
+            times=_vector(requested),
+            strata=prediction_strata,
+            survival=survival,
+            linear_predictors=predictors,
+        )
+
+    def predict_quantile(
+        self,
+        features: Iterable[Iterable[float]],
+        probabilities: Iterable[float] = (0.5,),
+        *,
+        strata: Iterable[str] | None = None,
+        offsets: Iterable[float] | None = None,
+        interpolation: SurvivalInterpolation = "step",
+    ) -> tuple[tuple[float | None, ...], ...]:
+        """Predict event-time CDF quantiles; return ``None`` beyond follow-up."""
+        matrix = _validate_prediction_features(features, len(self.coefficients))
+        requested = _validate_probabilities(probabilities)
+        interpolation = _validate_interpolation(interpolation)
+        prediction_strata = _prediction_strata(
+            strata, matrix.shape[0], self.strata_levels
+        )
+        predictors = self.predict_linear(matrix, offsets=offsets)
+        rows: list[tuple[float | None, ...]] = []
+        for predictor, stratum in zip(predictors, prediction_strata, strict=True):
+            mask = tuple(value == stratum for value in self.baseline_strata)
+            times = np.asarray(
+                tuple(
+                    time
+                    for time, keep in zip(self.baseline_times, mask, strict=True)
+                    if keep
+                ),
+                dtype=np.float64,
+            )
+            survival = np.exp(
+                -np.asarray(
+                    tuple(
+                        value
+                        for value, keep in zip(
+                            self.baseline_cumulative_hazard, mask, strict=True
+                        )
+                        if keep
+                    ),
+                    dtype=np.float64,
+                )
+                * math.exp(predictor)
+            )
+            rows.append(_curve_quantiles(times, survival, requested, interpolation))
+        return tuple(rows)
+
+    def predict_mean(
+        self,
+        features: Iterable[Iterable[float]],
+        *,
+        restricted_time: float,
+        strata: Iterable[str] | None = None,
+        offsets: Iterable[float] | None = None,
+        interpolation: SurvivalInterpolation = "step",
+    ) -> tuple[float, ...]:
+        """Predict the pinned rms event-grid mean at an explicit truncation."""
+        matrix = _validate_prediction_features(features, len(self.coefficients))
+        horizon = _validate_restricted_time(restricted_time)
+        interpolation = _validate_interpolation(interpolation)
+        prediction_strata = _prediction_strata(
+            strata, matrix.shape[0], self.strata_levels
+        )
+        predictors = self.predict_linear(matrix, offsets=offsets)
+        values: list[float] = []
+        for predictor, stratum in zip(predictors, prediction_strata, strict=True):
+            mask = tuple(value == stratum for value in self.baseline_strata)
+            times = np.asarray(
+                tuple(
+                    time
+                    for time, keep in zip(self.baseline_times, mask, strict=True)
+                    if keep
+                ),
+                dtype=np.float64,
+            )
+            survival = np.exp(
+                -np.asarray(
+                    tuple(
+                        value
+                        for value, keep in zip(
+                            self.baseline_cumulative_hazard, mask, strict=True
+                        )
+                        if keep
+                    ),
+                    dtype=np.float64,
+                )
+                * math.exp(predictor)
+            )
+            values.append(_cox_restricted_mean(times, survival, horizon, interpolation))
+        return tuple(values)
 
     def to_dict(self) -> dict[str, JsonValue]:
         """Return the strict versioned result document."""
@@ -540,6 +936,104 @@ class ParametricSurvivalResult:
         )
         return _matrix_rows(cumulative / (scales[:, None] * requested[None, :]))
 
+    def predict_curve(
+        self,
+        features: Iterable[Iterable[float]],
+        times: Iterable[float],
+        *,
+        strata: Iterable[str] | None = None,
+        offsets: Iterable[float] | None = None,
+    ) -> SurvivalCurveResult:
+        """Return structured parametric survival curves on an explicit grid."""
+        matrix = _validate_prediction_features(features, len(self.coefficients) - 1)
+        requested = _validate_prediction_times(times)
+        if np.any(  # pyright: ignore[reportUnknownMemberType]
+            requested <= 0.0
+        ):
+            raise InputValidationError("parametric prediction times must be positive")
+        if any(
+            later <= earlier
+            for earlier, later in zip(requested[:-1], requested[1:], strict=True)
+        ):
+            raise InputValidationError(
+                "curve prediction times must be strictly increasing"
+            )
+        prediction_strata = _prediction_strata(
+            strata, matrix.shape[0], self.strata_levels
+        )
+        offset = _prediction_offsets(offsets, matrix.shape[0])
+        predictors = self.predict_linear(matrix, offsets=offset)
+        survival = self.predict_survival(
+            matrix,
+            requested,
+            strata=prediction_strata,
+            offsets=offset,
+        )
+        return SurvivalCurveResult(
+            times=_vector(requested),
+            strata=prediction_strata,
+            survival=survival,
+            linear_predictors=predictors,
+        )
+
+    def predict_quantile(
+        self,
+        features: Iterable[Iterable[float]],
+        probabilities: Iterable[float] = (0.5,),
+        *,
+        strata: Iterable[str] | None = None,
+        offsets: Iterable[float] | None = None,
+    ) -> tuple[tuple[float, ...], ...]:
+        """Predict event-time quantiles for CDF probabilities in ``(0, 1)``."""
+        matrix = _validate_prediction_features(features, len(self.coefficients) - 1)
+        requested = _validate_probabilities(probabilities)
+        predictors = np.asarray(
+            self.predict_linear(matrix, offsets=offsets), dtype=np.float64
+        )
+        scales = self._prediction_scales(strata, matrix.shape[0])
+        log_multiplier = np.log(-np.log1p(-requested))
+        with np.errstate(over="ignore"):
+            values = np.exp(
+                predictors[:, None] + scales[:, None] * log_multiplier[None, :]
+            )
+        if not np.all(  # pyright: ignore[reportUnknownMemberType]
+            np.isfinite(values)
+        ):
+            raise InputValidationError(
+                "parametric quantile prediction exceeds the finite numeric range"
+            )
+        return _matrix_rows(values)
+
+    def predict_mean(
+        self,
+        features: Iterable[Iterable[float]],
+        *,
+        strata: Iterable[str] | None = None,
+        offsets: Iterable[float] | None = None,
+    ) -> tuple[float, ...]:
+        """Predict the finite Weibull or exponential mean survival time."""
+        matrix = _validate_prediction_features(features, len(self.coefficients) - 1)
+        predictors = np.asarray(
+            self.predict_linear(matrix, offsets=offsets), dtype=np.float64
+        )
+        scales = self._prediction_scales(strata, matrix.shape[0])
+        log_values = np.asarray(
+            tuple(
+                float(predictor) + math.lgamma(1.0 + float(scale))
+                for predictor, scale in zip(predictors, scales, strict=True)
+            ),
+            dtype=np.float64,
+        )
+        with np.errstate(over="ignore"):
+            values = np.exp(log_values)
+        if not np.all(  # pyright: ignore[reportUnknownMemberType]
+            np.isfinite(values)
+        ):
+            raise InputValidationError(
+                "parametric mean prediction exceeds the finite numeric range"
+            )
+        return _vector(values)
+
     def to_dict(self) -> dict[str, JsonValue]:
         """Return the strict versioned result document."""
         return {
@@ -687,6 +1181,110 @@ class NonparametricSurvivalResult:
             indices >= 0, survival[np.maximum(indices, 0)], 1.0
         )
         return _vector(values)
+
+    def predict_curve(
+        self,
+        times: Iterable[float] | None = None,
+        *,
+        strata: Iterable[str] | None = None,
+    ) -> SurvivalCurveResult:
+        """Return structured Kaplan–Meier curves for selected strata."""
+        requested = (
+            np.asarray((0.0, *sorted(set(self.time))), dtype=np.float64)
+            if times is None
+            else _validate_prediction_times(times)
+        )
+        if any(
+            later <= earlier
+            for earlier, later in zip(requested[:-1], requested[1:], strict=True)
+        ):
+            raise InputValidationError(
+                "curve prediction times must be strictly increasing"
+            )
+        prediction_strata = self.strata_levels if strata is None else tuple(strata)
+        if not prediction_strata or any(
+            value not in self.strata_levels for value in prediction_strata
+        ):
+            raise InputValidationError("prediction strata must match fitted strata")
+        return SurvivalCurveResult(
+            times=_vector(requested),
+            strata=prediction_strata,
+            survival=tuple(
+                self.predict(requested, stratum=stratum)
+                for stratum in prediction_strata
+            ),
+            linear_predictors=None,
+        )
+
+    def predict_quantile(
+        self,
+        probabilities: Iterable[float] = (0.5,),
+        *,
+        strata: Iterable[str] | None = None,
+        interpolation: SurvivalInterpolation = "step",
+    ) -> tuple[tuple[float | None, ...], ...]:
+        """Predict Kaplan–Meier event-time CDF quantiles by stratum."""
+        requested = _validate_probabilities(probabilities)
+        interpolation = _validate_interpolation(interpolation)
+        prediction_strata = self.strata_levels if strata is None else tuple(strata)
+        if not prediction_strata or any(
+            value not in self.strata_levels for value in prediction_strata
+        ):
+            raise InputValidationError("prediction strata must match fitted strata")
+        rows: list[tuple[float | None, ...]] = []
+        for stratum in prediction_strata:
+            mask = tuple(value == stratum for value in self.strata)
+            times = np.asarray(
+                tuple(time for time, keep in zip(self.time, mask, strict=True) if keep),
+                dtype=np.float64,
+            )
+            survival = np.asarray(
+                tuple(
+                    value
+                    for value, keep in zip(self.survival, mask, strict=True)
+                    if keep
+                ),
+                dtype=np.float64,
+            )
+            rows.append(
+                _kaplan_meier_quantiles(times, survival, requested, interpolation)
+            )
+        return tuple(rows)
+
+    def predict_mean(
+        self,
+        *,
+        restricted_time: float,
+        strata: Iterable[str] | None = None,
+        interpolation: SurvivalInterpolation = "step",
+    ) -> tuple[float, ...]:
+        """Predict restricted Kaplan–Meier mean survival by stratum."""
+        horizon = _validate_restricted_time(restricted_time)
+        interpolation = _validate_interpolation(interpolation)
+        prediction_strata = self.strata_levels if strata is None else tuple(strata)
+        if not prediction_strata or any(
+            value not in self.strata_levels for value in prediction_strata
+        ):
+            raise InputValidationError("prediction strata must match fitted strata")
+        values: list[float] = []
+        for stratum in prediction_strata:
+            mask = tuple(value == stratum for value in self.strata)
+            times = np.asarray(
+                tuple(time for time, keep in zip(self.time, mask, strict=True) if keep),
+                dtype=np.float64,
+            )
+            survival = np.asarray(
+                tuple(
+                    value
+                    for value, keep in zip(self.survival, mask, strict=True)
+                    if keep
+                ),
+                dtype=np.float64,
+            )
+            values.append(
+                _restricted_curve_mean(times, survival, horizon, interpolation)
+            )
+        return tuple(values)
 
     def to_dict(self) -> dict[str, JsonValue]:
         """Return the strict versioned result document."""
@@ -1070,11 +1668,37 @@ def fit_cph(
     )
 
 
+def _aft_endpoint_terms(
+    log_time: FloatVector, location: FloatVector, scales: FloatVector
+) -> tuple[
+    FloatVector, FloatVector, FloatVector, FloatVector, FloatVector, FloatVector
+]:
+    """Return survival and first/second derivatives by location and log-scale."""
+    z = (log_time - location) / scales
+    hazard = np.exp(
+        np.clip(z, -745.0, 100.0)  # pyright: ignore[reportUnknownMemberType]
+    )
+    survival = np.exp(-hazard)
+    eta = survival * hazard / scales
+    eta_eta = survival * (hazard * hazard - hazard) / (scales * scales)
+    log_scale = survival * hazard * z
+    log_scale_log_scale = survival * ((hazard * z) ** 2 - hazard * (z * z + z))
+    eta_log_scale = survival * hazard * (hazard * z - z - 1.0) / scales
+    return (
+        survival,
+        eta,
+        eta_eta,
+        log_scale,
+        log_scale_log_scale,
+        eta_log_scale,
+    )
+
+
 def _aft_terms(
     parameters: FloatVector,
-    log_times: FloatVector,
-    times: FloatVector,
-    events: IntVector,
+    lower_log_times: FloatVector,
+    upper_log_times: FloatVector,
+    censoring: IntVector,
     design: FloatMatrix,
     distribution: ParametricDistribution,
     strata: IntVector,
@@ -1090,18 +1714,93 @@ def _aft_terms(
         log_scales = parameters[width : width + scale_count]
     row_log_scales = log_scales[strata]
     scales = np.exp(row_log_scales)
-    z = (log_times - design @ beta - offsets) / scales
-    hazard = np.exp(
-        np.clip(z, -745.0, 600.0)  # pyright: ignore[reportUnknownMemberType]
-    )
-    observed = events.astype(np.float64)
-    log_likelihood = float(
-        np.sum(weights * (observed * (z - row_log_scales - np.log(times)) - hazard))
-    )
-    score_beta = design.T @ (weights * (hazard - observed) / scales)
-    hessian_beta = -(
-        design.T @ ((weights * hazard / (scales * scales))[:, None] * design)
-    )
+    location = design @ beta + offsets
+    row_log_likelihood = np.empty(design.shape[0], dtype=np.float64)
+    eta_score = np.empty(design.shape[0], dtype=np.float64)
+    eta_hessian = np.empty(design.shape[0], dtype=np.float64)
+    scale_score = np.empty(design.shape[0], dtype=np.float64)
+    scale_hessian = np.empty(design.shape[0], dtype=np.float64)
+    eta_scale_hessian = np.empty(design.shape[0], dtype=np.float64)
+
+    exact = censoring == EXACT_CENSORING
+    if bool(np.any(exact)):  # pyright: ignore[reportUnknownMemberType]
+        log_time = lower_log_times[exact]
+        row_scale = scales[exact]
+        z = (log_time - location[exact]) / row_scale
+        hazard = np.exp(
+            np.clip(z, -745.0, 100.0)  # pyright: ignore[reportUnknownMemberType]
+        )
+        row_log_likelihood[exact] = z - row_log_scales[exact] - log_time - hazard
+        eta_score[exact] = (hazard - 1.0) / row_scale
+        eta_hessian[exact] = -hazard / (row_scale * row_scale)
+        scale_score[exact] = -z - 1.0 + hazard * z
+        scale_hessian[exact] = z - hazard * (z * z + z)
+        eta_scale_hessian[exact] = (1.0 - hazard * (1.0 + z)) / row_scale
+
+    right = censoring == RIGHT_CENSORING
+    if bool(np.any(right)):  # pyright: ignore[reportUnknownMemberType]
+        row_scale = scales[right]
+        z = (lower_log_times[right] - location[right]) / row_scale
+        hazard = np.exp(
+            np.clip(z, -745.0, 100.0)  # pyright: ignore[reportUnknownMemberType]
+        )
+        row_log_likelihood[right] = -hazard
+        eta_score[right] = hazard / row_scale
+        eta_hessian[right] = -hazard / (row_scale * row_scale)
+        scale_score[right] = hazard * z
+        scale_hessian[right] = -hazard * (z * z + z)
+        eta_scale_hessian[right] = -hazard * (1.0 + z) / row_scale
+
+    tiny = np.finfo(np.float64).tiny
+    left = censoring == LEFT_CENSORING
+    if bool(np.any(left)):  # pyright: ignore[reportUnknownMemberType]
+        endpoint = _aft_endpoint_terms(
+            upper_log_times[left], location[left], scales[left]
+        )
+        survival, s_eta, s_eta_eta, s_scale, s_scale_scale, s_eta_scale = endpoint
+        probability = np.maximum(1.0 - survival, tiny)
+        p_eta = -s_eta
+        p_eta_eta = -s_eta_eta
+        p_scale = -s_scale
+        p_scale_scale = -s_scale_scale
+        p_eta_scale = -s_eta_scale
+        row_log_likelihood[left] = np.log(probability)
+        eta_score[left] = p_eta / probability
+        eta_hessian[left] = p_eta_eta / probability - (p_eta / probability) ** 2
+        scale_score[left] = p_scale / probability
+        scale_hessian[left] = p_scale_scale / probability - (p_scale / probability) ** 2
+        eta_scale_hessian[left] = p_eta_scale / probability - p_eta * p_scale / (
+            probability * probability
+        )
+
+    interval = censoring == INTERVAL_CENSORING
+    if bool(np.any(interval)):  # pyright: ignore[reportUnknownMemberType]
+        lower_endpoint = _aft_endpoint_terms(
+            lower_log_times[interval], location[interval], scales[interval]
+        )
+        upper_endpoint = _aft_endpoint_terms(
+            upper_log_times[interval], location[interval], scales[interval]
+        )
+        probability = np.maximum(lower_endpoint[0] - upper_endpoint[0], tiny)
+        p_eta = lower_endpoint[1] - upper_endpoint[1]
+        p_eta_eta = lower_endpoint[2] - upper_endpoint[2]
+        p_scale = lower_endpoint[3] - upper_endpoint[3]
+        p_scale_scale = lower_endpoint[4] - upper_endpoint[4]
+        p_eta_scale = lower_endpoint[5] - upper_endpoint[5]
+        row_log_likelihood[interval] = np.log(probability)
+        eta_score[interval] = p_eta / probability
+        eta_hessian[interval] = p_eta_eta / probability - (p_eta / probability) ** 2
+        scale_score[interval] = p_scale / probability
+        scale_hessian[interval] = (
+            p_scale_scale / probability - (p_scale / probability) ** 2
+        )
+        eta_scale_hessian[interval] = p_eta_scale / probability - p_eta * p_scale / (
+            probability * probability
+        )
+
+    log_likelihood = float(np.sum(weights * row_log_likelihood))
+    score_beta = design.T @ (weights * eta_score)
+    hessian_beta = design.T @ ((weights * eta_hessian)[:, None] * design)
     if distribution == "exponential":
         return log_likelihood, score_beta, hessian_beta
     score_scales = np.zeros(scale_count, dtype=np.float64)
@@ -1109,23 +1808,9 @@ def _aft_terms(
     hessian_scales = np.zeros(scale_count, dtype=np.float64)
     for stratum in range(scale_count):
         mask = strata == stratum
-        score_scales[stratum] = float(
-            np.sum(
-                weights[mask]
-                * (observed[mask] * (-z[mask] - 1.0) + hazard[mask] * z[mask])
-            )
-        )
-        cross[:, stratum] = design[mask].T @ (
-            weights[mask]
-            * (observed[mask] - hazard[mask] * (1.0 + z[mask]))
-            / scales[mask]
-        )
-        hessian_scales[stratum] = float(
-            np.sum(
-                weights[mask]
-                * (observed[mask] * z[mask] - hazard[mask] * (z[mask] ** 2 + z[mask]))
-            )
-        )
+        score_scales[stratum] = float(np.sum(weights[mask] * scale_score[mask]))
+        cross[:, stratum] = design[mask].T @ (weights[mask] * eta_scale_hessian[mask])
+        hessian_scales[stratum] = float(np.sum(weights[mask] * scale_hessian[mask]))
     score = np.concatenate(  # pyright: ignore[reportUnknownMemberType]
         (score_beta, score_scales)
     )
@@ -1140,8 +1825,10 @@ def _aft_terms(
 
 
 def _maximize_aft(
-    times: FloatVector,
-    events: IntVector,
+    lower_log_times: FloatVector,
+    upper_log_times: FloatVector,
+    representative_log_times: FloatVector,
+    censoring: IntVector,
     design: FloatMatrix,
     distribution: ParametricDistribution,
     strata: IntVector,
@@ -1152,16 +1839,15 @@ def _maximize_aft(
     max_iterations: int,
     tolerance: float,
 ) -> tuple[FloatVector, FloatMatrix, float, int]:
-    log_times = np.log(times)
     weighted_design = design * np.sqrt(weights)[:, None]
-    weighted_response = (log_times - offsets) * np.sqrt(weights)
+    weighted_response = (representative_log_times - offsets) * np.sqrt(weights)
     initial_beta, _, _, _ = np.linalg.lstsq(
         weighted_design, weighted_response, rcond=None
     )
     if distribution == "exponential":
         parameters = initial_beta
     else:
-        residual = log_times - design @ initial_beta - offsets
+        residual = representative_log_times - design @ initial_beta - offsets
         initial_scales = tuple(
             max(
                 math.sqrt(
@@ -1183,9 +1869,9 @@ def _maximize_aft(
     for iteration in range(1, max_iterations + 1):
         current, score, hessian = _aft_terms(
             parameters,
-            log_times,
-            times,
-            events,
+            lower_log_times,
+            upper_log_times,
+            censoring,
             design,
             distribution,
             strata,
@@ -1244,9 +1930,9 @@ def _maximize_aft(
                 continue
             candidate_log_likelihood, _, _ = _aft_terms(
                 candidate,
-                log_times,
-                times,
-                events,
+                lower_log_times,
+                upper_log_times,
+                censoring,
                 design,
                 distribution,
                 strata,
@@ -1267,9 +1953,9 @@ def _maximize_aft(
         if float(np.max(np.abs(scale * step))) <= tolerance:
             _, _, final_hessian = _aft_terms(
                 parameters,
-                log_times,
-                times,
-                events,
+                lower_log_times,
+                upper_log_times,
+                censoring,
                 design,
                 distribution,
                 strata,
@@ -1287,6 +1973,42 @@ def _maximize_aft(
     raise ConvergenceError("parametric survival fit did not converge")
 
 
+def _aft_response_contract(
+    response: SurvivalResponse,
+) -> tuple[FloatVector, FloatVector, FloatVector, IntVector]:
+    lower_log: list[float] = []
+    upper_log: list[float] = []
+    representative: list[float] = []
+    codes: list[int] = []
+    code_by_type = {
+        "exact": EXACT_CENSORING,
+        "left": LEFT_CENSORING,
+        "right": RIGHT_CENSORING,
+        "interval": INTERVAL_CENSORING,
+    }
+    for lower, upper, kind in zip(
+        response.lower, response.upper, response.censoring_types, strict=True
+    ):
+        logged_lower = -math.inf if lower == -math.inf else math.log(lower)
+        logged_upper = math.inf if upper == math.inf else math.log(upper)
+        lower_log.append(logged_lower)
+        upper_log.append(logged_upper)
+        if kind == "left":
+            representative.append(logged_upper)
+        elif kind == "interval":
+            representative.append((logged_lower + logged_upper) / 2.0)
+        else:
+            representative.append(logged_lower)
+        codes.append(code_by_type[kind])
+    return (
+        np.asarray(lower_log, dtype=np.float64),
+        np.asarray(upper_log, dtype=np.float64),
+        np.asarray(representative, dtype=np.float64),
+        np.asarray(codes, dtype=np.int64),
+    )
+
+
+@overload
 def fit_psm(
     times: Iterable[float],
     events: Iterable[int | bool],
@@ -1299,8 +2021,39 @@ def fit_psm(
     offsets: Iterable[float] | None = None,
     max_iterations: int = 100,
     tolerance: float = 1e-10,
+) -> ParametricSurvivalResult: ...
+
+
+@overload
+def fit_psm(
+    times: SurvivalResponse,
+    events: Iterable[Iterable[float]],
+    features: None = None,
+    *,
+    distribution: ParametricDistribution = "weibull",
+    feature_names: Iterable[str] | None = None,
+    strata: Iterable[str] | None = None,
+    weights: Iterable[float] | None = None,
+    offsets: Iterable[float] | None = None,
+    max_iterations: int = 100,
+    tolerance: float = 1e-10,
+) -> ParametricSurvivalResult: ...
+
+
+def fit_psm(
+    times: Iterable[float] | SurvivalResponse,
+    events: Iterable[int | bool] | Iterable[Iterable[float]],
+    features: Iterable[Iterable[float]] | None = None,
+    *,
+    distribution: ParametricDistribution = "weibull",
+    feature_names: Iterable[str] | None = None,
+    strata: Iterable[str] | None = None,
+    weights: Iterable[float] | None = None,
+    offsets: Iterable[float] | None = None,
+    max_iterations: int = 100,
+    tolerance: float = 1e-10,
 ) -> ParametricSurvivalResult:
-    """Fit a weighted right-censored AFT model with offsets and scale strata."""
+    """Fit a weighted exact/right or general interval-censored AFT model."""
     if distribution not in {"weibull", "exponential"}:
         raise InputValidationError("unsupported parametric survival distribution")
     if (
@@ -1311,29 +2064,55 @@ def fit_psm(
         or not 0.0 < tolerance < 1.0
     ):
         raise InputValidationError("invalid parametric convergence controls")
-    time_array, event_array = _as_times_events(times, events)
-    feature_array = _as_features(features, time_array.size)
+    if isinstance(times, SurvivalResponse):
+        if features is not None:
+            raise InputValidationError(
+                "interval-censored fit accepts features as its second argument"
+            )
+        response = times
+        feature_values = cast(Iterable[Iterable[float]], events)
+    else:
+        if features is None:
+            raise InputValidationError(
+                "right-censored fit requires times, events, and features"
+            )
+        time_array, event_array = _as_times_events(
+            times, cast(Iterable[int | bool], events)
+        )
+        response = SurvivalResponse.from_intervals(
+            time_array,
+            tuple(
+                float(time) if event else math.inf
+                for time, event in zip(time_array, event_array, strict=True)
+            ),
+        )
+        feature_values = features
+    lower_log, upper_log, representative_log, censoring = _aft_response_contract(
+        response
+    )
+    row_count = lower_log.size
+    feature_array = _as_features(feature_values, row_count)
     names = _feature_names(feature_array.shape[1], feature_names)
-    _, strata_levels, strata_codes = _as_strata(strata, time_array.size)
+    _, strata_levels, strata_codes = _as_strata(strata, row_count)
     if distribution == "exponential" and len(strata_levels) > 1:
         raise InputValidationError(
             "exponential models have fixed scale and do not support scale strata"
         )
     scale_count = 1 if distribution == "exponential" else len(strata_levels)
     weight_array = _as_optional_numeric(
-        weights, time_array.size, name="weights", default=1.0, positive=True
+        weights, row_count, name="weights", default=1.0, positive=True
     )
-    offset_array = _as_optional_numeric(
-        offsets, time_array.size, name="offsets", default=0.0
-    )
+    offset_array = _as_optional_numeric(offsets, row_count, name="offsets", default=0.0)
     design = np.column_stack(  # pyright: ignore[reportUnknownMemberType]
-        (np.ones(time_array.size), feature_array)
+        (np.ones(row_count), feature_array)
     )
     if np.linalg.matrix_rank(design) < design.shape[1]:
         raise RankDeficiencyError("parametric design must have full column rank")
     parameters, covariance, log_likelihood, iterations = _maximize_aft(
-        time_array,
-        event_array,
+        lower_log,
+        upper_log,
+        representative_log,
+        censoring,
         design,
         distribution,
         strata_codes,
@@ -1344,9 +2123,11 @@ def fit_psm(
         tolerance=tolerance,
     )
     null_parameters, _, null_log_likelihood, _ = _maximize_aft(
-        time_array,
-        event_array,
-        np.ones((time_array.size, 1), dtype=np.float64),
+        lower_log,
+        upper_log,
+        representative_log,
+        censoring,
+        np.ones((row_count, 1), dtype=np.float64),
         distribution,
         strata_codes,
         weight_array,
@@ -1374,7 +2155,7 @@ def fit_psm(
         linear_predictors=_vector(design @ coefficients + offset_array),
         log_likelihood=(null_log_likelihood, log_likelihood),
         iterations=iterations,
-        n_observations=time_array.size,
+        n_observations=row_count,
     )
 
 

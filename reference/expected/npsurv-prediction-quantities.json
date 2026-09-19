@@ -1,0 +1,105 @@
+{
+  "schema_version": "holocron-oracle-output/v1",
+  "case_id": "npsurv-prediction-quantities",
+  "reference": {
+    "package": "rms",
+    "version": "8.2-0",
+    "commit": "a4e4a305a029090e737562fb4d35bdb705db7d63",
+    "protocol_version": "1"
+  },
+  "ok": true,
+  "protocol_version": "1",
+  "operation": "npsurv",
+  "estimator": "kaplan-meier",
+  "observations": 8,
+  "time": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6
+  ],
+  "n_risk": [
+    8,
+    7,
+    5,
+    4,
+    2,
+    1
+  ],
+  "n_event": [
+    1,
+    1,
+    1,
+    1,
+    1,
+    0
+  ],
+  "n_censor": [
+    0,
+    1,
+    0,
+    1,
+    0,
+    1
+  ],
+  "survival": [
+    0.875,
+    0.75,
+    0.6000000000000001,
+    0.45000000000000007,
+    0.22500000000000003,
+    0.22500000000000003
+  ],
+  "standard_error": [
+    0.1336306209562122,
+    0.2041241452319315,
+    0.3027650354097492,
+    0.4183300132670378,
+    0.8215838362577492,
+    0.8215838362577492
+  ],
+  "lower": [
+    0.6733819365059555,
+    0.5027018412940469,
+    0.33146462434329693,
+    0.1982117340277319,
+    0.04496235899050289,
+    0.04496235899050289
+  ],
+  "upper": [
+    1,
+    1,
+    1,
+    1,
+    1,
+    1
+  ],
+  "evaluation_times": [
+    1,
+    2.5,
+    5
+  ],
+  "predicted_survival": [
+    [
+      0.875,
+      0.75,
+      0.22500000000000003
+    ]
+  ],
+  "evaluation_probabilities": [
+    0.25,
+    0.5
+  ],
+  "restricted_time": 5,
+  "predicted_quantiles": [
+    [
+      2.5,
+      4
+    ]
+  ],
+  "predicted_mean": [
+    3.6750000000000003
+  ]
+}

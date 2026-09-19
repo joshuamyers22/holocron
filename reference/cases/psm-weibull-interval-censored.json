@@ -1,0 +1,16 @@
+{
+  "schema_version": "holocron-oracle-case/v1",
+  "case_id": "psm-weibull-interval-censored",
+  "description": "Weibull AFT fit with exact, left-, right-, and interval-censored observations.",
+  "expected_output": "psm-weibull-interval-censored.json",
+  "comparison_profile": "parametric-survival-censoring-v1",
+  "qualification_stage": "python-parity",
+  "operation": "psm",
+  "basis": "linear",
+  "distribution": "weibull",
+  "x": [-2, -1.5, -1, -0.5, 0, 0.5, 1, 1.5, 2, -1.8, -0.8, 0.2, 1.2, 2.2, -2.2, -1.2, 0.8, 1.8],
+  "lower": [12, 8, 12, 7, 10, "neg_inf", 7, "neg_inf", 5, 8, 12, 7, "neg_inf", 5, 12, 9, 4, "neg_inf"],
+  "upper": [12, 10, "pos_inf", 7, "pos_inf", 7, 9, 5, 5, "pos_inf", 14, 7, 4, 7, "pos_inf", 9, 6, 3],
+  "evaluation_x": [-1.5, 0, 1.5],
+  "evaluation_times": [2, 4, 7, 10]
+}

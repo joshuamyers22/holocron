@@ -35,6 +35,26 @@ matching binary `rms::lrm`. Both results report the applied slope weights and
 effective degrees of freedom. A positive penalty can produce a finite binary
 fit for data that are separated under unpenalized maximum likelihood.
 
+`trace_penalty` evaluates an explicit, bounded scalar grid for an existing OLS
+or binary `lrm` fit. It returns every refit's coefficients, deviance, effective
+degrees of freedom, AIC, and BIC, then selects the minimum requested criterion
+with the smaller penalty breaking a tie. This is an owned Python contract, not
+R `pentrace` parity or an adaptive search.
+
+```python
+# holocron: execute
+from holocron.models import fit_ols, trace_penalty
+
+x = (-3.0, -2.0, -1.0, 0.0, 1.0, 2.0, 3.0, 4.0)
+y = (0.8, 1.5, 2.1, 3.0, 3.7, 4.6, 5.1, 6.2)
+features = tuple((value,) for value in x)
+fit = fit_ols(y, features, feature_names=("x",))
+trace = trace_penalty(fit, y, features, (0.0, 0.5, 2.0))
+
+assert trace.selected_point.penalty in {0.0, 0.5, 2.0}
+assert len(trace.points) == 3
+```
+
 ## Cluster-sandwich covariance
 
 `robust_covariance` requires the original response and analysis design because
@@ -91,7 +111,8 @@ single-class bootstrap sample.
 ## Boundaries
 
 Only diagonal slope penalties are supported. Arbitrary dense or categorical
-penalty matrices, automatic `pentrace`, penalized `Glm`, weights, offsets,
+penalty matrices, adaptive penalty search and R `pentrace` parity, penalized
+`Glm`, weights, offsets,
 penalized post-estimation inference, Efron OLS robust covariance, finite-sample
 corrections, cluster bootstrap, stratified/grouped resampling, failed-replicate
 skipping, bootstrap coefficient persistence, and bootstrap confidence intervals

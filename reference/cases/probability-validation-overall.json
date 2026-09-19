@@ -1,0 +1,11 @@
+{
+  "schema_version": "holocron-oracle-case/v1",
+  "case_id": "probability-validation-overall",
+  "description": "Binary discrimination, proper scores, likelihood quality, and logistic calibration.",
+  "expected_output": "probability-validation-overall.json",
+  "comparison_profile": "probability-validation-v1",
+  "qualification_stage": "python-parity",
+  "operation": "probability_validation",
+  "outcomes": [0, 1, 0, 1, 0, 1, 1, 0],
+  "probabilities": [0.1, 0.7, 0.4, 0.6, 0.55, 0.8, 0.35, 0.45]
+}

@@ -13,7 +13,7 @@ The project is distributed internally as `holocron-rms` and imported as
 Holocron is experimental and incomplete. Do not use it for consequential
 analysis, inference, prediction, or clinical decisions.
 
-Phases 0–4 are complete for private experimental development. The Phase 3
+Phases 0–5 are complete for private experimental development. The Phase 3
 deliverables cover experimental `ols`,
 Gaussian/identity and binomial/logit `Glm`, and binary `lrm` estimators plus
 their covariance,
@@ -29,6 +29,9 @@ Ron Mexico also independently reviewed and approved the Phase 4 ordinal,
 censoring, random-effects, and parity-exception scope on 2026-09-18; its exit
 gate is recorded in the
 [Phase 4 completion record](https://github.com/joshuamyers22/holocron/blob/main/governance/PHASE_4_COMPLETION.md).
+Ron Mexico independently reviewed and approved the Phase 5 survival scope on
+2026-09-18; its exit gate is recorded in the
+[Phase 5 completion record](https://github.com/joshuamyers22/holocron/blob/main/governance/PHASE_5_COMPLETION.md).
 The Phase 1 exit
 gate is recorded in the
 [completion record](https://github.com/joshuamyers22/holocron/blob/main/governance/PHASE_1_COMPLETION.md);
@@ -49,16 +52,21 @@ metadata, safe formulas, numeric and factor transformations, restricted
 interactions, classical full-rank ordinary least squares, bounded generalized
 linear models, binary logistic regression, cumulative-link ordinal regression,
 numeric mixed-censoring conversion, and single-cluster random-intercept ordinal
-models, plus right-censored Efron/Breslow Cox models, Weibull/exponential
-accelerated-failure-time models, and Kaplan–Meier curves with the declared
-risk-set, stratum, weight, offset, baseline-quantity, prediction, and residual
-operations. It also
+models, plus right-censored Efron/Breslow Cox models, exact/left/right/interval-
+censored Weibull/exponential accelerated-failure-time models, Kaplan–Meier
+curves, and fixed-horizon censoring-adjusted validation with the declared
+risk-set, stratum, weight, offset, baseline-quantity, prediction, residual,
+accuracy, discrimination, grouped-calibration, and threshold-classification
+operations. Model-independent binary-probability validation covers
+discrimination, Brier and log scores, likelihood quality indices, logistic
+recalibration, grouped calibration, and declared thresholds. It also
 includes the accepted post-estimation
 operations, diagonal OLS/lrm penalties, and robust/bootstrap covariance. The
-implemented surfaces are checked across 52 independent parity cases against
-committed outputs from a Dockerized R oracle. The nine survival cases cover
+implemented surfaces are checked across 60 independent parity cases against
+committed outputs from a Dockerized R oracle. The sixteen survival cases cover
 coefficients, covariance, likelihoods, risk sets, baseline quantities,
-predictions, and supported residuals.
+curves, means, quantiles, predictions, supported residuals, IPCW Brier scores,
+cumulative/dynamic discrimination, and marginal calibration.
 Interval-censored,
 random-intercept, and dual-scale random-effect ORM cases are parity-qualified;
 one-sided censoring is covered by an explicit documented parity exception.
@@ -81,18 +89,42 @@ sparsity/conditioning cases, and nine failure-mode cases on both accepted
 platforms. Its technical evidence and scoped independent statistical review
 pass, closing Phase 4 for private experimental development.
 
-The first two Phase 5 deliverables are complete within their experimental
+All five Phase 5 deliverables are implemented within their experimental
 envelope. Cox, Weibull/exponential AFT, and Kaplan–Meier paths now cover declared
 ties, strata, entry times where defined, positive weights, offsets where
 defined, baseline hazard/survival, hazard/survival prediction, and supported
-residuals. Broader censoring and distributions, richer survival quantities,
-time-dependent validation, and the Phase 5 exit gate remain open.
+residuals. Typed survival curves, event-time quantiles, analytic parametric
+means, and restricted Cox/Kaplan–Meier means are also supported. Parametric
+responses accept explicit exact, left, right, and interval bounds. Fixed-horizon
+validation provides censoring-adjusted Brier, AUC/Dxy, marginal calibration,
+and integrated Brier metrics. A locked seven-scenario, 1,280-replication
+simulation package passes all declared recovery, coverage, censoring, tie,
+strata/offset, Kaplan–Meier, and validation thresholds with no failed
+replication. Additional distributions, independent numerical/statistical
+review for capability promotion, and broader survival functionality remain
+deferred. The Phase 5 private-development exit gate is closed.
+
+Phase 6 is underway. Its first five deliverables provide immutable exact
+bootstrap, repeated K-fold, and caller-declared resample plans plus
+model-specific fixed-design validation and parametric calibration for OLS and
+binary-logistic results. Every split refits a fresh model, retains separate
+training and assessment measurements, and preserves explicit
+complete/partial/failed outcomes. The broader model-independent metric layer
+adds weighted binary probability validation and expands right-censored
+survival validation. Model-specific performance metrics and parametric
+calibration curves can now be corrected by the mean retained training-minus-
+assessment gap, with pairwise contributor counts and fail-closed partial-
+execution behavior. OLS and binary-logistic diagnostics now provide influence
+measures, covariance-correlation VIFs, robust/model uncertainty comparisons,
+bounded explicit penalty traces, and fresh-refit backward selection over
+caller-declared term groups. Failure-rate and partial-resample reporting is
+next; Phase 6 remains open.
 
 ## Library API
 
 Holocron is a typed library and intentionally installs no command-line tools.
 Its current public namespaces are `holocron.design`, `holocron.formula`,
-`holocron.models`, and `holocron.exceptions`:
+`holocron.models`, `holocron.validation`, and `holocron.exceptions`:
 
 ```python
 from holocron.design import DataDistribution, DesignSpec
@@ -114,8 +146,8 @@ restored_fit = type(fit).from_json(fit.to_json())
 depending on global state or the original input iterable.
 
 Design specifications, realized matrices, OLS results, binary-logistic results,
-ordinal results, and all three survival result types use strict versioned data-
-only JSON. Fitting from a `DesignMatrix`
+ordinal results, all three survival result types, and exact resample plans use
+strict versioned data-only JSON. Fitting from a `DesignMatrix`
 carries its specification fingerprint into the result and checks that identity
 during prediction. The public schemas ship under `holocron/schemas`; arbitrary
 pickle interchange is not supported.
@@ -124,9 +156,10 @@ Explicit categorical and scored-ordered terms plus hierarchical two-way
 restricted interactions are supported by the design compiler. Automatic knot
 or level selection, unrestricted or higher-order interactions, missing-data
 policies, aliased-fit handling, other GLM families/links, off-diagonal
-penalties, penalty tracing, weights/offsets, bootstrap confidence intervals,
-partial proportional odds, multi-effect random structures, and survival model
-families are not supported by this slice.
+penalties, automatic or dense penalty searches, weights/offsets, bootstrap confidence intervals,
+partial proportional odds, and multi-effect random structures are not supported
+outside the explicitly documented paths. Survival families beyond Cox,
+Weibull/exponential AFT, and Kaplan–Meier remain unsupported.
 Unsupported behavior must fail explicitly
 rather than silently substitute a different method. See the
 [package architecture](https://github.com/joshuamyers22/holocron/blob/main/docs/architecture/PACKAGE_STRUCTURE.md) for API and
@@ -166,16 +199,18 @@ make setup
 make check
 make phase-1-e2e
 make phase-3-evidence-clean
+make phase-5-evidence-clean
 make build
 make audit
 ```
 
 `make check` runs formatting, linting, strict type checking, unit and parity
 fixture tests, frozen-environment checks, and reference-metadata validation.
-It also executes the Phase 1 and Phase 2 evidence gates plus the Phase 3
-simulation and numerical-edge suites. Their schema-valid reports are written
-under `.work/` and retained by CI for 30 days. The committed Phase 3 acceptance
-reports and interpretation are described in the
+It also executes the Phase 1 and Phase 2 evidence gates, the Phase 3 simulation
+and numerical-edge suites, the Phase 4 evidence package, and the Phase 5
+survival simulations. Their schema-valid reports are written under `.work/`
+and retained by CI for 30 days. The simulation designs, reports, and
+interpretation are described in the
 [simulation guide](https://github.com/joshuamyers22/holocron/blob/main/docs/guides/simulation-and-edge-evidence.md).
 `make build` uses the locked build backend offline and without isolation, then
 inspects and independently installs both wheel and source distribution into

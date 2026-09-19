@@ -1,0 +1,103 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/joshuamyers22/holocron/schemas/phase-5-simulation-report.schema.json",
+  "type": "object",
+  "properties": {
+    "schema_version": {"const": "holocron-phase-5-simulation-report/v1"},
+    "evaluated_at_utc": {"type": "string", "format": "date-time"},
+    "plan_id": {"const": "phase-5-survival-models-v1"},
+    "plan_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "source": {
+      "type": "object",
+      "properties": {
+        "code_revision": {"type": "string", "minLength": 1},
+        "working_tree_dirty": {"type": "boolean"}
+      },
+      "required": ["code_revision", "working_tree_dirty"],
+      "additionalProperties": false
+    },
+    "environment": {
+      "type": "object",
+      "properties": {
+        "python_implementation": {"type": "string", "minLength": 1},
+        "python_version": {"type": "string", "minLength": 1},
+        "numpy_version": {"type": "string", "minLength": 1},
+        "operating_system": {"type": "string", "minLength": 1},
+        "machine": {"type": "string", "minLength": 1}
+      },
+      "required": ["python_implementation", "python_version", "numpy_version", "operating_system", "machine"],
+      "additionalProperties": false
+    },
+    "detail_policy": {"type": "string", "minLength": 1},
+    "total_replications": {"type": "integer", "minimum": 1},
+    "scenarios": {
+      "type": "array",
+      "minItems": 7,
+      "maxItems": 7,
+      "items": {"$ref": "#/$defs/scenarioResult"}
+    },
+    "platform_policy": {
+      "type": "object",
+      "properties": {
+        "required_platforms": {"const": ["ubuntu-24.04", "macos-15"]},
+        "ci_artifact": {"type": "string", "minLength": 1}
+      },
+      "required": ["required_platforms", "ci_artifact"],
+      "additionalProperties": false
+    },
+    "independent_review": {"$ref": "#/$defs/review"},
+    "technical_status": {"enum": ["pass", "fail"]},
+    "phase_5_exit_gate": {"enum": ["awaiting-independent-review", "closed", "failed"]}
+  },
+  "required": ["schema_version", "evaluated_at_utc", "plan_id", "plan_sha256", "source", "environment", "detail_policy", "total_replications", "scenarios", "platform_policy", "independent_review", "technical_status", "phase_5_exit_gate"],
+  "additionalProperties": false,
+  "$defs": {
+    "review": {
+      "type": "object",
+      "properties": {
+        "required": {"const": true},
+        "status": {"enum": ["pending", "approved"]},
+        "scope": {"type": "string", "minLength": 1},
+        "reviewer": {"type": "string", "minLength": 1},
+        "approved_at": {"type": "string", "format": "date"},
+        "disposition": {"type": "string", "minLength": 1}
+      },
+      "required": ["required", "status", "scope"],
+      "allOf": [
+        {
+          "if": {"properties": {"status": {"const": "approved"}}, "required": ["status"]},
+          "then": {"required": ["reviewer", "approved_at", "disposition"]}
+        }
+      ],
+      "additionalProperties": false
+    },
+    "metric": {
+      "type": "object",
+      "properties": {
+        "name": {"type": "string", "minLength": 1},
+        "value": {"type": "number"},
+        "minimum": {"oneOf": [{"type": "null"}, {"type": "number"}]},
+        "maximum": {"oneOf": [{"type": "null"}, {"type": "number"}]},
+        "outcome": {"enum": ["passed", "failed"]}
+      },
+      "required": ["name", "value", "minimum", "maximum", "outcome"],
+      "additionalProperties": false
+    },
+    "scenarioResult": {
+      "type": "object",
+      "properties": {
+        "scenario_id": {"type": "string", "minLength": 1},
+        "kind": {"enum": ["cox", "psm", "npsurv", "validation"]},
+        "seed": {"type": "integer", "minimum": 1},
+        "replications": {"type": "integer", "minimum": 1},
+        "successful_replications": {"type": "integer", "minimum": 0},
+        "failed_replications": {"type": "array", "items": {"type": "integer", "minimum": 0}},
+        "replication_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "metrics": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/metric"}},
+        "outcome": {"enum": ["passed", "failed"]}
+      },
+      "required": ["scenario_id", "kind", "seed", "replications", "successful_replications", "failed_replications", "replication_sha256", "metrics", "outcome"],
+      "additionalProperties": false
+    }
+  }
+}

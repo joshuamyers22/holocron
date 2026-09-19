@@ -1,0 +1,126 @@
+{
+  "schema_version": "holocron-phase-5-simulation-plan/v1",
+  "plan_id": "phase-5-survival-models-v1",
+  "approved_for": "private-experimental-development",
+  "approved_on": "2026-09-18",
+  "detail_policy": "Retain aggregate metrics, failed replication identifiers, and a SHA-256 digest of canonical per-replication diagnostics. Fixed scenario seeds reproduce every replication without committing row-level data.",
+  "required_platforms": ["ubuntu-24.04", "macos-15"],
+  "independent_review": {
+    "required": true,
+    "status": "approved",
+    "scope": "survival likelihoods, risk sets, censoring, prediction, validation metrics, and simulation thresholds",
+    "reviewer": "Ron Mexico",
+    "approved_at": "2026-09-18",
+    "disposition": "Approved for the Phase 5 private experimental scope"
+  },
+  "scenarios": [
+    {
+      "scenario_id": "cox-continuous-recovery",
+      "kind": "cox",
+      "seed": 51001,
+      "replications": 120,
+      "sample_size": 250,
+      "parameters": {"slope": 0.7, "baseline_hazard": 0.08, "censor_hazard": 0.04},
+      "acceptance": {
+        "slope_abs_bias": {"maximum": 0.08},
+        "slope_rmse": {"maximum": 0.18},
+        "slope_coverage": {"minimum": 0.88, "maximum": 0.99},
+        "mean_censoring_fraction": {"minimum": 0.20, "maximum": 0.55},
+        "failure_rate": {"maximum": 0.02}
+      }
+    },
+    {
+      "scenario_id": "cox-tied-methods",
+      "kind": "cox",
+      "seed": 51002,
+      "replications": 80,
+      "sample_size": 250,
+      "parameters": {"slope": 0.7, "baseline_hazard": 0.08, "censor_hazard": 0.04, "rounding_width": 0.5},
+      "acceptance": {
+        "efron_slope_abs_bias": {"maximum": 0.10},
+        "breslow_slope_abs_bias": {"maximum": 0.12},
+        "mean_abs_coefficient_difference": {"maximum": 0.05},
+        "mean_tied_event_fraction": {"minimum": 0.75},
+        "failure_rate": {"maximum": 0.03}
+      }
+    },
+    {
+      "scenario_id": "cox-stratified-offset-recovery",
+      "kind": "cox",
+      "seed": 51003,
+      "replications": 80,
+      "sample_size": 240,
+      "parameters": {"slope": 0.6, "baseline_hazard_a": 0.05, "baseline_hazard_b": 0.12, "censor_hazard": 0.035, "offset_sigma": 0.2, "evaluation_time": 5.0},
+      "acceptance": {
+        "slope_abs_bias": {"maximum": 0.10},
+        "slope_rmse": {"maximum": 0.20},
+        "slope_coverage": {"minimum": 0.86, "maximum": 0.99},
+        "baseline_ordering_rate": {"minimum": 0.90},
+        "failure_rate": {"maximum": 0.03}
+      }
+    },
+    {
+      "scenario_id": "psm-weibull-right-recovery",
+      "kind": "psm",
+      "seed": 51004,
+      "replications": 500,
+      "sample_size": 250,
+      "parameters": {"intercept": 1.6, "slope": 0.5, "scale": 0.65, "censor_hazard": 0.08},
+      "acceptance": {
+        "slope_abs_bias": {"maximum": 0.08},
+        "slope_rmse": {"maximum": 0.16},
+        "slope_coverage": {"minimum": 0.88, "maximum": 0.99},
+        "scale_abs_bias": {"maximum": 0.07},
+        "mean_censoring_fraction": {"minimum": 0.15, "maximum": 0.55},
+        "failure_rate": {"maximum": 0.02}
+      }
+    },
+    {
+      "scenario_id": "psm-weibull-mixed-censoring",
+      "kind": "psm",
+      "seed": 51005,
+      "replications": 100,
+      "sample_size": 250,
+      "parameters": {"intercept": 1.5, "slope": 0.5, "scale": 0.65, "left_limit": 1.0, "right_limit": 10.0, "interval_width": 1.0, "exact_probability": 0.25},
+      "acceptance": {
+        "slope_abs_bias": {"maximum": 0.12},
+        "slope_rmse": {"maximum": 0.22},
+        "scale_abs_bias": {"maximum": 0.10},
+        "mean_left_fraction": {"minimum": 0.03},
+        "mean_interval_fraction": {"minimum": 0.25},
+        "mean_right_fraction": {"minimum": 0.03},
+        "failure_rate": {"maximum": 0.05}
+      }
+    },
+    {
+      "scenario_id": "kaplan-meier-recovery",
+      "kind": "npsurv",
+      "seed": 51006,
+      "replications": 250,
+      "sample_size": 300,
+      "parameters": {"event_hazard": 0.12, "censor_hazard": 0.05, "evaluation_time": 5.0},
+      "acceptance": {
+        "survival_abs_bias": {"maximum": 0.035},
+        "survival_rmse": {"maximum": 0.065},
+        "interval_coverage": {"minimum": 0.88, "maximum": 0.99},
+        "mean_censoring_fraction": {"minimum": 0.20, "maximum": 0.50},
+        "failure_rate": {"maximum": 0.01}
+      }
+    },
+    {
+      "scenario_id": "survival-validation-recovery",
+      "kind": "validation",
+      "seed": 51007,
+      "replications": 150,
+      "sample_size": 600,
+      "parameters": {"slope": 0.6, "baseline_hazard": 0.10, "censor_hazard": 0.045, "horizon_1": 2.0, "horizon_2": 5.0, "horizon_3": 8.0},
+      "acceptance": {
+        "brier_abs_bias": {"maximum": 0.020},
+        "auc_abs_bias": {"maximum": 0.035},
+        "mean_abs_calibration_error": {"maximum": 0.035},
+        "integrated_brier_abs_bias": {"maximum": 0.020},
+        "failure_rate": {"maximum": 0.01}
+      }
+    }
+  ]
+}

@@ -20,6 +20,7 @@ jobs:
       - run: make phase-2-exit-gate
       - run: make phase-3-evidence-clean
       - run: make phase-4-evidence-clean
+      - run: make phase-5-evidence-clean
       - name: Retain Phase 1 parity evidence
         if: always()
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
@@ -53,6 +54,15 @@ jobs:
           if-no-files-found: error
           retention-days: 30
           include-hidden-files: true
+      - name: Retain Phase 5 simulation evidence
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: phase-5-simulation-evidence-${{ github.sha }}
+          path: .work/phase-5-evidence/simulation-report.json
+          if-no-files-found: error
+          retention-days: 30
+          include-hidden-files: true
       - run: make audit clean-build
   tolerance-pilot:
     strategy:
@@ -69,12 +79,14 @@ jobs:
       - run: make setup
       - name: Exercise Phase 3 estimators and operations on the platform matrix
         run: uv run --frozen python -m unittest tests.test_generalized_models tests.test_postfit_operations tests.test_regularization_covariance
-      - name: Exercise Phase 5 survival estimators on the platform matrix
-        run: uv run --frozen python -m unittest tests.test_survival_models
+      - name: Exercise Phase 5 survival estimators and validation on the platform matrix
+        run: uv run --frozen python -m unittest tests.test_survival_models tests.test_survival_validation tests.test_phase_5_simulations
       - name: Exercise Phase 3 simulation thresholds on the platform matrix
         run: uv run --frozen python -m tools.run_phase_3_evidence --simulation-output ".work/phase-3-platform/simulation-report.json" --edge-output ".work/phase-3-platform/numerical-edge-report.json"
       - name: Exercise Phase 4 evidence on the platform matrix
         run: uv run --frozen python -m tools.run_phase_4_evidence --output ".work/phase-4-platform/phase-4-exit.json"
+      - name: Exercise Phase 5 simulations on the platform matrix
+        run: uv run --frozen python -m tools.run_phase_5_simulations --output ".work/phase-5-platform/simulation-report.json"
       - name: Retain platform Phase 3 evidence
         if: always()
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
@@ -90,6 +102,15 @@ jobs:
         with:
           name: phase-4-platform-evidence-${{ runner.os }}-${{ runner.arch }}-${{ github.sha }}
           path: .work/phase-4-platform/phase-4-exit.json
+          if-no-files-found: error
+          retention-days: 30
+          include-hidden-files: true
+      - name: Retain platform Phase 5 evidence
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: phase-5-platform-evidence-${{ runner.os }}-${{ runner.arch }}-${{ github.sha }}
+          path: .work/phase-5-platform/simulation-report.json
           if-no-files-found: error
           retention-days: 30
           include-hidden-files: true

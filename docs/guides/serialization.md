@@ -8,6 +8,7 @@ formula, callback, or expression.
 # holocron: execute
 from holocron.design import DesignMatrix, DesignSpec
 from holocron.models import OlsResult, fit_ols
+from holocron.validation import ResamplePlan
 
 specification = DesignSpec.from_formula("y ~ pol(x, 2)")
 matrix = specification.transform({"x": (-2, -1, 0, 1, 2)})
@@ -16,12 +17,15 @@ fit = fit_ols((5, 2, 1, 2, 5), matrix)
 restored_specification = DesignSpec.from_json(specification.to_json())
 restored_matrix = DesignMatrix.from_json(matrix.to_json())
 restored_fit = OlsResult.from_json(fit.to_json())
+plan = ResamplePlan.k_fold(5, folds=5, seed=17)
+restored_plan = ResamplePlan.from_json(plan.to_json())
 
 assert restored_specification == specification
 assert restored_matrix == matrix
 assert restored_fit == fit
 assert restored_fit.design_fingerprint == specification.fingerprint
 assert restored_fit.predict(restored_matrix) == restored_fit.fitted_values
+assert restored_plan == plan
 ```
 
 `to_dict()` returns the schema document, `to_json()` returns its canonical JSON,

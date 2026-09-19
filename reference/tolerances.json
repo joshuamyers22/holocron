@@ -143,6 +143,51 @@
         {"path": "/predicted_survival/*/*", "rule": {"mode": "numeric", "absolute": 1e-8, "relative": 1e-7}}
       ]
     },
+    "cox-prediction-v1": {
+      "description": "Field-aware tolerances for Cox fits, curves, event-time quantiles, and restricted means.",
+      "default": {"mode": "exact"},
+      "rules": [
+        {"path": "/design/*/*", "rule": {"mode": "numeric", "absolute": 1e-12, "relative": 1e-12}},
+        {"path": "/coefficients/*", "rule": {"mode": "numeric", "absolute": 1e-8, "relative": 1e-7}},
+        {"path": "/covariance/*/*", "rule": {"mode": "numeric", "absolute": 1e-7, "relative": 1e-6}},
+        {"path": "/linear_predictors/*", "rule": {"mode": "numeric", "absolute": 1e-8, "relative": 1e-7}},
+        {"path": "/log_likelihood/*", "rule": {"mode": "numeric", "absolute": 1e-8, "relative": 1e-7}},
+        {"path": "/evaluation_linear_predictors/*", "rule": {"mode": "numeric", "absolute": 1e-8, "relative": 1e-7}},
+        {"path": "/predicted_survival/*/*", "rule": {"mode": "numeric", "absolute": 1e-8, "relative": 1e-7}},
+        {"path": "/predicted_quantiles/*/*", "rule": {"mode": "numeric", "absolute": 1e-8, "relative": 1e-7}},
+        {"path": "/predicted_mean/*", "rule": {"mode": "numeric", "absolute": 1e-8, "relative": 1e-7}}
+      ]
+    },
+    "parametric-survival-prediction-v1": {
+      "description": "Field-aware tolerances for parametric fits, curves, event-time quantiles, and means.",
+      "default": {"mode": "exact"},
+      "rules": [
+        {"path": "/design/*/*", "rule": {"mode": "numeric", "absolute": 1e-12, "relative": 1e-12}},
+        {"path": "/coefficients/*", "rule": {"mode": "numeric", "absolute": 1e-8, "relative": 1e-7}},
+        {"path": "/covariance/*/*", "rule": {"mode": "numeric", "absolute": 1e-7, "relative": 1e-6}},
+        {"path": "/linear_predictors/*", "rule": {"mode": "numeric", "absolute": 1e-8, "relative": 1e-7}},
+        {"path": "/log_likelihood/*", "rule": {"mode": "numeric", "absolute": 1e-8, "relative": 1e-7}},
+        {"path": "/scale", "rule": {"mode": "numeric", "absolute": 1e-8, "relative": 1e-7}},
+        {"path": "/evaluation_linear_predictors/*", "rule": {"mode": "numeric", "absolute": 1e-8, "relative": 1e-7}},
+        {"path": "/predicted_survival/*/*", "rule": {"mode": "numeric", "absolute": 1e-8, "relative": 1e-7}},
+        {"path": "/predicted_quantiles/*/*", "rule": {"mode": "numeric", "absolute": 1e-8, "relative": 1e-7}},
+        {"path": "/predicted_mean/*", "rule": {"mode": "numeric", "absolute": 1e-8, "relative": 1e-7}}
+      ]
+    },
+    "parametric-survival-censoring-v1": {
+      "description": "Field-aware tolerances for Weibull/exponential exact, left-, right-, and interval-censored fits.",
+      "default": {"mode": "exact"},
+      "rules": [
+        {"path": "/design/*/*", "rule": {"mode": "numeric", "absolute": 1e-12, "relative": 1e-12}},
+        {"path": "/coefficients/*", "rule": {"mode": "numeric", "absolute": 1e-7, "relative": 1e-6}},
+        {"path": "/covariance/*/*", "rule": {"mode": "numeric", "absolute": 1e-6, "relative": 1e-5}},
+        {"path": "/linear_predictors/*", "rule": {"mode": "numeric", "absolute": 1e-7, "relative": 1e-6}},
+        {"path": "/log_likelihood/*", "rule": {"mode": "numeric", "absolute": 1e-7, "relative": 1e-6}},
+        {"path": "/scale", "rule": {"mode": "numeric", "absolute": 1e-7, "relative": 1e-6}},
+        {"path": "/evaluation_linear_predictors/*", "rule": {"mode": "numeric", "absolute": 1e-7, "relative": 1e-6}},
+        {"path": "/predicted_survival/*/*", "rule": {"mode": "numeric", "absolute": 1e-7, "relative": 1e-6}}
+      ]
+    },
     "nonparametric-survival-v1": {
       "description": "Exact risk-set counts and times with numeric tolerance for estimated survival uncertainty.",
       "default": {"mode": "exact"},
@@ -151,6 +196,62 @@
         {"path": "/standard_error/*", "rule": {"mode": "numeric", "absolute": 1e-10, "relative": 1e-9}},
         {"path": "/lower/*", "rule": {"mode": "numeric", "absolute": 1e-10, "relative": 1e-9}},
         {"path": "/upper/*", "rule": {"mode": "numeric", "absolute": 1e-10, "relative": 1e-9}}
+      ]
+    },
+    "survival-validation-v1": {
+      "description": "Field-aware tolerances for IPCW Brier scores, cumulative/dynamic discrimination, and horizon calibration primitives.",
+      "default": {"mode": "exact"},
+      "rules": [
+        {"path": "/horizons/*", "rule": {"mode": "numeric", "absolute": 1e-12, "relative": 1e-12}},
+        {"path": "/brier_scores/*", "rule": {"mode": "numeric", "absolute": 1e-12, "relative": 1e-12}},
+        {"path": "/aucs/*", "rule": {"mode": "numeric", "absolute": 1e-12, "relative": 1e-12}},
+        {"path": "/dxy/*", "rule": {"mode": "numeric", "absolute": 1e-12, "relative": 1e-12}},
+        {"path": "/observed_survival/*", "rule": {"mode": "numeric", "absolute": 1e-12, "relative": 1e-12}},
+        {"path": "/mean_predicted_survival/*", "rule": {"mode": "numeric", "absolute": 1e-12, "relative": 1e-12}},
+        {"path": "/calibration_errors/*", "rule": {"mode": "numeric", "absolute": 1e-12, "relative": 1e-12}},
+        {"path": "/censoring_survival/*", "rule": {"mode": "numeric", "absolute": 1e-12, "relative": 1e-12}},
+        {"path": "/integrated_brier_score", "rule": {"mode": "numeric", "absolute": 1e-12, "relative": 1e-12}},
+        {"path": "/total_weight", "rule": {"mode": "numeric", "absolute": 1e-12, "relative": 1e-12}}
+      ]
+    },
+    "probability-validation-v1": {
+      "description": "Field-aware tolerances for val.prob discrimination, accuracy, likelihood quality, and logistic calibration.",
+      "default": {"mode": "exact"},
+      "rules": [
+        {"path": "/auc", "rule": {"mode": "numeric", "absolute": 1e-10, "relative": 1e-9}},
+        {"path": "/dxy", "rule": {"mode": "numeric", "absolute": 1e-10, "relative": 1e-9}},
+        {"path": "/brier_score", "rule": {"mode": "numeric", "absolute": 1e-10, "relative": 1e-9}},
+        {"path": "/scaled_brier_score", "rule": {"mode": "numeric", "absolute": 1e-10, "relative": 1e-9}},
+        {"path": "/log_loss", "rule": {"mode": "numeric", "absolute": 1e-10, "relative": 1e-9}},
+        {"path": "/null_log_loss", "rule": {"mode": "numeric", "absolute": 1e-10, "relative": 1e-9}},
+        {"path": "/nagelkerke_r_squared", "rule": {"mode": "numeric", "absolute": 1e-10, "relative": 1e-9}},
+        {"path": "/discrimination_index", "rule": {"mode": "numeric", "absolute": 1e-10, "relative": 1e-9}},
+        {"path": "/unreliability_index", "rule": {"mode": "numeric", "absolute": 1e-10, "relative": 1e-9}},
+        {"path": "/quality_index", "rule": {"mode": "numeric", "absolute": 1e-10, "relative": 1e-9}},
+        {"path": "/likelihood_ratio_chi_square", "rule": {"mode": "numeric", "absolute": 1e-10, "relative": 1e-9}},
+        {"path": "/likelihood_ratio_p_value", "rule": {"mode": "numeric", "absolute": 1e-10, "relative": 1e-9}},
+        {"path": "/unreliability_chi_square", "rule": {"mode": "numeric", "absolute": 1e-10, "relative": 1e-9}},
+        {"path": "/unreliability_p_value", "rule": {"mode": "numeric", "absolute": 1e-10, "relative": 1e-9}},
+        {"path": "/calibration_intercept", "rule": {"mode": "numeric", "absolute": 1e-8, "relative": 1e-7}},
+        {"path": "/calibration_slope", "rule": {"mode": "numeric", "absolute": 1e-8, "relative": 1e-7}},
+        {"path": "/spiegelhalter_z", "rule": {"mode": "numeric", "absolute": 1e-10, "relative": 1e-9}},
+        {"path": "/spiegelhalter_p_value", "rule": {"mode": "numeric", "absolute": 1e-10, "relative": 1e-9}},
+        {"path": "/prevalence", "rule": {"mode": "numeric", "absolute": 1e-12, "relative": 1e-12}},
+        {"path": "/mean_prediction", "rule": {"mode": "numeric", "absolute": 1e-12, "relative": 1e-12}},
+        {"path": "/calibration_in_the_large", "rule": {"mode": "numeric", "absolute": 1e-12, "relative": 1e-12}}
+      ]
+    },
+    "nonparametric-survival-prediction-v1": {
+      "description": "Field-aware tolerances for Kaplan-Meier curves, event-time quantiles, and restricted means.",
+      "default": {"mode": "exact"},
+      "rules": [
+        {"path": "/survival/*", "rule": {"mode": "numeric", "absolute": 1e-10, "relative": 1e-9}},
+        {"path": "/standard_error/*", "rule": {"mode": "numeric", "absolute": 1e-10, "relative": 1e-9}},
+        {"path": "/lower/*", "rule": {"mode": "numeric", "absolute": 1e-10, "relative": 1e-9}},
+        {"path": "/upper/*", "rule": {"mode": "numeric", "absolute": 1e-10, "relative": 1e-9}},
+        {"path": "/predicted_survival/*/*", "rule": {"mode": "numeric", "absolute": 1e-10, "relative": 1e-9}},
+        {"path": "/predicted_quantiles/*/*", "rule": {"mode": "numeric", "absolute": 1e-10, "relative": 1e-9}},
+        {"path": "/predicted_mean/*", "rule": {"mode": "numeric", "absolute": 1e-10, "relative": 1e-9}}
       ]
     },
     "cox-risk-set-v2": {

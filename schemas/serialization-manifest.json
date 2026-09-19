@@ -17,6 +17,7 @@
     {"python_type": "holocron.models.OrdinalResult", "schema_version": "holocron-ordinal-result/v1", "schema_file": "ordinal-result.schema.json", "stability": "experimental-schema"},
     {"python_type": "holocron.models.CoxResult", "schema_version": "holocron-cox-result/v2", "schema_file": "cox-result-v2.schema.json", "stability": "experimental-schema"},
     {"python_type": "holocron.models.ParametricSurvivalResult", "schema_version": "holocron-parametric-survival-result/v2", "schema_file": "parametric-survival-result-v2.schema.json", "stability": "experimental-schema"},
-    {"python_type": "holocron.models.NonparametricSurvivalResult", "schema_version": "holocron-nonparametric-survival-result/v2", "schema_file": "nonparametric-survival-result-v2.schema.json", "stability": "experimental-schema"}
+    {"python_type": "holocron.models.NonparametricSurvivalResult", "schema_version": "holocron-nonparametric-survival-result/v2", "schema_file": "nonparametric-survival-result-v2.schema.json", "stability": "experimental-schema"},
+    {"python_type": "holocron.validation.ResamplePlan", "schema_version": "holocron-resample-plan/v1", "schema_file": "resample-plan.schema.json", "stability": "experimental-schema"}
   ]
 }

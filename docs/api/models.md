@@ -41,6 +41,26 @@ One joint Wald test over a declared formula term.
 | `denominator_degrees_of_freedom` | `int | None` |
 | `p_value` | `float` |
 
+## `BackwardSelectionResult`
+
+```python
+class holocron.models.diagnostics.BackwardSelectionResult(model_family: Literal['ols', 'binary-logistic'], significance_level: float, initial_terms: tuple[str, ...], selected_terms: tuple[str, ...], protected_terms: tuple[str, ...], steps: tuple[holocron.models.diagnostics.SelectionStep, ...], final_model: holocron.models.linear.OlsResult | holocron.models.logistic.BinaryLogisticResult) -> None
+```
+
+A bounded sequence of term removals with the final fresh model fit.
+
+### Attributes
+
+| Name | Type |
+| --- | --- |
+| `model_family` | `ModelFamily` |
+| `significance_level` | `float` |
+| `initial_terms` | `tuple[str, ...]` |
+| `selected_terms` | `tuple[str, ...]` |
+| `protected_terms` | `tuple[str, ...]` |
+| `steps` | `tuple[SelectionStep, ...]` |
+| `final_model` | `ModelResult` |
+
 ## `BinaryLogisticResult`
 
 ```python
@@ -161,6 +181,24 @@ A named covariance matrix, optionally restricted to selected terms.
 | `coefficient_names` | `tuple[str, ...]` |
 | `matrix` | `tuple[tuple[float, ...], ...]` |
 
+## `CoefficientRobustness`
+
+```python
+class holocron.models.diagnostics.CoefficientRobustness(coefficient_name: str, coefficient: float, model_standard_error: float, robust_standard_error: float, robust_to_model_ratio: float) -> None
+```
+
+Model-based and cluster-robust uncertainty for one coefficient.
+
+### Attributes
+
+| Name | Type |
+| --- | --- |
+| `coefficient_name` | `str` |
+| `coefficient` | `float` |
+| `model_standard_error` | `float` |
+| `robust_standard_error` | `float` |
+| `robust_to_model_ratio` | `float` |
+
 ## `CoxResult`
 
 ```python
@@ -209,9 +247,21 @@ Reconstruct a Cox result from strict bounded JSON.
 
 Predict cumulative hazard at each time for every feature row.
 
+### `predict_curve(self, features: collections.abc.Iterable[collections.abc.Iterable[float]], times: collections.abc.Iterable[float] | None = None, *, strata: collections.abc.Iterable[str] | None = None, offsets: collections.abc.Iterable[float] | None = None) -> holocron.models.survival.SurvivalCurveResult`
+
+Return structured Cox survival curves on an explicit or fitted grid.
+
 ### `predict_linear(self, features: collections.abc.Iterable[collections.abc.Iterable[float]], *, offsets: collections.abc.Iterable[float] | None = None) -> tuple[float, ...]`
 
 Predict mean-centered log relative hazards.
+
+### `predict_mean(self, features: collections.abc.Iterable[collections.abc.Iterable[float]], *, restricted_time: float, strata: collections.abc.Iterable[str] | None = None, offsets: collections.abc.Iterable[float] | None = None, interpolation: Literal['step', 'linear'] = 'step') -> tuple[float, ...]`
+
+Predict the pinned rms event-grid mean at an explicit truncation.
+
+### `predict_quantile(self, features: collections.abc.Iterable[collections.abc.Iterable[float]], probabilities: collections.abc.Iterable[float] = (0.5,), *, strata: collections.abc.Iterable[str] | None = None, offsets: collections.abc.Iterable[float] | None = None, interpolation: Literal['step', 'linear'] = 'step') -> tuple[tuple[float | None, ...], ...]`
+
+Predict event-time CDF quantiles; return ``None`` beyond follow-up.
 
 ### `predict_survival(self, features: collections.abc.Iterable[collections.abc.Iterable[float]], times: collections.abc.Iterable[float], *, strata: collections.abc.Iterable[str] | None = None, offsets: collections.abc.Iterable[float] | None = None) -> tuple[tuple[float, ...], ...]`
 
@@ -246,6 +296,49 @@ One estimate with a Wald statistic, p-value, and confidence interval.
 | `p_value` | `float` |
 | `lower` | `float` |
 | `upper` | `float` |
+
+## `InfluenceObservation`
+
+```python
+class holocron.models.diagnostics.InfluenceObservation(row_index: int, leverage: float, standardized_residual: float, cooks_distance: float, coefficient_change: tuple[float, ...], dfbetas: tuple[float, ...], influential: bool) -> None
+```
+
+One row's leverage, residual, Cook distance, and coefficient influence.
+
+### Attributes
+
+| Name | Type |
+| --- | --- |
+| `row_index` | `int` |
+| `leverage` | `float` |
+| `standardized_residual` | `float` |
+| `cooks_distance` | `float` |
+| `coefficient_change` | `tuple[float, ...]` |
+| `dfbetas` | `tuple[float, ...]` |
+| `influential` | `bool` |
+
+## `InfluenceResult`
+
+```python
+class holocron.models.diagnostics.InfluenceResult(model_family: Literal['ols', 'binary-logistic'], coefficient_names: tuple[str, ...], observations: tuple[holocron.models.diagnostics.InfluenceObservation, ...], leverage_threshold: float, cooks_distance_threshold: float, dfbeta_threshold: float) -> None
+```
+
+Observation-level influence diagnostics with declared flag thresholds.
+
+### Attributes
+
+| Name | Type |
+| --- | --- |
+| `model_family` | `ModelFamily` |
+| `coefficient_names` | `tuple[str, ...]` |
+| `observations` | `tuple[InfluenceObservation, ...]` |
+| `leverage_threshold` | `float` |
+| `cooks_distance_threshold` | `float` |
+| `dfbeta_threshold` | `float` |
+
+### `influential_rows`
+
+Return row indices exceeding any declared heuristic threshold.
 
 ## `LikelihoodResult`
 
@@ -326,6 +419,18 @@ Reconstruct a Kaplan–Meier result from strict bounded JSON.
 ### `predict(self, times: collections.abc.Iterable[float], *, stratum: str | None = None) -> tuple[float, ...]`
 
 Evaluate the right-continuous Kaplan–Meier step function.
+
+### `predict_curve(self, times: collections.abc.Iterable[float] | None = None, *, strata: collections.abc.Iterable[str] | None = None) -> holocron.models.survival.SurvivalCurveResult`
+
+Return structured Kaplan–Meier curves for selected strata.
+
+### `predict_mean(self, *, restricted_time: float, strata: collections.abc.Iterable[str] | None = None, interpolation: Literal['step', 'linear'] = 'step') -> tuple[float, ...]`
+
+Predict restricted Kaplan–Meier mean survival by stratum.
+
+### `predict_quantile(self, probabilities: collections.abc.Iterable[float] = (0.5,), *, strata: collections.abc.Iterable[str] | None = None, interpolation: Literal['step', 'linear'] = 'step') -> tuple[tuple[float | None, ...], ...]`
+
+Predict Kaplan–Meier event-time CDF quantiles by stratum.
 
 ### `to_dict(self) -> dict[str, None | bool | int | float | str | list['JsonValue'] | dict[str, 'JsonValue']]`
 
@@ -547,6 +652,46 @@ Predict on the linear scale while enforcing design identity.
 
 Predict fitted means: Gaussian means or binary probabilities.
 
+## `PenaltyTracePoint`
+
+```python
+class holocron.models.diagnostics.PenaltyTracePoint(penalty: float, effective_degrees_of_freedom: float, deviance: float, aic: float, bic: float, coefficients: tuple[float, ...]) -> None
+```
+
+One scalar-penalty fit and its effective-complexity criteria.
+
+### Attributes
+
+| Name | Type |
+| --- | --- |
+| `penalty` | `float` |
+| `effective_degrees_of_freedom` | `float` |
+| `deviance` | `float` |
+| `aic` | `float` |
+| `bic` | `float` |
+| `coefficients` | `tuple[float, ...]` |
+
+## `PenaltyTraceResult`
+
+```python
+class holocron.models.diagnostics.PenaltyTraceResult(model_family: Literal['ols', 'lrm-binary'], criterion: Literal['aic', 'bic'], points: tuple[holocron.models.diagnostics.PenaltyTracePoint, ...], selected_penalty: float) -> None
+```
+
+A bounded scalar-penalty path with one selected information criterion.
+
+### Attributes
+
+| Name | Type |
+| --- | --- |
+| `model_family` | `Literal['ols', 'lrm-binary']` |
+| `criterion` | `PenaltyCriterion` |
+| `points` | `tuple[PenaltyTracePoint, ...]` |
+| `selected_penalty` | `float` |
+
+### `selected_point`
+
+Return the criterion-minimizing point, preferring the lower penalty.
+
 ## `ParametricSurvivalResult`
 
 ```python
@@ -583,6 +728,10 @@ Reconstruct a parametric result from an exact-version document.
 
 Reconstruct a parametric result from strict bounded JSON.
 
+### `predict_curve(self, features: collections.abc.Iterable[collections.abc.Iterable[float]], times: collections.abc.Iterable[float], *, strata: collections.abc.Iterable[str] | None = None, offsets: collections.abc.Iterable[float] | None = None) -> holocron.models.survival.SurvivalCurveResult`
+
+Return structured parametric survival curves on an explicit grid.
+
 ### `predict_hazard(self, features: collections.abc.Iterable[collections.abc.Iterable[float]], times: collections.abc.Iterable[float], *, strata: collections.abc.Iterable[str] | None = None, offsets: collections.abc.Iterable[float] | None = None) -> tuple[tuple[float, ...], ...]`
 
 Predict the Weibull or exponential hazard function.
@@ -590,6 +739,14 @@ Predict the Weibull or exponential hazard function.
 ### `predict_linear(self, features: collections.abc.Iterable[collections.abc.Iterable[float]], *, offsets: collections.abc.Iterable[float] | None = None) -> tuple[float, ...]`
 
 Predict log survival-time location.
+
+### `predict_mean(self, features: collections.abc.Iterable[collections.abc.Iterable[float]], *, strata: collections.abc.Iterable[str] | None = None, offsets: collections.abc.Iterable[float] | None = None) -> tuple[float, ...]`
+
+Predict the finite Weibull or exponential mean survival time.
+
+### `predict_quantile(self, features: collections.abc.Iterable[collections.abc.Iterable[float]], probabilities: collections.abc.Iterable[float] = (0.5,), *, strata: collections.abc.Iterable[str] | None = None, offsets: collections.abc.Iterable[float] | None = None) -> tuple[tuple[float, ...], ...]`
+
+Predict event-time quantiles for CDF probabilities in ``(0, 1)``.
 
 ### `predict_survival(self, features: collections.abc.Iterable[collections.abc.Iterable[float]], times: collections.abc.Iterable[float], *, strata: collections.abc.Iterable[str] | None = None, offsets: collections.abc.Iterable[float] | None = None) -> tuple[tuple[float, ...], ...]`
 
@@ -664,6 +821,77 @@ A named residual vector in original training-row order.
 | `kind` | `str` |
 | `values` | `tuple[float, ...]` |
 
+## `RobustnessDiagnostics`
+
+```python
+class holocron.models.diagnostics.RobustnessDiagnostics(covariance: holocron.models.regularization.CovarianceEstimate, coefficients: tuple[holocron.models.diagnostics.CoefficientRobustness, ...]) -> None
+```
+
+Cluster-sandwich covariance and coefficient-level uncertainty changes.
+
+### Attributes
+
+| Name | Type |
+| --- | --- |
+| `covariance` | `CovarianceEstimate` |
+| `coefficients` | `tuple[CoefficientRobustness, ...]` |
+
+## `SelectionStep`
+
+```python
+class holocron.models.diagnostics.SelectionStep(step: int, removed_term: str, p_value: float, remaining_terms: tuple[str, ...]) -> None
+```
+
+One fully refitted backward-elimination step.
+
+### Attributes
+
+| Name | Type |
+| --- | --- |
+| `step` | `int` |
+| `removed_term` | `str` |
+| `p_value` | `float` |
+| `remaining_terms` | `tuple[str, ...]` |
+
+## `SurvivalCalibrationGroup`
+
+```python
+class holocron.models.survival_validation.SurvivalCalibrationGroup(horizon: float, group: int, observation_count: int, total_weight: float, minimum_predicted_survival: float, maximum_predicted_survival: float, mean_predicted_survival: float, observed_survival: float, calibration_error: float) -> None
+```
+
+One prediction-ranked Kaplan--Meier calibration group at a horizon.
+
+### Attributes
+
+| Name | Type |
+| --- | --- |
+| `horizon` | `float` |
+| `group` | `int` |
+| `observation_count` | `int` |
+| `total_weight` | `float` |
+| `minimum_predicted_survival` | `float` |
+| `maximum_predicted_survival` | `float` |
+| `mean_predicted_survival` | `float` |
+| `observed_survival` | `float` |
+| `calibration_error` | `float` |
+
+## `SurvivalCurveResult`
+
+```python
+class holocron.models.survival.SurvivalCurveResult(times: tuple[float, ...], strata: tuple[str, ...], survival: tuple[tuple[float, ...], ...], linear_predictors: tuple[float, ...] | None) -> None
+```
+
+Structured survival curves with one row per prediction subject.
+
+### Attributes
+
+| Name | Type |
+| --- | --- |
+| `times` | `tuple[float, ...]` |
+| `strata` | `tuple[str, ...]` |
+| `survival` | `tuple[tuple[float, ...], ...]` |
+| `linear_predictors` | `tuple[float, ...] | None` |
+
 ## `SurvivalResidualResult`
 
 ```python
@@ -678,6 +906,83 @@ A named survival residual vector in original training-row order.
 | --- | --- |
 | `kind` | `SurvivalResidualKind` |
 | `values` | `tuple[float, ...]` |
+
+## `SurvivalResponse`
+
+```python
+class holocron.models.survival.SurvivalResponse(lower: tuple[float, ...], upper: tuple[float, ...]) -> None
+```
+
+Positive-time exact, left-, right-, or interval-censored response.
+
+### Attributes
+
+| Name | Type |
+| --- | --- |
+| `lower` | `tuple[float, ...]` |
+| `upper` | `tuple[float, ...]` |
+
+### `censoring_types`
+
+Return the censoring contribution represented by each interval.
+
+### `from_intervals(lower: collections.abc.Iterable[float], upper: collections.abc.Iterable[float] | None = None) -> holocron.models.survival.SurvivalResponse`
+
+Construct a response; omitted upper endpoints declare exact times.
+
+## `SurvivalThresholdMetrics`
+
+```python
+class holocron.models.survival_validation.SurvivalThresholdMetrics(horizon: float, risk_threshold: float, true_positive_weight: float, false_positive_weight: float, true_negative_weight: float, false_negative_weight: float, sensitivity: float | None, specificity: float | None, positive_predictive_value: float | None, negative_predictive_value: float | None, accuracy: float) -> None
+```
+
+IPCW binary risk-classification metrics at one horizon and threshold.
+
+### Attributes
+
+| Name | Type |
+| --- | --- |
+| `horizon` | `float` |
+| `risk_threshold` | `float` |
+| `true_positive_weight` | `float` |
+| `false_positive_weight` | `float` |
+| `true_negative_weight` | `float` |
+| `false_negative_weight` | `float` |
+| `sensitivity` | `float | None` |
+| `specificity` | `float | None` |
+| `positive_predictive_value` | `float | None` |
+| `negative_predictive_value` | `float | None` |
+| `accuracy` | `float` |
+
+## `SurvivalValidationResult`
+
+```python
+class holocron.models.survival_validation.SurvivalValidationResult(horizons: tuple[float, ...], brier_scores: tuple[float, ...], aucs: tuple[float | None, ...], dxy: tuple[float | None, ...], observed_survival: tuple[float, ...], mean_predicted_survival: tuple[float, ...], calibration_errors: tuple[float, ...], censoring_survival: tuple[float, ...], case_counts: tuple[int, ...], control_counts: tuple[int, ...], integrated_brier_score: float | None, integrated_auc: float | None, integrated_absolute_calibration_error: float | None, calibration_groups: tuple[tuple[holocron.models.survival_validation.SurvivalCalibrationGroup, ...], ...], threshold_metrics: tuple[holocron.models.survival_validation.SurvivalThresholdMetrics, ...], n_observations: int, total_weight: float) -> None
+```
+
+Censoring-adjusted discrimination, accuracy, and calibration by horizon.
+
+### Attributes
+
+| Name | Type |
+| --- | --- |
+| `horizons` | `tuple[float, ...]` |
+| `brier_scores` | `tuple[float, ...]` |
+| `aucs` | `tuple[float | None, ...]` |
+| `dxy` | `tuple[float | None, ...]` |
+| `observed_survival` | `tuple[float, ...]` |
+| `mean_predicted_survival` | `tuple[float, ...]` |
+| `calibration_errors` | `tuple[float, ...]` |
+| `censoring_survival` | `tuple[float, ...]` |
+| `case_counts` | `tuple[int, ...]` |
+| `control_counts` | `tuple[int, ...]` |
+| `integrated_brier_score` | `float | None` |
+| `integrated_auc` | `float | None` |
+| `integrated_absolute_calibration_error` | `float | None` |
+| `calibration_groups` | `tuple[tuple[SurvivalCalibrationGroup, ...], ...]` |
+| `threshold_metrics` | `tuple[SurvivalThresholdMetrics, ...]` |
+| `n_observations` | `int` |
+| `total_weight` | `float` |
 
 ## `TurnbullResult`
 
@@ -716,9 +1021,28 @@ Boundary-aware likelihood-ratio test for ordinal random effects.
 | `mixture` | `str` |
 | `p_value` | `float` |
 
+## `VarianceInflationFactor`
+
+```python
+class holocron.models.diagnostics.VarianceInflationFactor(coefficient_name: str, value: float) -> None
+```
+
+One coefficient's covariance-correlation variance inflation factor.
+
+### Attributes
+
+| Name | Type |
+| --- | --- |
+| `coefficient_name` | `str` |
+| `value` | `float` |
+
 ## `anova(result: holocron.models.linear.OlsResult | holocron.models.logistic.BinaryLogisticResult, terms: holocron.design.formula.DesignSpec | collections.abc.Mapping[str, collections.abc.Iterable[str]]) -> holocron.models.postfit.AnovaResult`
 
 Compute joint Wald tests from a design specification or explicit groups.
+
+## `backward_select(result: holocron.models.linear.OlsResult | holocron.models.logistic.BinaryLogisticResult, response: collections.abc.Iterable[int | float], features: collections.abc.Iterable[collections.abc.Iterable[float]] | holocron.design.formula.DesignMatrix, terms: collections.abc.Mapping[str, collections.abc.Iterable[str]], *, significance_level: float = 0.05, protected_terms: collections.abc.Iterable[str] = (), minimum_terms: int = 1, max_iterations: int = 100, tolerance: float | None = None) -> holocron.models.diagnostics.BackwardSelectionResult`
+
+Remove the largest eligible Wald-p term and freshly refit each step.
 
 ## `bootstrap_covariance(result: holocron.models.linear.OlsResult | holocron.models.logistic.BinaryLogisticResult, response: collections.abc.Iterable[int | float], features: collections.abc.Iterable[collections.abc.Iterable[float]] | holocron.design.formula.DesignMatrix, *, replicates: int = 200, seed: int = 1, resample_indices: collections.abc.Iterable[collections.abc.Iterable[int]] | None = None) -> holocron.models.regularization.CovarianceEstimate`
 
@@ -773,13 +1097,17 @@ Fit binary lrm with a diagonal quadratic penalty on slopes.
 
 Fit diagonal quadratic-penalty OLS with the rms variance choices.
 
-## `fit_psm(times: collections.abc.Iterable[float], events: collections.abc.Iterable[int | bool], features: collections.abc.Iterable[collections.abc.Iterable[float]], *, distribution: Literal['weibull', 'exponential'] = 'weibull', feature_names: collections.abc.Iterable[str] | None = None, strata: collections.abc.Iterable[str] | None = None, weights: collections.abc.Iterable[float] | None = None, offsets: collections.abc.Iterable[float] | None = None, max_iterations: int = 100, tolerance: float = 1e-10) -> holocron.models.survival.ParametricSurvivalResult`
+## `fit_psm(times: collections.abc.Iterable[float] | holocron.models.survival.SurvivalResponse, events: collections.abc.Iterable[int | bool] | collections.abc.Iterable[collections.abc.Iterable[float]], features: collections.abc.Iterable[collections.abc.Iterable[float]] | None = None, *, distribution: Literal['weibull', 'exponential'] = 'weibull', feature_names: collections.abc.Iterable[str] | None = None, strata: collections.abc.Iterable[str] | None = None, weights: collections.abc.Iterable[float] | None = None, offsets: collections.abc.Iterable[float] | None = None, max_iterations: int = 100, tolerance: float = 1e-10) -> holocron.models.survival.ParametricSurvivalResult`
 
-Fit a weighted right-censored AFT model with offsets and scale strata.
+Fit a weighted exact/right or general interval-censored AFT model.
 
 ## `fit_random_intercept_orm(response: collections.abc.Iterable[int | float] | holocron.models.ordinal.CensoredResponse, features: collections.abc.Iterable[collections.abc.Iterable[float]] | holocron.design.formula.DesignMatrix, clusters: collections.abc.Iterable[collections.abc.Hashable], *, family: Literal['logistic', 'probit', 'loglog', 'cloglog', 'cauchit'] = 'logistic', feature_names: collections.abc.Iterable[str] | None = None, design_fingerprint: str | None = None, mix_re: collections.abc.Iterable[float] | None = None, quadrature_grid: collections.abc.Iterable[int] = (7, 11, 15, 21, 31, 45, 63), quadrature_tolerance: float = 1e-06, max_iterations: int = 80, tolerance: float = 1e-06) -> holocron.models.random_ordinal.RandomEffectsOrdinalResult`
 
 Fit a single random-intercept ORM with escalating adaptive quadrature.
+
+## `influence_diagnostics(result: holocron.models.linear.OlsResult | holocron.models.logistic.BinaryLogisticResult, response: collections.abc.Iterable[int | float], features: collections.abc.Iterable[collections.abc.Iterable[float]] | holocron.design.formula.DesignMatrix) -> holocron.models.diagnostics.InfluenceResult`
+
+Compute leverage, standardized residual, Cook, and DFBETA diagnostics.
 
 ## `likelihood(result: holocron.models.linear.OlsResult | holocron.models.logistic.BinaryLogisticResult) -> holocron.models.postfit.LikelihoodResult`
 
@@ -801,6 +1129,10 @@ binary models support ordinary, Pearson, and deviance residuals.
 
 Compute the uncorrected Huber cluster-sandwich covariance.
 
+## `robustness_diagnostics(result: holocron.models.linear.OlsResult | holocron.models.logistic.BinaryLogisticResult, response: collections.abc.Iterable[int | float], features: collections.abc.Iterable[collections.abc.Iterable[float]] | holocron.design.formula.DesignMatrix, *, clusters: collections.abc.Iterable[collections.abc.Hashable] | None = None) -> holocron.models.diagnostics.RobustnessDiagnostics`
+
+Compare model-based standard errors with the robust sandwich estimate.
+
 ## `summarize(result: holocron.models.linear.OlsResult | holocron.models.logistic.BinaryLogisticResult, *, confidence_level: float = 0.95) -> holocron.models.postfit.ModelSummary`
 
 Summarize coefficient-level inference for a supported fitted model.
@@ -808,3 +1140,22 @@ Summarize coefficient-level inference for a supported fitted model.
 ## `survival_residuals(result: holocron.models.survival.CoxResult | holocron.models.survival.ParametricSurvivalResult, times: collections.abc.Iterable[float], events: collections.abc.Iterable[int | bool], *, kind: Literal['martingale', 'deviance', 'normalized', 'response'] = 'martingale', entry_times: collections.abc.Iterable[float] | None = None, strata: collections.abc.Iterable[str] | None = None) -> holocron.models.survival.SurvivalResidualResult`
 
 Compute supported survival residuals in original training-row order.
+
+## `trace_penalty(result: holocron.models.linear.OlsResult | holocron.models.logistic.BinaryLogisticResult, response: collections.abc.Iterable[int | float], features: collections.abc.Iterable[collections.abc.Iterable[float]] | holocron.design.formula.DesignMatrix, penalties: collections.abc.Iterable[float], *, criterion: Literal['aic', 'bic'] = 'aic', ols_variance: Literal['simple', 'sandwich'] = 'simple', max_iterations: int = 100, tolerance: float = 1e-10) -> holocron.models.diagnostics.PenaltyTraceResult`
+
+Refit an explicit scalar-penalty grid and select minimum AIC or BIC.
+
+## `validate_survival_predictions(times: collections.abc.Iterable[float], events: collections.abc.Iterable[int | bool], predicted_survival: collections.abc.Iterable[collections.abc.Iterable[float]], horizons: collections.abc.Iterable[float], *, weights: collections.abc.Iterable[float] | None = None, calibration_groups: int = 10, risk_thresholds: collections.abc.Iterable[float] = (0.5,)) -> holocron.models.survival_validation.SurvivalValidationResult`
+
+Validate right-censored survival predictions at fixed horizons.
+
+Brier scores use inverse Kaplan--Meier censoring weights. AUC is the
+cumulative/dynamic definition with event cases through each horizon and
+event-free controls beyond it; ties receive half credit. Integrated Brier
+score is the normalized trapezoidal integral over the supplied horizons.
+Prediction-ranked groups use Kaplan--Meier observed survival, and declared
+risk thresholds use the same IPCW case/control definitions as AUC.
+
+## `variance_inflation_factors(result: holocron.models.linear.OlsResult | holocron.models.logistic.BinaryLogisticResult) -> tuple[holocron.models.diagnostics.VarianceInflationFactor, ...]`
+
+Compute covariance-correlation VIFs for non-intercept coefficients.

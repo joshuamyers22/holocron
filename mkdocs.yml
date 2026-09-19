@@ -35,6 +35,9 @@ nav:
       - Ordinal regression and censoring: guides/ordinal-censoring.md
       - Survival models: guides/survival-models.md
       - Simulation and numerical edges: guides/simulation-and-edge-evidence.md
+      - Exact resample plans: guides/resampling.md
+      - Probability and survival validation: guides/validation-metrics.md
+      - Diagnostics and selection: guides/diagnostics-and-selection.md
       - Serialization and reconstruction: guides/serialization.md
       - R migration: guides/r-migration.md
   - Examples:
@@ -44,6 +47,7 @@ nav:
       - Design: api/design.md
       - Formula: api/formula.md
       - Models: api/models.md
+      - Validation: api/validation.md
       - Exceptions: api/exceptions.md
   - Interpretation and limitations: interpretation-and-limitations.md
   - Development: development.md

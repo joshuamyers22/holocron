@@ -36,7 +36,7 @@ class ParityContractTests(unittest.TestCase):
         self.payload = output_payload(self.expected)
 
     def test_all_schemas_policies_and_fixtures_are_valid(self) -> None:
-        self.assertEqual(validate_repository_contracts(), 53)
+        self.assertEqual(validate_repository_contracts(), 61)
 
     def test_oracle_corpus_has_declared_breadth_and_qualification(self) -> None:
         cases = [
@@ -60,14 +60,16 @@ class ParityContractTests(unittest.TestCase):
                 "orm": 3,
                 "orm_censored": 1,
                 "orm_random": 2,
-                "cph": 3,
-                "psm": 3,
-                "npsurv": 3,
+                "cph": 4,
+                "psm": 6,
+                "npsurv": 4,
+                "probability_validation": 1,
+                "survival_validation": 2,
             },
         )
         self.assertEqual(
             stages,
-            {"environment": 1, "python-parity": 52},
+            {"environment": 1, "python-parity": 60},
         )
 
     def test_tolerance_pilot_covers_all_accepted_profiles(self) -> None:

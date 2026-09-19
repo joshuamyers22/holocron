@@ -124,3 +124,55 @@ Notable changes are recorded here using semantic versioning.
   Kaplan–Meier curves. Three new vertical cases raise survival parity to 432
   exact and 721 numeric comparisons, while v2 result schemas retain tested v1
   migrations and packaged historical schemas.
+- Completed the third Phase 5 deliverable with typed survival curves, Cox and
+  Kaplan–Meier event-time quantiles and restricted means, and analytic Weibull/
+  exponential quantiles and means. Three new cases raise survival parity to 509
+  exact and 899 numeric pinned-R comparisons.
+- Completed the fourth Phase 5 deliverable with an explicit `SurvivalResponse`
+  contract and exact, left-, right-, and interval-censored Weibull/exponential
+  AFT likelihoods. Two new cases raise survival parity to 579 exact and 1,019
+  numeric pinned-R comparisons.
+- Implemented the fifth Phase 5 deliverable with model-independent fixed-horizon
+  IPCW Brier scores, cumulative/dynamic AUC and Dxy, Kaplan–Meier observed
+  survival, marginal calibration error, and integrated Brier score. Two new
+  cases raise survival parity to 599 exact and 1,071 numeric comparisons.
+- Added the locked Phase 5 survival simulation gate: seven seeded scenarios and
+  1,280 replications cover Cox recovery, ties, strata and offsets, right- and
+  mixed-censored Weibull AFT recovery, Kaplan–Meier coverage, and censoring-
+  adjusted validation accuracy. All thresholds pass with no failed replication;
+  CI retains clean and macOS/Ubuntu platform reports while independent review
+  and the Phase 5 exit gate remain open.
+- Closed the Phase 5 private-development exit gate after Ron Mexico
+  independently approved the survival likelihood, information, risk-set,
+  censoring, prediction, validation, and simulation-threshold evidence on
+  2026-09-18. Survival capabilities remain experimental and broader promotion
+  and distribution gates remain separate.
+- Completed the first Phase 6 deliverable with immutable exact bootstrap,
+  repeated K-fold, and caller-declared resample plans; strict canonical JSON
+  reconstruction and fingerprints; row-aligned selection; whole-procedure
+  execution; explicit complete/partial/failed outcomes; bounded resource
+  limits; and shared use by the existing bootstrap-covariance path.
+- Completed the second Phase 6 deliverable for fixed realized designs with
+  model-specific OLS and binary-logistic validation indices, parametric
+  recalibration curves, fresh fits inside every exact split, retained
+  training/assessment results, and fail-closed or explicitly partial outcomes.
+  Aggregation, optimism correction, ordinal/survival methods, smooth
+  calibration, and pinned-R method parity remain deferred.
+- Completed the third Phase 6 deliverable with weighted model-independent
+  binary-probability validation, including discrimination, Brier/log scores,
+  likelihood-quality indices, logistic recalibration, Spiegelhalter testing,
+  grouped calibration, and threshold metrics. Expanded right-censored
+  survival validation with grouped Kaplan--Meier calibration, IPCW threshold
+  metrics, integrated AUC, and integrated absolute calibration error. A new
+  pinned `rms::val.prob` case passes 4 exact and 21 numeric comparisons.
+- Completed the fourth Phase 6 deliverable with metric-wise optimism correction
+  for retained OLS and binary-logistic training/assessment pairs and pointwise
+  correction of their parametric calibration curves. Results retain the source
+  plan fingerprint, completion status, failure rate, and pairwise contributor
+  counts; partial executions fail closed unless explicitly allowed.
+- Completed the fifth Phase 6 deliverable with exact OLS and one-step binary
+  influence diagnostics, covariance-correlation VIFs, robust/model uncertainty
+  comparisons, explicit bounded OLS/lrm penalty traces, and fresh-refit
+  backward selection over caller-declared coefficient groups. These owned
+  Python contracts remain separate from deferred R `vif`, `pentrace`, and
+  `fastbw` compatibility claims.

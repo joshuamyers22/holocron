@@ -13,6 +13,8 @@ from holocron.models import (
     CoxResult,
     NonparametricSurvivalResult,
     ParametricSurvivalResult,
+    SurvivalCurveResult,
+    SurvivalResponse,
     fit_cph,
     fit_npsurv,
     fit_psm,
@@ -65,7 +67,7 @@ class SurvivalModelTests(unittest.TestCase):
             if require_object(load_json(path), name=str(path)).get("operation")
             in {"cph", "psm", "npsurv"}
         ]
-        self.assertEqual(len(case_paths), 9)
+        self.assertEqual(len(case_paths), 14)
         exact_comparisons = 0
         numeric_comparisons = 0
         for case_path in case_paths:
@@ -81,8 +83,8 @@ class SurvivalModelTests(unittest.TestCase):
                 self.assertGreater(report.numeric_comparisons, 0)
                 exact_comparisons += report.exact_comparisons
                 numeric_comparisons += report.numeric_comparisons
-        self.assertEqual(exact_comparisons, 432)
-        self.assertEqual(numeric_comparisons, 721)
+        self.assertEqual(exact_comparisons, 579)
+        self.assertEqual(numeric_comparisons, 1019)
 
     def test_cox_ties_predictions_and_round_trip(self) -> None:
         features = tuple((float(value),) for value in self.x)
@@ -155,6 +157,150 @@ class SurvivalModelTests(unittest.TestCase):
                 )
                 validate_document(result.to_dict(), PARAMETRIC_SURVIVAL_RESULT_SCHEMA)
 
+    def test_parametric_left_and_interval_censoring(self) -> None:
+        lower = (12, 8, 12, 7, 10, -math.inf, 7, -math.inf, 5, 8, 12, 7)
+        upper = (12, 10, math.inf, 7, math.inf, 7, 9, 5, 5, math.inf, 14, 7)
+        response = SurvivalResponse.from_intervals(lower, upper)
+        self.assertEqual(
+            response.censoring_types,
+            (
+                "exact",
+                "interval",
+                "right",
+                "exact",
+                "right",
+                "left",
+                "interval",
+                "left",
+                "exact",
+                "right",
+                "interval",
+                "exact",
+            ),
+        )
+        features = tuple((float(value),) for value in self.x[: len(lower)])
+        result = fit_psm(response, features, feature_names=("x",))
+        self.assertEqual(result.n_observations, len(lower))
+        self.assertTrue(all(math.isfinite(value) for value in result.coefficients))
+        self.assertGreater(result.log_likelihood[1], result.log_likelihood[0])
+        self.assertEqual(ParametricSurvivalResult.from_json(result.to_json()), result)
+
+        ordinary_features = tuple((float(value),) for value in self.x)
+        ordinary = fit_psm(self.times, self.events, ordinary_features)
+        explicit = SurvivalResponse.from_intervals(
+            self.times,
+            tuple(
+                float(time) if event else math.inf
+                for time, event in zip(self.times, self.events, strict=True)
+            ),
+        )
+        reconstructed = fit_psm(explicit, ordinary_features)
+        for actual, expected in zip(
+            reconstructed.coefficients, ordinary.coefficients, strict=True
+        ):
+            self.assertAlmostEqual(actual, expected)
+        self.assertIsNotNone(reconstructed.scale)
+        self.assertIsNotNone(ordinary.scale)
+        assert reconstructed.scale is not None and ordinary.scale is not None
+        self.assertAlmostEqual(reconstructed.scale, ordinary.scale)
+
+        with self.assertRaisesRegex(InputValidationError, "invalid survival"):
+            SurvivalResponse.from_intervals((1.0, 3.0), (2.0, 2.0))
+        with self.assertRaisesRegex(InputValidationError, "finite event bound"):
+            SurvivalResponse.from_intervals((1.0, 2.0), (math.inf, math.inf))
+        with self.assertRaisesRegex(InputValidationError, "invalid survival"):
+            SurvivalResponse.from_intervals((True,), (1.0,))
+
+    def test_cox_curve_quantile_and_restricted_mean_predictions(self) -> None:
+        features = tuple((float(value),) for value in self.x)
+        result = fit_cph(
+            self.times,
+            self.events,
+            features,
+            feature_names=("x",),
+        )
+        evaluation = ((-1.5,), (0.0,), (1.5,))
+
+        curve = result.predict_curve(evaluation, (0.0, 3.0, 6.0, 10.0))
+        self.assertIsInstance(curve, SurvivalCurveResult)
+        self.assertEqual(curve.times, (0.0, 3.0, 6.0, 10.0))
+        self.assertEqual(curve.strata, ("__all__",) * 3)
+        self.assertEqual(
+            curve.survival,
+            result.predict_survival(evaluation, curve.times),
+        )
+        self.assertEqual(curve.linear_predictors, result.predict_linear(evaluation))
+
+        quantiles = result.predict_quantile(evaluation, (0.25, 0.5, 0.9))
+        self.assertEqual(len(quantiles), 3)
+        self.assertTrue(
+            all(
+                first is None or second is None or first <= second
+                for row in quantiles
+                for first, second in zip(row[:-1], row[1:], strict=True)
+            )
+        )
+        means = result.predict_mean(evaluation, restricted_time=10.0)
+        self.assertTrue(all(0.0 < value <= 10.0 for value in means))
+        self.assertGreater(means[0], means[1])
+        self.assertGreater(means[1], means[2])
+
+        linear_quantiles = result.predict_quantile(
+            evaluation, (0.25, 0.5), interpolation="linear"
+        )
+        linear_means = result.predict_mean(
+            evaluation, restricted_time=10.0, interpolation="linear"
+        )
+        self.assertTrue(
+            all(
+                value is None or value > 0.0
+                for row in linear_quantiles
+                for value in row
+            )
+        )
+        self.assertTrue(all(0.0 < value <= 10.0 for value in linear_means))
+
+    def test_parametric_curve_quantile_and_mean_predictions(self) -> None:
+        features = tuple((float(value),) for value in self.x)
+        evaluation = ((-1.5,), (0.0,), (1.5,))
+        distributions: tuple[Literal["weibull", "exponential"], ...] = (
+            "weibull",
+            "exponential",
+        )
+        for distribution in distributions:
+            with self.subTest(distribution=distribution):
+                result = fit_psm(
+                    self.times,
+                    self.events,
+                    features,
+                    distribution=distribution,
+                    feature_names=("x",),
+                )
+                curve = result.predict_curve(evaluation, (3.0, 6.0, 10.0))
+                self.assertEqual(
+                    curve.survival,
+                    result.predict_survival(evaluation, curve.times),
+                )
+                quantiles = result.predict_quantile(evaluation, (0.25, 0.5, 0.75))
+                self.assertTrue(
+                    all(
+                        first < second
+                        for row in quantiles
+                        for first, second in zip(row[:-1], row[1:], strict=True)
+                    )
+                )
+                means = result.predict_mean(evaluation)
+                self.assertTrue(all(value > 0.0 for value in means))
+                self.assertGreater(means[0], means[1])
+                self.assertGreater(means[1], means[2])
+                for index, values in enumerate(quantiles):
+                    median = values[1]
+                    predicted = result.predict_survival(
+                        (evaluation[index],),
+                        (median,),
+                    )
+                    self.assertAlmostEqual(predicted[0][0], 0.5)
+
     def test_kaplan_meier_counts_intervals_and_round_trip(self) -> None:
         result = fit_npsurv((1, 2, 2, 3, 4, 4, 5, 6), (1, 1, 0, 1, 0, 1, 1, 0))
         restored = NonparametricSurvivalResult.from_json(result.to_json())
@@ -178,6 +324,49 @@ class SurvivalModelTests(unittest.TestCase):
             )
         )
         validate_document(result.to_dict(), NONPARAMETRIC_SURVIVAL_RESULT_SCHEMA)
+
+    def test_kaplan_meier_curve_quantile_and_restricted_mean_predictions(self) -> None:
+        result = fit_npsurv(
+            (1, 2, 2, 3, 4, 4, 5, 6),
+            (1, 1, 0, 1, 0, 1, 1, 0),
+        )
+
+        curve = result.predict_curve((0.0, 1.0, 2.5, 5.0))
+        self.assertEqual(curve.strata, ("__all__",))
+        self.assertEqual(curve.linear_predictors, None)
+        for actual, expected in zip(
+            curve.survival[0], (1.0, 0.875, 0.75, 0.225), strict=True
+        ):
+            self.assertAlmostEqual(actual, expected)
+        self.assertEqual(
+            result.predict_quantile((0.25, 0.5, 0.9)),
+            ((2.5, 4.0, None),),
+        )
+        self.assertAlmostEqual(result.predict_mean(restricted_time=5.0)[0], 3.675)
+        self.assertTrue(
+            0.0
+            < result.predict_mean(restricted_time=5.0, interpolation="linear")[0]
+            <= 5.0
+        )
+
+        terminal_plateau = fit_npsurv((1, 1, 2, 3), (1, 1, 0, 0))
+        self.assertEqual(terminal_plateau.predict_quantile((0.5,)), ((2.0,),))
+        ending_drop = fit_npsurv((1, 1, 1, 2, 3, 4), (1, 1, 1, 0, 0, 1))
+        self.assertEqual(ending_drop.predict_quantile((0.5,)), ((2.5,),))
+
+        with self.assertRaisesRegex(InputValidationError, "strictly increasing"):
+            result.predict_curve((1.0, 1.0))
+        with self.assertRaisesRegex(InputValidationError, "strictly between"):
+            result.predict_quantile((0.0,))
+        with self.assertRaisesRegex(InputValidationError, "curve support"):
+            result.predict_mean(restricted_time=7.0)
+        with self.assertRaisesRegex(InputValidationError, "inconsistent"):
+            SurvivalCurveResult(
+                times=(1.0, 2.0),
+                strata=("__all__",),
+                survival=((0.5, 0.6),),
+                linear_predictors=None,
+            )
 
     def test_cox_counting_process_strata_weights_offsets_and_residuals(self) -> None:
         features = tuple((float(value),) for value in self.x)

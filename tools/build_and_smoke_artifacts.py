@@ -37,7 +37,9 @@ from holocron.models import (
     OlsResult,
     OrdinalResult,
     ParametricSurvivalResult,
+    SurvivalResponse,
     anova,
+    backward_select,
     bootstrap_covariance,
     contrast,
     covariance,
@@ -50,12 +52,27 @@ from holocron.models import (
     fit_penalized_lrm,
     fit_penalized_ols,
     fit_psm,
+    influence_diagnostics,
     likelihood,
     predict,
     residuals,
     robust_covariance,
+    robustness_diagnostics,
     summarize,
     survival_residuals,
+    trace_penalty,
+    validate_survival_predictions,
+    variance_inflation_factors,
+)
+from holocron.validation import (
+    ResamplePlan,
+    calibrate_model,
+    optimism_correct_calibration,
+    optimism_correct_validation,
+    run_resample_plan,
+    take_rows,
+    validate_model,
+    validate_probabilities,
 )
 
 source_root = Path(os.environ["HOLOCRON_SMOKE_SOURCE_ROOT"]).resolve()
@@ -67,6 +84,9 @@ assert Path(sys.prefix).resolve() == environment_root
 assert holocron.__version__ == os.environ["HOLOCRON_SMOKE_VERSION"]
 assert importlib.metadata.version("holocron-rms") == holocron.__version__
 assert importlib.util.find_spec("holocron.cli") is None
+assert importlib.resources.files("holocron").joinpath(
+    "schemas/resample-plan.schema.json"
+).is_file()
 
 x = (-2.0, -1.0, 0.0, 1.0, 2.0, 3.0)
 y = (0.2, 0.8, 1.1, 1.7, 2.5, 3.6)
@@ -127,6 +147,45 @@ bootstrapped = bootstrap_covariance(
 assert penalized_linear.penalty_weights == (1.0,)
 assert robust.cluster_count == 3
 assert bootstrapped.replicate_count == 4
+influence = influence_diagnostics(linear_fit, y, linear_design)
+vifs = variance_inflation_factors(linear_fit)
+robustness = robustness_diagnostics(
+    linear_fit, y, linear_design, clusters=("a", "a", "b", "b", "c", "c")
+)
+penalty_trace = trace_penalty(
+    linear_fit, y, linear_design, (0.0, 0.5, 2.0), criterion="bic"
+)
+selection = backward_select(
+    linear_fit, y, linear_design, {"x": ("asis(x)",)}
+)
+assert len(influence.observations) == len(y)
+assert len(vifs) == 1 and vifs[0].value == 1.0
+assert robustness.covariance == robust
+assert penalty_trace.selected_point in penalty_trace.points
+assert selection.selected_terms == ("x",)
+
+resample_plan = ResamplePlan.k_fold(6, folds=3, repeats=2, seed=7)
+assert ResamplePlan.from_json(resample_plan.to_json()) == resample_plan
+resample_execution = run_resample_plan(
+    resample_plan,
+    lambda split: sum(take_rows(y, split.assessment_indices, plan=resample_plan)),
+)
+assert resample_execution.status == "complete"
+assert resample_execution.plan_fingerprint == resample_plan.fingerprint
+model_validation = validate_model(linear_fit, y, linear_design, resample_plan)
+model_calibration = calibrate_model(
+    linear_fit, y, linear_design, resample_plan, grid_points=5
+)
+assert model_validation.status == "complete"
+assert model_validation.resamples.plan_fingerprint == resample_plan.fingerprint
+assert model_calibration.status == "complete"
+assert len(model_calibration.apparent_curve) == 5
+corrected_validation = optimism_correct_validation(model_validation)
+corrected_calibration = optimism_correct_calibration(model_calibration)
+assert corrected_validation.status == "complete"
+assert corrected_validation.metric("mean_squared_error").corrected is not None
+assert corrected_calibration.status == "complete"
+assert len(corrected_calibration.corrected_curve) == 5
 
 binary_x = (-3.0, -2.0, -1.0, 0.0, 1.0, 2.0, 3.0) * 2
 binary_y = (0, 0, 0, 0, 1, 1, 1, 0, 1, 0, 1, 0, 1, 1)
@@ -144,6 +203,15 @@ assert len(residuals(binary_fit, response=binary_y).values) == len(binary_y)
 assert predict(binary_fit, binary_design).scale == "response"
 assert likelihood(binary_fit).parameter_count == binary_fit.rank
 assert penalized_binary.penalty_weights == (1.0,)
+probability_validation = validate_probabilities(
+    binary_y,
+    binary_fit.fitted_probabilities,
+    calibration_groups=4,
+    thresholds=(0.4, 0.5, 0.6),
+)
+assert probability_validation.auc >= 0.5
+assert len(probability_validation.calibration_groups) >= 1
+assert len(probability_validation.threshold_metrics) == 3
 
 ordinal_y = (1, 1, 2, 2, 3, 3, 1, 2, 3, 1, 2, 3)
 ordinal_x = ((-2.0,), (-1.5,), (-1.0,), (-0.5,), (0.0,), (0.5,),
@@ -180,24 +248,70 @@ psm_fit = fit_psm(
     survival_time, survival_event, survival_x, feature_names=("x",),
     strata=survival_strata, weights=survival_weights, offsets=survival_offsets,
 )
+censored_response = SurvivalResponse.from_intervals(
+    (12, 8, 12, 7, 10, -np.inf, 7, -np.inf, 5, 8, 12, 7),
+    (12, 10, np.inf, 7, np.inf, 7, 9, 5, 5, np.inf, 14, 7),
+)
+censored_psm_fit = fit_psm(
+    censored_response, survival_x[:12], feature_names=("x",)
+)
 km_fit = fit_npsurv(
     survival_time, survival_event, entry_times=survival_entry,
     strata=survival_strata, weights=survival_weights,
 )
 assert CoxResult.from_json(cox_fit.to_json()) == cox_fit
 assert ParametricSurvivalResult.from_json(psm_fit.to_json()) == psm_fit
+assert censored_psm_fit.log_likelihood[1] > censored_psm_fit.log_likelihood[0]
 assert NonparametricSurvivalResult.from_json(km_fit.to_json()) == km_fit
 assert len(cox_fit.predict_survival(
     ((0.0,),), (3.0, 6.0), strata=("A",), offsets=(0.1,)
 )) == 1
+assert len(cox_fit.predict_curve(
+    ((0.0,),), (0.0, 3.0, 6.0), strata=("A",), offsets=(0.1,)
+).survival) == 1
+assert len(cox_fit.predict_quantile(
+    ((0.0,),), strata=("A",), offsets=(0.1,)
+)) == 1
+assert len(cox_fit.predict_mean(
+    ((0.0,),), restricted_time=6.0, strata=("A",), offsets=(0.1,)
+)) == 1
 assert len(psm_fit.predict_hazard(
     ((0.0,),), (3.0, 6.0), strata=("B",), offsets=(-0.1,)
 )) == 1
+assert len(psm_fit.predict_curve(
+    ((0.0,),), (3.0, 6.0), strata=("B",), offsets=(-0.1,)
+).survival) == 1
+assert len(psm_fit.predict_quantile(
+    ((0.0,),), strata=("B",), offsets=(-0.1,)
+)) == 1
+assert len(psm_fit.predict_mean(
+    ((0.0,),), strata=("B",), offsets=(-0.1,)
+)) == 1
+validation = validate_survival_predictions(
+    survival_time,
+    survival_event,
+    psm_fit.predict_survival(
+        survival_x,
+        (3.0, 6.0),
+        strata=survival_strata,
+        offsets=survival_offsets,
+    ),
+    (3.0, 6.0),
+    weights=survival_weights,
+)
+assert validation.integrated_brier_score is not None
+assert validation.integrated_auc is not None
+assert validation.integrated_absolute_calibration_error is not None
+assert len(validation.calibration_groups) == 2
+assert len(validation.threshold_metrics) == 2
 assert len(survival_residuals(
     cox_fit, survival_time, survival_event,
     entry_times=survival_entry, strata=survival_strata,
 ).values) == len(survival_time)
 assert len(km_fit.predict((3.0, 6.0), stratum="A")) == 2
+assert len(km_fit.predict_curve(strata=("A",)).survival) == 1
+assert len(km_fit.predict_quantile(strata=("A",))) == 1
+assert len(km_fit.predict_mean(restricted_time=6.0, strata=("A",))) == 1
 schema_root = importlib.resources.files("holocron").joinpath("schemas")
 assert schema_root.joinpath("serialization-manifest.json").is_file()
 assert schema_root.joinpath("ols-result.schema.json").is_file()

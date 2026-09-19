@@ -112,6 +112,7 @@ def inspect_artifacts(directory: Path) -> tuple[Path, Path]:
         f"{sdist_root}/schemas/ordinal-result.schema.json",
         f"{sdist_root}/schemas/parametric-survival-result.schema.json",
         f"{sdist_root}/schemas/parametric-survival-result-v2.schema.json",
+        f"{sdist_root}/schemas/resample-plan.schema.json",
         f"{sdist_root}/schemas/serialization-manifest.json",
     }
     if not expected_sdist_files <= set(sdist_names):
@@ -154,6 +155,7 @@ def inspect_artifacts(directory: Path) -> tuple[Path, Path]:
         "holocron/schemas/ordinal-result.schema.json",
         "holocron/schemas/parametric-survival-result.schema.json",
         "holocron/schemas/parametric-survival-result-v2.schema.json",
+        "holocron/schemas/resample-plan.schema.json",
         "holocron/schemas/serialization-manifest.json",
     }
     if not expected_schema_files <= set(wheel_names):

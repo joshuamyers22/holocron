@@ -8,14 +8,21 @@ from pathlib import Path
 from typing import cast
 
 import holocron
-from holocron import design, exceptions, formula, models
+from holocron import design, exceptions, formula, models, validation
 
 
 class PublicApiTests(unittest.TestCase):
     def test_top_level_api_is_deliberately_small(self) -> None:
         self.assertEqual(
             holocron.__all__,
-            ("__version__", "design", "exceptions", "formula", "models"),
+            (
+                "__version__",
+                "design",
+                "exceptions",
+                "formula",
+                "models",
+                "validation",
+            ),
         )
         self.assertRegex(holocron.__version__, r"^\d+(?:\.\d+)+(?:[A-Za-z0-9.+-]*)$")
 
@@ -67,12 +74,16 @@ class PublicApiTests(unittest.TestCase):
             [
                 "AnovaResult",
                 "AnovaTest",
+                "BackwardSelectionResult",
                 "BinaryLogisticResult",
                 "CensoredResponse",
                 "CovarianceEstimate",
                 "CovarianceResult",
+                "CoefficientRobustness",
                 "CoxResult",
                 "InferenceEstimate",
+                "InfluenceObservation",
+                "InfluenceResult",
                 "LikelihoodResult",
                 "ModelSummary",
                 "NonparametricSurvivalResult",
@@ -81,14 +92,25 @@ class PublicApiTests(unittest.TestCase):
                 "OrdinalResult",
                 "OrdinalTest",
                 "PenalizedResult",
+                "PenaltyTracePoint",
+                "PenaltyTraceResult",
                 "ParametricSurvivalResult",
                 "PredictionResult",
                 "RandomEffectsOrdinalResult",
                 "ResidualResult",
+                "RobustnessDiagnostics",
+                "SelectionStep",
+                "SurvivalCalibrationGroup",
+                "SurvivalCurveResult",
                 "SurvivalResidualResult",
+                "SurvivalResponse",
+                "SurvivalThresholdMetrics",
+                "SurvivalValidationResult",
                 "TurnbullResult",
                 "VarianceComponentTest",
+                "VarianceInflationFactor",
                 "anova",
+                "backward_select",
                 "bootstrap_covariance",
                 "contrast",
                 "covariance",
@@ -103,12 +125,53 @@ class PublicApiTests(unittest.TestCase):
                 "fit_penalized_ols",
                 "fit_psm",
                 "fit_random_intercept_orm",
+                "influence_diagnostics",
                 "likelihood",
                 "predict",
                 "residuals",
                 "robust_covariance",
+                "robustness_diagnostics",
                 "summarize",
                 "survival_residuals",
+                "trace_penalty",
+                "validate_survival_predictions",
+                "variance_inflation_factors",
+            ],
+        )
+
+    def test_validation_namespace_exports_only_supported_objects(self) -> None:
+        self.assertEqual(
+            validation.__all__,
+            [
+                "BinaryValidationIndices",
+                "CalibrationEstimate",
+                "ModelCalibrationResult",
+                "ModelCalibrationSplit",
+                "ModelValidationResult",
+                "ModelValidationSplit",
+                "OlsValidationIndices",
+                "OptimismCorrectedCalibrationResult",
+                "OptimismCorrectedMetric",
+                "OptimismCorrectedValidationResult",
+                "ProbabilityCalibrationGroup",
+                "ProbabilityThresholdMetrics",
+                "ProbabilityValidationResult",
+                "ResampleExecution",
+                "ResampleFailure",
+                "ResamplePlan",
+                "ResampleSplit",
+                "ResampleSuccess",
+                "SurvivalCalibrationGroup",
+                "SurvivalThresholdMetrics",
+                "SurvivalValidationResult",
+                "calibrate_model",
+                "optimism_correct_calibration",
+                "optimism_correct_validation",
+                "run_resample_plan",
+                "take_rows",
+                "validate_model",
+                "validate_probabilities",
+                "validate_survival_predictions",
             ],
         )
 
@@ -133,7 +196,6 @@ class PublicApiTests(unittest.TestCase):
             "model",
             "regression",
             "time_validation_cli",
-            "validation",
             "validation_evidence",
         )
         for module in removed:

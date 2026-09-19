@@ -1,0 +1,84 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/joshuamyers22/holocron/schemas/phase-5-simulation-plan.schema.json",
+  "type": "object",
+  "properties": {
+    "schema_version": {"const": "holocron-phase-5-simulation-plan/v1"},
+    "plan_id": {"const": "phase-5-survival-models-v1"},
+    "approved_for": {"const": "private-experimental-development"},
+    "approved_on": {"type": "string", "format": "date"},
+    "detail_policy": {"type": "string", "minLength": 1},
+    "required_platforms": {"const": ["ubuntu-24.04", "macos-15"]},
+    "independent_review": {"$ref": "#/$defs/review"},
+    "scenarios": {
+      "type": "array",
+      "minItems": 7,
+      "maxItems": 7,
+      "items": {"$ref": "#/$defs/scenario"}
+    }
+  },
+  "required": ["schema_version", "plan_id", "approved_for", "approved_on", "detail_policy", "required_platforms", "independent_review", "scenarios"],
+  "additionalProperties": false,
+  "$defs": {
+    "bound": {
+      "type": "object",
+      "properties": {
+        "minimum": {"type": "number"},
+        "maximum": {"type": "number"}
+      },
+      "minProperties": 1,
+      "additionalProperties": false
+    },
+    "review": {
+      "type": "object",
+      "properties": {
+        "required": {"const": true},
+        "status": {"enum": ["pending", "approved"]},
+        "scope": {"type": "string", "minLength": 1},
+        "reviewer": {"type": "string", "minLength": 1},
+        "approved_at": {"type": "string", "format": "date"},
+        "disposition": {"type": "string", "minLength": 1}
+      },
+      "required": ["required", "status", "scope"],
+      "allOf": [
+        {
+          "if": {"properties": {"status": {"const": "approved"}}, "required": ["status"]},
+          "then": {"required": ["reviewer", "approved_at", "disposition"]}
+        }
+      ],
+      "additionalProperties": false
+    },
+    "scenario": {
+      "type": "object",
+      "properties": {
+        "scenario_id": {
+          "enum": [
+            "cox-continuous-recovery",
+            "cox-tied-methods",
+            "cox-stratified-offset-recovery",
+            "psm-weibull-right-recovery",
+            "psm-weibull-mixed-censoring",
+            "kaplan-meier-recovery",
+            "survival-validation-recovery"
+          ]
+        },
+        "kind": {"enum": ["cox", "psm", "npsurv", "validation"]},
+        "seed": {"type": "integer", "minimum": 1},
+        "replications": {"type": "integer", "minimum": 1, "maximum": 10000},
+        "sample_size": {"type": "integer", "minimum": 20, "maximum": 100000},
+        "parameters": {
+          "type": "object",
+          "minProperties": 1,
+          "additionalProperties": {"type": "number"}
+        },
+        "acceptance": {
+          "type": "object",
+          "minProperties": 1,
+          "additionalProperties": {"$ref": "#/$defs/bound"}
+        }
+      },
+      "required": ["scenario_id", "kind", "seed", "replications", "sample_size", "parameters", "acceptance"],
+      "additionalProperties": false
+    }
+  }
+}

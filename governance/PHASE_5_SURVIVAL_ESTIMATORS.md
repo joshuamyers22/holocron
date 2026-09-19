@@ -54,6 +54,10 @@ deferred.
 These were the boundaries at acceptance of the first deliverable. The
 subsequent risk-set deliverable closes the strata, entry, weight, offset,
 baseline-quantity, and supported residual gaps; see
-`governance/PHASE_5_RISK_SETS.md`. Broader prediction, censoring, validation,
-simulation, and review gates remain open. No capability is promoted beyond
-`experimental`.
+`governance/PHASE_5_RISK_SETS.md`. The prediction and parametric-censoring gaps
+subsequently close in `governance/PHASE_5_PREDICTION_APIS.md` and
+`governance/PHASE_5_CENSORING.md`; the fixed-horizon validation gap closes in
+`governance/PHASE_5_SURVIVAL_VALIDATION.md`. The subsequent simulation gate
+passes in `governance/PHASE_5_SIMULATIONS.md`; independent review and the exit
+gate close in `governance/PHASE_5_COMPLETION.md`. No capability is promoted
+beyond `experimental`.

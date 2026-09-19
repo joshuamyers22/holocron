@@ -1,0 +1,15 @@
+{
+  "schema_version": "holocron-oracle-case/v1",
+  "case_id": "npsurv-prediction-quantities",
+  "description": "Kaplan–Meier curve evaluation, event-time quantiles, and restricted mean.",
+  "expected_output": "npsurv-prediction-quantities.json",
+  "comparison_profile": "nonparametric-survival-prediction-v1",
+  "qualification_stage": "python-parity",
+  "operation": "npsurv",
+  "estimator": "kaplan-meier",
+  "time": [1, 2, 2, 3, 4, 4, 5, 6],
+  "event": [1, 1, 0, 1, 0, 1, 1, 0],
+  "evaluation_times": [1, 2.5, 5],
+  "evaluation_probabilities": [0.25, 0.5],
+  "restricted_time": 5
+}

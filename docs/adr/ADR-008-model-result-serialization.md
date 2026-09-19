@@ -39,6 +39,7 @@ The accepted schemas are:
 | `CoxResult` | `holocron-cox-result/v2` |
 | `ParametricSurvivalResult` | `holocron-parametric-survival-result/v2` |
 | `NonparametricSurvivalResult` | `holocron-nonparametric-survival-result/v2` |
+| `ResamplePlan` | `holocron-resample-plan/v1` |
 
 `DesignMatrix` stores its specification fingerprint and intercept policy. An
 OLS fit made directly from that matrix derives the intercept policy, stores the

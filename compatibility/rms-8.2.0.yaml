@@ -935,11 +935,12 @@
       "oracle_cases": [
         "npsurv-delayed-censoring",
         "npsurv-kaplan-meier",
-        "npsurv-counting-stratified-weighted"
+        "npsurv-counting-stratified-weighted",
+        "npsurv-prediction-quantities"
       ],
       "tolerance_profile": "nonparametric-survival-risk-set-v2",
-      "additional_tolerance_profiles": ["nonparametric-survival-v1"],
-      "known_differences": "Right-censored and counting-process Kaplan-Meier curves support strata and positive frequency weights with weighted risk/event/censor counts and log-scale Greenwood intervals. Alternate estimators, robust variance, and formula-level fitting remain deferred."
+      "additional_tolerance_profiles": ["nonparametric-survival-v1", "nonparametric-survival-prediction-v1"],
+      "known_differences": "Right-censored and counting-process Kaplan-Meier curves support strata and positive frequency weights with weighted risk/event/censor counts, log-scale Greenwood intervals, typed curve evaluation, event-time quantiles, and restricted means. Alternate estimators, robust variance, and formula-level fitting remain deferred."
     },
     {
       "id": "export:ols",
@@ -1301,12 +1302,14 @@
       "owner": "joshuamyers22",
       "oracle_cases": [
         "psm-exponential-rcs",
+        "psm-exponential-left-censored",
         "psm-weibull-linear",
+        "psm-weibull-interval-censored",
         "psm-weibull-stratified-weighted-offset"
       ],
       "tolerance_profile": "parametric-survival-risk-set-v2",
-      "additional_tolerance_profiles": ["parametric-survival-v1"],
-      "known_differences": "Right-censored Weibull and exponential AFT fits support positive weights, offsets, observed covariance, survival/hazard prediction, and response/normalized/martingale/deviance residuals; Weibull additionally supports scale strata. Other distributions, left/interval censoring, and formula-level fitting remain deferred."
+      "additional_tolerance_profiles": ["parametric-survival-v1", "parametric-survival-censoring-v1"],
+      "known_differences": "Weibull and exponential AFT fits support exact, left-, right-, and interval-censored responses plus positive weights, offsets, observed covariance, and survival/hazard prediction; Weibull additionally supports scale strata. Residuals are currently defined only for right-censored inputs. Other distributions and formula-level fitting remain deferred."
     },
     {
       "id": "export:rcs",
@@ -1566,14 +1569,16 @@
       "id": "export:val.prob",
       "r_symbol": "val.prob",
       "kind": "export",
-      "python_entry_point": null,
+      "python_entry_point": "holocron.validation.validate_probabilities",
       "tier": "C",
       "milestone": "Phase 6",
-      "status": "deferred",
+      "status": "experimental",
       "owner": "joshuamyers22",
-      "oracle_cases": [],
-      "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "oracle_cases": [
+        "probability-validation-overall"
+      ],
+      "tolerance_profile": "probability-validation-v1",
+      "known_differences": "Supports binary discrimination, Brier/log scores, likelihood quality indices, logistic recalibration, Spiegelhalter calibration testing, weighted equal-frequency calibration groups, and declared-threshold classification metrics. Probabilities must be strictly inside (0,1); val.prob plotting, LOWESS errors, missing-value deletion, and val.probg's named group comparison remain deferred."
     },
     {
       "id": "export:val.probg",
@@ -1592,14 +1597,14 @@
       "id": "export:val.surv",
       "r_symbol": "val.surv",
       "kind": "export",
-      "python_entry_point": null,
+      "python_entry_point": "holocron.models.validate_survival_predictions",
       "tier": "C",
-      "milestone": "Phase 6",
-      "status": "deferred",
+      "milestone": "Phase 5-6",
+      "status": "experimental",
       "owner": "joshuamyers22",
-      "oracle_cases": [],
-      "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "oracle_cases": ["survival-validation-horizons", "survival-validation-weighted"],
+      "tolerance_profile": "survival-validation-v1",
+      "known_differences": "Provides model-independent fixed-horizon IPCW Brier scores, cumulative/dynamic AUC and Dxy, Kaplan-Meier observed survival, mean predicted survival, marginal and prediction-grouped Kaplan-Meier calibration, declared-risk-threshold IPCW classification metrics, integrated Brier score, integrated AUC when defined at every horizon, and integrated absolute calibration error. It does not implement val.surv's hare/smoothkm calibration curves, Cox-Snell plots, censoring-time plots, model dispatch, left/interval-censored validation, or resampling validation."
     },
     {
       "id": "export:validate",
@@ -1722,14 +1727,14 @@
       "id": "s3_method:Mean.cph",
       "r_symbol": "Mean.cph",
       "kind": "s3_method",
-      "python_entry_point": null,
+      "python_entry_point": "holocron.models.CoxResult.predict_mean",
       "tier": "B",
       "milestone": "Phase 4-5",
-      "status": "deferred",
+      "status": "experimental",
       "owner": "joshuamyers22",
-      "oracle_cases": [],
-      "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "oracle_cases": ["cph-prediction-quantities"],
+      "tolerance_profile": "cox-prediction-v1",
+      "known_differences": "Computes the pinned rms exact event-grid restricted mean for explicit feature rows, strata, offsets, and a required finite restriction time; approximate precomputation and an unrestricted lower-limit estimate are intentionally omitted."
     },
     {
       "id": "s3_method:Mean.lrm",
@@ -1761,14 +1766,14 @@
       "id": "s3_method:Mean.psm",
       "r_symbol": "Mean.psm",
       "kind": "s3_method",
-      "python_entry_point": null,
+      "python_entry_point": "holocron.models.ParametricSurvivalResult.predict_mean",
       "tier": "B",
       "milestone": "Phase 4-5",
-      "status": "deferred",
+      "status": "experimental",
       "owner": "joshuamyers22",
-      "oracle_cases": [],
-      "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "oracle_cases": ["psm-prediction-quantities"],
+      "tolerance_profile": "parametric-survival-prediction-v1",
+      "known_differences": "Computes finite analytic means for the supported Weibull and exponential families with explicit feature rows, strata, and offsets; other psm distributions remain deferred."
     },
     {
       "id": "s3_method:Newlabels.rms",
@@ -1800,14 +1805,14 @@
       "id": "s3_method:Quantile.cph",
       "r_symbol": "Quantile.cph",
       "kind": "s3_method",
-      "python_entry_point": null,
+      "python_entry_point": "holocron.models.CoxResult.predict_quantile",
       "tier": "B",
       "milestone": "Phase 4-5",
-      "status": "deferred",
+      "status": "experimental",
       "owner": "joshuamyers22",
-      "oracle_cases": [],
-      "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "oracle_cases": ["cph-prediction-quantities"],
+      "tolerance_profile": "cox-prediction-v1",
+      "known_differences": "Accepts conventional event-time CDF probabilities, mapping them to the pinned rms survival-threshold convention; step and linear interpolation are supported and an unobserved quantile is returned as None."
     },
     {
       "id": "s3_method:Quantile.orm",
@@ -1826,14 +1831,14 @@
       "id": "s3_method:Quantile.psm",
       "r_symbol": "Quantile.psm",
       "kind": "s3_method",
-      "python_entry_point": null,
+      "python_entry_point": "holocron.models.ParametricSurvivalResult.predict_quantile",
       "tier": "B",
       "milestone": "Phase 4-5",
-      "status": "deferred",
+      "status": "experimental",
       "owner": "joshuamyers22",
-      "oracle_cases": [],
-      "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "oracle_cases": ["psm-prediction-quantities"],
+      "tolerance_profile": "parametric-survival-prediction-v1",
+      "known_differences": "Computes analytic event-time quantiles for CDF probabilities under the supported Weibull and exponential families; other psm distributions remain deferred."
     },
     {
       "id": "s3_method:Survival.cph",
@@ -3386,14 +3391,14 @@
       "id": "s3_method:survest.cph",
       "r_symbol": "survest.cph",
       "kind": "s3_method",
-      "python_entry_point": null,
+      "python_entry_point": "holocron.models.CoxResult.predict_curve",
       "tier": "B",
       "milestone": "Phase 4-5",
-      "status": "deferred",
+      "status": "experimental",
       "owner": "joshuamyers22",
-      "oracle_cases": [],
-      "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "oracle_cases": ["cph-prediction-quantities"],
+      "tolerance_profile": "cox-prediction-v1",
+      "known_differences": "Returns typed survival curves for explicit feature rows and a requested or fitted event-time grid; confidence intervals, individual time-dependent paths, and standard errors remain deferred."
     },
     {
       "id": "s3_method:survest.orm",
@@ -3412,27 +3417,27 @@
       "id": "s3_method:survest.psm",
       "r_symbol": "survest.psm",
       "kind": "s3_method",
-      "python_entry_point": null,
+      "python_entry_point": "holocron.models.ParametricSurvivalResult.predict_curve",
       "tier": "B",
       "milestone": "Phase 4-5",
-      "status": "deferred",
+      "status": "experimental",
       "owner": "joshuamyers22",
-      "oracle_cases": [],
-      "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "oracle_cases": ["psm-prediction-quantities"],
+      "tolerance_profile": "parametric-survival-prediction-v1",
+      "known_differences": "Returns typed survival curves on an explicit positive time grid; confidence intervals, transformations, and parallel-time mode remain deferred."
     },
     {
       "id": "s3_method:survfit.cph",
       "r_symbol": "survfit.cph",
       "kind": "s3_method",
-      "python_entry_point": null,
+      "python_entry_point": "holocron.models.CoxResult.predict_curve",
       "tier": "B",
       "milestone": "Phase 4-5",
-      "status": "deferred",
+      "status": "experimental",
       "owner": "joshuamyers22",
-      "oracle_cases": [],
-      "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "oracle_cases": ["cph-prediction-quantities"],
+      "tolerance_profile": "cox-prediction-v1",
+      "known_differences": "Covers fixed-covariate survival curves from the owned baseline; standard errors, confidence bands, individual time-dependent paths, and survfit object compatibility remain deferred."
     },
     {
       "id": "s3_method:survplot.npsurv",

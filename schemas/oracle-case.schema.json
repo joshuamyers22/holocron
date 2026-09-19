@@ -283,10 +283,13 @@
         "knots": {"$ref": "#/$defs/knotVector"},
         "evaluation_x": {"$ref": "#/$defs/nonemptyNumericVector"},
         "evaluation_times": {"$ref": "#/$defs/positiveNumericVector"},
+        "evaluation_probabilities": {"$ref": "#/$defs/probabilityVector"},
+        "restricted_time": {"type": "number", "exclusiveMinimum": 0},
         "evaluation_strata": {"$ref": "#/$defs/stringVector"},
         "evaluation_offset": {"$ref": "#/$defs/nonemptyNumericVector"}
       },
-      "required": ["operation", "basis", "method", "x", "time", "event", "evaluation_x", "evaluation_times"]
+      "required": ["operation", "basis", "method", "x", "time", "event", "evaluation_x", "evaluation_times"],
+      "dependentRequired": {"evaluation_probabilities": ["restricted_time"]}
     },
     {
       "title": "Parametric survival case",
@@ -298,16 +301,23 @@
         "x": {"$ref": "#/$defs/fitNumericVector"},
         "time": {"$ref": "#/$defs/positiveNumericVector"},
         "event": {"$ref": "#/$defs/binaryVector"},
+        "lower": {"$ref": "#/$defs/lowerCensorVector"},
+        "upper": {"$ref": "#/$defs/upperCensorVector"},
         "strata": {"$ref": "#/$defs/stringVector"},
         "weights": {"$ref": "#/$defs/positiveNumericVector"},
         "offset": {"$ref": "#/$defs/fitNumericVector"},
         "knots": {"$ref": "#/$defs/knotVector"},
         "evaluation_x": {"$ref": "#/$defs/nonemptyNumericVector"},
         "evaluation_times": {"$ref": "#/$defs/positiveNumericVector"},
+        "evaluation_probabilities": {"$ref": "#/$defs/probabilityVector"},
         "evaluation_strata": {"$ref": "#/$defs/stringVector"},
         "evaluation_offset": {"$ref": "#/$defs/nonemptyNumericVector"}
       },
-      "required": ["operation", "basis", "distribution", "x", "time", "event", "evaluation_x", "evaluation_times"]
+      "required": ["operation", "basis", "distribution", "x", "evaluation_x", "evaluation_times"],
+      "oneOf": [
+        {"required": ["time", "event"]},
+        {"required": ["lower", "upper"]}
+      ]
     },
     {
       "title": "Nonparametric survival case",
@@ -319,9 +329,38 @@
         "event": {"$ref": "#/$defs/binaryVector"},
         "entry": {"$ref": "#/$defs/nonnegativeNumericVector"},
         "strata": {"$ref": "#/$defs/stringVector"},
+        "weights": {"$ref": "#/$defs/positiveNumericVector"},
+        "evaluation_times": {"$ref": "#/$defs/positiveNumericVector"},
+        "evaluation_probabilities": {"$ref": "#/$defs/probabilityVector"},
+        "restricted_time": {"type": "number", "exclusiveMinimum": 0}
+      },
+      "required": ["operation", "estimator", "time", "event"],
+      "dependentRequired": {
+        "evaluation_probabilities": ["evaluation_times", "restricted_time"]
+      }
+    },
+    {
+      "title": "Binary probability validation case",
+      "properties": {
+        "operation": {"const": "probability_validation"},
+        "qualification_stage": {"const": "python-parity"},
+        "outcomes": {"$ref": "#/$defs/binaryVector"},
+        "probabilities": {"$ref": "#/$defs/probabilityVector"}
+      },
+      "required": ["operation", "outcomes", "probabilities"]
+    },
+    {
+      "title": "Time-dependent survival validation case",
+      "properties": {
+        "operation": {"const": "survival_validation"},
+        "qualification_stage": {"const": "python-parity"},
+        "time": {"$ref": "#/$defs/positiveNumericVector"},
+        "event": {"$ref": "#/$defs/binaryVector"},
+        "predicted_survival": {"$ref": "#/$defs/probabilityMatrix"},
+        "horizons": {"$ref": "#/$defs/positiveNumericVector"},
         "weights": {"$ref": "#/$defs/positiveNumericVector"}
       },
-      "required": ["operation", "estimator", "time", "event"]
+      "required": ["operation", "time", "event", "predicted_survival", "horizons"]
     }
   ],
   "unevaluatedProperties": false,
@@ -344,6 +383,20 @@
       "type": "array",
       "minItems": 1,
       "items": {"type": "number", "exclusiveMinimum": 0}
+    },
+    "probabilityVector": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"type": "number", "exclusiveMinimum": 0, "exclusiveMaximum": 1}
+    },
+    "probabilityMatrix": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "array",
+        "minItems": 1,
+        "items": {"type": "number", "minimum": 0, "maximum": 1}
+      }
     },
     "nonnegativeNumericVector": {
       "type": "array",

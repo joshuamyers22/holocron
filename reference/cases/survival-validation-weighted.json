@@ -1,0 +1,25 @@
+{
+  "schema_version": "holocron-oracle-case/v1",
+  "case_id": "survival-validation-weighted",
+  "description": "Weighted IPCW survival validation with tied event and censoring times.",
+  "expected_output": "survival-validation-weighted.json",
+  "comparison_profile": "survival-validation-v1",
+  "qualification_stage": "python-parity",
+  "operation": "survival_validation",
+  "time": [2, 2, 3, 4, 4, 5, 6, 7, 8, 9],
+  "event": [1, 0, 1, 0, 1, 1, 0, 1, 1, 0],
+  "horizons": [2.5, 4.5, 7.5],
+  "weights": [1, 2, 0.5, 1.5, 1, 2, 1, 0.75, 1.25, 1],
+  "predicted_survival": [
+    [0.82, 0.55, 0.30],
+    [0.68, 0.42, 0.20],
+    [0.70, 0.65, 0.32],
+    [0.76, 0.48, 0.24],
+    [0.72, 0.43, 0.20],
+    [0.80, 0.51, 0.28],
+    [0.84, 0.58, 0.34],
+    [0.86, 0.63, 0.55],
+    [0.89, 0.68, 0.47],
+    [0.92, 0.75, 0.56]
+  ]
+}

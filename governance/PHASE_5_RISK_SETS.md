@@ -50,11 +50,13 @@ oracle implementation detail, not a runtime dependency.
 Inputs remain caller-supplied finite full-rank designs with explicit row
 alignment; formula evaluation and implicit missing-row deletion are unsupported.
 Cox score, Schoenfeld, influence, and robust residual/covariance surfaces remain
-deferred. Parametric fitting remains right-censoring only and limited to
-Weibull/exponential distributions. Kaplan–Meier alternate estimators and robust
+deferred. At this record's acceptance, parametric fitting remained
+right-censoring only and limited to Weibull/exponential distributions.
+Kaplan–Meier alternate estimators and robust
 variance are unsupported; non-integer weights use the declared frequency-weight
-Greenwood calculation. Mean/quantile prediction, broader censoring, and
-time-dependent validation are later Phase 5 deliverables.
+Greenwood calculation. The subsequent prediction and censoring records close
+the declared mean/quantile and parametric-censoring gaps; the subsequent
+validation record closes the fixed-horizon validation gap.
 
 This record completes the second Phase 5 deliverable. It does not close Phase 5
 or promote these capabilities beyond `experimental`.

@@ -23,20 +23,41 @@ The current experimental surface supports only:
   and iid bootstrap covariance for every currently supported estimator path.
 - experimental cumulative-link ordinal regression, exact-grid mixed-censoring
   conversion, and single-cluster random-intercept models; and
-- experimental right-censored Efron/Breslow Cox, Weibull/exponential
-  accelerated-failure-time, and unstratified Kaplan–Meier estimators.
+- experimental right-censored Efron/Breslow Cox,
+  exact/left/right/interval-censored Weibull/exponential
+  accelerated-failure-time, and Kaplan–Meier estimators with typed curves,
+  means, and event-time quantiles; and
+- immutable exact bootstrap, repeated K-fold, and caller-declared resample
+  plans with whole-procedure execution and explicit partial-failure status.
+- model-independent weighted binary-probability metrics and right-censored
+  fixed-horizon survival validation with grouped calibration, threshold
+  classification, and integrated summaries.
+- metric-wise optimism correction and pointwise parametric calibration
+  correction over retained OLS/binary training-assessment pairs.
+- OLS/binary influence, covariance-correlation VIF, robust/model uncertainty,
+  bounded scalar penalty-trace, and declared-group backward-selection helpers.
 
 The core estimator envelope is also checked by seven seeded simulation
 scenarios totaling 2,620 outer replications and a 16-case numerical edge corpus.
-Phases 3 and 4 are complete for private experimental development following
+Phases 3, 4, and 5 are complete for private experimental development following
 their scoped independent statistical reviews. The Phase 4 approval covers the
-ordinal, censoring, random-effects, and documented parity-exception evidence.
+ordinal, censoring, random-effects, and documented parity-exception evidence;
+the Phase 5 approval covers the declared survival scope.
 Capability promotion,
 consequential use, and external distribution remain separately blocked.
 
-The implemented APIs are checked against 52 cases from the pinned R `rms`
-8.2-0 oracle. Nine cover Cox, parametric-survival, and Kaplan–Meier fits,
-risk-set features, baseline quantities, predictions, and residuals.
+The Phase 5 survival envelope has its own seven-scenario, 1,280-replication
+simulation gate covering continuous and tied Cox data, strata and offsets,
+right- and mixed-censored Weibull AFT data, Kaplan–Meier coverage, and
+censoring-adjusted validation metrics. Its technical thresholds pass; scoped
+independent numerical/statistical review by Ron Mexico also passes, closing the
+Phase 5 private-development exit gate. Capabilities remain experimental.
+
+The implemented APIs are checked against 60 cases from the pinned R `rms`
+8.2-0 oracle. Sixteen cover Cox, parametric-survival, Kaplan–Meier, and
+fixed-horizon survival validation,
+censoring likelihoods, risk-set features, baseline quantities, curves, means,
+quantiles, residuals, accuracy, discrimination, and marginal calibration.
 Interval-censored and clustered ordinal paths have registered
 oracle cases; one-sided censoring has a documented parity exception.
 See the generated [compatibility inventory](compatibility.md) for the exact
@@ -54,6 +75,9 @@ surface and evidence links.
 - [Use the supported post-estimation operations](guides/post-estimation.md).
 - [Use penalties and alternative covariance estimators](guides/regularization-and-covariance.md).
 - [Inspect and reproduce simulation and numerical-edge evidence](guides/simulation-and-edge-evidence.md).
+- [Create and execute exact resample plans](guides/resampling.md).
+- [Validate binary probabilities and survival predictions](guides/validation-metrics.md).
+- [Diagnose and compare supported fitted models](guides/diagnostics-and-selection.md).
 - [Understand the interpretation boundary](interpretation-and-limitations.md).
 - [Compare Python and R concepts](guides/r-migration.md).
 - [Contribute through the frozen development environment](development.md).

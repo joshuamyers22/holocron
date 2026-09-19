@@ -7,7 +7,7 @@
 | Hidden Hmisc or dependency behavior changes | Medium | High | Pinned Hmisc commit, dated R repository, full environment manifest | joshuamyers22 | Create a reference migration and rerun differential suite |
 | Numerical instability or platform drift | High | High | Stable factorizations, condition/rank cases, required Linux/macOS tolerance-pilot matrix under ADR-009 | Numerical reviewer (vacant) | Quarantine affected case and investigate; do not widen tolerance silently |
 | Formula or serialization code execution | Medium | Critical | Future allowlisted AST, no `eval`, non-executable serialization requirement | joshuamyers22 | Security incident process; disable entry point |
-| Resource exhaustion from design expansion/resampling | Medium | High | Planned preflight limits and explicit dense/sparse boundaries | joshuamyers22 | Reject request with structured status |
+| Resource exhaustion from design expansion/resampling | Medium | High | Design limits plus resampling observation/split/total-index preflight bounds and explicit partial status | joshuamyers22 | Reject request with structured status |
 | Project/package name conflict | High | Medium | `holocron-rms` distribution name; recheck before publishing | joshuamyers22 | Rename distribution before first public artifact |
 | Single-maintainer review and continuity risk | High | High | Stable artifacts, CI, explicit vacant roles and promotion gate | joshuamyers22 | Recruit qualified reviewers before non-experimental claims |
 | Multi-year scope exceeds resources | High | High | Tiered capability manifest and phase gates | joshuamyers22 | Narrow advertised scope and re-estimate after each phase |

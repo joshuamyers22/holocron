@@ -342,7 +342,8 @@
           "properties": {
             "operation": {"const": "psm"},
             "distribution": {"enum": ["weibull", "exponential"]},
-            "scale": {"oneOf": [{"type": "null"}, {"type": "number", "exclusiveMinimum": 0}]}
+            "scale": {"oneOf": [{"type": "null"}, {"type": "number", "exclusiveMinimum": 0}]},
+            "censoring_types": {"type": "array", "items": {"enum": ["exact", "left", "right", "interval"]}}
           },
           "required": ["operation", "distribution", "scale"]
         }
@@ -366,9 +367,70 @@
         "survival": {"$ref": "#/$defs/numericVector"},
         "standard_error": {"$ref": "#/$defs/numericVector"},
         "lower": {"$ref": "#/$defs/numericVector"},
-        "upper": {"$ref": "#/$defs/numericVector"}
+        "upper": {"$ref": "#/$defs/numericVector"},
+        "evaluation_times": {"$ref": "#/$defs/numericVector"},
+        "predicted_survival": {"$ref": "#/$defs/numericMatrix"},
+        "evaluation_probabilities": {"$ref": "#/$defs/numericVector"},
+        "restricted_time": {"type": "number", "exclusiveMinimum": 0},
+        "predicted_quantiles": {"$ref": "#/$defs/nullableNumericMatrix"},
+        "predicted_mean": {"$ref": "#/$defs/numericVector"}
       },
       "required": ["ok", "protocol_version", "operation", "estimator", "observations", "time", "n_risk", "n_event", "n_censor", "survival", "standard_error", "lower", "upper"]
+    },
+    {
+      "title": "Binary probability validation output",
+      "properties": {
+        "ok": {"const": true},
+        "protocol_version": {"const": "1"},
+        "operation": {"const": "probability_validation"},
+        "auc": {"type": "number", "minimum": 0, "maximum": 1},
+        "dxy": {"type": "number", "minimum": -1, "maximum": 1},
+        "brier_score": {"type": "number", "minimum": 0, "maximum": 1},
+        "scaled_brier_score": {"type": "number"},
+        "log_loss": {"type": "number", "minimum": 0},
+        "null_log_loss": {"type": "number", "minimum": 0},
+        "nagelkerke_r_squared": {"type": "number"},
+        "discrimination_index": {"type": "number"},
+        "unreliability_index": {"type": "number"},
+        "quality_index": {"type": "number"},
+        "likelihood_ratio_chi_square": {"type": "number", "minimum": 0},
+        "likelihood_ratio_p_value": {"type": "number", "minimum": 0, "maximum": 1},
+        "unreliability_chi_square": {"type": "number", "minimum": 0},
+        "unreliability_p_value": {"type": "number", "minimum": 0, "maximum": 1},
+        "calibration_intercept": {"type": "number"},
+        "calibration_slope": {"type": "number"},
+        "spiegelhalter_z": {"type": "number"},
+        "spiegelhalter_p_value": {"type": "number", "minimum": 0, "maximum": 1},
+        "prevalence": {"type": "number", "exclusiveMinimum": 0, "exclusiveMaximum": 1},
+        "mean_prediction": {"type": "number", "exclusiveMinimum": 0, "exclusiveMaximum": 1},
+        "calibration_in_the_large": {"type": "number"},
+        "observations": {"type": "integer", "minimum": 2}
+      },
+      "required": ["ok", "protocol_version", "operation", "auc", "dxy", "brier_score", "scaled_brier_score", "log_loss", "null_log_loss", "nagelkerke_r_squared", "discrimination_index", "unreliability_index", "quality_index", "likelihood_ratio_chi_square", "likelihood_ratio_p_value", "unreliability_chi_square", "unreliability_p_value", "calibration_intercept", "calibration_slope", "spiegelhalter_z", "spiegelhalter_p_value", "prevalence", "mean_prediction", "calibration_in_the_large", "observations"]
+    },
+    {
+      "title": "Time-dependent survival validation output",
+      "properties": {
+        "ok": {"const": true},
+        "protocol_version": {"const": "1"},
+        "operation": {"const": "survival_validation"},
+        "horizons": {"$ref": "#/$defs/numericVector"},
+        "brier_scores": {"$ref": "#/$defs/numericVector"},
+        "aucs": {"$ref": "#/$defs/nullableNumericVector"},
+        "dxy": {"$ref": "#/$defs/nullableNumericVector"},
+        "observed_survival": {"$ref": "#/$defs/numericVector"},
+        "mean_predicted_survival": {"$ref": "#/$defs/numericVector"},
+        "calibration_errors": {"$ref": "#/$defs/numericVector"},
+        "censoring_survival": {"$ref": "#/$defs/numericVector"},
+        "case_counts": {"$ref": "#/$defs/integerVector"},
+        "control_counts": {"$ref": "#/$defs/integerVector"},
+        "integrated_brier_score": {
+          "oneOf": [{"type": "null"}, {"type": "number", "minimum": 0}]
+        },
+        "observations": {"type": "integer", "minimum": 1},
+        "total_weight": {"type": "number", "exclusiveMinimum": 0}
+      },
+      "required": ["ok", "protocol_version", "operation", "horizons", "brier_scores", "aucs", "dxy", "observed_survival", "mean_predicted_survival", "calibration_errors", "censoring_survival", "case_counts", "control_counts", "integrated_brier_score", "observations", "total_weight"]
     }
   ],
   "unevaluatedProperties": false,
@@ -460,10 +522,24 @@
       "minItems": 1,
       "items": {"type": "number"}
     },
+    "nullableNumericVector": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"oneOf": [{"type": "number"}, {"type": "null"}]}
+    },
     "numericMatrix": {
       "type": "array",
       "minItems": 1,
       "items": {"$ref": "#/$defs/numericVector"}
+    },
+    "nullableNumericMatrix": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "array",
+        "minItems": 1,
+        "items": {"oneOf": [{"type": "number"}, {"type": "null"}]}
+      }
     },
     "nameVector": {
       "type": "array",
@@ -803,6 +879,10 @@
         "evaluation_linear_predictors": {"$ref": "#/$defs/numericVector"},
         "evaluation_times": {"$ref": "#/$defs/numericVector"},
         "predicted_survival": {"$ref": "#/$defs/numericMatrix"},
+        "evaluation_probabilities": {"$ref": "#/$defs/numericVector"},
+        "restricted_time": {"type": "number", "exclusiveMinimum": 0},
+        "predicted_quantiles": {"$ref": "#/$defs/nullableNumericMatrix"},
+        "predicted_mean": {"$ref": "#/$defs/numericVector"},
         "entry": {"$ref": "#/$defs/numericVector"},
         "strata": {"$ref": "#/$defs/nameVector"},
         "weights": {"$ref": "#/$defs/numericVector"},

@@ -101,8 +101,16 @@ for later effect or display operations.
 | binary `lrm(...)` | `fit_lrm(response, design)` | Unpenalized full-rank binary response only. |
 | penalized `ols(...)` | `fit_penalized_ols(response, design, penalty=...)` | Diagonal, non-negative slope weights only; the intercept is unpenalized. |
 | penalized binary `lrm(...)` | `fit_penalized_lrm(response, design, penalty=...)` | Diagonal, non-negative slope weights only. |
+| `pentrace(fit, penalty=...)` | `trace_penalty(fit, response, design, penalties, criterion=...)` | Explicit bounded scalar grid for OLS/binary `lrm`; owned constant-free AIC/BIC contract, not R parity or adaptive search. |
+| `vif(fit)` | `variance_inflation_factors(fit)` | OLS/binary slope-coefficient covariance-correlation VIFs; owned Python contract. |
+| `which.influence(...)` | `influence_diagnostics(fit, response, design)` | Exact OLS case-deletion and one-step binary influence with declared heuristics. |
+| `fastbw(fit)` | `backward_select(fit, response, design, terms)` | Caller supplies a complete coefficient-group partition; fresh Wald refits, no inferred hierarchy or R parity. |
 | `robcov(fit, cluster=...)` | `robust_covariance(fit, response, design, clusters=...)` | Uncorrected Huber cluster sandwich; omitted clusters make rows independent clusters. |
 | `bootcov(fit, B=...)` | `bootstrap_covariance(fit, response, design, replicates=..., seed=...)` | Iid row resampling only; pass `resample_indices` for cross-language replay. |
+| `val.prob(p, y)` | `validate_probabilities(y, p, ...)` | Model-independent binary metrics; probabilities must be strictly inside `(0, 1)`. |
+| `val.surv(...)` | `validate_survival_predictions(...)` | Right-censored fixed-horizon predictions only; smooth calibration and model dispatch are deferred. |
+| `validate(fit, ...)` | `validate_model(...)` then `optimism_correct_validation(...)` | Fixed realized OLS/binary designs only; the exact plan controls refits and no R method parity is claimed. |
+| `calibrate(fit, ...)` | `calibrate_model(...)` then `optimism_correct_calibration(...)` | Parametric OLS/binary recalibration only; smooth calibration remains deferred. |
 | `predict(fit, newdata=...)` | `fit.predict(specification.transform(data))` | Transform with the original specification; unseen or missing values fail closed. |
 | `vcov(fit)` | `covariance(fit)` | Full named covariance or a named principal submatrix. |
 | `logLik(fit)` | `likelihood(fit)` | Includes maximized/null likelihood, AIC, and the overall LR test. |
@@ -261,15 +269,20 @@ following:
   semantics;
 - complete R `DesignAssign`, `modelData`, `Newlevels`, `Newlabels`, or `specs`
   behavior;
-- aliased OLS columns, weights, offsets, dense penalties, `pentrace`,
+- aliased OLS columns, weights, offsets, dense penalties, adaptive/R-compatible
+  `pentrace`,
   finite-sample robust corrections, cluster/stratified bootstrap, bootstrap
   intervals, adjusted-effect summaries, complete `anova.rms` partitions, or
   nonlinear, simultaneous, grid-based, or expression-driven contrasts; or
 - logistic behavior outside the supported binary/logit and diagonal-penalty
   envelope; ordinal behavior outside its declared contract; Cox strata, entry
   times, weights, offsets, or residuals; parametric families other than
-  Weibull/exponential or non-right censoring; stratified/weighted/entry-time
-  Kaplan–Meier; or validation, calibration, or nomogram execution in Python.
+  Weibull/exponential, residuals for left/interval-censored parametric fits,
+  interval-censored nonparametric estimation, stratified/weighted/entry-time
+  Kaplan–Meier, model-refitting validation outside fixed-design OLS/binary
+  paths, smooth calibration, or
+  nomogram execution in Python. Fixed-horizon survival-validation metrics are
+  available only through their explicit model-independent Python contract.
 
 Supported ordinal and first-slice survival paths have Python parity evidence.
 Anything outside those explicit envelopes remains a stop condition; Holocron

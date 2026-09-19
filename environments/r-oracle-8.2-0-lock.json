@@ -4,7 +4,7 @@
   "scope": "test-only rms parity oracle",
   "image": {
     "tag": "holocron-rms-oracle:8.2-0",
-    "id": "sha256:962da1a11dba7568511d04b3a62eb02680f430102946934bd27d885f49b35506",
+    "id": "sha256:479994b7181824c22b447ef4b76d5325c594aef789825fc0b40c407f78f144af",
     "platform": "linux/arm64"
   },
   "base_image": {
@@ -29,11 +29,11 @@
     "commit": "778bd69d83961577be1f73fa1e36781bd3fd099f"
   },
   "files": {
-    "reference/expected/oracle-environment.json": "b05e7a3add43747bb963b245481b6b02c6eeeaead2a5d6e41d4550192a7772ea",
+    "reference/expected/oracle-environment.json": "a63b8d278198bd7b0c59548670702bb23bf64a694eeeb2c5a06521d97700ba5e",
     "reference/manifests/rms-8.2-0-files.sha256": "40a3805d92ecd6bd1318db842c8c78e05595e48345b46c5e9e21ef01cd7a0bce",
     "reference/r/Dockerfile": "6f72f5864280ed8da130c14f465aa456f1d37967a4c184c0ed18caa679d52078",
     "reference/r/build-oracle.sh": "c9800d6b2a541cb8315cda1b55720a073721c7491ba430e877b2d898400f6ce4",
-    "reference/r/oracle.R": "d8dbfc91c28091cdd5e29164eb5cb212851a769156a2f65daba58f577f42bb4d",
+    "reference/r/oracle.R": "33116af1fb3de2e8c698094270fed5caf379310c0aa256747595a83284280e39",
     "reference/r/run-oracle.sh": "f9af288bdfb335a497017994bf679302f8faaca21eed4de4eedac29bc4396551"
   }
 }

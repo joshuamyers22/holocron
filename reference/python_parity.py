@@ -9,6 +9,7 @@ from holocron.models import (
     BinaryLogisticResult,
     CensoredResponse,
     InferenceEstimate,
+    SurvivalResponse,
     anova,
     bootstrap_covariance,
     contrast,
@@ -29,7 +30,9 @@ from holocron.models import (
     robust_covariance,
     summarize,
     survival_residuals,
+    validate_survival_predictions,
 )
+from holocron.validation import validate_probabilities
 from reference.contracts import JsonValue
 
 
@@ -55,6 +58,72 @@ def _inference_output(value: InferenceEstimate) -> dict[str, JsonValue]:
 def build_python_output(case: dict[str, JsonValue]) -> dict[str, JsonValue]:
     """Compute an implemented case without invoking or importing the R oracle."""
     operation = case["operation"]
+    if operation == "probability_validation":
+        result = validate_probabilities(
+            cast(list[int], case["outcomes"]),
+            cast(list[float], case["probabilities"]),
+        )
+        assert result.unreliability_index is not None
+        assert result.quality_index is not None
+        assert result.unreliability_chi_square is not None
+        assert result.unreliability_p_value is not None
+        assert result.calibration_intercept is not None
+        assert result.calibration_slope is not None
+        return {
+            "ok": True,
+            "protocol_version": "1",
+            "operation": "probability_validation",
+            "auc": result.auc,
+            "dxy": result.dxy,
+            "brier_score": result.brier_score,
+            "scaled_brier_score": result.scaled_brier_score,
+            "log_loss": result.log_loss,
+            "null_log_loss": result.null_log_loss,
+            "nagelkerke_r_squared": result.nagelkerke_r_squared,
+            "discrimination_index": result.discrimination_index,
+            "unreliability_index": result.unreliability_index,
+            "quality_index": result.quality_index,
+            "likelihood_ratio_chi_square": result.likelihood_ratio_chi_square,
+            "likelihood_ratio_p_value": result.likelihood_ratio_p_value,
+            "unreliability_chi_square": result.unreliability_chi_square,
+            "unreliability_p_value": result.unreliability_p_value,
+            "calibration_intercept": result.calibration_intercept,
+            "calibration_slope": result.calibration_slope,
+            "spiegelhalter_z": result.spiegelhalter_z,
+            "spiegelhalter_p_value": result.spiegelhalter_p_value,
+            "prevalence": result.prevalence,
+            "mean_prediction": result.mean_prediction,
+            "calibration_in_the_large": result.calibration_in_the_large,
+            "observations": result.n_observations,
+        }
+    if operation == "survival_validation":
+        result = validate_survival_predictions(
+            cast(list[float], case["time"]),
+            cast(list[int], case["event"]),
+            cast(list[list[float]], case["predicted_survival"]),
+            cast(list[float], case["horizons"]),
+            weights=cast(list[float] | None, case.get("weights")),
+        )
+        return {
+            "ok": True,
+            "protocol_version": "1",
+            "operation": "survival_validation",
+            "horizons": cast(JsonValue, list(result.horizons)),
+            "brier_scores": cast(JsonValue, list(result.brier_scores)),
+            "aucs": cast(JsonValue, list(result.aucs)),
+            "dxy": cast(JsonValue, list(result.dxy)),
+            "observed_survival": cast(JsonValue, list(result.observed_survival)),
+            "mean_predicted_survival": cast(
+                JsonValue, list(result.mean_predicted_survival)
+            ),
+            "calibration_errors": cast(JsonValue, list(result.calibration_errors)),
+            "censoring_survival": cast(JsonValue, list(result.censoring_survival)),
+            "case_counts": cast(JsonValue, list(result.case_counts)),
+            "control_counts": cast(JsonValue, list(result.control_counts)),
+            "integrated_brier_score": result.integrated_brier_score,
+            "observations": result.n_observations,
+            "total_weight": result.total_weight,
+        }
     if operation == "npsurv":
         result = fit_npsurv(
             cast(list[float], case["time"]),
@@ -83,6 +152,25 @@ def build_python_output(case: dict[str, JsonValue]) -> dict[str, JsonValue]:
                 entry=case.get("entry"),
                 strata=cast(JsonValue, list(result.strata)),
                 weights=case.get("weights"),
+            )
+        if "evaluation_probabilities" in case:
+            evaluation_times = cast(list[float], case["evaluation_times"])
+            probabilities = cast(list[float], case["evaluation_probabilities"])
+            restricted_time = float(cast(int | float, case["restricted_time"]))
+            output.update(
+                evaluation_times=cast(JsonValue, evaluation_times),
+                predicted_survival=cast(
+                    JsonValue, [list(result.predict(evaluation_times))]
+                ),
+                evaluation_probabilities=cast(JsonValue, probabilities),
+                restricted_time=restricted_time,
+                predicted_quantiles=cast(
+                    JsonValue, [list(result.predict_quantile(probabilities)[0])]
+                ),
+                predicted_mean=cast(
+                    JsonValue,
+                    list(result.predict_mean(restricted_time=restricted_time)),
+                ),
             )
         return output
     if operation == "design":
@@ -446,6 +534,36 @@ def build_python_output(case: dict[str, JsonValue]) -> dict[str, JsonValue]:
             "evaluation_times": case["evaluation_times"],
             "predicted_survival": cast(JsonValue, [list(row) for row in survival]),
         }
+        if "evaluation_probabilities" in case:
+            probabilities = cast(list[float], case["evaluation_probabilities"])
+            restricted_time = float(cast(int | float, case["restricted_time"]))
+            output.update(
+                evaluation_probabilities=cast(JsonValue, probabilities),
+                restricted_time=restricted_time,
+                predicted_quantiles=cast(
+                    JsonValue,
+                    [
+                        list(row)
+                        for row in result.predict_quantile(
+                            evaluation_basis,
+                            probabilities,
+                            strata=evaluation_strata,
+                            offsets=evaluation_offset,
+                        )
+                    ],
+                ),
+                predicted_mean=cast(
+                    JsonValue,
+                    list(
+                        result.predict_mean(
+                            evaluation_basis,
+                            restricted_time=restricted_time,
+                            strata=evaluation_strata,
+                            offsets=evaluation_offset,
+                        )
+                    ),
+                ),
+            )
         if any(
             name in case
             for name in (
@@ -503,16 +621,47 @@ def build_python_output(case: dict[str, JsonValue]) -> dict[str, JsonValue]:
         strata = cast(list[str] | None, case.get("strata"))
         weights = cast(list[float] | None, case.get("weights"))
         offset = cast(list[float] | None, case.get("offset"))
-        result = fit_psm(
-            cast(list[float], case["time"]),
-            cast(list[int], case["event"]),
-            basis,
-            distribution=cast(Literal["weibull", "exponential"], case["distribution"]),
-            feature_names=design_names,
-            strata=strata,
-            weights=weights,
-            offsets=offset,
-        )
+        if "lower" in case:
+
+            def endpoint(value: JsonValue) -> float:
+                if value == "neg_inf":
+                    return float("-inf")
+                if value == "pos_inf":
+                    return float("inf")
+                return float(cast(int | float, value))
+
+            lower = tuple(
+                endpoint(value) for value in cast(list[JsonValue], case["lower"])
+            )
+            upper = tuple(
+                endpoint(value) for value in cast(list[JsonValue], case["upper"])
+            )
+            response = SurvivalResponse.from_intervals(lower, upper)
+            result = fit_psm(
+                response,
+                basis,
+                distribution=cast(
+                    Literal["weibull", "exponential"], case["distribution"]
+                ),
+                feature_names=design_names,
+                strata=strata,
+                weights=weights,
+                offsets=offset,
+            )
+        else:
+            response = None
+            result = fit_psm(
+                cast(list[float], case["time"]),
+                cast(list[int], case["event"]),
+                basis,
+                distribution=cast(
+                    Literal["weibull", "exponential"], case["distribution"]
+                ),
+                feature_names=design_names,
+                strata=strata,
+                weights=weights,
+                offsets=offset,
+            )
         evaluation_x = cast(list[float], case["evaluation_x"])
         evaluation_basis = (
             [[value] for value in evaluation_x]
@@ -556,6 +705,35 @@ def build_python_output(case: dict[str, JsonValue]) -> dict[str, JsonValue]:
             "evaluation_times": case["evaluation_times"],
             "predicted_survival": cast(JsonValue, [list(row) for row in survival]),
         }
+        if response is not None:
+            output["censoring_types"] = cast(JsonValue, list(response.censoring_types))
+        if "evaluation_probabilities" in case:
+            probabilities = cast(list[float], case["evaluation_probabilities"])
+            output.update(
+                evaluation_probabilities=cast(JsonValue, probabilities),
+                predicted_quantiles=cast(
+                    JsonValue,
+                    [
+                        list(row)
+                        for row in result.predict_quantile(
+                            evaluation_basis,
+                            probabilities,
+                            strata=evaluation_strata,
+                            offsets=evaluation_offset,
+                        )
+                    ],
+                ),
+                predicted_mean=cast(
+                    JsonValue,
+                    list(
+                        result.predict_mean(
+                            evaluation_basis,
+                            strata=evaluation_strata,
+                            offsets=evaluation_offset,
+                        )
+                    ),
+                ),
+            )
         if any(
             name in case
             for name in (
