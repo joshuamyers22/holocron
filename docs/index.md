@@ -41,6 +41,9 @@ The current experimental surface supports only:
   semantic layers, annotations, metadata, and required alternative text.
 - typed model/result adapters and dependency-free accessible inline SVG for
   effects, contrasts, ANOVA, validation, calibration, survival, and diagnostics.
+- strict additive OLS/logit nomogram points geometry and accessible inline SVG.
+- typed raw-value tables, result adapters, strict JSON, and safe deterministic
+  dependency-free LaTeX output.
 
 The core estimator envelope is also checked by seven seeded simulation
 scenarios totaling 2,620 outer replications and a 16-case numerical edge corpus.
@@ -50,8 +53,9 @@ accountable technical exit review without claiming independent approval. The Pha
 ordinal, censoring, random-effects, and documented parity-exception evidence;
 the Phase 5 approval covers the declared survival scope, and Phase 6 covers its
 declared resampling, validation, diagnostics, and failure-reporting envelope.
-Phase 7 is underway with plot specifications, typed result adapters, and its
-owned SVG renderer complete; nomogram geometry and later reporting remain open.
+Phase 7 is underway with plot specifications, typed result adapters/SVG,
+additive nomogram geometry/rendering, and structured table/LaTeX reporting
+complete; task-oriented galleries and later assurance remain open.
 Capability promotion,
 consequential use, and external distribution remain separately blocked.
 
@@ -88,6 +92,7 @@ surface and evidence links.
 - [Validate binary probabilities and survival predictions](guides/validation-metrics.md).
 - [Diagnose and compare supported fitted models](guides/diagnostics-and-selection.md).
 - [Build backend-neutral plot specifications](guides/plot-specifications.md).
+- [Build structured tables and safe LaTeX output](guides/reporting.md).
 - [Understand the interpretation boundary](interpretation-and-limitations.md).
 - [Compare Python and R concepts](guides/r-migration.md).
 - [Contribute through the frozen development environment](development.md).

@@ -109,11 +109,13 @@ def inspect_artifacts(directory: Path) -> tuple[Path, Path]:
         f"{sdist_root}/schemas/ols-result.schema.json",
         f"{sdist_root}/schemas/nonparametric-survival-result.schema.json",
         f"{sdist_root}/schemas/nonparametric-survival-result-v2.schema.json",
+        f"{sdist_root}/schemas/nomogram-geometry.schema.json",
         f"{sdist_root}/schemas/ordinal-result.schema.json",
         f"{sdist_root}/schemas/parametric-survival-result.schema.json",
         f"{sdist_root}/schemas/parametric-survival-result-v2.schema.json",
         f"{sdist_root}/schemas/plot-spec.schema.json",
         f"{sdist_root}/schemas/resample-plan.schema.json",
+        f"{sdist_root}/schemas/table-spec.schema.json",
         f"{sdist_root}/schemas/serialization-manifest.json",
     }
     if not expected_sdist_files <= set(sdist_names):
@@ -153,11 +155,13 @@ def inspect_artifacts(directory: Path) -> tuple[Path, Path]:
         "holocron/schemas/ols-result.schema.json",
         "holocron/schemas/nonparametric-survival-result.schema.json",
         "holocron/schemas/nonparametric-survival-result-v2.schema.json",
+        "holocron/schemas/nomogram-geometry.schema.json",
         "holocron/schemas/ordinal-result.schema.json",
         "holocron/schemas/parametric-survival-result.schema.json",
         "holocron/schemas/parametric-survival-result-v2.schema.json",
         "holocron/schemas/plot-spec.schema.json",
         "holocron/schemas/resample-plan.schema.json",
+        "holocron/schemas/table-spec.schema.json",
         "holocron/schemas/serialization-manifest.json",
     }
     if not expected_schema_files <= set(wheel_names):

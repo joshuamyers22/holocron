@@ -1,6 +1,6 @@
 # Project Brief
 
-- Status and scope: Phases 0–6 complete for private experimental development as of 2026-09-19; Phase 7 is underway with immutable backend-neutral plot specifications, typed result adapters, and bounded accessible SVG rendering complete while nomograms and later reporting work remain open; capability promotion, consequential use, and external distribution remain blocked by their separate reviews
+- Status and scope: Phases 0–6 complete for private experimental development as of 2026-09-19; Phase 7 is underway with plot specifications, typed adapters/SVG, additive OLS/logit nomograms, and structured table/LaTeX reporting complete while galleries and later assurance remain open; capability promotion, consequential use, and external distribution remain blocked by their separate reviews
 - Problem and affected users: Python lacks an integrated equivalent of R's `rms`; biostatisticians, epidemiologists, statistical programmers, and scientific-library authors must assemble incomplete workflows across packages.
 - Measurable success criteria: Every claimed compatible capability is linked to a pinned R 8.2-0 oracle case, method-specific numerical tolerances, statistical simulation evidence, typed public results, executable documentation, and a reproducible release artifact.
 - Explicit non-goals: Runtime delegation to R; a thin `rpy2` wrapper; initial implementation of the separate `rmsb` package; silent method substitutions; claiming drop-in or full parity without manifest-backed evidence.

@@ -1,0 +1,132 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://joshuamyers22.github.io/holocron/schemas/nomogram-geometry.schema.json",
+  "title": "Holocron nomogram geometry",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "model_family",
+    "title",
+    "alt_text",
+    "maximum_axis_points",
+    "linear_predictor_units_per_point",
+    "minimum_linear_predictor",
+    "maximum_total_points",
+    "axes",
+    "outcome_axes",
+    "design_fingerprint",
+    "distribution_fingerprint"
+  ],
+  "properties": {
+    "schema_version": {"const": "holocron-nomogram-geometry/v1"},
+    "model_family": {"enum": ["ols", "binary-logistic"]},
+    "title": {"$ref": "#/$defs/text"},
+    "alt_text": {"$ref": "#/$defs/text"},
+    "maximum_axis_points": {"type": "number", "exclusiveMinimum": 0},
+    "linear_predictor_units_per_point": {
+      "type": "number",
+      "exclusiveMinimum": 0
+    },
+    "minimum_linear_predictor": {"type": "number"},
+    "maximum_total_points": {"type": "number", "exclusiveMinimum": 0},
+    "axes": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 32,
+      "items": {"$ref": "#/$defs/predictorAxis"}
+    },
+    "outcome_axes": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 16,
+      "items": {"$ref": "#/$defs/outcomeAxis"}
+    },
+    "design_fingerprint": {"$ref": "#/$defs/fingerprint"},
+    "distribution_fingerprint": {"$ref": "#/$defs/fingerprint"}
+  },
+  "$defs": {
+    "text": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 4096
+    },
+    "fingerprint": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "value": {
+      "oneOf": [
+        {"type": "number"},
+        {"$ref": "#/$defs/text"}
+      ]
+    },
+    "tick": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["value", "label", "linear_predictor", "points"],
+      "properties": {
+        "value": {"$ref": "#/$defs/value"},
+        "label": {"$ref": "#/$defs/text"},
+        "linear_predictor": {"type": "number"},
+        "points": {"type": "number", "minimum": 0}
+      }
+    },
+    "predictorAxis": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "variable",
+        "label",
+        "unit",
+        "adjustment",
+        "adjustment_linear_predictor",
+        "ticks"
+      ],
+      "properties": {
+        "variable": {"$ref": "#/$defs/text"},
+        "label": {"$ref": "#/$defs/text"},
+        "unit": {
+          "oneOf": [
+            {"type": "null"},
+            {"$ref": "#/$defs/text"}
+          ]
+        },
+        "adjustment": {"$ref": "#/$defs/value"},
+        "adjustment_linear_predictor": {"type": "number"},
+        "ticks": {
+          "type": "array",
+          "minItems": 2,
+          "maxItems": 128,
+          "items": {"$ref": "#/$defs/tick"}
+        }
+      }
+    },
+    "outcomeTick": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["total_points", "linear_predictor", "value", "label"],
+      "properties": {
+        "total_points": {"type": "number", "minimum": 0},
+        "linear_predictor": {"type": "number"},
+        "value": {"type": "number"},
+        "label": {"$ref": "#/$defs/text"}
+      }
+    },
+    "outcomeAxis": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["label", "scale", "ticks"],
+      "properties": {
+        "label": {"$ref": "#/$defs/text"},
+        "scale": {"enum": ["response", "probability"]},
+        "ticks": {
+          "type": "array",
+          "minItems": 2,
+          "maxItems": 128,
+          "items": {"$ref": "#/$defs/outcomeTick"}
+        }
+      }
+    }
+  }
+}

@@ -23,6 +23,7 @@ API_MODULES = {
     ROOT / "docs/api/formula.md": "holocron.formula",
     ROOT / "docs/api/graphics.md": "holocron.graphics",
     ROOT / "docs/api/models.md": "holocron.models",
+    ROOT / "docs/api/reporting.md": "holocron.reporting",
     ROOT / "docs/api/validation.md": "holocron.validation",
     ROOT / "docs/api/exceptions.md": "holocron.exceptions",
 }

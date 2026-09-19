@@ -40,11 +40,13 @@ packages = ["src/holocron"]
 "schemas/ols-result.schema.json" = "holocron/schemas/ols-result.schema.json"
 "schemas/nonparametric-survival-result.schema.json" = "holocron/schemas/nonparametric-survival-result.schema.json"
 "schemas/nonparametric-survival-result-v2.schema.json" = "holocron/schemas/nonparametric-survival-result-v2.schema.json"
+"schemas/nomogram-geometry.schema.json" = "holocron/schemas/nomogram-geometry.schema.json"
 "schemas/ordinal-result.schema.json" = "holocron/schemas/ordinal-result.schema.json"
 "schemas/parametric-survival-result.schema.json" = "holocron/schemas/parametric-survival-result.schema.json"
 "schemas/parametric-survival-result-v2.schema.json" = "holocron/schemas/parametric-survival-result-v2.schema.json"
 "schemas/plot-spec.schema.json" = "holocron/schemas/plot-spec.schema.json"
 "schemas/resample-plan.schema.json" = "holocron/schemas/resample-plan.schema.json"
+"schemas/table-spec.schema.json" = "holocron/schemas/table-spec.schema.json"
 "schemas/serialization-manifest.json" = "holocron/schemas/serialization-manifest.json"
 
 [tool.hatch.build.targets.sdist]
@@ -64,11 +66,13 @@ include = [
     "schemas/ols-result.schema.json",
     "schemas/nonparametric-survival-result.schema.json",
     "schemas/nonparametric-survival-result-v2.schema.json",
+    "schemas/nomogram-geometry.schema.json",
     "schemas/ordinal-result.schema.json",
     "schemas/parametric-survival-result.schema.json",
     "schemas/parametric-survival-result-v2.schema.json",
     "schemas/plot-spec.schema.json",
     "schemas/resample-plan.schema.json",
+    "schemas/table-spec.schema.json",
     "schemas/serialization-manifest.json",
 ]
 exclude = [

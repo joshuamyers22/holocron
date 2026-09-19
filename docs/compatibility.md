@@ -233,7 +233,7 @@ in the pinned namespace. Counts by tier are A: 32, B: 33, C: 26, D: 190.
 | `lm.pfit` | export | — | deferred | Phase 8 | 0 | — | Not yet implemented. |
 | `lrtest` | export | — | deferred | Phase 8 | 0 | — | Not yet implemented. |
 | `matinv` | export | — | deferred | Phase 8 | 0 | — | Not yet implemented. |
-| `nomogram` | export | — | deferred | Phase 7 | 0 | — | Not yet implemented. |
+| `nomogram` | export | — | deferred | Phase 7 | 0 | — | An owned additive OLS/logit geometry builder exists, but it is not mapped to rms::nomogram because conditional interactions, broader model families, custom transforms, and pinned-R parity remain absent. |
 | `pantext` | export | — | deferred | Phase 8 | 0 | — | Not yet implemented. |
 | `perimeter` | export | — | deferred | Phase 8 | 0 | — | Not yet implemented. |
 | `perlcode` | export | — | deferred | Phase 7 | 0 | — | Not yet implemented. |
@@ -282,20 +282,20 @@ in the pinned namespace. Counts by tier are A: 32, B: 33, C: 26, D: 190.
 | `html.summary.rms` | s3_method | — | deferred | Phase 8 | 0 | — | Not yet implemented. |
 | `html.validate` | s3_method | — | deferred | Phase 8 | 0 | — | Not yet implemented. |
 | `is.na.Ocens` | s3_method | — | deferred | Phase 8 | 0 | — | Not yet implemented. |
-| `latex.Glm` | s3_method | — | deferred | Phase 7 | 0 | — | Not yet implemented. |
+| `latex.Glm` | s3_method | — | deferred | Phase 7 | 0 | — | Owned model-summary tables and safe LaTeX rendering exist for supported Gaussian/identity and binomial/logit summaries, but no rms::latex.Glm layout, option, or oracle parity is claimed. |
 | `latex.Gls` | s3_method | — | deferred | Phase 7 | 0 | — | Not yet implemented. |
 | `latex.Rq` | s3_method | — | deferred | Phase 7 | 0 | — | Not yet implemented. |
-| `latex.anova.rms` | s3_method | — | deferred | Phase 7 | 0 | — | Not yet implemented. |
+| `latex.anova.rms` | s3_method | — | deferred | Phase 7 | 0 | — | Owned structured ANOVA tables and safe LaTeX rendering exist for supported Wald tests, but no rms::latex.anova.rms layout, option, or oracle parity is claimed. |
 | `latex.bj` | s3_method | — | deferred | Phase 7 | 0 | — | Not yet implemented. |
 | `latex.cph` | s3_method | — | deferred | Phase 7 | 0 | — | Not yet implemented. |
-| `latex.lrm` | s3_method | — | deferred | Phase 7 | 0 | — | Not yet implemented. |
+| `latex.lrm` | s3_method | — | deferred | Phase 7 | 0 | — | Owned model-summary tables and safe LaTeX rendering exist for binary lrm summaries, but no rms::latex.lrm layout, option, or oracle parity is claimed. |
 | `latex.naprint.delete` | s3_method | — | deferred | Phase 7 | 0 | — | Not yet implemented. |
-| `latex.ols` | s3_method | — | deferred | Phase 7 | 0 | — | Not yet implemented. |
+| `latex.ols` | s3_method | — | deferred | Phase 7 | 0 | — | Owned model-summary tables and safe LaTeX rendering exist for supported OLS summaries, but no rms::latex.ols layout, option, or oracle parity is claimed. |
 | `latex.orm` | s3_method | — | deferred | Phase 7 | 0 | — | Not yet implemented. |
 | `latex.pphsm` | s3_method | — | deferred | Phase 7 | 0 | — | Not yet implemented. |
 | `latex.psm` | s3_method | — | deferred | Phase 7 | 0 | — | Not yet implemented. |
-| `latex.summary.rms` | s3_method | — | deferred | Phase 7 | 0 | — | Not yet implemented. |
-| `latex.validate` | s3_method | — | deferred | Phase 7 | 0 | — | Not yet implemented. |
+| `latex.summary.rms` | s3_method | — | deferred | Phase 7 | 0 | — | Owned contrast/inference tables and safe LaTeX rendering exist for supported estimates, but no rms::latex.summary.rms layout, option, or oracle parity is claimed. |
+| `latex.validate` | s3_method | — | deferred | Phase 7 | 0 | — | Owned probability, survival, optimism, and resample-report tables have safe LaTeX output, but no rms::latex.validate layout, option, or oracle parity is claimed. |
 | `lines.residuals.psm.censored.normalized` | s3_method | — | deferred | Phase 8 | 0 | — | Not yet implemented. |
 | `logLik.Gls` | s3_method | — | deferred | Phase 8 | 0 | — | Not yet implemented. |
 | `logLik.ols` | s3_method | `holocron.models.likelihood` | experimental | Phase 8 | 1 | `postfit-inference-v1` | Returns a typed likelihood record including null likelihood, AIC, and LR test; arbitrary alternative-model comparisons remain deferred. |
@@ -315,7 +315,7 @@ in the pinned namespace. Counts by tier are A: 32, B: 33, C: 26, D: 190.
 | `plot.contrast.rms` | s3_method | — | deferred | Phase 7 | 0 | — | Not yet implemented. |
 | `plot.gIndex` | s3_method | — | deferred | Phase 7 | 0 | — | Not yet implemented. |
 | `plot.lrm.partial` | s3_method | — | deferred | Phase 7 | 0 | — | Not yet implemented. |
-| `plot.nomogram` | s3_method | — | deferred | Phase 7 | 0 | — | Not yet implemented. |
+| `plot.nomogram` | s3_method | — | deferred | Phase 7 | 0 | — | An owned SVG renderer exists for Holocron NomogramGeometry, but it is not mapped to plot.nomogram because R geometry/styling parity and visual-regression evidence remain absent. |
 | `plot.pentrace` | s3_method | — | deferred | Phase 7 | 0 | — | Not yet implemented. |
 | `plot.rexVar` | s3_method | — | deferred | Phase 7 | 0 | — | Not yet implemented. |
 | `plot.sensuc` | s3_method | — | deferred | Phase 7 | 0 | — | Not yet implemented. |

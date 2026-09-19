@@ -33,8 +33,11 @@ from holocron.graphics import (
     AxisSpec,
     BandLayer,
     LineLayer,
+    NomogramGeometry,
     PlotSpec,
+    build_nomogram,
     effect_plot_spec,
+    render_nomogram_svg,
     render_svg,
 )
 from holocron.models import (
@@ -72,6 +75,7 @@ from holocron.models import (
     validate_survival_predictions,
     variance_inflation_factors,
 )
+from holocron.reporting import TableSpec, model_summary_table, render_latex
 from holocron.validation import (
     ResamplePlan,
     calibrate_model,
@@ -98,6 +102,12 @@ assert importlib.resources.files("holocron").joinpath(
 ).is_file()
 assert importlib.resources.files("holocron").joinpath(
     "schemas/plot-spec.schema.json"
+).is_file()
+assert importlib.resources.files("holocron").joinpath(
+    "schemas/nomogram-geometry.schema.json"
+).is_file()
+assert importlib.resources.files("holocron").joinpath(
+    "schemas/table-spec.schema.json"
 ).is_file()
 
 x = (-2.0, -1.0, 0.0, 1.0, 2.0, 3.0)
@@ -196,6 +206,14 @@ assert PlotSpec.from_json(plot_spec.to_json()) == plot_spec
 effect_spec = effect_plot_spec(prediction_result, x, predictor_label="x")
 effect_svg = render_svg(effect_spec)
 assert 'role="img"' in effect_svg and "holocron-plot-spec/v1" in effect_svg
+nomogram = build_nomogram(fit, formula_spec, metadata)
+assert NomogramGeometry.from_json(nomogram.to_json()) == nomogram
+nomogram_svg = render_nomogram_svg(nomogram)
+assert 'role="img"' in nomogram_svg and "Total points" in nomogram_svg
+summary_table = model_summary_table(summarize(fit))
+assert TableSpec.from_json(summary_table.to_json()) == summary_table
+summary_latex = render_latex(summary_table)
+assert "\\\\begin{table}" in summary_latex and "Estimate" in summary_latex
 
 resample_plan = ResamplePlan.k_fold(6, folds=3, repeats=2, seed=7)
 assert ResamplePlan.from_json(resample_plan.to_json()) == resample_plan

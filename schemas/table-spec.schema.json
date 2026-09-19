@@ -1,0 +1,83 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/joshuamyers22/holocron/schemas/table-spec.schema.json",
+  "type": "object",
+  "properties": {
+    "schema_version": {"const": "holocron-table-spec/v1"},
+    "table_id": {"$ref": "#/$defs/identifier"},
+    "kind": {"enum": ["model-summary", "contrast", "anova", "validation", "resampling", "diagnostic", "custom"]},
+    "title": {"$ref": "#/$defs/text"},
+    "caption": {"$ref": "#/$defs/nullableText"},
+    "columns": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 64,
+      "items": {"$ref": "#/$defs/column"}
+    },
+    "rows": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 10000,
+      "items": {"$ref": "#/$defs/row"}
+    },
+    "notes": {
+      "type": "array",
+      "maxItems": 64,
+      "items": {"$ref": "#/$defs/text"}
+    },
+    "metadata": {
+      "type": "array",
+      "maxItems": 128,
+      "items": {"$ref": "#/$defs/metadata"}
+    }
+  },
+  "required": ["schema_version", "table_id", "kind", "title", "caption", "columns", "rows", "notes", "metadata"],
+  "additionalProperties": false,
+  "$defs": {
+    "identifier": {"type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,127}$"},
+    "text": {"type": "string", "minLength": 1, "maxLength": 4096},
+    "nullableText": {
+      "oneOf": [
+        {"type": "null"},
+        {"$ref": "#/$defs/text"}
+      ]
+    },
+    "column": {
+      "type": "object",
+      "properties": {
+        "key": {"$ref": "#/$defs/identifier"},
+        "label": {"$ref": "#/$defs/text"},
+        "kind": {"enum": ["text", "integer", "number", "probability", "p-value"]},
+        "alignment": {"enum": ["left", "center", "right"]},
+        "digits": {"type": "integer", "minimum": 0, "maximum": 15},
+        "unit": {"$ref": "#/$defs/nullableText"}
+      },
+      "required": ["key", "label", "kind", "alignment", "digits", "unit"],
+      "additionalProperties": false
+    },
+    "cell": {"type": ["null", "integer", "number", "string"], "maxLength": 4096},
+    "row": {
+      "type": "object",
+      "properties": {
+        "row_id": {"$ref": "#/$defs/identifier"},
+        "values": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 64,
+          "items": {"$ref": "#/$defs/cell"}
+        }
+      },
+      "required": ["row_id", "values"],
+      "additionalProperties": false
+    },
+    "metadata": {
+      "type": "object",
+      "properties": {
+        "key": {"$ref": "#/$defs/identifier"},
+        "value": {"$ref": "#/$defs/text"}
+      },
+      "required": ["key", "value"],
+      "additionalProperties": false
+    }
+  }
+}

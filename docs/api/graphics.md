@@ -2,7 +2,7 @@
 
 # Graphics API
 
-Plot specifications, typed result adapters, and accessible SVG rendering.
+Plot and nomogram geometry, typed adapters, and accessible SVG rendering.
 
 Import public names from `holocron.graphics`. The signatures and docstrings below
 are generated from the installed source during `make docs-check`.
@@ -107,6 +107,147 @@ An ordered numeric line or step series.
 | `label` | `str | None` |
 | `role` | `LayerRole` |
 | `interpolation` | `Literal['linear', 'step']` |
+
+## `NomogramAxis`
+
+```python
+class holocron.graphics.nomogram.NomogramAxis(variable: str, label: str, unit: str | None, adjustment: float | str, adjustment_linear_predictor: float, ticks: tuple[holocron.graphics.nomogram.NomogramTick, ...]) -> None
+```
+
+One predictor axis evaluated with every other predictor adjusted.
+
+### Attributes
+
+| Name | Type |
+| --- | --- |
+| `variable` | `str` |
+| `label` | `str` |
+| `unit` | `str | None` |
+| `adjustment` | `NomogramValue` |
+| `adjustment_linear_predictor` | `float` |
+| `ticks` | `tuple[NomogramTick, ...]` |
+
+### `maximum_points`
+
+Return the largest points contribution on this axis.
+
+### `to_dict(self) -> dict[str, None | bool | int | float | str | list['JsonValue'] | dict[str, 'JsonValue']]`
+
+Return this axis's data-only document.
+
+## `NomogramGeometry`
+
+```python
+class holocron.graphics.nomogram.NomogramGeometry(model_family: Literal['ols', 'binary-logistic'], title: str, alt_text: str, maximum_axis_points: float, linear_predictor_units_per_point: float, minimum_linear_predictor: float, maximum_total_points: float, axes: tuple[holocron.graphics.nomogram.NomogramAxis, ...], outcome_axes: tuple[holocron.graphics.nomogram.NomogramOutcomeAxis, ...], design_fingerprint: str, distribution_fingerprint: str) -> None
+```
+
+Strict additive points geometry independent of a rendering backend.
+
+### Attributes
+
+| Name | Type |
+| --- | --- |
+| `model_family` | `NomogramModelFamily` |
+| `title` | `str` |
+| `alt_text` | `str` |
+| `maximum_axis_points` | `float` |
+| `linear_predictor_units_per_point` | `float` |
+| `minimum_linear_predictor` | `float` |
+| `maximum_total_points` | `float` |
+| `axes` | `tuple[NomogramAxis, ...]` |
+| `outcome_axes` | `tuple[NomogramOutcomeAxis, ...]` |
+| `design_fingerprint` | `str` |
+| `distribution_fingerprint` | `str` |
+
+### `fingerprint`
+
+Return the SHA-256 identity of the canonical geometry.
+
+### `from_dict(document: object) -> holocron.graphics.nomogram.NomogramGeometry`
+
+Reconstruct geometry from an exact-version document.
+
+### `from_json(value: str) -> holocron.graphics.nomogram.NomogramGeometry`
+
+Reconstruct geometry from strict bounded JSON.
+
+### `linear_predictor(self, total_points: float) -> float`
+
+Convert an in-range total-points value to the model linear predictor.
+
+### `predict(self, total_points: float) -> float`
+
+Convert total points to the model's response-scale prediction.
+
+### `to_dict(self) -> dict[str, None | bool | int | float | str | list['JsonValue'] | dict[str, 'JsonValue']]`
+
+Return the strict versioned geometry document.
+
+### `to_json(self) -> str`
+
+Return canonical non-executable geometry JSON.
+
+## `NomogramOutcomeAxis`
+
+```python
+class holocron.graphics.nomogram.NomogramOutcomeAxis(label: str, scale: Literal['response', 'probability'], ticks: tuple[holocron.graphics.nomogram.NomogramOutcomeTick, ...]) -> None
+```
+
+A response transformation aligned to total points.
+
+### Attributes
+
+| Name | Type |
+| --- | --- |
+| `label` | `str` |
+| `scale` | `NomogramOutcomeScale` |
+| `ticks` | `tuple[NomogramOutcomeTick, ...]` |
+
+### `to_dict(self) -> dict[str, None | bool | int | float | str | list['JsonValue'] | dict[str, 'JsonValue']]`
+
+Return this outcome axis's data-only document.
+
+## `NomogramOutcomeTick`
+
+```python
+class holocron.graphics.nomogram.NomogramOutcomeTick(total_points: float, linear_predictor: float, value: float, label: str) -> None
+```
+
+One outcome value located on the total-points scale.
+
+### Attributes
+
+| Name | Type |
+| --- | --- |
+| `total_points` | `float` |
+| `linear_predictor` | `float` |
+| `value` | `float` |
+| `label` | `str` |
+
+### `to_dict(self) -> dict[str, None | bool | int | float | str | list['JsonValue'] | dict[str, 'JsonValue']]`
+
+Return this outcome tick's data-only document.
+
+## `NomogramTick`
+
+```python
+class holocron.graphics.nomogram.NomogramTick(value: float | str, label: str, linear_predictor: float, points: float) -> None
+```
+
+One displayed predictor value and its points contribution.
+
+### Attributes
+
+| Name | Type |
+| --- | --- |
+| `value` | `NomogramValue` |
+| `label` | `str` |
+| `linear_predictor` | `float` |
+| `points` | `float` |
+
+### `to_dict(self) -> dict[str, None | bool | int | float | str | list['JsonValue'] | dict[str, 'JsonValue']]`
+
+Return this tick's data-only document.
 
 ## `PlotMetadata`
 
@@ -223,6 +364,14 @@ Text anchored at one pair of numeric data coordinates.
 
 Adapt joint Wald tests to a horizontal term-statistic plot.
 
+## `build_nomogram(model: holocron.models.linear.OlsResult | holocron.models.logistic.BinaryLogisticResult, design: holocron.design.formula.DesignSpec, distribution: holocron.design.distributions.DataDistribution, *, maximum_axis_points: float = 100.0, continuous_ticks: int = 5, outcome_ticks: int = 6, title: str = 'Nomogram', outcome_label: str | None = None) -> holocron.graphics.nomogram.NomogramGeometry`
+
+Build additive points geometry for an identity-bound OLS or logit model.
+
+Every predictor is varied across its declared display values while all other
+predictors remain at their explicit distribution adjustment. Interactions
+are rejected because they do not admit one unconditional predictor axis.
+
 ## `calibration_plot_spec(result: holocron.validation.models.ModelCalibrationResult | holocron.validation.optimism.OptimismCorrectedCalibrationResult | holocron.validation.probability.ProbabilityValidationResult | holocron.models.survival_validation.SurvivalValidationResult, *, plot_id: str = 'calibration', title: str = 'Calibration') -> holocron.graphics.specification.PlotSpec`
 
 Adapt model, corrected, probability, or survival calibration results.
@@ -245,6 +394,10 @@ Render a plot specification as deterministic, accessible inline SVG.
 
 The renderer owns a fixed semantic palette and emits no scripts, external
 resources, event handlers, or backend-specific state.
+
+## `render_nomogram_svg(geometry: holocron.graphics.nomogram.NomogramGeometry, *, width: int = 1000, height: int | None = None) -> str`
+
+Render nomogram geometry as deterministic accessible inline SVG.
 
 ## `survival_plot_spec(result: holocron.models.survival.SurvivalCurveResult, *, plot_id: str = 'survival', title: str = 'Survival curves') -> holocron.graphics.specification.PlotSpec`
 

@@ -126,21 +126,26 @@ it does not claim independent approval or promote any capability beyond
 experimental. See the
 [Phase 6 completion record](https://github.com/joshuamyers22/holocron/blob/main/governance/PHASE_6_COMPLETION.md).
 
-Phase 7 is underway. Its first two deliverables add immutable backend-neutral plot
+Phase 7 is underway. Its first four deliverables add immutable backend-neutral plot
 specifications for numeric lines, points, interval bands, categorical bars and
 estimate intervals, semantic annotations and metadata, explicit axis scales,
 legend order, and required alternative text. Plot specifications use strict
 versioned JSON. Typed adapters cover effects, contrasts, ANOVA, validation,
 calibration, survival, and diagnostics; a dependency-free backend renders the
-same specifications as bounded accessible inline SVG. Nomograms and broader
-reporting remain deferred.
+same specifications as bounded accessible inline SVG. Strict backend-neutral
+nomogram geometry and accessible SVG cover additive identity-bound OLS and
+binary-logistic models, with interactions rejected explicitly. Immutable typed
+tables retain raw result values in strict canonical JSON, and typed adapters
+feed a deterministic dependency-free LaTeX renderer that escapes all
+caller-controlled text. Task-oriented galleries and broader renderer assurance
+remain deferred.
 
 ## Library API
 
 Holocron is a typed library and intentionally installs no command-line tools.
 Its current public namespaces are `holocron.design`, `holocron.formula`,
-`holocron.graphics`, `holocron.models`, `holocron.validation`, and
-`holocron.exceptions`:
+`holocron.graphics`, `holocron.models`, `holocron.reporting`,
+`holocron.validation`, and `holocron.exceptions`:
 
 ```python
 from holocron.design import DataDistribution, DesignSpec
@@ -163,7 +168,8 @@ depending on global state or the original input iterable.
 
 Design specifications, realized matrices, OLS results, binary-logistic results,
 ordinal results, all three survival result types, exact resample plans, and plot
-specifications use strict versioned data-only JSON. Fitting from a `DesignMatrix`
+specifications, nomogram geometry, and table specifications use strict versioned
+data-only JSON. Fitting from a `DesignMatrix`
 carries its specification fingerprint into the result and checks that identity
 during prediction. The public schemas ship under `holocron/schemas`; arbitrary
 pickle interchange is not supported.

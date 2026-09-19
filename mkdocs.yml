@@ -39,6 +39,8 @@ nav:
       - Probability and survival validation: guides/validation-metrics.md
       - Diagnostics and selection: guides/diagnostics-and-selection.md
       - Backend-neutral plot specifications: guides/plot-specifications.md
+      - Nomogram geometry and SVG: guides/nomograms.md
+      - Structured tables and LaTeX: guides/reporting.md
       - Serialization and reconstruction: guides/serialization.md
       - R migration: guides/r-migration.md
   - Examples:
@@ -49,6 +51,7 @@ nav:
       - Formula: api/formula.md
       - Graphics: api/graphics.md
       - Models: api/models.md
+      - Reporting: api/reporting.md
       - Validation: api/validation.md
       - Exceptions: api/exceptions.md
   - Interpretation and limitations: interpretation-and-limitations.md

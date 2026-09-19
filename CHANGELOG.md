@@ -197,3 +197,14 @@ Notable changes are recorded here using semantic versioning.
   curves, and current diagnostics, plus a dependency-free renderer for bounded
   accessible inline SVG. Semantic and accessibility-contract tests do not yet
   constitute pixel-baseline, browser-certification, or R graphics parity.
+- Completed the third Phase 7 deliverable with strict backend-neutral nomogram
+  geometry for additive identity-bound OLS and binary-logistic models. The
+  shared-points identity reconstructs model predictions, geometry has canonical
+  JSON/schema identity, and an owned accessible SVG renderer covers predictor,
+  total-points, and response axes. Interactions fail explicitly; no R nomogram
+  parity is claimed.
+- Completed the fourth Phase 7 deliverable with a new `holocron.reporting`
+  namespace for bounded typed raw-value tables, strict canonical JSON/schema
+  identity, result adapters spanning supported inference, validation,
+  resampling, and diagnostic objects, and safe deterministic dependency-free
+  LaTeX output. No R `latex.*` layout or oracle parity is claimed.

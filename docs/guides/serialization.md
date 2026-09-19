@@ -9,6 +9,7 @@ formula, callback, or expression.
 from holocron.design import DesignMatrix, DesignSpec
 from holocron.graphics import AxisSpec, LineLayer, PlotSpec
 from holocron.models import OlsResult, fit_ols
+from holocron.reporting import TableColumn, TableRow, TableSpec
 from holocron.validation import ResamplePlan
 
 specification = DesignSpec.from_formula("y ~ pol(x, 2)")
@@ -30,6 +31,14 @@ plot = PlotSpec(
     (LineLayer("line", (0.0, 1.0), (0.0, 1.0)),),
 )
 restored_plot = PlotSpec.from_json(plot.to_json())
+table = TableSpec(
+    "serialized-table",
+    "custom",
+    "Serialized table",
+    (TableColumn("estimate", "Estimate", "number", "right", 3),),
+    (TableRow("row", (1.25,)),),
+)
+restored_table = TableSpec.from_json(table.to_json())
 
 assert restored_specification == specification
 assert restored_matrix == matrix
@@ -38,6 +47,7 @@ assert restored_fit.design_fingerprint == specification.fingerprint
 assert restored_fit.predict(restored_matrix) == restored_fit.fitted_values
 assert restored_plan == plan
 assert restored_plot == plot
+assert restored_table == table
 ```
 
 `to_dict()` returns the schema document, `to_json()` returns its canonical JSON,
@@ -58,8 +68,9 @@ assert manifest.is_file()
 ```
 
 The manifest identifies every serializable public type, version, and schema
-filename. The current readers limit JSON text to 64 MiB; design matrices and
-results additionally impose documented row and column limits.
+filename, including `PlotSpec`, `NomogramGeometry`, and `TableSpec`. The current readers limit
+JSON text to 64 MiB; design matrices and results additionally impose documented
+row and column limits.
 
 Do not persist Holocron objects with pickle as a supported interchange format.
 Do not treat fingerprints as signatures. Store the exact schema version with

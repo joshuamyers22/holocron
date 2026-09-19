@@ -8,7 +8,15 @@ from pathlib import Path
 from typing import cast
 
 import holocron
-from holocron import design, exceptions, formula, graphics, models, validation
+from holocron import (
+    design,
+    exceptions,
+    formula,
+    graphics,
+    models,
+    reporting,
+    validation,
+)
 
 
 class PublicApiTests(unittest.TestCase):
@@ -22,6 +30,7 @@ class PublicApiTests(unittest.TestCase):
                 "formula",
                 "graphics",
                 "models",
+                "reporting",
                 "validation",
             ),
         )
@@ -149,17 +158,24 @@ class PublicApiTests(unittest.TestCase):
                 "BarLayer",
                 "IntervalLayer",
                 "LineLayer",
+                "NomogramAxis",
+                "NomogramGeometry",
+                "NomogramOutcomeAxis",
+                "NomogramOutcomeTick",
+                "NomogramTick",
                 "PlotMetadata",
                 "PlotSpec",
                 "PointLayer",
                 "ReferenceLine",
                 "TextAnnotation",
                 "anova_plot_spec",
+                "build_nomogram",
                 "calibration_plot_spec",
                 "contrast_plot_spec",
                 "diagnostic_plot_spec",
                 "effect_plot_spec",
                 "render_svg",
+                "render_nomogram_svg",
                 "survival_plot_spec",
                 "validation_plot_spec",
             ],
@@ -202,6 +218,26 @@ class PublicApiTests(unittest.TestCase):
                 "validate_model",
                 "validate_probabilities",
                 "validate_survival_predictions",
+            ],
+        )
+
+    def test_reporting_namespace_exports_supported_table_contracts(self) -> None:
+        self.assertEqual(
+            reporting.__all__,
+            [
+                "TableColumn",
+                "TableMetadata",
+                "TableRow",
+                "TableSpec",
+                "anova_table",
+                "contrast_table",
+                "diagnostic_table",
+                "escape_latex",
+                "format_cell",
+                "model_summary_table",
+                "render_latex",
+                "resample_report_table",
+                "validation_table",
             ],
         )
 

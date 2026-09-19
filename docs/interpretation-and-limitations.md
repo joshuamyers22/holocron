@@ -141,6 +141,21 @@ groups, but this is not browser or assistive-technology certification. No
 pixel-baseline visual-regression evidence, interactive renderer, custom theme,
 or R graphics parity is currently supported.
 
+Nomogram points are exact only within the declared additive model geometry.
+They vary each predictor while holding all others at `DataDistribution`
+adjustments and retain the design/distribution fingerprints. Interaction models
+are rejected because an unconditional axis would conceal effect modification.
+The current OLS/logit contract does not support ordinal/survival outcomes,
+confidence limits, custom transforms, or R `nomogram` parity.
+
+Structured reporting preserves typed source values and explicit nulls, but it
+does not make a statistical result publication-ready or validate the analysis
+that produced it. LaTeX output escapes all caller-controlled text and exposes
+no raw-markup path; it does not compile documents or claim layout, macro, or
+option parity with R `latex.*` methods. Callers still own table selection,
+rounding suitability, captions, multiplicity context, and disclosure of missing
+or partial-resample quantities.
+
 ## Decision boundary
 
 Callers own the estimand, target population, action policy, time horizon, utility,

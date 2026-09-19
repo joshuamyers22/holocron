@@ -1,6 +1,6 @@
 # Independent Python Implementation of `rms`: Production Project Plan
 
-**Status:** Active — Phases 0–6 complete for private experimental development; Phase 7 is underway with plot specifications plus model adapters and SVG rendering complete
+**Status:** Active — Phases 0–6 complete for private experimental development; Phase 7 is underway with plots, additive nomograms, and structured reporting complete
 **Plan date:** 2026-09-17  
 **Reference implementation:** Frank Harrell's R package `rms`  
 **Project name:** `holocron`  
@@ -831,16 +831,22 @@ or capability promotion. See
 
 ### Phase 7 — Graphics, nomograms, reporting, and documentation (16–24 weeks)
 
-**Implementation progress:** The first two deliverables are complete within
+**Implementation progress:** The first four deliverables are complete within
 their experimental envelopes. `holocron.graphics.PlotSpec` provides bounded numeric
 and categorical axes and layers, interval bands, categorical estimate
 intervals, semantic roles, annotations, metadata, legend ordering, required
 alternative text, canonical JSON, and stable fingerprints without importing a
 rendering backend. Typed adapters now cover effects, contrasts, ANOVA,
 validation, calibration, survival, and diagnostics, and the owned renderer
-emits bounded accessible inline SVG from `PlotSpec`. The next deliverable is
-nomogram geometry and rendering. See `governance/PHASE_7_PLOT_SPECIFICATIONS.md`
-and `governance/PHASE_7_ADAPTERS_RENDERERS.md`.
+emits bounded accessible inline SVG from `PlotSpec`. Strict nomogram geometry
+and owned SVG rendering now cover additive identity-bound OLS and binary-logistic
+models and fail closed on interactions. Immutable typed table specifications,
+result adapters, canonical JSON, and safe dependency-free LaTeX output now
+complete the reporting vertical. The next deliverable is task-oriented
+documentation and tested galleries. See `governance/PHASE_7_PLOT_SPECIFICATIONS.md`,
+`governance/PHASE_7_ADAPTERS_RENDERERS.md`,
+`governance/PHASE_7_NOMOGRAMS.md`, and
+`governance/PHASE_7_STRUCTURED_REPORTING.md`.
 
 **Deliverables**
 

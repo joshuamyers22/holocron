@@ -142,6 +142,6 @@ The SVG renderer is deterministic and semantically tested, but it is not a
 browser accessibility certification or pixel-level visual-regression claim.
 There is no bitmap, HTML, interactive, custom-theme, or automatic output-file
 contract. Adapter coverage is limited to the explicit result types above and
-does not claim parity with R graphics methods. The `nomogram` kind reserves
-semantic identity only; nomogram geometry and rendering remain the next Phase 7
-deliverable.
+does not claim parity with R graphics methods. The `nomogram` kind remains a
+reserved `PlotSpec` identity because nomograms use their own stricter
+multi-axis `NomogramGeometry`; see the [nomogram guide](nomograms.md).

@@ -921,7 +921,7 @@
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "known_differences": "An owned additive OLS/logit geometry builder exists, but it is not mapped to rms::nomogram because conditional interactions, broader model families, custom transforms, and pinned-R parity remain absent."
     },
     {
       "id": "export:npsurv",
@@ -2150,7 +2150,7 @@
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "known_differences": "Owned model-summary tables and safe LaTeX rendering exist for supported Gaussian/identity and binomial/logit summaries, but no rms::latex.Glm layout, option, or oracle parity is claimed."
     },
     {
       "id": "s3_method:latex.Gls",
@@ -2189,7 +2189,7 @@
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "known_differences": "Owned structured ANOVA tables and safe LaTeX rendering exist for supported Wald tests, but no rms::latex.anova.rms layout, option, or oracle parity is claimed."
     },
     {
       "id": "s3_method:latex.bj",
@@ -2228,7 +2228,7 @@
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "known_differences": "Owned model-summary tables and safe LaTeX rendering exist for binary lrm summaries, but no rms::latex.lrm layout, option, or oracle parity is claimed."
     },
     {
       "id": "s3_method:latex.naprint.delete",
@@ -2254,7 +2254,7 @@
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "known_differences": "Owned model-summary tables and safe LaTeX rendering exist for supported OLS summaries, but no rms::latex.ols layout, option, or oracle parity is claimed."
     },
     {
       "id": "s3_method:latex.orm",
@@ -2306,7 +2306,7 @@
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "known_differences": "Owned contrast/inference tables and safe LaTeX rendering exist for supported estimates, but no rms::latex.summary.rms layout, option, or oracle parity is claimed."
     },
     {
       "id": "s3_method:latex.validate",
@@ -2319,7 +2319,7 @@
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "known_differences": "Owned probability, survival, optimism, and resample-report tables have safe LaTeX output, but no rms::latex.validate layout, option, or oracle parity is claimed."
     },
     {
       "id": "s3_method:lines.residuals.psm.censored.normalized",
@@ -2579,7 +2579,7 @@
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "known_differences": "An owned SVG renderer exists for Holocron NomogramGeometry, but it is not mapped to plot.nomogram because R geometry/styling parity and visual-regression evidence remain absent."
     },
     {
       "id": "s3_method:plot.pentrace",
