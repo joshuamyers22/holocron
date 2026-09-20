@@ -1,0 +1,203 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/joshuamyers22/holocron/schemas/phase-9-beta-program.schema.json",
+  "type": "object",
+  "properties": {
+    "schema_version": {"const": "holocron-phase-9-beta-program/v1"},
+    "plan_id": {"const": "phase-9-private-beta-v1"},
+    "status": {"enum": ["blocked", "active", "complete"]},
+    "blockers": {
+      "type": "array",
+      "maxItems": 20,
+      "items": {"$ref": "#/$defs/blocker"}
+    },
+    "distribution_approvals": {
+      "type": "array",
+      "maxItems": 20,
+      "items": {"$ref": "#/$defs/approval"}
+    },
+    "candidates": {
+      "type": "array",
+      "maxItems": 20,
+      "items": {"$ref": "#/$defs/candidate"}
+    },
+    "feedback": {
+      "type": "array",
+      "maxItems": 1000,
+      "items": {"$ref": "#/$defs/feedback"}
+    }
+  },
+  "required": [
+    "schema_version",
+    "plan_id",
+    "status",
+    "blockers",
+    "distribution_approvals",
+    "candidates",
+    "feedback"
+  ],
+  "additionalProperties": false,
+  "$defs": {
+    "blocker": {
+      "type": "object",
+      "properties": {
+        "blocker_id": {"type": "string", "pattern": "^[a-z0-9-]+$"},
+        "owner_role": {"type": "string", "minLength": 3, "maxLength": 80},
+        "detail": {"type": "string", "minLength": 20, "maxLength": 500}
+      },
+      "required": ["blocker_id", "owner_role", "detail"],
+      "additionalProperties": false
+    },
+    "approval": {
+      "type": "object",
+      "properties": {
+        "candidate_id": {"type": "string", "pattern": "^holocron-1\\.0\\.0rc[1-9][0-9]*$"},
+        "reviewer_id": {"type": "string", "pattern": "^license-reviewer-[a-z0-9-]+$"},
+        "role": {"const": "qualified-license-provenance-reviewer"},
+        "approved_on": {"type": "string", "format": "date"},
+        "approved_source_revision": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+        "license_approved": {"const": true},
+        "provenance_approved": {"const": true},
+        "package_name_approved": {"const": true},
+        "notices_approved": {"const": true},
+        "external_beta_authorized": {"const": true},
+        "record": {
+          "type": "string",
+          "pattern": "^governance/phase-9-distribution-approvals/[a-z0-9.-]+\\.md$",
+          "maxLength": 300
+        }
+      },
+      "required": [
+        "candidate_id",
+        "reviewer_id",
+        "role",
+        "approved_on",
+        "approved_source_revision",
+        "license_approved",
+        "provenance_approved",
+        "package_name_approved",
+        "notices_approved",
+        "external_beta_authorized",
+        "record"
+      ],
+      "additionalProperties": false
+    },
+    "candidate": {
+      "type": "object",
+      "properties": {
+        "candidate_id": {"type": "string", "pattern": "^holocron-1\\.0\\.0rc[1-9][0-9]*$"},
+        "ordinal": {"type": "integer", "minimum": 1, "maximum": 99},
+        "version": {"type": "string", "pattern": "^1\\.0\\.0rc[1-9][0-9]*$"},
+        "tag": {"type": "string", "pattern": "^v1\\.0\\.0rc[1-9][0-9]*$"},
+        "source_revision": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+        "built_on": {"type": "string", "format": "date"},
+        "artifact_sha256": {
+          "type": "object",
+          "properties": {
+            "wheel": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+            "sdist": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+          },
+          "required": ["wheel", "sdist"],
+          "additionalProperties": false
+        },
+        "checks": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {"enum": ["make-check", "make-audit", "clean-artifact-smoke"]}
+        },
+        "status": {"enum": ["active", "superseded", "accepted"]}
+      },
+      "required": [
+        "candidate_id",
+        "ordinal",
+        "version",
+        "tag",
+        "source_revision",
+        "built_on",
+        "artifact_sha256",
+        "checks",
+        "status"
+      ],
+      "additionalProperties": false
+    },
+    "finding": {
+      "type": "object",
+      "properties": {
+        "finding_id": {"type": "string", "pattern": "^[a-z0-9-]+$"},
+        "severity": {"enum": ["blocker", "high", "medium", "low", "observation"]},
+        "summary": {"type": "string", "minLength": 10, "maxLength": 1000},
+        "disposition": {"enum": ["open", "resolved", "accepted", "not-actionable"]},
+        "resolution": {"type": ["string", "null"], "maxLength": 1000}
+      },
+      "required": ["finding_id", "severity", "summary", "disposition", "resolution"],
+      "additionalProperties": false
+    },
+    "feedback": {
+      "type": "object",
+      "properties": {
+        "feedback_id": {"type": "string", "pattern": "^[a-z0-9-]+$"},
+        "candidate_id": {"type": "string", "pattern": "^holocron-1\\.0\\.0rc[1-9][0-9]*$"},
+        "reviewer_id": {"type": "string", "pattern": "^external-beta-[a-z0-9-]+$"},
+        "independence_attested": {"const": true},
+        "retention_consent": {"const": true},
+        "received_on": {"type": "string", "format": "date"},
+        "environment": {
+          "type": "object",
+          "properties": {
+            "operating_system": {"type": "string", "minLength": 2, "maxLength": 100},
+            "python": {"type": "string", "pattern": "^3\\.(11|12)(\\.[0-9]+)?$"},
+            "install_source": {"enum": ["wheel", "sdist"]}
+          },
+          "required": ["operating_system", "python", "install_source"],
+          "additionalProperties": false
+        },
+        "workflows": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "design-and-core-modeling",
+              "survival",
+              "validation-and-calibration",
+              "graphics-and-reporting",
+              "migration"
+            ]
+          }
+        },
+        "outcome": {"enum": ["completed", "partial", "blocked"]},
+        "ratings": {
+          "type": "object",
+          "properties": {
+            "usability": {"type": "integer", "minimum": 1, "maximum": 5},
+            "documentation": {"type": "integer", "minimum": 1, "maximum": 5},
+            "statistical_clarity": {"type": "integer", "minimum": 1, "maximum": 5}
+          },
+          "required": ["usability", "documentation", "statistical_clarity"],
+          "additionalProperties": false
+        },
+        "summary": {"type": "string", "minLength": 20, "maxLength": 2000},
+        "findings": {
+          "type": "array",
+          "maxItems": 100,
+          "items": {"$ref": "#/$defs/finding"}
+        }
+      },
+      "required": [
+        "feedback_id",
+        "candidate_id",
+        "reviewer_id",
+        "independence_attested",
+        "retention_consent",
+        "received_on",
+        "environment",
+        "workflows",
+        "outcome",
+        "ratings",
+        "summary",
+        "findings"
+      ],
+      "additionalProperties": false
+    }
+  }
+}

@@ -79,6 +79,14 @@ notices, and package-version drift. The
 [migration and deprecation guide](guides/migration-and-deprecation.md) defines
 the user-facing planner and removal guarantees.
 
+## Phase 9 release-candidate workflow
+
+`make phase-9-rc-check` validates the release-candidate plan and current beta
+registry without pretending an incomplete program has passed. The stronger
+`make phase-9-rc-exit-gate` is reserved for the final Phase 9 evidence decision
+and fails until genuine candidates, exact distribution approvals, and external
+feedback meet every locked criterion.
+
 ## Phase 1 evidence workflow
 
 `make phase-1-e2e` executes the accepted RCS-design, OLS-fit, and prediction case,

@@ -1,0 +1,25 @@
+{
+  "schema_version": "holocron-phase-9-beta-program/v1",
+  "plan_id": "phase-9-private-beta-v1",
+  "status": "blocked",
+  "blockers": [
+    {
+      "blocker_id": "stable-scope-definition",
+      "owner_role": "maintainer-and-independent-reviewers",
+      "detail": "ADR-010 must define the exact 1.0 stable core and its compatibility meaning before a 1.0.0 release candidate is cut."
+    },
+    {
+      "blocker_id": "distribution-approval",
+      "owner_role": "qualified-license-provenance-reviewer",
+      "detail": "External beta artifacts require written approval of the exact commit, license, provenance process, package name, and notices."
+    },
+    {
+      "blocker_id": "external-beta-cohort",
+      "owner_role": "maintainer",
+      "detail": "At least three independent external beta reviewers must be recruited after distribution approval and must submit retained feedback."
+    }
+  ],
+  "distribution_approvals": [],
+  "candidates": [],
+  "feedback": []
+}

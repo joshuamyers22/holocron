@@ -13,6 +13,9 @@ closed the Phase 6, Phase 7, and Phase 8 technical exit gates on 2026-09-19.
 No independent Phase 6, Phase 7, or Phase 8 approval is claimed. Independent
 verification and legal/license reviewer roles remain unfilled; numerical review
 remains a separate promotion gate outside the approved Phase 5 scope.
+The Phase 9 release-candidate evidence process is defined, but candidate and
+external-beta execution remains blocked by ADR-010, qualified distribution
+approval, and external cohort recruitment.
 Until those qualified reviewers are appointed and their applicable gates pass:
 
 - implemented capabilities may be marked only `experimental`; `mapped` and

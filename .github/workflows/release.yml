@@ -12,9 +12,19 @@ jobs:
       - name: Verify external distribution approval
         env:
           EXTERNAL_DISTRIBUTION_APPROVED: ${{ vars.EXTERNAL_DISTRIBUTION_APPROVED }}
+          EXTERNAL_DISTRIBUTION_APPROVED_SHA: ${{ vars.EXTERNAL_DISTRIBUTION_APPROVED_SHA }}
+          EXTERNAL_DISTRIBUTION_APPROVAL_RECORD: ${{ vars.EXTERNAL_DISTRIBUTION_APPROVAL_RECORD }}
         run: |
           if [ "$EXTERNAL_DISTRIBUTION_APPROVED" != "true" ]; then
             echo "External distribution is not approved" >&2
+            exit 1
+          fi
+          if [ "$EXTERNAL_DISTRIBUTION_APPROVED_SHA" != "$GITHUB_SHA" ]; then
+            echo "External distribution approval does not match this commit" >&2
+            exit 1
+          fi
+          if [ -z "$EXTERNAL_DISTRIBUTION_APPROVAL_RECORD" ]; then
+            echo "External distribution approval record is missing" >&2
             exit 1
           fi
   release:
@@ -34,7 +44,20 @@ jobs:
         env:
           RELEASE_TAG: ${{ github.ref_name }}
         run: uv run python tools/verify_release.py --tag "$RELEASE_TAG"
+      - name: Verify release-candidate program records
+        if: ${{ contains(github.ref_name, 'rc') }}
+        env:
+          RELEASE_TAG: ${{ github.ref_name }}
+        run: uv run --frozen python -m tools.check_phase_9_release_candidates --release-tag "$RELEASE_TAG"
+      - name: Require completed external beta evidence for a final release
+        if: ${{ !contains(github.ref_name, 'rc') }}
+        run: make phase-9-rc-exit-gate
       - run: make check phase-1-exit-gate phase-2-exit-gate audit clean-build
+      - name: Verify release-candidate artifact hashes
+        if: ${{ contains(github.ref_name, 'rc') }}
+        env:
+          RELEASE_TAG: ${{ github.ref_name }}
+        run: uv run --frozen python -m tools.check_phase_9_release_candidates --release-tag "$RELEASE_TAG" --artifact-directory dist
       - uses: anchore/sbom-action@e22c389904149dbc22b58101806040fa8d37a610 # v0.24.0
         with:
           path: ./dist
@@ -46,4 +69,5 @@ jobs:
         with:
           generate_release_notes: true
           fail_on_unmatched_files: true
+          prerelease: ${{ contains(github.ref_name, 'rc') }}
           files: dist/*

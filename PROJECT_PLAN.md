@@ -1,6 +1,6 @@
 # Independent Python Implementation of `rms`: Production Project Plan
 
-**Status:** Active — Phases 0–8 complete for private experimental development; Phase 9 is next
+**Status:** Active — Phases 0–8 complete for private experimental development; Phase 9 is underway with external release-candidate prerequisites blocked
 **Plan date:** 2026-09-17  
 **Reference implementation:** Frank Harrell's R package `rms`  
 **Project name:** `holocron`  
@@ -920,14 +920,24 @@ The compatibility manifest has no unreviewed entries. Deferred or unsupported en
 
 ### Phase 9 — Stable release qualification (10–16 weeks)
 
+**Implementation progress:** The release-candidate and external-beta evidence
+contracts are implemented for a future `1.0.0rcN` series. The fail-closed gate
+requires at least two distinct candidates, exact per-candidate distribution
+approval, three independent external reviewers, coverage of five task
+workflows, feedback on the accepted final candidate, and resolution of all
+blocker/high findings. No candidate or feedback is recorded. Execution remains
+blocked until ADR-010 defines the stable core, a qualified license/provenance
+reviewer authorizes an exact candidate commit, and an external cohort is
+recruited. See `governance/PHASE_9_RELEASE_CANDIDATES.md`.
+
 **Deliverables**
 
-- release candidate series and external beta feedback;
-- clean full-matrix builds and artifact installation evidence;
-- independent statistical, numerical, security, API, and documentation reviews;
-- completed release-readiness checklist;
-- signed/traceable artifacts, SBOM, provenance, changelog, and support policy;
-- incident, vulnerability, rollback/yank, and compatibility-response procedures.
+- [ ] release candidate series and external beta feedback — process ready; externally blocked;
+- [ ] clean full-matrix builds and artifact installation evidence;
+- [ ] independent statistical, numerical, security, API, and documentation reviews;
+- [ ] completed release-readiness checklist;
+- [ ] signed/traceable artifacts, SBOM, provenance, changelog, and support policy;
+- [ ] incident, vulnerability, rollback/yank, and compatibility-response procedures.
 
 **Exit gate**
 

@@ -28,7 +28,10 @@ plans migrations across every reviewed R symbol, and a machine-checked registry
 governs future Python API deprecations. The accountable technical completion
 review passes the Phase 8 private-development exit gate without claiming
 independent approval, parity for mapped behavior, or stable-release authority.
-Phase 9 stable release qualification is next.
+Phase 9 stable release qualification is underway. Its candidate/feedback
+registry is fail-closed and currently records zero candidates and zero external
+reviews; ADR-010, qualified license/provenance approval, and an authorized
+external cohort are required before beta execution.
 The Phase 3
 deliverables cover experimental `ols`,
 Gaussian/identity and binomial/logit `Glm`, and binary `lrm` estimators plus

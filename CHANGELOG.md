@@ -4,6 +4,13 @@ Notable changes are recorded here using semantic versioning.
 
 ## Unreleased
 
+- Added the fail-closed Phase 9 release-candidate and external-beta evidence
+  process for a future `1.0.0rcN` series. Strict schemas and semantic checks
+  require two distinct candidates, exact per-candidate distribution approval,
+  three independent external reviewers, five-workflow coverage, accepted-final-
+  candidate feedback, and resolved blocker/high findings. The truthful initial
+  registry contains no candidates or feedback and remains blocked by ADR-010,
+  qualified license/provenance approval, and external cohort recruitment.
 - Closed the Phase 8 private-development exit gate after an accountable
   technical review confirmed all five deliverables, final dispositions for all
   281 namespace entries, zero deferred entries, public migration paths,

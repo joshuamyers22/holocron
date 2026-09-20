@@ -1,0 +1,48 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/joshuamyers22/holocron/schemas/phase-9-release-candidate-plan.schema.json",
+  "type": "object",
+  "properties": {
+    "schema_version": {"const": "holocron-phase-9-release-candidate-plan/v1"},
+    "plan_id": {"const": "phase-9-private-beta-v1"},
+    "approved_on": {"type": "string", "format": "date"},
+    "target_version": {"const": "1.0.0"},
+    "scope": {"const": "private-prerelease-qualification"},
+    "minimum_candidates": {"type": "integer", "minimum": 2},
+    "minimum_external_reviewers": {"type": "integer", "minimum": 3},
+    "required_checks": {
+      "const": ["make-check", "make-audit", "clean-artifact-smoke"]
+    },
+    "required_workflows": {
+      "const": [
+        "design-and-core-modeling",
+        "survival",
+        "validation-and-calibration",
+        "graphics-and-reporting",
+        "migration"
+      ]
+    },
+    "blocking_severities": {"const": ["blocker", "high"]},
+    "distribution_requirements": {
+      "const": [
+        "qualified-license-provenance-review",
+        "package-name-and-trademark-clearance",
+        "written-approval-of-exact-commit-license-notices-and-provenance"
+      ]
+    }
+  },
+  "required": [
+    "schema_version",
+    "plan_id",
+    "approved_on",
+    "target_version",
+    "scope",
+    "minimum_candidates",
+    "minimum_external_reviewers",
+    "required_checks",
+    "required_workflows",
+    "blocking_severities",
+    "distribution_requirements"
+  ],
+  "additionalProperties": false
+}

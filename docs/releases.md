@@ -1,21 +1,79 @@
 # Releases
 
-Holocron is at version 0.1.0 for private development. No public release or
-package-index publication is authorized.
+Holocron is at version 0.1.0 for private development. No public release,
+release candidate, external beta artifact, or package-index publication is
+authorized.
 
-## Current release gate
+## Phase 9 candidate program
 
-A tag-triggered release remains fail-closed unless governance records a qualified
-license and provenance approval and the repository variable
-`EXTERNAL_DISTRIBUTION_APPROVED` is exactly `true`. Passing CI or building a wheel
-does not satisfy that gate.
+The locked candidate plan targets `1.0.0rcN`, but candidate creation is blocked
+until ADR-010 defines the exact stable core. A valid series requires at least
+two distinct candidates. Every candidate must retain a clean source revision,
+wheel and source-distribution SHA-256 values, and passing `make check`,
+`make audit`, and clean artifact-installation evidence.
 
-Release candidates must use frozen dependencies, pass the complete quality gate,
-build wheel and source distributions from a clean checkout, install from those
-artifacts in clean environments, and inspect their contents. Compatibility and
-documentation must describe the same public surface. `make clean-build` performs
-the package build offline, constrains fresh-install dependencies to `uv.lock`,
-and is required by both CI and the release workflow.
+External distribution has a separate fail-closed prerequisite. A qualified
+license/provenance reviewer must approve each candidate's exact source commit,
+license, provenance process, package name, and notices in writing. The
+tag-triggered workflow also requires the repository variable
+`EXTERNAL_DISTRIBUTION_APPROVED` to equal `true`, requires
+`EXTERNAL_DISTRIBUTION_APPROVED_SHA` to equal the tag commit, and requires a
+nonempty `EXTERNAL_DISTRIBUTION_APPROVAL_RECORD`. Neither CI nor a local build
+satisfies this authorization.
 
-Changes planned for the next version are recorded in the
+Run the structural program check with:
+
+```sh
+make phase-9-rc-check
+```
+
+The completion gate intentionally fails until real candidate and external-beta
+evidence meets every criterion:
+
+```sh
+make phase-9-rc-exit-gate
+```
+
+## Candidate sequence
+
+For each candidate:
+
+1. Resolve ADR-010 and obtain written distribution approval for the exact clean
+   candidate commit.
+2. Set the PEP 440 package version to the next `1.0.0rcN`, run the complete
+   checks, audit dependencies, and build/install-test both artifacts from a
+   clean checkout.
+3. Record the immutable tag, commit, artifact hashes, checks, and approval in
+   `governance/phase-9-beta-program.json`.
+4. Only after authorization, publish the prerelease artifact to the approved
+   private beta channel. Do not publish it to PyPI or make it public merely
+   because the release workflow can build it.
+5. Collect structured feedback, resolve findings, and supersede the candidate
+   with a new commit and ordinal when behavior or documentation changes.
+
+The final candidate may be accepted only after all earlier candidates are
+marked superseded and every completion criterion passes.
+
+## External beta feedback
+
+At least three independent external reviewers must submit retained feedback.
+Together their work must cover design/core modeling, survival, validation and
+calibration, graphics/reporting, and migration. Every reviewer attests
+independence and retention consent; records use pseudonymous reviewer IDs and
+must not contain names, email addresses, organizations, datasets, or other
+personal or restricted information.
+
+Feedback records identify the exact candidate, installation source, Python and
+operating-system environment, exercised workflows, bounded ratings, outcome,
+summary, and findings. Every blocker or high-severity finding must be resolved.
+The accepted final candidate must itself receive external feedback. Synthetic
+test fixtures demonstrate the validator only and never count as beta evidence.
+
+The authoritative contracts are
+[`phase-9-release-candidate-plan.json`](https://github.com/joshuamyers22/holocron/blob/main/governance/phase-9-release-candidate-plan.json),
+[`phase-9-beta-program.json`](https://github.com/joshuamyers22/holocron/blob/main/governance/phase-9-beta-program.json),
+and the
+[`Phase 9 program decision`](https://github.com/joshuamyers22/holocron/blob/main/governance/PHASE_9_RELEASE_CANDIDATES.md).
+
+Changes planned for the next version remain recorded in the
 [changelog](https://github.com/joshuamyers22/holocron/blob/main/CHANGELOG.md).

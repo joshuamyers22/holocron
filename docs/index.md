@@ -78,7 +78,10 @@ also in place. The accountable technical completion review passes the Phase 8
 private-development exit gate without claiming independent approval or parity
 for mapped behavior. See the
 [Phase 8 completion record](https://github.com/joshuamyers22/holocron/blob/main/governance/PHASE_8_COMPLETION.md).
-Phase 9 stable release qualification is next.
+Phase 9 stable release qualification is underway. Its candidate and feedback
+contracts are implemented, but no candidate or external review is recorded;
+stable-scope definition, qualified distribution approval, and an authorized
+external cohort remain blockers.
 Capability promotion,
 consequential use, and external distribution remain separately blocked.
 

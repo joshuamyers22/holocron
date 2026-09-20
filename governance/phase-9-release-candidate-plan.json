@@ -1,0 +1,23 @@
+{
+  "schema_version": "holocron-phase-9-release-candidate-plan/v1",
+  "plan_id": "phase-9-private-beta-v1",
+  "approved_on": "2026-09-19",
+  "target_version": "1.0.0",
+  "scope": "private-prerelease-qualification",
+  "minimum_candidates": 2,
+  "minimum_external_reviewers": 3,
+  "required_checks": ["make-check", "make-audit", "clean-artifact-smoke"],
+  "required_workflows": [
+    "design-and-core-modeling",
+    "survival",
+    "validation-and-calibration",
+    "graphics-and-reporting",
+    "migration"
+  ],
+  "blocking_severities": ["blocker", "high"],
+  "distribution_requirements": [
+    "qualified-license-provenance-review",
+    "package-name-and-trademark-clearance",
+    "written-approval-of-exact-commit-license-notices-and-provenance"
+  ]
+}
