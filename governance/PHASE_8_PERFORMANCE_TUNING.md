@@ -76,4 +76,5 @@ call ceiling and cross-platform runs complement that measurement.
 
 The retained profiles pass their declared technical gates. This completes the
 fourth Phase 8 deliverable. Migration tooling and deprecation policy were
-completed by the subsequent decision; the Phase 8 completion review remains.
+completed by the subsequent decision. The accountable completion review in
+`PHASE_8_COMPLETION.md` subsequently passed the private-development exit gate.

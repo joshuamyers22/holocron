@@ -1,6 +1,6 @@
 # Independent Python Implementation of `rms`: Production Project Plan
 
-**Status:** Active — Phases 0–7 complete for private experimental development; Phase 8 is underway
+**Status:** Active — Phases 0–8 complete for private experimental development; Phase 9 is next
 **Plan date:** 2026-09-17  
 **Reference implementation:** Frank Harrell's R package `rms`  
 **Project name:** `holocron`  
@@ -898,7 +898,13 @@ ordinary Cox fits while preserving the general delayed-entry path. See
 The installed migration catalog exposes every reviewed disposition through
 typed lookup and planning APIs, while a machine-checked registry establishes a
 two-minor-release and 90-day minimum Python API deprecation window. See
-`governance/PHASE_8_MIGRATION_DEPRECATION.md`.
+`governance/PHASE_8_MIGRATION_DEPRECATION.md`. The accountable completion
+review passes the Phase 8 private-development exit gate: all 281 compatibility
+entries are reviewed, none is deferred, mapped paths resolve publicly, and all
+unsupported entries have approved rationale and user-facing alternatives. No
+independent approval, parity promotion, stable-release authority, or external-
+distribution approval is claimed. Phase 9 stable release qualification is the
+next project-plan item. See `governance/PHASE_8_COMPLETION.md`.
 
 **Deliverables**
 

@@ -78,5 +78,6 @@ This decision completes namespace disposition only. It does not implement the
 106 unsupported behaviors, add oracle evidence, promote experimental
 capabilities, authorize consequential use, or approve external distribution.
 Retained-profile performance tuning and migration/deprecation policy were
-completed by subsequent Phase 8 decisions. The Phase 8 completion review and
-exit-gate decision are next.
+completed by subsequent Phase 8 decisions. The accountable completion review
+in `PHASE_8_COMPLETION.md` subsequently passed the private-development exit
+gate.

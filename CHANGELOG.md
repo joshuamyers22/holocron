@@ -4,6 +4,14 @@ Notable changes are recorded here using semantic versioning.
 
 ## Unreleased
 
+- Closed the Phase 8 private-development exit gate after an accountable
+  technical review confirmed all five deliverables, final dispositions for all
+  281 namespace entries, zero deferred entries, public migration paths,
+  approved unsupported rationales and alternatives, passing retained-profile
+  budgets, the 26-test focused suite, the 216-test full gate, and isolated
+  wheel/sdist installation. The decision claims no independent approval,
+  mapped-behavior parity, capability promotion, consequential-use authority,
+  external-distribution authority, or stable-release approval.
 - Completed Phase 8 migration tooling and deprecation policy with an installed
   281-entry catalog, typed exact/raw-symbol planning, strict serialized plans,
   Markdown/JSON reporting, artifact smoke coverage, and an enforceable registry

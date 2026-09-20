@@ -89,4 +89,5 @@ the new model entries remain `mapped` and must not be described as
 
 This decision did not complete Phase 8. Multiple imputation, full namespace
 disposition, retained-profile tuning, and migration/deprecation policy were
-completed by subsequent decisions; the Phase 8 exit review remains open.
+completed by subsequent decisions. The accountable completion review in
+`PHASE_8_COMPLETION.md` subsequently passed the private-development exit gate.

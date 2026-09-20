@@ -13,8 +13,8 @@ The project is distributed internally as `holocron-rms` and imported as
 Holocron is experimental and incomplete. Do not use it for consequential
 analysis, inference, prediction, or clinical decisions.
 
-Phases 0–7 are complete and all five Phase 8 deliverables are implemented for
-private experimental development. They add bounded mapped replacements for
+Phases 0–8 are complete for private experimental development. Phase 8 added
+bounded mapped replacements for
 fixed-covariance `Gls`, single-quantile `Rq`, right-censored Buckley–James
 `bj`, and one-scale Weibull/exponential `pphsm`, plus reviewed dispositions for
 the other Phase 8 exports, plus Rubin model pooling, corrected validation and
@@ -25,7 +25,10 @@ mapped, or unsupported dispositions. Five retained cross-platform workloads
 now gate deterministic call and peak-memory budgets, and their profiles drove
 a faster nested-risk-set path for ordinary Cox fits. An installed catalog now
 plans migrations across every reviewed R symbol, and a machine-checked registry
-governs future Python API deprecations. The Phase 8 completion review is next.
+governs future Python API deprecations. The accountable technical completion
+review passes the Phase 8 private-development exit gate without claiming
+independent approval, parity for mapped behavior, or stable-release authority.
+Phase 9 stable release qualification is next.
 The Phase 3
 deliverables cover experimental `ols`,
 Gaussian/identity and binomial/logit `Glm`, and binary `lrm` estimators plus
@@ -182,6 +185,12 @@ The fifth packages the reviewed namespace catalog as typed migration planning
 data and establishes an enforceable deprecation registry and warning window.
 See the
 [migration and deprecation decision](https://github.com/joshuamyers22/holocron/blob/main/governance/PHASE_8_MIGRATION_DEPRECATION.md).
+The accountable technical completion review passes the Phase 8
+private-development exit gate after confirming all 281 namespace dispositions,
+zero deferred entries, approved unsupported alternatives, retained performance
+budgets, the full repository gate, and isolated artifact installation. It does
+not claim independent approval or parity for mapped behavior. See the
+[Phase 8 completion record](https://github.com/joshuamyers22/holocron/blob/main/governance/PHASE_8_COMPLETION.md).
 
 ## Library API
 

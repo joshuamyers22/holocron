@@ -65,4 +65,5 @@ dispatcher boundaries, and artifact installation.
 The machine-readable authority is `compatibility/rms-8.2.0.yaml`. This decision
 completed only the second Phase 8 deliverable. Full namespace disposition and
 retained-profile performance work and migration/deprecation policy were
-completed by subsequent decisions; the Phase 8 exit review remains open.
+completed by subsequent decisions. The accountable completion review in
+`PHASE_8_COMPLETION.md` subsequently passed the private-development exit gate.

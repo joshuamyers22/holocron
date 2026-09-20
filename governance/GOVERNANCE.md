@@ -9,12 +9,10 @@ triage owner for the compatibility inventory.
 Ron Mexico serves as the independent statistical reviewer for the Phase 3
 alpha, Phase 4 private experimental, and Phase 5 private experimental scopes
 and approved all three scoped reviews on 2026-09-18. The accountable maintainer
-closed the Phase 6 and Phase 7 technical exit gates on 2026-09-19. The first
-five Phase 8 engineering deliverables, including migration and deprecation
-tooling, are complete without a Phase 8 exit decision; no independent Phase 6,
-Phase 7, or Phase 8 approval is claimed. Independent verification
-and legal/license reviewer roles remain unfilled; numerical review remains a
-separate promotion gate outside the approved Phase 5 scope.
+closed the Phase 6, Phase 7, and Phase 8 technical exit gates on 2026-09-19.
+No independent Phase 6, Phase 7, or Phase 8 approval is claimed. Independent
+verification and legal/license reviewer roles remain unfilled; numerical review
+remains a separate promotion gate outside the approved Phase 5 scope.
 Until those qualified reviewers are appointed and their applicable gates pass:
 
 - implemented capabilities may be marked only `experimental`; `mapped` and
@@ -24,11 +22,10 @@ Until those qualified reviewers are appointed and their applicable gates pass:
 - no package artifact may be published externally; and
 - the repository must remain private.
 
-The Phase 3, Phase 4, and Phase 5 statistical approvals, the Phase 6–7
-technical completion decisions, and the Phase 8 engineering records are
-scope-specific; they are not approval of
-future phases, capability promotion, external
-distribution, or a broader compatibility claim. The remaining vacancies are
+The Phase 3, Phase 4, and Phase 5 statistical approvals and the Phase 6–8
+technical completion decisions are scope-specific; they are not approval of
+future phases, capability promotion, external distribution, or a broader
+compatibility claim. The remaining vacancies are
 staffing constraints, not an inference that one maintainer constitutes
 independent review.
 

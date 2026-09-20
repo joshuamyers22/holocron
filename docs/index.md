@@ -56,24 +56,29 @@ The current experimental surface supports only:
 
 The core estimator envelope is also checked by seven seeded simulation
 scenarios totaling 2,620 outer replications and a 16-case numerical edge corpus.
-Phases 3–7 are complete for private experimental development. Phases
-3–5 passed their scoped independent statistical reviews; Phases 6–7 passed
+Phases 3–8 are complete for private experimental development. Phases
+3–5 passed their scoped independent statistical reviews; Phases 6–8 passed
 accountable technical exit reviews without claiming independent approval. The
 Phase 4 approval covers the
 ordinal, censoring, random-effects, and documented parity-exception evidence;
 the Phase 5 approval covers the declared survival scope, Phase 6 covers its
 declared resampling, validation, diagnostics, and failure-reporting envelope,
-and Phase 7 covers its owned presentation and documentation envelope.
+Phase 7 covers its owned presentation and documentation envelope, and Phase 8
+covers extended mapped contracts and final namespace disposition.
 All six Phase 7 deliverables are implemented within their experimental
 envelopes: plot specifications, typed result adapters/SVG, additive nomogram
 geometry/rendering, structured table/LaTeX reporting, five tested galleries,
 and deterministic SVG assurance. Its accountable technical exit review passes
-without claiming independent approval or R presentation-method parity. The
-all five Phase 8 deliverables are implemented. All 281 pinned namespace entries
+without claiming independent approval or R presentation-method parity. All
+five Phase 8 deliverables are implemented. All 281 pinned namespace entries
 have final reviewed dispositions. Five retained cross-platform workloads now
 protect structural call and peak-memory budgets and drove ordinary Cox risk-set
 tuning. Typed migration planning and a machine-checked deprecation lifecycle are
-also in place; the Phase 8 completion review is next.
+also in place. The accountable technical completion review passes the Phase 8
+private-development exit gate without claiming independent approval or parity
+for mapped behavior. See the
+[Phase 8 completion record](https://github.com/joshuamyers22/holocron/blob/main/governance/PHASE_8_COMPLETION.md).
+Phase 9 stable release qualification is next.
 Capability promotion,
 consequential use, and external distribution remain separately blocked.
 

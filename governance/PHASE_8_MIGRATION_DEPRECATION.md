@@ -64,5 +64,5 @@ the checkout. `make migration-check` is part of the ordinary gate.
 This decision adds migration assessment and Python API lifecycle governance; it
 does not translate R code, load R objects, execute R, implement unsupported
 capabilities, or promote any compatibility disposition. All five Phase 8
-deliverables are now implemented. A separate completion review and exit-gate
-decision remain required before Phase 8 is closed.
+deliverables are now implemented. The accountable completion review in
+`PHASE_8_COMPLETION.md` subsequently passed the private-development exit gate.
