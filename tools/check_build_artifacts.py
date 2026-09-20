@@ -98,6 +98,7 @@ def inspect_artifacts(directory: Path) -> tuple[Path, Path]:
         f"{sdist_root}/README.md",
         f"{sdist_root}/pyproject.toml",
         f"{sdist_root}/src/holocron/__init__.py",
+        f"{sdist_root}/src/holocron/migration/_catalog.json",
         f"{sdist_root}/src/holocron/py.typed",
         f"{sdist_root}/schemas/binary-logistic-result.schema.json",
         f"{sdist_root}/schemas/buckley-james-result.schema.json",
@@ -108,6 +109,7 @@ def inspect_artifacts(directory: Path) -> tuple[Path, Path]:
         f"{sdist_root}/schemas/design-spec.schema.json",
         f"{sdist_root}/schemas/formula.schema.json",
         f"{sdist_root}/schemas/gls-result.schema.json",
+        f"{sdist_root}/schemas/migration-plan.schema.json",
         f"{sdist_root}/schemas/ols-result.schema.json",
         f"{sdist_root}/schemas/nonparametric-survival-result.schema.json",
         f"{sdist_root}/schemas/nonparametric-survival-result-v2.schema.json",
@@ -152,6 +154,8 @@ def inspect_artifacts(directory: Path) -> tuple[Path, Path]:
         raise ValueError("wheel does not contain the holocron import package")
     if "holocron/py.typed" not in wheel_names:
         raise ValueError("wheel does not contain the PEP 561 marker")
+    if "holocron/migration/_catalog.json" not in wheel_names:
+        raise ValueError("wheel does not contain the reviewed migration catalog")
     expected_schema_files = {
         "holocron/schemas/binary-logistic-result.schema.json",
         "holocron/schemas/buckley-james-result.schema.json",
@@ -162,6 +166,7 @@ def inspect_artifacts(directory: Path) -> tuple[Path, Path]:
         "holocron/schemas/design-spec.schema.json",
         "holocron/schemas/formula.schema.json",
         "holocron/schemas/gls-result.schema.json",
+        "holocron/schemas/migration-plan.schema.json",
         "holocron/schemas/ols-result.schema.json",
         "holocron/schemas/nonparametric-survival-result.schema.json",
         "holocron/schemas/nonparametric-survival-result-v2.schema.json",

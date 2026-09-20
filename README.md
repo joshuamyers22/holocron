@@ -13,8 +13,8 @@ The project is distributed internally as `holocron-rms` and imported as
 Holocron is experimental and incomplete. Do not use it for consequential
 analysis, inference, prediction, or clinical decisions.
 
-Phases 0–7 are complete and Phase 8 is underway for private experimental
-development. Its first four deliverables add bounded mapped replacements for
+Phases 0–7 are complete and all five Phase 8 deliverables are implemented for
+private experimental development. They add bounded mapped replacements for
 fixed-covariance `Gls`, single-quantile `Rq`, right-censored Buckley–James
 `bj`, and one-scale Weibull/exponential `pphsm`, plus reviewed dispositions for
 the other Phase 8 exports, plus Rubin model pooling, corrected validation and
@@ -23,8 +23,10 @@ information tables. These mappings are owned Python contracts, not R parity
 claims. All 281 pinned namespace entries now have final reviewed experimental,
 mapped, or unsupported dispositions. Five retained cross-platform workloads
 now gate deterministic call and peak-memory budgets, and their profiles drove
-a faster nested-risk-set path for ordinary Cox fits. Migration tooling and
-deprecation policy are next. The Phase 3
+a faster nested-risk-set path for ordinary Cox fits. An installed catalog now
+plans migrations across every reviewed R symbol, and a machine-checked registry
+governs future Python API deprecations. The Phase 8 completion review is next.
+The Phase 3
 deliverables cover experimental `ols`,
 Gaussian/identity and binomial/logit `Glm`, and binary `lrm` estimators plus
 their covariance,
@@ -159,7 +161,7 @@ the Phase 7 private-development exit gate without claiming independent approval
 or R presentation-method parity. See the
 [Phase 7 completion record](https://github.com/joshuamyers22/holocron/blob/main/governance/PHASE_7_COMPLETION.md).
 
-The first four Phase 8 deliverables are complete. The first two provide mapped Python-native
+All five Phase 8 deliverables are implemented. The first two provide mapped Python-native
 replacements, not R-parity claims. In addition to the bounded GLS, quantile,
 Buckley--James, and AFT-to-PH model paths, `holocron.validation` can Rubin-pool
 compatible OLS and binary-logistic fits, average already corrected validation
@@ -176,12 +178,16 @@ The fourth retains five deterministic validation and survival profiles with
 structural call and peak-memory gates and tunes the ordinary Cox risk-set path.
 See the
 [performance decision](https://github.com/joshuamyers22/holocron/blob/main/governance/PHASE_8_PERFORMANCE_TUNING.md).
+The fifth packages the reviewed namespace catalog as typed migration planning
+data and establishes an enforceable deprecation registry and warning window.
+See the
+[migration and deprecation decision](https://github.com/joshuamyers22/holocron/blob/main/governance/PHASE_8_MIGRATION_DEPRECATION.md).
 
 ## Library API
 
 Holocron is a typed library and intentionally installs no command-line tools.
 Its current public namespaces are `holocron.design`, `holocron.formula`,
-`holocron.graphics`, `holocron.models`, `holocron.reporting`,
+`holocron.graphics`, `holocron.migration`, `holocron.models`, `holocron.reporting`,
 `holocron.validation`, and `holocron.exceptions`:
 
 ```python

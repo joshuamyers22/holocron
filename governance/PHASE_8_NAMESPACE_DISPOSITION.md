@@ -77,5 +77,6 @@ shows the final inventory.
 This decision completes namespace disposition only. It does not implement the
 106 unsupported behaviors, add oracle evidence, promote experimental
 capabilities, authorize consequential use, or approve external distribution.
-Retained-profile performance tuning was completed by the subsequent Phase 8
-performance decision. Migration tooling and deprecation policy are next.
+Retained-profile performance tuning and migration/deprecation policy were
+completed by subsequent Phase 8 decisions. The Phase 8 completion review and
+exit-gate decision are next.

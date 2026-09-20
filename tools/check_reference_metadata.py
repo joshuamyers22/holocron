@@ -85,6 +85,14 @@ def main() -> None:
         "governance_record": "governance/PHASE_8_NAMESPACE_DISPOSITION.md",
     }:
         raise ValueError("namespace disposition review is missing or inconsistent")
+    if compatibility.get("migration_policy") != {
+        "completed_on": "2026-09-19",
+        "decision": "complete",
+        "catalog_schema": "holocron-migration-catalog/v1",
+        "deprecation_registry": "compatibility/deprecations.json",
+        "governance_record": "governance/PHASE_8_MIGRATION_DEPRECATION.md",
+    }:
+        raise ValueError("migration and deprecation policy is missing or inconsistent")
     capabilities = require_list(compatibility["capabilities"], name="capabilities")
     actual_ids: set[str] = set()
     linked_cases: set[str] = set()

@@ -2,7 +2,8 @@
 
 Statistical APIs are organized by domain beneath :mod:`holocron.design`,
 :mod:`holocron.graphics`, :mod:`holocron.models`, :mod:`holocron.reporting`,
-and :mod:`holocron.validation`. They are not duplicated at the package root.
+and :mod:`holocron.validation`. Migration assessment is organized beneath
+:mod:`holocron.migration`. Domain APIs are not duplicated at the package root.
 """
 
 from holocron import (
@@ -10,6 +11,7 @@ from holocron import (
     exceptions,
     formula,
     graphics,
+    migration,
     models,
     reporting,
     validation,
@@ -22,6 +24,7 @@ __all__ = (
     "exceptions",
     "formula",
     "graphics",
+    "migration",
     "models",
     "reporting",
     "validation",

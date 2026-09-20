@@ -75,5 +75,5 @@ Python allocator may not be fully visible to `tracemalloc`; the fixed-shape
 call ceiling and cross-platform runs complement that measurement.
 
 The retained profiles pass their declared technical gates. This completes the
-fourth Phase 8 deliverable. Migration tooling and deprecation policy remain the
-next Phase 8 deliverable.
+fourth Phase 8 deliverable. Migration tooling and deprecation policy were
+completed by the subsequent decision; the Phase 8 completion review remains.

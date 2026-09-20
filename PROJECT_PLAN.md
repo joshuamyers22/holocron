@@ -874,7 +874,7 @@ Plot source data passes parity; renderers pass semantic and accessibility checks
 
 ### Phase 8 — Extended models and namespace completion (24–40 weeks)
 
-**Implementation progress:** The first four deliverables are complete within
+**Implementation progress:** All five deliverables are complete within
 bounded Python-native replacement envelopes. Fixed-covariance `fit_gls`, weighted
 single-quantile `fit_quantile_regression`, right-censored
 `fit_buckley_james`, and one-scale Weibull/exponential
@@ -895,6 +895,10 @@ measurements, portable primitive-call ceilings, and diagnostic timing medians.
 Those profiles drove bounded suffix aggregates and a nested-risk-set sweep for
 ordinary Cox fits while preserving the general delayed-entry path. See
 `governance/PHASE_8_PERFORMANCE_TUNING.md`.
+The installed migration catalog exposes every reviewed disposition through
+typed lookup and planning APIs, while a machine-checked registry establishes a
+two-minor-release and 90-day minimum Python API deprecation window. See
+`governance/PHASE_8_MIGRATION_DEPRECATION.md`.
 
 **Deliverables**
 
@@ -902,7 +906,7 @@ ordinary Cox fits while preserving the general delayed-entry path. See
 - [x] multiple-imputation adapter;
 - [x] complete namespace disposition;
 - [x] performance tuning driven by retained profiles;
-- migration tooling and deprecation policy.
+- [x] migration tooling and deprecation policy.
 
 **Exit gate**
 

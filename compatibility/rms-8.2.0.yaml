@@ -20,6 +20,13 @@
     "reviewed_capabilities": 281,
     "governance_record": "governance/PHASE_8_NAMESPACE_DISPOSITION.md"
   },
+  "migration_policy": {
+    "completed_on": "2026-09-19",
+    "decision": "complete",
+    "catalog_schema": "holocron-migration-catalog/v1",
+    "deprecation_registry": "compatibility/deprecations.json",
+    "governance_record": "governance/PHASE_8_MIGRATION_DEPRECATION.md"
+  },
   "capability_count": 281,
   "capabilities": [
     {

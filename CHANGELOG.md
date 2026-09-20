@@ -4,6 +4,11 @@ Notable changes are recorded here using semantic versioning.
 
 ## Unreleased
 
+- Completed Phase 8 migration tooling and deprecation policy with an installed
+  281-entry catalog, typed exact/raw-symbol planning, strict serialized plans,
+  Markdown/JSON reporting, artifact smoke coverage, and an enforceable registry
+  requiring visible warnings, replacements, changelog guidance, two minor
+  releases, and 90 days before ordinary public API removal.
 - Completed retained-profile performance tuning with five deterministic
   validation and survival workloads, raw `cProfile` retention, structural call
   and peak-memory budgets, cross-platform CI evidence, and bounded nested-risk-

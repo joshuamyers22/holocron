@@ -39,6 +39,7 @@ packages = ["src/holocron"]
 "schemas/design-spec.schema.json" = "holocron/schemas/design-spec.schema.json"
 "schemas/formula.schema.json" = "holocron/schemas/formula.schema.json"
 "schemas/gls-result.schema.json" = "holocron/schemas/gls-result.schema.json"
+"schemas/migration-plan.schema.json" = "holocron/schemas/migration-plan.schema.json"
 "schemas/ols-result.schema.json" = "holocron/schemas/ols-result.schema.json"
 "schemas/nonparametric-survival-result.schema.json" = "holocron/schemas/nonparametric-survival-result.schema.json"
 "schemas/nonparametric-survival-result-v2.schema.json" = "holocron/schemas/nonparametric-survival-result-v2.schema.json"
@@ -73,6 +74,7 @@ include = [
     "schemas/design-spec.schema.json",
     "schemas/formula.schema.json",
     "schemas/gls-result.schema.json",
+    "schemas/migration-plan.schema.json",
     "schemas/ols-result.schema.json",
     "schemas/nonparametric-survival-result.schema.json",
     "schemas/nonparametric-survival-result-v2.schema.json",

@@ -13,6 +13,7 @@ from holocron import (
     exceptions,
     formula,
     graphics,
+    migration,
     models,
     reporting,
     validation,
@@ -29,6 +30,7 @@ class PublicApiTests(unittest.TestCase):
                 "exceptions",
                 "formula",
                 "graphics",
+                "migration",
                 "models",
                 "reporting",
                 "validation",
@@ -260,6 +262,24 @@ class PublicApiTests(unittest.TestCase):
                 "render_latex",
                 "resample_report_table",
                 "validation_table",
+            ],
+        )
+
+    def test_migration_namespace_exports_only_planning_contracts(self) -> None:
+        self.assertEqual(
+            migration.__all__,
+            [
+                "DeprecationNotice",
+                "DeprecationPolicy",
+                "HolocronDeprecationWarning",
+                "MigrationEntry",
+                "MigrationMatch",
+                "MigrationPlan",
+                "deprecation_notices",
+                "deprecation_policy",
+                "lookup_rms_capability",
+                "migration_catalog",
+                "plan_rms_migration",
             ],
         )
 

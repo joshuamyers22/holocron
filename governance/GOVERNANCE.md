@@ -10,8 +10,8 @@ Ron Mexico serves as the independent statistical reviewer for the Phase 3
 alpha, Phase 4 private experimental, and Phase 5 private experimental scopes
 and approved all three scoped reviews on 2026-09-18. The accountable maintainer
 closed the Phase 6 and Phase 7 technical exit gates on 2026-09-19. The first
-four Phase 8 engineering deliverables, including retained-profile performance
-tuning, are complete without a Phase 8 exit decision; no independent Phase 6,
+five Phase 8 engineering deliverables, including migration and deprecation
+tooling, are complete without a Phase 8 exit decision; no independent Phase 6,
 Phase 7, or Phase 8 approval is claimed. Independent verification
 and legal/license reviewer roles remain unfilled; numerical review remains a
 separate promotion gate outside the approved Phase 5 scope.

@@ -69,6 +69,16 @@ diagnostic rather than portable gates. Use `make phase-8-profiles-clean` for
 clean-source review evidence. The [performance profile guide](guides/performance-profiles.md)
 defines the workloads, interpretation, and change policy.
 
+## Migration and deprecation workflow
+
+After changing the compatibility manifest or deprecation registry, run
+`make migration-catalog` to regenerate the installed catalog and then
+`make migration-check`. The check rejects stale source hashes, incomplete
+namespace coverage, invalid public paths, short warning windows, duplicate
+notices, and package-version drift. The
+[migration and deprecation guide](guides/migration-and-deprecation.md) defines
+the user-facing planner and removal guarantees.
+
 ## Phase 1 evidence workflow
 
 `make phase-1-e2e` executes the accepted RCS-design, OLS-fit, and prediction case,

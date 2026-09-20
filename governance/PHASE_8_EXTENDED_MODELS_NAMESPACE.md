@@ -88,5 +88,5 @@ the new model entries remain `mapped` and must not be described as
 `experimental` parity capabilities.
 
 This decision did not complete Phase 8. Multiple imputation, full namespace
-disposition, and retained-profile tuning were completed by subsequent
-decisions; migration tooling and the Phase 8 exit review remain open.
+disposition, retained-profile tuning, and migration/deprecation policy were
+completed by subsequent decisions; the Phase 8 exit review remains open.

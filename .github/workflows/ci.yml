@@ -95,7 +95,7 @@ jobs:
       - name: Exercise Phase 7 graphics and reporting on the platform matrix
         run: uv run --frozen python -m unittest tests.test_plot_specifications tests.test_plot_adapters_renderers tests.test_nomograms tests.test_structured_reporting tests.test_svg_accessibility_regression
       - name: Exercise Phase 8 adapters on the platform matrix
-        run: uv run --frozen python -m unittest tests.test_extended_models tests.test_multiple_imputation tests.test_namespace_disposition
+        run: uv run --frozen python -m unittest tests.test_extended_models tests.test_multiple_imputation tests.test_namespace_disposition tests.test_migration
       - name: Exercise and retain Phase 8 performance profiles
         run: uv run --frozen python -m tools.run_phase_8_profiles --output ".work/phase-8-platform/performance-report.json"
       - name: Exercise Phase 3 simulation thresholds on the platform matrix

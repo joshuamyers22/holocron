@@ -17,6 +17,7 @@
     {"python_type": "holocron.models.QuantileRegressionResult", "schema_version": "holocron-quantile-regression-result/v1", "schema_file": "quantile-regression-result.schema.json", "stability": "experimental-schema"},
     {"python_type": "holocron.models.BuckleyJamesResult", "schema_version": "holocron-buckley-james-result/v1", "schema_file": "buckley-james-result.schema.json", "stability": "experimental-schema"},
     {"python_type": "holocron.models.ProportionalHazardsParametricResult", "schema_version": "holocron-proportional-hazards-result/v1", "schema_file": "proportional-hazards-result.schema.json", "stability": "experimental-schema"},
+    {"python_type": "holocron.migration.MigrationPlan", "schema_version": "holocron-rms-migration-plan/v1", "schema_file": "migration-plan.schema.json", "stability": "experimental-schema"},
     {"python_type": "holocron.models.BinaryLogisticResult", "schema_version": "holocron-binary-logistic-result/v1", "schema_file": "binary-logistic-result.schema.json", "stability": "stable-schema"},
     {"python_type": "holocron.models.OrdinalResult", "schema_version": "holocron-ordinal-result/v1", "schema_file": "ordinal-result.schema.json", "stability": "experimental-schema"},
     {"python_type": "holocron.models.CoxResult", "schema_version": "holocron-cox-result/v2", "schema_file": "cox-result-v2.schema.json", "stability": "experimental-schema"},

@@ -1,0 +1,13 @@
+{
+  "schema_version": "holocron-deprecation-policy/v1",
+  "package_version": "0.1.0",
+  "policy": {
+    "minimum_minor_releases": 2,
+    "minimum_days": 90,
+    "runtime_warning_required": true,
+    "changelog_required": true,
+    "migration_replacement_required": true,
+    "pre_1_0_rule": "Experimental APIs may still change before 1.0, but an intentional removal or rename of a documented public name must be registered and warned under this policy unless required immediately for security, legal, or statistically invalid behavior."
+  },
+  "notices": []
+}

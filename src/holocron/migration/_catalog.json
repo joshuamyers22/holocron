@@ -1,0 +1,2272 @@
+{
+  "deprecation_notices": [],
+  "deprecation_policy": {
+    "changelog_required": true,
+    "migration_replacement_required": true,
+    "minimum_days": 90,
+    "minimum_minor_releases": 2,
+    "pre_1_0_rule": "Experimental APIs may still change before 1.0, but an intentional removal or rename of a documented public name must be registered and warned under this policy unless required immediately for security, legal, or statistically invalid behavior.",
+    "runtime_warning_required": true
+  },
+  "entries": [
+    {
+      "disposition": "experimental",
+      "guidance": "Explicit two-way interactions only; both component main effects are required, doubly nonlinear products are omitted, and nested, self, unrestricted, matrix, and stratification interactions are rejected.",
+      "identifier": "export:%ia%",
+      "kind": "export",
+      "python_entry_point": "holocron.formula.RestrictedInteractionTerm",
+      "r_symbol": "%ia%"
+    },
+    {
+      "disposition": "experimental",
+      "guidance": "Owned allowlisted AST with explicit numeric, categorical, scored-ordered, and restricted-interaction terms; automatic parameters, offsets, strata, matrices, and R formula evaluation remain deferred.",
+      "identifier": "export:Design",
+      "kind": "export",
+      "python_entry_point": "holocron.design.DesignSpec",
+      "r_symbol": "Design"
+    },
+    {
+      "disposition": "mapped",
+      "guidance": "Use immutable DesignSpec term metadata and generated-column ownership. R assignment vectors, mutable attributes, and arbitrary design objects are not reproduced.",
+      "identifier": "export:DesignAssign",
+      "kind": "export",
+      "python_entry_point": "holocron.design.DesignSpec",
+      "r_symbol": "DesignAssign"
+    },
+    {
+      "disposition": "mapped",
+      "guidance": "Returns exceedance probabilities at an observed ordinal response level; rms function factories, interpolation, and survival-model dispatch remain deferred.",
+      "identifier": "export:ExProb",
+      "kind": "export",
+      "python_entry_point": "holocron.models.OrdinalResult.predict_exceedance",
+      "r_symbol": "ExProb"
+    },
+    {
+      "disposition": "experimental",
+      "guidance": "Initial envelope supports Gaussian/identity and binomial/logit only; weights, offsets, other families/links, penalties, dispersion options, formula-level fitting, and the broader R Glm method surface remain deferred.",
+      "identifier": "export:Glm",
+      "kind": "export",
+      "python_entry_point": "holocron.models.fit_glm",
+      "r_symbol": "Glm"
+    },
+    {
+      "disposition": "mapped",
+      "guidance": "Approved bounded replacement for a fixed caller-supplied positive-definite relative observation covariance with ML or REML scale estimation. Correlation/variance-structure estimation, grouped formulas, bootstrap fitting, and nlme/rms method parity are unsupported.",
+      "identifier": "export:Gls",
+      "kind": "export",
+      "python_entry_point": "holocron.models.fit_gls",
+      "r_symbol": "Gls"
+    },
+    {
+      "disposition": "mapped",
+      "guidance": "Use explicit parametric-survival hazard prediction. R function factories and broader model dispatch are unsupported.",
+      "identifier": "export:Hazard",
+      "kind": "export",
+      "python_entry_point": "holocron.models.ParametricSurvivalResult.predict_hazard",
+      "r_symbol": "Hazard"
+    },
+    {
+      "disposition": "unsupported",
+      "guidance": "No direct replacement is approved. Use holocron.validation.calibrate_model or validate_probabilities for explicit calibration assessment; in-place mutation of an rms fit is intentionally unsupported.",
+      "identifier": "export:LRupdate",
+      "kind": "export",
+      "python_entry_point": null,
+      "r_symbol": "LRupdate"
+    },
+    {
+      "disposition": "unsupported",
+      "guidance": "Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md).",
+      "identifier": "export:Newlabels",
+      "kind": "export",
+      "python_entry_point": null,
+      "r_symbol": "Newlabels"
+    },
+    {
+      "disposition": "unsupported",
+      "guidance": "Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md).",
+      "identifier": "export:Newlevels",
+      "kind": "export",
+      "python_entry_point": null,
+      "r_symbol": "Newlevels"
+    },
+    {
+      "disposition": "mapped",
+      "guidance": "Numeric exact, left-, right-, interval-, and mixed-censoring endpoints are supported. Interval-censored fitting passes pinned-R parity; one-sided endpoints retain the documented open-endpoint contract under an explicit pinned-R parity exception. Factor/character inputs, labels, units, missing rows, weights, and Surv conversion remain deferred.",
+      "identifier": "export:Ocens",
+      "kind": "export",
+      "python_entry_point": "holocron.models.CensoredResponse",
+      "r_symbol": "Ocens"
+    },
+    {
+      "disposition": "mapped",
+      "guidance": "Construct an explicit SurvivalResponse from censoring endpoints. R Surv objects, attribute mutation, and implicit type inference are not reproduced.",
+      "identifier": "export:Ocens2Surv",
+      "kind": "export",
+      "python_entry_point": "holocron.models.SurvivalResponse.from_intervals",
+      "r_symbol": "Ocens2Surv"
+    },
+    {
+      "disposition": "mapped",
+      "guidance": "Implements rounded exact-grid open one-sided endpoints, maximal intersections, self-consistency, support consolidation, and a right-tail category. Rich R attributes, the deprecated data-changing consolidation mode, weights, and missing-row reinsertion remain deferred.",
+      "identifier": "export:Ocens2ord",
+      "kind": "export",
+      "python_entry_point": "holocron.models.CensoredResponse.turnbull",
+      "r_symbol": "Ocens2ord"
+    },
+    {
+      "disposition": "mapped",
+      "guidance": "Select one supported ordinal link explicitly in fit_orm. Runtime discovery and R link-function objects are unsupported.",
+      "identifier": "export:Olinks",
+      "kind": "export",
+      "python_entry_point": "holocron.models.fit_orm",
+      "r_symbol": "Olinks"
+    },
+    {
+      "disposition": "experimental",
+      "guidance": "Python accepts a non-negative scalar or named diagonal slope penalties directly in fit_penalized_ols and fit_penalized_lrm; categorical off-diagonal matrices and arbitrary dense penalty matrices remain deferred.",
+      "identifier": "export:Penalty.matrix",
+      "kind": "export",
+      "python_entry_point": "holocron.models.fit_penalized_ols",
+      "r_symbol": "Penalty.matrix"
+    },
+    {
+      "disposition": "experimental",
+      "guidance": "Penalty setup is explicit by generated coefficient name rather than inferred from rms assume codes; only diagonal slope penalties are supported.",
+      "identifier": "export:Penalty.setup",
+      "kind": "export",
+      "python_entry_point": "holocron.models.fit_penalized_lrm",
+      "r_symbol": "Penalty.setup"
+    },
+    {
+      "disposition": "mapped",
+      "guidance": "Use explicit realized design rows with the supported postfit predictor, or family-specific ordinal/survival prediction methods. Automatic adjustment grids, R formulas, and data-frame assembly are unsupported.",
+      "identifier": "export:Predict",
+      "kind": "export",
+      "python_entry_point": "holocron.models.predict",
+      "r_symbol": "Predict"
+    },
+    {
+      "disposition": "mapped",
+      "guidance": "Approved bounded replacement fits one weighted conditional quantile by deterministic ADMM and reports kernel-density sandwich covariance. Multiple tau fits, quantreg algorithm selection, bootstrap inference, and R method parity are unsupported.",
+      "identifier": "export:Rq",
+      "kind": "export",
+      "python_entry_point": "holocron.models.fit_quantile_regression",
+      "r_symbol": "Rq"
+    },
+    {
+      "disposition": "mapped",
+      "guidance": "Use the explicit SurvivalResponse interval contract. It supports exact, left-, right-, interval-, and mixed censoring without R attributes, formula evaluation, counting-process construction, or arbitrary Surv types.",
+      "identifier": "export:Surv",
+      "kind": "export",
+      "python_entry_point": "holocron.models.SurvivalResponse",
+      "r_symbol": "Surv"
+    },
+    {
+      "disposition": "mapped",
+      "guidance": "Use typed Cox, parametric, or nonparametric survival prediction methods. R function factories and arbitrary fit dispatch are unsupported.",
+      "identifier": "export:Survival",
+      "kind": "export",
+      "python_entry_point": "holocron.models.CoxResult.predict_survival",
+      "r_symbol": "Survival"
+    },
+    {
+      "disposition": "mapped",
+      "guidance": "Use one explicit named linear contrast on a supported OLS or binary-logistic fit. Design-row generation and simultaneous or nonlinear contrasts are unsupported.",
+      "identifier": "export:Xcontrast",
+      "kind": "export",
+      "python_entry_point": "holocron.models.contrast",
+      "r_symbol": "Xcontrast"
+    },
+    {
+      "disposition": "unsupported",
+      "guidance": "Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md).",
+      "identifier": "export:adapt_orm",
+      "kind": "export",
+      "python_entry_point": null,
+      "r_symbol": "adapt_orm"
+    },
+    {
+      "disposition": "mapped",
+      "guidance": "Add explicit TextAnnotation values to an owned PlotSpec. Automatic ANOVA parsing and graphics-device mutation are unsupported.",
+      "identifier": "export:annotateAnova",
+      "kind": "export",
+      "python_entry_point": "holocron.graphics.TextAnnotation",
+      "r_symbol": "annotateAnova"
+    },
+    {
+      "disposition": "experimental",
+      "guidance": "Numeric one-dimensional predictors only; labels and units are retained separately by DataDistribution.",
+      "identifier": "export:asis",
+      "kind": "export",
+      "python_entry_point": "holocron.formula.IdentityTerm",
+      "r_symbol": "asis"
+    },
+    {
+      "disposition": "mapped",
+      "guidance": "Approved bounded right-censored Buckley-James AFT replacement with identity or log time, Kaplan-Meier residual-tail imputation, fail-closed convergence, and an event-only working OLS covariance. Formula/link breadth, cycle averaging, bootstrap covariance, and rms inference parity are unsupported.",
+      "identifier": "export:bj",
+      "kind": "export",
+      "python_entry_point": "holocron.models.fit_buckley_james",
+      "r_symbol": "bj"
+    },
+    {
+      "disposition": "unsupported",
+      "guidance": "Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md).",
+      "identifier": "export:bjplot",
+      "kind": "export",
+      "python_entry_point": null,
+      "r_symbol": "bjplot"
+    },
+    {
+      "disposition": "unsupported",
+      "guidance": "Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md).",
+      "identifier": "export:bootBCa",
+      "kind": "export",
+      "python_entry_point": null,
+      "r_symbol": "bootBCa"
+    },
+    {
+      "disposition": "experimental",
+      "guidance": "Supports iid row bootstrap covariance for current OLS, binomial Glm, and binary lrm fits, with a fixed NumPy seed or an auditable declared schedule; cluster bootstrap, failed-replicate skipping, coefficient persistence, intervals, and out-of-sample likelihood remain deferred.",
+      "identifier": "export:bootcov",
+      "kind": "export",
+      "python_entry_point": "holocron.models.bootstrap_covariance",
+      "r_symbol": "bootcov"
+    },
+    {
+      "disposition": "unsupported",
+      "guidance": "Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md).",
+      "identifier": "export:bootplot",
+      "kind": "export",
+      "python_entry_point": null,
+      "r_symbol": "bootplot"
+    },
+    {
+      "disposition": "unsupported",
+      "guidance": "Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md).",
+      "identifier": "export:bplot",
+      "kind": "export",
+      "python_entry_point": null,
+      "r_symbol": "bplot"
+    },
+    {
+      "disposition": "mapped",
+      "guidance": "Use explicit exact resample plans for supported OLS or binary-logistic parametric calibration. Other families, boot-method aliases, and implicit refitting are unsupported.",
+      "identifier": "export:calibrate",
+      "kind": "export",
+      "python_entry_point": "holocron.validation.calibrate_model",
+      "r_symbol": "calibrate"
+    },
+    {
+      "disposition": "experimental",
+      "guidance": "Levels and their reference order must be explicit; missing and unseen levels fail closed instead of using ambient factor metadata.",
+      "identifier": "export:catg",
+      "kind": "export",
+      "python_entry_point": "holocron.formula.CategoricalTerm",
+      "r_symbol": "catg"
+    },
+    {
+      "disposition": "mapped",
+      "guidance": "Maps formula-level cluster marking to the explicit fit_random_intercept_orm API. One Gaussian grouping effect is supported; multiple, crossed, correlated, and random-slope structures are deferred.",
+      "identifier": "export:cluster",
+      "kind": "export",
+      "python_entry_point": "holocron.models.fit_random_intercept_orm",
+      "r_symbol": "cluster"
+    },
+    {
+      "disposition": "unsupported",
+      "guidance": "Automatic predictor-cluster combination is not approved because it changes the estimand and design identity. Encode a reviewed transformation explicitly in DesignSpec instead.",
+      "identifier": "export:combineRelatedPredictors",
+      "kind": "export",
+      "python_entry_point": null,
+      "r_symbol": "combineRelatedPredictors"
+    },
+    {
+      "disposition": "mapped",
+      "guidance": "Use a typed prediction result and effect_plot_spec for interval geometry. R graphics state and arbitrary confidence-band inputs are unsupported.",
+      "identifier": "export:confplot",
+      "kind": "export",
+      "python_entry_point": "holocron.graphics.effect_plot_spec",
+      "r_symbol": "confplot"
+    },
+    {
+      "disposition": "experimental",
+      "guidance": "Supports one declared linear coefficient contrast with model-based uncertainty; rms design-setting expansion, simultaneous intervals, joint contrasts, profile intervals, and Bayesian paths remain deferred.",
+      "identifier": "export:contrast",
+      "kind": "export",
+      "python_entry_point": "holocron.models.contrast",
+      "r_symbol": "contrast"
+    },
+    {
+      "disposition": "unsupported",
+      "guidance": "Correlation-structure estimation is not implemented. Construct and review the relative covariance explicitly, then pass it to holocron.models.fit_gls.",
+      "identifier": "export:corFloorExp",
+      "kind": "export",
+      "python_entry_point": null,
+      "r_symbol": "corFloorExp"
+    },
+    {
+      "disposition": "mapped",
+      "guidance": "Use the owned fit_cph estimator; this does not expose the rms internal coxphFit adapter or arbitrary survival-package controls.",
+      "identifier": "export:coxphFit",
+      "kind": "export",
+      "python_entry_point": "holocron.models.fit_cph",
+      "r_symbol": "coxphFit"
+    },
+    {
+      "disposition": "experimental",
+      "guidance": "Caller-supplied full-rank designs support Efron/Breslow ties, counting-process entry, strata, positive weights, offsets, observed covariance, per-stratum baseline hazard/survival, cumulative-hazard/survival prediction, and martingale/deviance residuals. Formula fitting, robust covariance, and other residual kinds remain deferred.",
+      "identifier": "export:cph",
+      "kind": "export",
+      "python_entry_point": "holocron.models.fit_cph",
+      "r_symbol": "cph"
+    },
+    {
+      "disposition": "unsupported",
+      "guidance": "Internal continuation-ratio setup mutation is not a public contract. Use the explicit ordinal response and fit_orm APIs; continuation-ratio modeling itself is unsupported.",
+      "identifier": "export:cr.setup",
+      "kind": "export",
+      "python_entry_point": null,
+      "r_symbol": "cr.setup"
+    },
+    {
+      "disposition": "experimental",
+      "guidance": "Python uses immutable explicit metadata instead of R global options; categorical levels must be declared; dataframe/date-time adapters are deferred; ordered factors use the lower middle declared level when the level count is even; and default display probabilities are computed per variable when missingness differs.",
+      "identifier": "export:datadist",
+      "kind": "export",
+      "python_entry_point": "holocron.design.DataDistribution",
+      "r_symbol": "datadist"
+    },
+    {
+      "disposition": "mapped",
+      "guidance": "Use validate_survival_predictions for explicit horizon-specific concordance, Brier, log-loss, and calibration metrics. The standalone rank-correlation return contract and R missing-value semantics are not reproduced.",
+      "identifier": "export:dxy.cens",
+      "kind": "export",
+      "python_entry_point": "holocron.models.validate_survival_predictions",
+      "r_symbol": "dxy.cens"
+    },
+    {
+      "disposition": "mapped",
+      "guidance": "Read effective_degrees_of_freedom from a supported PenalizedResult or penalty-trace point. General penalty-matrix decomposition is unsupported.",
+      "identifier": "export:effective.df",
+      "kind": "export",
+      "python_entry_point": "holocron.models.PenalizedResult",
+      "r_symbol": "effective.df"
+    },
+    {
+      "disposition": "mapped",
+      "guidance": "Use bounded fresh-refit Wald elimination over a complete caller-declared coefficient partition. AIC/rule variants and rms object mutation are unsupported.",
+      "identifier": "export:fastbw",
+      "kind": "export",
+      "python_entry_point": "holocron.models.backward_select",
+      "r_symbol": "fastbw"
+    },
+    {
+      "disposition": "unsupported",
+      "guidance": "R-specific N/P text formatting is not a statistical API. Build typed holocron.reporting.TableSpec cells and use render_latex or application-native presentation formatting.",
+      "identifier": "export:formatNP",
+      "kind": "export",
+      "python_entry_point": null,
+      "r_symbol": "formatNP"
+    },
+    {
+      "disposition": "unsupported",
+      "guidance": "The rms g-index bundle is not reproduced. Use holocron.validation.validate_model or validate_probabilities and select an explicitly named supported metric.",
+      "identifier": "export:gIndex",
+      "kind": "export",
+      "python_entry_point": null,
+      "r_symbol": "gIndex"
+    },
+    {
+      "disposition": "unsupported",
+      "guidance": "Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md).",
+      "identifier": "export:gTrans",
+      "kind": "export",
+      "python_entry_point": null,
+      "r_symbol": "gTrans"
+    },
+    {
+      "disposition": "mapped",
+      "guidance": "Use an explicit fitted DesignSpec and transform reviewed predictor rows. Interactive datadist prompting, formula evaluation, and implicit adjustment-value generation are unsupported.",
+      "identifier": "export:gendata",
+      "kind": "export",
+      "python_entry_point": "holocron.design.DesignSpec.transform",
+      "r_symbol": "gendata"
+    },
+    {
+      "disposition": "mapped",
+      "guidance": "Render an explicit backend-neutral PlotSpec to dependency-free SVG. ggplot2 objects, themes, layers, and extension dispatch are unsupported.",
+      "identifier": "export:ggplot",
+      "kind": "export",
+      "python_entry_point": "holocron.graphics.render_svg",
+      "r_symbol": "ggplot"
+    },
+    {
+      "disposition": "mapped",
+      "guidance": "Grouped Kaplan-Meier calibration is available through validate_survival_predictions at explicit horizons. The standalone R object and plotting side effects are not reproduced.",
+      "identifier": "export:groupkm",
+      "kind": "export",
+      "python_entry_point": "holocron.models.validate_survival_predictions",
+      "r_symbol": "groupkm"
+    },
+    {
+      "disposition": "unsupported",
+      "guidance": "Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md).",
+      "identifier": "export:hazard.ratio.plot",
+      "kind": "export",
+      "python_entry_point": null,
+      "r_symbol": "hazard.ratio.plot"
+    },
+    {
+      "disposition": "unsupported",
+      "guidance": "Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md).",
+      "identifier": "export:histdensity",
+      "kind": "export",
+      "python_entry_point": null,
+      "r_symbol": "histdensity"
+    },
+    {
+      "disposition": "unsupported",
+      "guidance": "This internal information-expansion setup helper has no approved public replacement; model fitting owns its information matrices.",
+      "identifier": "export:ie.setup",
+      "kind": "export",
+      "python_entry_point": null,
+      "r_symbol": "ie.setup"
+    },
+    {
+      "disposition": "mapped",
+      "guidance": "Use OrdinalResult.diagnostics for explicit proportional-odds diagnostics. Simulation, plotting, and the impactPO report layout are unsupported.",
+      "identifier": "export:impactPO",
+      "kind": "export",
+      "python_entry_point": "holocron.models.OrdinalResult.diagnostics",
+      "r_symbol": "impactPO"
+    },
+    {
+      "disposition": "unsupported",
+      "guidance": "Direct mutation and partitioning of internal information matrices is not public. Use owned model covariance results or holocron.models.covariance.",
+      "identifier": "export:infoMxop",
+      "kind": "export",
+      "python_entry_point": null,
+      "r_symbol": "infoMxop"
+    },
+    {
+      "disposition": "mapped",
+      "guidance": "Use validate_probabilities for explicit binary calibration intercept, slope, error, and grouped estimates. R plotting and formula dispatch are not reproduced.",
+      "identifier": "export:intCalibration",
+      "kind": "export",
+      "python_entry_point": "holocron.validation.validate_probabilities",
+      "r_symbol": "intCalibration"
+    },
+    {
+      "disposition": "experimental",
+      "guidance": "Returns zero-based term indices from an immutable DesignSpec; it does not inspect an R Design attribute.",
+      "identifier": "export:interactions.containing",
+      "kind": "export",
+      "python_entry_point": "holocron.design.DesignSpec.interactions_containing",
+      "r_symbol": "interactions.containing"
+    },
+    {
+      "disposition": "unsupported",
+      "guidance": "Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md).",
+      "identifier": "export:legend.nomabbrev",
+      "kind": "export",
+      "python_entry_point": null,
+      "r_symbol": "legend.nomabbrev"
+    },
+    {
+      "disposition": "mapped",
+      "guidance": "Use fit_penalized_ols with explicit scalar or named diagonal slope penalties. Low-level matrix inputs and arbitrary dense penalty matrices are unsupported.",
+      "identifier": "export:lm.pfit",
+      "kind": "export",
+      "python_entry_point": "holocron.models.fit_penalized_ols",
+      "r_symbol": "lm.pfit"
+    },
+    {
+      "disposition": "experimental",
+      "guidance": "fit_lrm is binary; the companion fit_ordinal_lrm implements unpenalized full-rank multi-intercept proportional odds. Weights, offsets, ordinal penalties, formula-level fitting, partial proportional odds, and the broader R lrm method surface remain deferred.",
+      "identifier": "export:lrm",
+      "kind": "export",
+      "python_entry_point": "holocron.models.fit_lrm",
+      "r_symbol": "lrm"
+    },
+    {
+      "disposition": "mapped",
+      "guidance": "Use the public bounded binary fit_lrm estimator. Low-level R fitter controls, ordinal dispatch, and mutable work arrays are unsupported.",
+      "identifier": "export:lrm.fit",
+      "kind": "export",
+      "python_entry_point": "holocron.models.fit_lrm",
+      "r_symbol": "lrm.fit"
+    },
+    {
+      "disposition": "mapped",
+      "guidance": "Use the typed likelihood operation on supported fitted results. Automatic arbitrary nested-model comparison and R print behavior are not reproduced.",
+      "identifier": "export:lrtest",
+      "kind": "export",
+      "python_entry_point": "holocron.models.likelihood",
+      "r_symbol": "lrtest"
+    },
+    {
+      "disposition": "experimental",
+      "guidance": "Explicit finite knots only; automatic parameters remain deferred.",
+      "identifier": "export:lsp",
+      "kind": "export",
+      "python_entry_point": "holocron.formula.LinearSplineTerm",
+      "r_symbol": "lsp"
+    },
+    {
+      "disposition": "unsupported",
+      "guidance": "A public statistical matrix-inversion helper is not approved. Use numpy.linalg.solve for explicit linear systems; owned estimators translate rank failures at their API boundary.",
+      "identifier": "export:matinv",
+      "kind": "export",
+      "python_entry_point": null,
+      "r_symbol": "matinv"
+    },
+    {
+      "disposition": "unsupported",
+      "guidance": "Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md).",
+      "identifier": "export:matrx",
+      "kind": "export",
+      "python_entry_point": null,
+      "r_symbol": "matrx"
+    },
+    {
+      "disposition": "mapped",
+      "guidance": "The explicit mix_re argument implements the signed dual-scale loading and requires within-cluster variation; formula-level special-term syntax is not exposed.",
+      "identifier": "export:mix_re",
+      "kind": "export",
+      "python_entry_point": "holocron.models.fit_random_intercept_orm",
+      "r_symbol": "mix_re"
+    },
+    {
+      "disposition": "mapped",
+      "guidance": "Retain the immutable realized DesignMatrix and source data explicitly. R call evaluation and environment lookup are unsupported.",
+      "identifier": "export:modelData",
+      "kind": "export",
+      "python_entry_point": "holocron.design.DesignMatrix",
+      "r_symbol": "modelData"
+    },
+    {
+      "disposition": "mapped",
+      "guidance": "Build strict additive identity-bound OLS/logit nomogram geometry. Conditional interactions, broader model families, custom transforms, and R geometry parity are unsupported.",
+      "identifier": "export:nomogram",
+      "kind": "export",
+      "python_entry_point": "holocron.graphics.build_nomogram",
+      "r_symbol": "nomogram"
+    },
+    {
+      "disposition": "experimental",
+      "guidance": "Right-censored and counting-process Kaplan-Meier curves support strata and positive frequency weights with weighted risk/event/censor counts, log-scale Greenwood intervals, typed curve evaluation, event-time quantiles, and restricted means. Alternate estimators, robust variance, and formula-level fitting remain deferred.",
+      "identifier": "export:npsurv",
+      "kind": "export",
+      "python_entry_point": "holocron.models.fit_npsurv",
+      "r_symbol": "npsurv"
+    },
+    {
+      "disposition": "experimental",
+      "guidance": "Initial narrow API; full rms contract remains deferred.",
+      "identifier": "export:ols",
+      "kind": "export",
+      "python_entry_point": "holocron.models.fit_ols",
+      "r_symbol": "ols"
+    },
+    {
+      "disposition": "mapped",
+      "guidance": "Use typed exact OLS case-deletion influence diagnostics. R print/plot side effects and additional deletion summaries are unsupported.",
+      "identifier": "export:ols.influence",
+      "kind": "export",
+      "python_entry_point": "holocron.models.influence_diagnostics",
+      "r_symbol": "ols.influence"
+    },
+    {
+      "disposition": "unsupported",
+      "guidance": "Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md).",
+      "identifier": "export:oos.loglik",
+      "kind": "export",
+      "python_entry_point": null,
+      "r_symbol": "oos.loglik"
+    },
+    {
+      "disposition": "unsupported",
+      "guidance": "Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md).",
+      "identifier": "export:ordESS",
+      "kind": "export",
+      "python_entry_point": null,
+      "r_symbol": "ordESS"
+    },
+    {
+      "disposition": "mapped",
+      "guidance": "Use the bounded proportional-odds diagnostic carried by OrdinalResult. Bootstrap, plotting, and broader ordinal model dispatch are unsupported.",
+      "identifier": "export:ordParallel",
+      "kind": "export",
+      "python_entry_point": "holocron.models.OrdinalResult.diagnostics",
+      "r_symbol": "ordParallel"
+    },
+    {
+      "disposition": "experimental",
+      "guidance": "Exact-response logistic, probit, loglog, cloglog, and cauchit cumulative links plus numeric censoring are implemented. Three exact-response fixtures pass this profile; censored and clustered evidence is linked from Ocens, cluster, and mix_re. Weights, offsets, penalties, y-dependent effects, and formula-level fitting remain deferred.",
+      "identifier": "export:orm",
+      "kind": "export",
+      "python_entry_point": "holocron.models.fit_orm",
+      "r_symbol": "orm"
+    },
+    {
+      "disposition": "mapped",
+      "guidance": "Use the public bounded fit_orm estimator. Low-level R work arrays, arbitrary optimization controls, and object mutation are unsupported.",
+      "identifier": "export:orm.fit",
+      "kind": "export",
+      "python_entry_point": "holocron.models.fit_orm",
+      "r_symbol": "orm.fit"
+    },
+    {
+      "disposition": "mapped",
+      "guidance": "Use backend-neutral TextAnnotation within PlotSpec. Graphics-device coordinate lookup and side-effectful R drawing are unsupported.",
+      "identifier": "export:pantext",
+      "kind": "export",
+      "python_entry_point": "holocron.graphics.TextAnnotation",
+      "r_symbol": "pantext"
+    },
+    {
+      "disposition": "mapped",
+      "guidance": "Use a bounded explicit scalar penalty grid with AIC or BIC selection for OLS or binary lrm. Multidimensional penalties and rms optimization shortcuts are unsupported.",
+      "identifier": "export:pentrace",
+      "kind": "export",
+      "python_entry_point": "holocron.models.trace_penalty",
+      "r_symbol": "pentrace"
+    },
+    {
+      "disposition": "unsupported",
+      "guidance": "The specialized two-dimensional data-perimeter algorithm is not implemented. Supply reviewed plot-domain bounds explicitly in PlotSpec.",
+      "identifier": "export:perimeter",
+      "kind": "export",
+      "python_entry_point": null,
+      "r_symbol": "perimeter"
+    },
+    {
+      "disposition": "unsupported",
+      "guidance": "Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md).",
+      "identifier": "export:perlcode",
+      "kind": "export",
+      "python_entry_point": null,
+      "r_symbol": "perlcode"
+    },
+    {
+      "disposition": "mapped",
+      "guidance": "Build a backend-neutral contrast PlotSpec from typed estimates. R graphics arguments and contrast-object dispatch are unsupported.",
+      "identifier": "export:plot.contrast.rms",
+      "kind": "export",
+      "python_entry_point": "holocron.graphics.contrast_plot_spec",
+      "r_symbol": "plot.contrast.rms"
+    },
+    {
+      "disposition": "unsupported",
+      "guidance": "Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md).",
+      "identifier": "export:plot.lrm.partial",
+      "kind": "export",
+      "python_entry_point": null,
+      "r_symbol": "plot.lrm.partial"
+    },
+    {
+      "disposition": "unsupported",
+      "guidance": "Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md).",
+      "identifier": "export:plot.xmean.ordinaly",
+      "kind": "export",
+      "python_entry_point": null,
+      "r_symbol": "plot.xmean.ordinaly"
+    },
+    {
+      "disposition": "unsupported",
+      "guidance": "Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md).",
+      "identifier": "export:plotIntercepts",
+      "kind": "export",
+      "python_entry_point": null,
+      "r_symbol": "plotIntercepts"
+    },
+    {
+      "disposition": "mapped",
+      "guidance": "Use anova_plot_spec for explicit typed term tests. Plotmath expression generation and device annotation are unsupported.",
+      "identifier": "export:plotmathAnova",
+      "kind": "export",
+      "python_entry_point": "holocron.graphics.anova_plot_spec",
+      "r_symbol": "plotmathAnova"
+    },
+    {
+      "disposition": "experimental",
+      "guidance": "Raw powers of explicit degree 2 through 10 only; no ambient option supplies a default degree.",
+      "identifier": "export:pol",
+      "kind": "export",
+      "python_entry_point": "holocron.formula.PolynomialTerm",
+      "r_symbol": "pol"
+    },
+    {
+      "disposition": "mapped",
+      "guidance": "Use OrdinalResult.diagnostics for the supported proportional-odds assessment. The R poma report and broader model dispatch are not reproduced.",
+      "identifier": "export:poma",
+      "kind": "export",
+      "python_entry_point": "holocron.models.OrdinalResult.diagnostics",
+      "r_symbol": "poma"
+    },
+    {
+      "disposition": "mapped",
+      "guidance": "Approved exact Weibull/exponential one-scale AFT-to-PH transformation with survival prediction equivalence. Covariance is explicitly conditional on fitted scale; scale-stratified fits and R object mutation are rejected.",
+      "identifier": "export:pphsm",
+      "kind": "export",
+      "python_entry_point": "holocron.models.to_proportional_hazards",
+      "r_symbol": "pphsm"
+    },
+    {
+      "disposition": "mapped",
+      "guidance": "Use typed model-summary table adapters and an explicit renderer. The R console formatting helper and global output options are not reproduced.",
+      "identifier": "export:prModFit",
+      "kind": "export",
+      "python_entry_point": "holocron.reporting.model_summary_table",
+      "r_symbol": "prModFit"
+    },
+    {
+      "disposition": "mapped",
+      "guidance": "Represent model-report items as explicit typed TableSpec cells. R console width, markup, and global formatting state are unsupported.",
+      "identifier": "export:prModItem",
+      "kind": "export",
+      "python_entry_point": "holocron.reporting.TableSpec",
+      "r_symbol": "prModItem"
+    },
+    {
+      "disposition": "mapped",
+      "guidance": "Run one caller-owned whole procedure over an exact immutable resample plan. rms method strings, hidden refits, and model-object mutation are unsupported.",
+      "identifier": "export:predab.resample",
+      "kind": "export",
+      "python_entry_point": "holocron.validation.run_resample_plan",
+      "r_symbol": "predab.resample"
+    },
+    {
+      "disposition": "mapped",
+      "guidance": "Use explicit design rows with the supported postfit predictor or family-specific prediction methods. R formula evaluation, adjustment frames, and broad type dispatch are unsupported.",
+      "identifier": "export:predictrms",
+      "kind": "export",
+      "python_entry_point": "holocron.models.predict",
+      "r_symbol": "predictrms"
+    },
+    {
+      "disposition": "mapped",
+      "guidance": "Returns a typed TableSpec for Chan–Meng missing-information diagnostics. R console formatting, side effects, and arbitrary processMI object inspection are not reproduced.",
+      "identifier": "export:prmiInfo",
+      "kind": "export",
+      "python_entry_point": "holocron.validation.imputation_information_table",
+      "r_symbol": "prmiInfo"
+    },
+    {
+      "disposition": "mapped",
+      "guidance": "Choose the supported Gaussian/identity or binomial/logit family explicitly in fit_glm. Runtime family discovery and arbitrary R family objects are unsupported.",
+      "identifier": "export:probabilityFamilies",
+      "kind": "export",
+      "python_entry_point": "holocron.models.fit_glm",
+      "r_symbol": "probabilityFamilies"
+    },
+    {
+      "disposition": "mapped",
+      "guidance": "Bounded Python replacement: Rubin pooling supports homogeneous OLS and binary-logistic results; validation and calibration accept already optimism-corrected Holocron results; ANOVA requires explicit per-imputation and stacked LR tables. It does not consume fit.mult.impute objects, refit models, delegate to R, or claim numerical parity.",
+      "identifier": "export:processMI",
+      "kind": "export",
+      "python_entry_point": "holocron.validation.process_multiple_imputation",
+      "r_symbol": "processMI"
+    },
+    {
+      "disposition": "experimental",
+      "guidance": "Weibull and exponential AFT fits support exact, left-, right-, and interval-censored responses plus positive weights, offsets, observed covariance, and survival/hazard prediction; Weibull additionally supports scale strata. Residuals are currently defined only for right-censored inputs. Other distributions and formula-level fitting remain deferred.",
+      "identifier": "export:psm",
+      "kind": "export",
+      "python_entry_point": "holocron.models.fit_psm",
+      "r_symbol": "psm"
+    },
+    {
+      "disposition": "experimental",
+      "guidance": "Initial narrow API; full rms contract remains deferred.",
+      "identifier": "export:rcs",
+      "kind": "export",
+      "python_entry_point": "holocron.design.RestrictedCubicSplineSpec",
+      "r_symbol": "rcs"
+    },
+    {
+      "disposition": "unsupported",
+      "guidance": "This R recursive-list cleanup helper has no statistical public contract. Use ordinary typed Python collections at application boundaries.",
+      "identifier": "export:reListclean",
+      "kind": "export",
+      "python_entry_point": null,
+      "r_symbol": "reListclean"
+    },
+    {
+      "disposition": "mapped",
+      "guidance": "Use an explicit categorical or ordered term in DesignSpec; learned levels and generated-column identity are retained instead of returning anonymous integer codes.",
+      "identifier": "export:recode2integer",
+      "kind": "export",
+      "python_entry_point": "holocron.design.DesignSpec",
+      "r_symbol": "recode2integer"
+    },
+    {
+      "disposition": "unsupported",
+      "guidance": "Automatic related-predictor discovery is not approved because thresholds and clustering choices are analysis decisions. Compute and review such diagnostics outside the fit, then encode the chosen DesignSpec explicitly.",
+      "identifier": "export:related.predictors",
+      "kind": "export",
+      "python_entry_point": null,
+      "r_symbol": "related.predictors"
+    },
+    {
+      "disposition": "mapped",
+      "guidance": "Use the bounded random-intercept ordinal fit and its variance-component result. General random-effect extraction, covariance structures, and report formatting are unsupported.",
+      "identifier": "export:rexVar",
+      "kind": "export",
+      "python_entry_point": "holocron.models.fit_random_intercept_orm",
+      "r_symbol": "rexVar"
+    },
+    {
+      "disposition": "experimental",
+      "guidance": "Supports the uncorrected Huber cluster sandwich for current unpenalized OLS, binomial Glm, and binary lrm fits; Efron OLS covariance, finite-sample corrections, and penalized fits remain deferred.",
+      "identifier": "export:robcov",
+      "kind": "export",
+      "python_entry_point": "holocron.models.robust_covariance",
+      "r_symbol": "robcov"
+    },
+    {
+      "disposition": "unsupported",
+      "guidance": "Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md).",
+      "identifier": "export:sascode",
+      "kind": "export",
+      "python_entry_point": null,
+      "r_symbol": "sascode"
+    },
+    {
+      "disposition": "experimental",
+      "guidance": "Three or more strictly increasing numeric levels must be explicit; missing and unseen levels fail closed.",
+      "identifier": "export:scored",
+      "kind": "export",
+      "python_entry_point": "holocron.formula.OrderedTerm",
+      "r_symbol": "scored"
+    },
+    {
+      "disposition": "unsupported",
+      "guidance": "Unmeasured-confounding sensitivity analysis is not implemented; no numerical substitute is approved. Report an externally reviewed sensitivity analysis separately.",
+      "identifier": "export:sensuc",
+      "kind": "export",
+      "python_entry_point": null,
+      "r_symbol": "sensuc"
+    },
+    {
+      "disposition": "unsupported",
+      "guidance": "Progress-bar mutation is presentation infrastructure, not a statistical capability. Applications should supply their own progress reporting around bounded Holocron calls.",
+      "identifier": "export:setPb",
+      "kind": "export",
+      "python_entry_point": null,
+      "r_symbol": "setPb"
+    },
+    {
+      "disposition": "mapped",
+      "guidance": "Use the typed InfluenceResult and reporting/plot adapters. Interactive identification and R console side effects are unsupported.",
+      "identifier": "export:show.influence",
+      "kind": "export",
+      "python_entry_point": "holocron.models.influence_diagnostics",
+      "r_symbol": "show.influence"
+    },
+    {
+      "disposition": "mapped",
+      "guidance": "Inspect immutable DesignSpec terms, generated columns, labels, and fingerprints. R console formatting and Design attribute inference are unsupported.",
+      "identifier": "export:specs",
+      "kind": "export",
+      "python_entry_point": "holocron.design.DesignSpec",
+      "r_symbol": "specs"
+    },
+    {
+      "disposition": "mapped",
+      "guidance": "Supply explicit stratum labels to supported survival estimators and predictors. Formula-special parsing and interaction with arbitrary R models are unsupported.",
+      "identifier": "export:strat",
+      "kind": "export",
+      "python_entry_point": "holocron.models.fit_cph",
+      "r_symbol": "strat"
+    },
+    {
+      "disposition": "unsupported",
+      "guidance": "Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md).",
+      "identifier": "export:survdiffplot",
+      "kind": "export",
+      "python_entry_point": null,
+      "r_symbol": "survdiffplot"
+    },
+    {
+      "disposition": "mapped",
+      "guidance": "Use typed Cox or parametric survival and curve prediction methods with explicit rows, times, strata, and offsets. R data-frame dispatch and confidence bands are unsupported.",
+      "identifier": "export:survest",
+      "kind": "export",
+      "python_entry_point": "holocron.models.CoxResult.predict_survival",
+      "r_symbol": "survest"
+    },
+    {
+      "disposition": "mapped",
+      "guidance": "Adapt a typed SurvivalCurveResult to backend-neutral plot geometry. Automatic prediction, R graphics state, and broad model dispatch are unsupported.",
+      "identifier": "export:survplot",
+      "kind": "export",
+      "python_entry_point": "holocron.graphics.survival_plot_spec",
+      "r_symbol": "survplot"
+    },
+    {
+      "disposition": "mapped",
+      "guidance": "Render an explicit survival PlotSpec as accessible SVG. plotly output, interactive controls, and R widget behavior are unsupported.",
+      "identifier": "export:survplotp",
+      "kind": "export",
+      "python_entry_point": "holocron.graphics.render_svg",
+      "r_symbol": "survplotp"
+    },
+    {
+      "disposition": "mapped",
+      "guidance": "Distribution, coefficient, scale, likelihood, and prediction information is carried explicitly by ParametricSurvivalResult. R survreg object introspection is unsupported.",
+      "identifier": "export:survreg.auxinfo",
+      "kind": "export",
+      "python_entry_point": "holocron.models.ParametricSurvivalResult",
+      "r_symbol": "survreg.auxinfo"
+    },
+    {
+      "disposition": "unsupported",
+      "guidance": "Automated univariable likelihood-ratio screening is not approved because it encourages implicit selection. Fit prespecified models with fit_lrm and inspect typed likelihood results explicitly.",
+      "identifier": "export:univarLR",
+      "kind": "export",
+      "python_entry_point": null,
+      "r_symbol": "univarLR"
+    },
+    {
+      "disposition": "experimental",
+      "guidance": "Supports binary discrimination, Brier/log scores, likelihood quality indices, logistic recalibration, Spiegelhalter calibration testing, weighted equal-frequency calibration groups, and declared-threshold classification metrics. Probabilities must be strictly inside (0,1); val.prob plotting, LOWESS errors, missing-value deletion, and val.probg's named group comparison remain deferred.",
+      "identifier": "export:val.prob",
+      "kind": "export",
+      "python_entry_point": "holocron.validation.validate_probabilities",
+      "r_symbol": "val.prob"
+    },
+    {
+      "disposition": "mapped",
+      "guidance": "Use explicit grouped probability calibration from validate_probabilities. R plotting, smoothing, and formula interfaces are unsupported.",
+      "identifier": "export:val.probg",
+      "kind": "export",
+      "python_entry_point": "holocron.validation.validate_probabilities",
+      "r_symbol": "val.probg"
+    },
+    {
+      "disposition": "experimental",
+      "guidance": "Provides model-independent fixed-horizon IPCW Brier scores, cumulative/dynamic AUC and Dxy, Kaplan-Meier observed survival, mean predicted survival, marginal and prediction-grouped Kaplan-Meier calibration, declared-risk-threshold IPCW classification metrics, integrated Brier score, integrated AUC when defined at every horizon, and integrated absolute calibration error. It does not implement val.surv's hare/smoothkm calibration curves, Cox-Snell plots, censoring-time plots, model dispatch, left/interval-censored validation, or resampling validation.",
+      "identifier": "export:val.surv",
+      "kind": "export",
+      "python_entry_point": "holocron.models.validate_survival_predictions",
+      "r_symbol": "val.surv"
+    },
+    {
+      "disposition": "mapped",
+      "guidance": "Use exact resample plans and fresh OLS or binary-logistic refits, or explicit survival prediction validation. Other model families and rms method dispatch are unsupported.",
+      "identifier": "export:validate",
+      "kind": "export",
+      "python_entry_point": "holocron.validation.validate_model",
+      "r_symbol": "validate"
+    },
+    {
+      "disposition": "mapped",
+      "guidance": "Use covariance-correlation VIFs for supported OLS or binary-logistic fits. Generalized VIFs, term aggregation, and other model families are unsupported.",
+      "identifier": "export:vif",
+      "kind": "export",
+      "python_entry_point": "holocron.models.variance_inflation_factors",
+      "r_symbol": "vif"
+    },
+    {
+      "disposition": "mapped",
+      "guidance": "Use InfluenceResult observations and explicit application thresholds. Interactive R selection and hidden cutoff defaults are unsupported.",
+      "identifier": "export:which.influence",
+      "kind": "export",
+      "python_entry_point": "holocron.models.influence_diagnostics",
+      "r_symbol": "which.influence"
+    },
+    {
+      "disposition": "mapped",
+      "guidance": "Read the constant-inclusive AIC from a supported OLS or binary-logistic LikelihoodResult. Other model families, AIC variants, and arbitrary penalty factors are unsupported.",
+      "identifier": "s3_method:AIC.rms",
+      "kind": "s3_method",
+      "python_entry_point": "holocron.models.likelihood",
+      "r_symbol": "AIC.rms"
+    },
+    {
+      "disposition": "mapped",
+      "guidance": "Predict exceedance probabilities at explicit observed response levels. R function factories, interpolation, and plotting side effects are unsupported.",
+      "identifier": "s3_method:ExProb.orm",
+      "kind": "s3_method",
+      "python_entry_point": "holocron.models.OrdinalResult.predict_exceedance",
+      "r_symbol": "ExProb.orm"
+    },
+    {
+      "disposition": "unsupported",
+      "guidance": "Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md).",
+      "identifier": "s3_method:Function.cph",
+      "kind": "s3_method",
+      "python_entry_point": null,
+      "r_symbol": "Function.cph"
+    },
+    {
+      "disposition": "unsupported",
+      "guidance": "Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md).",
+      "identifier": "s3_method:Function.rms",
+      "kind": "s3_method",
+      "python_entry_point": null,
+      "r_symbol": "Function.rms"
+    },
+    {
+      "disposition": "experimental",
+      "guidance": "Returns Weibull/exponential hazards for explicit feature rows, times, strata, and offsets; rms function-factory and adjustment-grid behavior remain deferred.",
+      "identifier": "s3_method:Hazard.psm",
+      "kind": "s3_method",
+      "python_entry_point": "holocron.models.ParametricSurvivalResult.predict_hazard",
+      "r_symbol": "Hazard.psm"
+    },
+    {
+      "disposition": "unsupported",
+      "guidance": "Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md).",
+      "identifier": "s3_method:Initialize.corFloorExp",
+      "kind": "s3_method",
+      "python_entry_point": null,
+      "r_symbol": "Initialize.corFloorExp"
+    },
+    {
+      "disposition": "experimental",
+      "guidance": "Computes the pinned rms exact event-grid restricted mean for explicit feature rows, strata, offsets, and a required finite restriction time; approximate precomputation and an unrestricted lower-limit estimate are intentionally omitted.",
+      "identifier": "s3_method:Mean.cph",
+      "kind": "s3_method",
+      "python_entry_point": "holocron.models.CoxResult.predict_mean",
+      "r_symbol": "Mean.cph"
+    },
+    {
+      "disposition": "mapped",
+      "guidance": "Binary lrm response means are explicit predicted probabilities. Ordinal lrm function factories and R interpolation are unsupported.",
+      "identifier": "s3_method:Mean.lrm",
+      "kind": "s3_method",
+      "python_entry_point": "holocron.models.BinaryLogisticResult.predict_probability",
+      "r_symbol": "Mean.lrm"
+    },
+    {
+      "disposition": "mapped",
+      "guidance": "Predict numeric means over the fitted ordered response values. R function factories and custom response transformations are unsupported.",
+      "identifier": "s3_method:Mean.orm",
+      "kind": "s3_method",
+      "python_entry_point": "holocron.models.OrdinalResult.predict_mean",
+      "r_symbol": "Mean.orm"
+    },
+    {
+      "disposition": "experimental",
+      "guidance": "Computes finite analytic means for the supported Weibull and exponential families with explicit feature rows, strata, and offsets; other psm distributions remain deferred.",
+      "identifier": "s3_method:Mean.psm",
+      "kind": "s3_method",
+      "python_entry_point": "holocron.models.ParametricSurvivalResult.predict_mean",
+      "r_symbol": "Mean.psm"
+    },
+    {
+      "disposition": "unsupported",
+      "guidance": "Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md).",
+      "identifier": "s3_method:Newlabels.rms",
+      "kind": "s3_method",
+      "python_entry_point": null,
+      "r_symbol": "Newlabels.rms"
+    },
+    {
+      "disposition": "unsupported",
+      "guidance": "Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md).",
+      "identifier": "s3_method:Newlevels.rms",
+      "kind": "s3_method",
+      "python_entry_point": null,
+      "r_symbol": "Newlevels.rms"
+    },
+    {
+      "disposition": "experimental",
+      "guidance": "Accepts conventional event-time CDF probabilities, mapping them to the pinned rms survival-threshold convention; step and linear interpolation are supported and an unobserved quantile is returned as None.",
+      "identifier": "s3_method:Quantile.cph",
+      "kind": "s3_method",
+      "python_entry_point": "holocron.models.CoxResult.predict_quantile",
+      "r_symbol": "Quantile.cph"
+    },
+    {
+      "disposition": "mapped",
+      "guidance": "Predict fitted ordinal response quantiles for explicit probabilities and design rows. R function factories and interpolation options are unsupported.",
+      "identifier": "s3_method:Quantile.orm",
+      "kind": "s3_method",
+      "python_entry_point": "holocron.models.OrdinalResult.predict_quantile",
+      "r_symbol": "Quantile.orm"
+    },
+    {
+      "disposition": "experimental",
+      "guidance": "Computes analytic event-time quantiles for CDF probabilities under the supported Weibull and exponential families; other psm distributions remain deferred.",
+      "identifier": "s3_method:Quantile.psm",
+      "kind": "s3_method",
+      "python_entry_point": "holocron.models.ParametricSurvivalResult.predict_quantile",
+      "r_symbol": "Quantile.psm"
+    },
+    {
+      "disposition": "experimental",
+      "guidance": "Predicts survival from the owned per-stratum baseline for explicit feature rows, times, strata, and offsets; rms function-factory and adjustment-grid behavior remain deferred.",
+      "identifier": "s3_method:Survival.cph",
+      "kind": "s3_method",
+      "python_entry_point": "holocron.models.CoxResult.predict_survival",
+      "r_symbol": "Survival.cph"
+    },
+    {
+      "disposition": "mapped",
+      "guidance": "Use explicit ordinal exceedance probabilities as the supported discrete-survival analogue. R survival function factories and time interpolation are unsupported.",
+      "identifier": "s3_method:Survival.orm",
+      "kind": "s3_method",
+      "python_entry_point": "holocron.models.OrdinalResult.predict_exceedance",
+      "r_symbol": "Survival.orm"
+    },
+    {
+      "disposition": "experimental",
+      "guidance": "Predicts survival for explicit feature rows, times, strata, and offsets; rms function-factory and adjustment-grid behavior remain deferred.",
+      "identifier": "s3_method:Survival.psm",
+      "kind": "s3_method",
+      "python_entry_point": "holocron.models.ParametricSurvivalResult.predict_survival",
+      "r_symbol": "Survival.psm"
+    },
+    {
+      "disposition": "unsupported",
+      "guidance": "Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md).",
+      "identifier": "s3_method:[.Ocens",
+      "kind": "s3_method",
+      "python_entry_point": null,
+      "r_symbol": "[.Ocens"
+    },
+    {
+      "disposition": "unsupported",
+      "guidance": "Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md).",
+      "identifier": "s3_method:[.rms",
+      "kind": "s3_method",
+      "python_entry_point": null,
+      "r_symbol": "[.rms"
+    },
+    {
+      "disposition": "experimental",
+      "guidance": "Supports formula-term or explicitly grouped joint Wald F/chi-square tests; rms nonlinear/main-effect decomposition, interaction pooling, LR tests, and presentation methods remain deferred.",
+      "identifier": "s3_method:anova.rms",
+      "kind": "s3_method",
+      "python_entry_point": "holocron.models.anova",
+      "r_symbol": "anova.rms"
+    },
+    {
+      "disposition": "unsupported",
+      "guidance": "Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md).",
+      "identifier": "s3_method:as.data.frame.Ocens",
+      "kind": "s3_method",
+      "python_entry_point": null,
+      "r_symbol": "as.data.frame.Ocens"
+    },
+    {
+      "disposition": "unsupported",
+      "guidance": "Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md).",
+      "identifier": "s3_method:as.data.frame.rms",
+      "kind": "s3_method",
+      "python_entry_point": null,
+      "r_symbol": "as.data.frame.rms"
+    },
+    {
+      "disposition": "unsupported",
+      "guidance": "Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md).",
+      "identifier": "s3_method:calibrate.cph",
+      "kind": "s3_method",
+      "python_entry_point": null,
+      "r_symbol": "calibrate.cph"
+    },
+    {
+      "disposition": "mapped",
+      "guidance": "Use explicit exact resampling for OLS or binary-logistic parametric calibration. Generic R dispatch and nonparametric smooth calibration are unsupported.",
+      "identifier": "s3_method:calibrate.default",
+      "kind": "s3_method",
+      "python_entry_point": "holocron.validation.calibrate_model",
+      "r_symbol": "calibrate.default"
+    },
+    {
+      "disposition": "unsupported",
+      "guidance": "Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md).",
+      "identifier": "s3_method:calibrate.orm",
+      "kind": "s3_method",
+      "python_entry_point": null,
+      "r_symbol": "calibrate.orm"
+    },
+    {
+      "disposition": "unsupported",
+      "guidance": "Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md).",
+      "identifier": "s3_method:calibrate.psm",
+      "kind": "s3_method",
+      "python_entry_point": null,
+      "r_symbol": "calibrate.psm"
+    },
+    {
+      "disposition": "unsupported",
+      "guidance": "Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md).",
+      "identifier": "s3_method:coef.corFloorExp",
+      "kind": "s3_method",
+      "python_entry_point": null,
+      "r_symbol": "coef.corFloorExp"
+    },
+    {
+      "disposition": "unsupported",
+      "guidance": "Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md).",
+      "identifier": "s3_method:coef<-.corFloorExp",
+      "kind": "s3_method",
+      "python_entry_point": null,
+      "r_symbol": "coef<-.corFloorExp"
+    },
+    {
+      "disposition": "experimental",
+      "guidance": "Python accepts explicit coefficient weights rather than rms data-setting lists; multirow, joint, simultaneous, profile, and Bayesian contrasts remain deferred.",
+      "identifier": "s3_method:contrast.rms",
+      "kind": "s3_method",
+      "python_entry_point": "holocron.models.contrast",
+      "r_symbol": "contrast.rms"
+    },
+    {
+      "disposition": "unsupported",
+      "guidance": "Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md).",
+      "identifier": "s3_method:corMatrix.corFloorExp",
+      "kind": "s3_method",
+      "python_entry_point": null,
+      "r_symbol": "corMatrix.corFloorExp"
+    },
+    {
+      "disposition": "mapped",
+      "guidance": "Adapt a typed PredictionResult to backend-neutral effect geometry and render separately. ggplot2 objects, faceting grammar, and themes are unsupported.",
+      "identifier": "s3_method:ggplot.Predict",
+      "kind": "s3_method",
+      "python_entry_point": "holocron.graphics.effect_plot_spec",
+      "r_symbol": "ggplot.Predict"
+    },
+    {
+      "disposition": "mapped",
+      "guidance": "Adapt an explicit nonparametric SurvivalCurveResult to a PlotSpec. ggplot2 objects, risk tables, confidence bands, and themes are unsupported.",
+      "identifier": "s3_method:ggplot.npsurv",
+      "kind": "s3_method",
+      "python_entry_point": "holocron.graphics.survival_plot_spec",
+      "r_symbol": "ggplot.npsurv"
+    },
+    {
+      "disposition": "unsupported",
+      "guidance": "Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md).",
+      "identifier": "s3_method:html.anova.rms",
+      "kind": "s3_method",
+      "python_entry_point": null,
+      "r_symbol": "html.anova.rms"
+    },
+    {
+      "disposition": "unsupported",
+      "guidance": "Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md).",
+      "identifier": "s3_method:html.naprint.delete",
+      "kind": "s3_method",
+      "python_entry_point": null,
+      "r_symbol": "html.naprint.delete"
+    },
+    {
+      "disposition": "unsupported",
+      "guidance": "Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md).",
+      "identifier": "s3_method:html.summary.rms",
+      "kind": "s3_method",
+      "python_entry_point": null,
+      "r_symbol": "html.summary.rms"
+    },
+    {
+      "disposition": "unsupported",
+      "guidance": "Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md).",
+      "identifier": "s3_method:html.validate",
+      "kind": "s3_method",
+      "python_entry_point": null,
+      "r_symbol": "html.validate"
+    },
+    {
+      "disposition": "unsupported",
+      "guidance": "Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md).",
+      "identifier": "s3_method:is.na.Ocens",
+      "kind": "s3_method",
+      "python_entry_point": null,
+      "r_symbol": "is.na.Ocens"
+    },
+    {
+      "disposition": "mapped",
+      "guidance": "Render an owned model-summary TableSpec as escaped deterministic LaTeX. rms layout, options, and output parity are unsupported.",
+      "identifier": "s3_method:latex.Glm",
+      "kind": "s3_method",
+      "python_entry_point": "holocron.reporting.render_latex",
+      "r_symbol": "latex.Glm"
+    },
+    {
+      "disposition": "unsupported",
+      "guidance": "Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md).",
+      "identifier": "s3_method:latex.Gls",
+      "kind": "s3_method",
+      "python_entry_point": null,
+      "r_symbol": "latex.Gls"
+    },
+    {
+      "disposition": "unsupported",
+      "guidance": "Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md).",
+      "identifier": "s3_method:latex.Rq",
+      "kind": "s3_method",
+      "python_entry_point": null,
+      "r_symbol": "latex.Rq"
+    },
+    {
+      "disposition": "mapped",
+      "guidance": "Render an owned ANOVA TableSpec as escaped deterministic LaTeX. rms layout, options, and output parity are unsupported.",
+      "identifier": "s3_method:latex.anova.rms",
+      "kind": "s3_method",
+      "python_entry_point": "holocron.reporting.render_latex",
+      "r_symbol": "latex.anova.rms"
+    },
+    {
+      "disposition": "unsupported",
+      "guidance": "Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md).",
+      "identifier": "s3_method:latex.bj",
+      "kind": "s3_method",
+      "python_entry_point": null,
+      "r_symbol": "latex.bj"
+    },
+    {
+      "disposition": "unsupported",
+      "guidance": "Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md).",
+      "identifier": "s3_method:latex.cph",
+      "kind": "s3_method",
+      "python_entry_point": null,
+      "r_symbol": "latex.cph"
+    },
+    {
+      "disposition": "mapped",
+      "guidance": "Render an owned binary-lrm summary TableSpec as escaped deterministic LaTeX. rms layout, options, and output parity are unsupported.",
+      "identifier": "s3_method:latex.lrm",
+      "kind": "s3_method",
+      "python_entry_point": "holocron.reporting.render_latex",
+      "r_symbol": "latex.lrm"
+    },
+    {
+      "disposition": "unsupported",
+      "guidance": "Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md).",
+      "identifier": "s3_method:latex.naprint.delete",
+      "kind": "s3_method",
+      "python_entry_point": null,
+      "r_symbol": "latex.naprint.delete"
+    },
+    {
+      "disposition": "mapped",
+      "guidance": "Render an owned OLS summary TableSpec as escaped deterministic LaTeX. rms layout, options, and output parity are unsupported.",
+      "identifier": "s3_method:latex.ols",
+      "kind": "s3_method",
+      "python_entry_point": "holocron.reporting.render_latex",
+      "r_symbol": "latex.ols"
+    },
+    {
+      "disposition": "unsupported",
+      "guidance": "Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md).",
+      "identifier": "s3_method:latex.orm",
+      "kind": "s3_method",
+      "python_entry_point": null,
+      "r_symbol": "latex.orm"
+    },
+    {
+      "disposition": "unsupported",
+      "guidance": "Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md).",
+      "identifier": "s3_method:latex.pphsm",
+      "kind": "s3_method",
+      "python_entry_point": null,
+      "r_symbol": "latex.pphsm"
+    },
+    {
+      "disposition": "unsupported",
+      "guidance": "Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md).",
+      "identifier": "s3_method:latex.psm",
+      "kind": "s3_method",
+      "python_entry_point": null,
+      "r_symbol": "latex.psm"
+    },
+    {
+      "disposition": "mapped",
+      "guidance": "Render an owned contrast or inference TableSpec as escaped deterministic LaTeX. rms layout, options, and output parity are unsupported.",
+      "identifier": "s3_method:latex.summary.rms",
+      "kind": "s3_method",
+      "python_entry_point": "holocron.reporting.render_latex",
+      "r_symbol": "latex.summary.rms"
+    },
+    {
+      "disposition": "mapped",
+      "guidance": "Render an owned validation TableSpec as escaped deterministic LaTeX. rms layout, options, and output parity are unsupported.",
+      "identifier": "s3_method:latex.validate",
+      "kind": "s3_method",
+      "python_entry_point": "holocron.reporting.render_latex",
+      "r_symbol": "latex.validate"
+    },
+    {
+      "disposition": "unsupported",
+      "guidance": "Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md).",
+      "identifier": "s3_method:lines.residuals.psm.censored.normalized",
+      "kind": "s3_method",
+      "python_entry_point": null,
+      "r_symbol": "lines.residuals.psm.censored.normalized"
+    },
+    {
+      "disposition": "mapped",
+      "guidance": "Read the stored ML or REML log likelihood from the typed GLS result. R logLik attributes, refitting, and arbitrary nlme structures are unsupported.",
+      "identifier": "s3_method:logLik.Gls",
+      "kind": "s3_method",
+      "python_entry_point": "holocron.models.GeneralizedLeastSquaresResult.log_likelihood",
+      "r_symbol": "logLik.Gls"
+    },
+    {
+      "disposition": "experimental",
+      "guidance": "Returns a typed likelihood record including null likelihood, AIC, and LR test; arbitrary alternative-model comparisons remain deferred.",
+      "identifier": "s3_method:logLik.ols",
+      "kind": "s3_method",
+      "python_entry_point": "holocron.models.likelihood",
+      "r_symbol": "logLik.ols"
+    },
+    {
+      "disposition": "experimental",
+      "guidance": "Supported only for the current Gaussian and binary-logit result types; other rms model families and arbitrary nested-model comparisons remain deferred.",
+      "identifier": "s3_method:logLik.rms",
+      "kind": "s3_method",
+      "python_entry_point": "holocron.models.likelihood",
+      "r_symbol": "logLik.rms"
+    },
+    {
+      "disposition": "unsupported",
+      "guidance": "Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md).",
+      "identifier": "s3_method:makepredictcall.rms",
+      "kind": "s3_method",
+      "python_entry_point": null,
+      "r_symbol": "makepredictcall.rms"
+    },
+    {
+      "disposition": "mapped",
+      "guidance": "Read n_observations from each supported typed result. Generic S3 dispatch and reconstruction from model frames are unsupported.",
+      "identifier": "s3_method:nobs.rms",
+      "kind": "s3_method",
+      "python_entry_point": "holocron.models.OlsResult.n_observations",
+      "r_symbol": "nobs.rms"
+    },
+    {
+      "disposition": "unsupported",
+      "guidance": "Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md).",
+      "identifier": "s3_method:oos.loglik.Glm",
+      "kind": "s3_method",
+      "python_entry_point": null,
+      "r_symbol": "oos.loglik.Glm"
+    },
+    {
+      "disposition": "unsupported",
+      "guidance": "Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md).",
+      "identifier": "s3_method:oos.loglik.cph",
+      "kind": "s3_method",
+      "python_entry_point": null,
+      "r_symbol": "oos.loglik.cph"
+    },
+    {
+      "disposition": "unsupported",
+      "guidance": "Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md).",
+      "identifier": "s3_method:oos.loglik.lrm",
+      "kind": "s3_method",
+      "python_entry_point": null,
+      "r_symbol": "oos.loglik.lrm"
+    },
+    {
+      "disposition": "unsupported",
+      "guidance": "Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md).",
+      "identifier": "s3_method:oos.loglik.ols",
+      "kind": "s3_method",
+      "python_entry_point": null,
+      "r_symbol": "oos.loglik.ols"
+    },
+    {
+      "disposition": "unsupported",
+      "guidance": "Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md).",
+      "identifier": "s3_method:oos.loglik.psm",
+      "kind": "s3_method",
+      "python_entry_point": null,
+      "r_symbol": "oos.loglik.psm"
+    },
+    {
+      "disposition": "unsupported",
+      "guidance": "Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md).",
+      "identifier": "s3_method:plot.ExProb",
+      "kind": "s3_method",
+      "python_entry_point": null,
+      "r_symbol": "plot.ExProb"
+    },
+    {
+      "disposition": "mapped",
+      "guidance": "Adapt one typed PredictionResult and explicit predictor coordinates to a PlotSpec. R adjustment grids, panels, and graphics state are unsupported.",
+      "identifier": "s3_method:plot.Predict",
+      "kind": "s3_method",
+      "python_entry_point": "holocron.graphics.effect_plot_spec",
+      "r_symbol": "plot.Predict"
+    },
+    {
+      "disposition": "mapped",
+      "guidance": "Adapt supported typed Wald ANOVA tests to backend-neutral geometry. R nonlinear decomposition and plotting options are unsupported.",
+      "identifier": "s3_method:plot.anova.rms",
+      "kind": "s3_method",
+      "python_entry_point": "holocron.graphics.anova_plot_spec",
+      "r_symbol": "plot.anova.rms"
+    },
+    {
+      "disposition": "mapped",
+      "guidance": "Adapt a supported corrected calibration result to a PlotSpec. R smoothing, risk distributions, and graphics options are unsupported.",
+      "identifier": "s3_method:plot.calibrate",
+      "kind": "s3_method",
+      "python_entry_point": "holocron.graphics.calibration_plot_spec",
+      "r_symbol": "plot.calibrate"
+    },
+    {
+      "disposition": "mapped",
+      "guidance": "Adapt a supported corrected calibration result to a PlotSpec. Generic R object dispatch and graphics options are unsupported.",
+      "identifier": "s3_method:plot.calibrate.default",
+      "kind": "s3_method",
+      "python_entry_point": "holocron.graphics.calibration_plot_spec",
+      "r_symbol": "plot.calibrate.default"
+    },
+    {
+      "disposition": "mapped",
+      "guidance": "Adapt typed inference estimates to backend-neutral contrast geometry. R contrast objects, simultaneous bands, and graphics options are unsupported.",
+      "identifier": "s3_method:plot.contrast.rms",
+      "kind": "s3_method",
+      "python_entry_point": "holocron.graphics.contrast_plot_spec",
+      "r_symbol": "plot.contrast.rms"
+    },
+    {
+      "disposition": "unsupported",
+      "guidance": "Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md).",
+      "identifier": "s3_method:plot.gIndex",
+      "kind": "s3_method",
+      "python_entry_point": null,
+      "r_symbol": "plot.gIndex"
+    },
+    {
+      "disposition": "unsupported",
+      "guidance": "Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md).",
+      "identifier": "s3_method:plot.lrm.partial",
+      "kind": "s3_method",
+      "python_entry_point": null,
+      "r_symbol": "plot.lrm.partial"
+    },
+    {
+      "disposition": "mapped",
+      "guidance": "Render owned NomogramGeometry as deterministic accessible SVG. R geometry, styling, device behavior, and visual parity are unsupported.",
+      "identifier": "s3_method:plot.nomogram",
+      "kind": "s3_method",
+      "python_entry_point": "holocron.graphics.render_nomogram_svg",
+      "r_symbol": "plot.nomogram"
+    },
+    {
+      "disposition": "mapped",
+      "guidance": "Adapt a bounded PenaltyTraceResult to a PlotSpec. Multi-parameter surfaces and R graphics options are unsupported.",
+      "identifier": "s3_method:plot.pentrace",
+      "kind": "s3_method",
+      "python_entry_point": "holocron.graphics.diagnostic_plot_spec",
+      "r_symbol": "plot.pentrace"
+    },
+    {
+      "disposition": "unsupported",
+      "guidance": "Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md).",
+      "identifier": "s3_method:plot.rexVar",
+      "kind": "s3_method",
+      "python_entry_point": null,
+      "r_symbol": "plot.rexVar"
+    },
+    {
+      "disposition": "unsupported",
+      "guidance": "Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md).",
+      "identifier": "s3_method:plot.sensuc",
+      "kind": "s3_method",
+      "python_entry_point": null,
+      "r_symbol": "plot.sensuc"
+    },
+    {
+      "disposition": "mapped",
+      "guidance": "Adapt explicit typed estimates to contrast geometry. Automatic summary construction, adjustment grids, and R graphics options are unsupported.",
+      "identifier": "s3_method:plot.summary.rms",
+      "kind": "s3_method",
+      "python_entry_point": "holocron.graphics.contrast_plot_spec",
+      "r_symbol": "plot.summary.rms"
+    },
+    {
+      "disposition": "mapped",
+      "guidance": "Adapt a typed ProbabilityValidationResult to supported validation geometry. R smoothing, distributions, and graphics options are unsupported.",
+      "identifier": "s3_method:plot.val.prob",
+      "kind": "s3_method",
+      "python_entry_point": "holocron.graphics.validation_plot_spec",
+      "r_symbol": "plot.val.prob"
+    },
+    {
+      "disposition": "mapped",
+      "guidance": "Adapt typed fixed-horizon survival validation to supported geometry. R smoothing and graphics options are unsupported.",
+      "identifier": "s3_method:plot.val.surv",
+      "kind": "s3_method",
+      "python_entry_point": "holocron.graphics.validation_plot_spec",
+      "r_symbol": "plot.val.surv"
+    },
+    {
+      "disposition": "mapped",
+      "guidance": "Adapt typed multi-horizon survival validation to supported geometry. R smoothing and graphics options are unsupported.",
+      "identifier": "s3_method:plot.val.survh",
+      "kind": "s3_method",
+      "python_entry_point": "holocron.graphics.validation_plot_spec",
+      "r_symbol": "plot.val.survh"
+    },
+    {
+      "disposition": "unsupported",
+      "guidance": "Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md).",
+      "identifier": "s3_method:plot.validate.rpart",
+      "kind": "s3_method",
+      "python_entry_point": null,
+      "r_symbol": "plot.validate.rpart"
+    },
+    {
+      "disposition": "unsupported",
+      "guidance": "Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md).",
+      "identifier": "s3_method:plot.xmean.ordinaly",
+      "kind": "s3_method",
+      "python_entry_point": null,
+      "r_symbol": "plot.xmean.ordinaly"
+    },
+    {
+      "disposition": "mapped",
+      "guidance": "Render an explicit effect PlotSpec as accessible SVG. plotly widgets, interactivity, and R object dispatch are unsupported.",
+      "identifier": "s3_method:plotp.Predict",
+      "kind": "s3_method",
+      "python_entry_point": "holocron.graphics.render_svg",
+      "r_symbol": "plotp.Predict"
+    },
+    {
+      "disposition": "experimental",
+      "guidance": "Supports explicit design rows on linear or response scale with mean confidence limits; terms, adjustment-frame, simultaneous, and generated-grid modes remain deferred.",
+      "identifier": "s3_method:predict.Glm",
+      "kind": "s3_method",
+      "python_entry_point": "holocron.models.predict",
+      "r_symbol": "predict.Glm"
+    },
+    {
+      "disposition": "mapped",
+      "guidance": "Predict conditional means for explicit feature rows. R terms, intervals, data-frame reconstruction, and correlation-aware prediction are unsupported.",
+      "identifier": "s3_method:predict.Gls",
+      "kind": "s3_method",
+      "python_entry_point": "holocron.models.GeneralizedLeastSquaresResult.predict",
+      "r_symbol": "predict.Gls"
+    },
+    {
+      "disposition": "mapped",
+      "guidance": "Predict the fitted conditional quantile for explicit feature rows. Multiple quantiles, intervals, and R model-frame reconstruction are unsupported.",
+      "identifier": "s3_method:predict.Rq",
+      "kind": "s3_method",
+      "python_entry_point": "holocron.models.QuantileRegressionResult.predict",
+      "r_symbol": "predict.Rq"
+    },
+    {
+      "disposition": "mapped",
+      "guidance": "Predict transformed or response-scale time for explicit feature rows. Survival curves, intervals, and R model-frame reconstruction are unsupported.",
+      "identifier": "s3_method:predict.bj",
+      "kind": "s3_method",
+      "python_entry_point": "holocron.models.BuckleyJamesResult.predict",
+      "r_symbol": "predict.bj"
+    },
+    {
+      "disposition": "mapped",
+      "guidance": "Use explicit Cox linear, cumulative-hazard, survival, curve, quantile, or restricted-mean methods. R terms, intervals, and automatic adjustment frames are unsupported.",
+      "identifier": "s3_method:predict.cph",
+      "kind": "s3_method",
+      "python_entry_point": "holocron.models.CoxResult",
+      "r_symbol": "predict.cph"
+    },
+    {
+      "disposition": "experimental",
+      "guidance": "Supports binary-logit linear predictors and probabilities with mean confidence limits; ordinal, terms, generated-grid, and simultaneous modes remain deferred.",
+      "identifier": "s3_method:predict.lrm",
+      "kind": "s3_method",
+      "python_entry_point": "holocron.models.predict",
+      "r_symbol": "predict.lrm"
+    },
+    {
+      "disposition": "experimental",
+      "guidance": "Supports explicit design rows with mean or individual t intervals; terms, adjustment-frame, simultaneous, and generated-grid modes remain deferred.",
+      "identifier": "s3_method:predict.ols",
+      "kind": "s3_method",
+      "python_entry_point": "holocron.models.predict",
+      "r_symbol": "predict.ols"
+    },
+    {
+      "disposition": "mapped",
+      "guidance": "Use explicit ordinal linear, probability, mean, quantile, or exceedance methods. R type strings, terms, and automatic adjustment frames are unsupported.",
+      "identifier": "s3_method:predict.orm",
+      "kind": "s3_method",
+      "python_entry_point": "holocron.models.OrdinalResult",
+      "r_symbol": "predict.orm"
+    },
+    {
+      "disposition": "mapped",
+      "guidance": "Use explicit parametric linear, hazard, survival, curve, quantile, or mean methods. R terms, intervals, and automatic adjustment frames are unsupported.",
+      "identifier": "s3_method:predict.psm",
+      "kind": "s3_method",
+      "python_entry_point": "holocron.models.ParametricSurvivalResult",
+      "r_symbol": "predict.psm"
+    },
+    {
+      "disposition": "mapped",
+      "guidance": "Build a typed model-summary TableSpec for supported Gaussian or binomial GLM results and choose a renderer explicitly. R console layout and global options are unsupported.",
+      "identifier": "s3_method:print.Glm",
+      "kind": "s3_method",
+      "python_entry_point": "holocron.reporting.model_summary_table",
+      "r_symbol": "print.Glm"
+    },
+    {
+      "disposition": "unsupported",
+      "guidance": "Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md).",
+      "identifier": "s3_method:print.Gls",
+      "kind": "s3_method",
+      "python_entry_point": null,
+      "r_symbol": "print.Gls"
+    },
+    {
+      "disposition": "unsupported",
+      "guidance": "Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md).",
+      "identifier": "s3_method:print.Ocens",
+      "kind": "s3_method",
+      "python_entry_point": null,
+      "r_symbol": "print.Ocens"
+    },
+    {
+      "disposition": "unsupported",
+      "guidance": "Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md).",
+      "identifier": "s3_method:print.Predict",
+      "kind": "s3_method",
+      "python_entry_point": null,
+      "r_symbol": "print.Predict"
+    },
+    {
+      "disposition": "unsupported",
+      "guidance": "Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md).",
+      "identifier": "s3_method:print.Rq",
+      "kind": "s3_method",
+      "python_entry_point": null,
+      "r_symbol": "print.Rq"
+    },
+    {
+      "disposition": "mapped",
+      "guidance": "Build a typed ANOVA TableSpec and choose a renderer explicitly. R console layout, nonlinear decomposition, and print options are unsupported.",
+      "identifier": "s3_method:print.anova.rms",
+      "kind": "s3_method",
+      "python_entry_point": "holocron.reporting.anova_table",
+      "r_symbol": "print.anova.rms"
+    },
+    {
+      "disposition": "unsupported",
+      "guidance": "Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md).",
+      "identifier": "s3_method:print.bj",
+      "kind": "s3_method",
+      "python_entry_point": null,
+      "r_symbol": "print.bj"
+    },
+    {
+      "disposition": "unsupported",
+      "guidance": "Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md).",
+      "identifier": "s3_method:print.calibrate",
+      "kind": "s3_method",
+      "python_entry_point": null,
+      "r_symbol": "print.calibrate"
+    },
+    {
+      "disposition": "mapped",
+      "guidance": "Build a typed contrast TableSpec and choose a renderer explicitly. R console layout, redundant-adjustment text, and print options are unsupported.",
+      "identifier": "s3_method:print.contrast.rms",
+      "kind": "s3_method",
+      "python_entry_point": "holocron.reporting.contrast_table",
+      "r_symbol": "print.contrast.rms"
+    },
+    {
+      "disposition": "unsupported",
+      "guidance": "Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md).",
+      "identifier": "s3_method:print.corFloorExp",
+      "kind": "s3_method",
+      "python_entry_point": null,
+      "r_symbol": "print.corFloorExp"
+    },
+    {
+      "disposition": "unsupported",
+      "guidance": "Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md).",
+      "identifier": "s3_method:print.cph",
+      "kind": "s3_method",
+      "python_entry_point": null,
+      "r_symbol": "print.cph"
+    },
+    {
+      "disposition": "unsupported",
+      "guidance": "Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md).",
+      "identifier": "s3_method:print.datadist",
+      "kind": "s3_method",
+      "python_entry_point": null,
+      "r_symbol": "print.datadist"
+    },
+    {
+      "disposition": "unsupported",
+      "guidance": "Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md).",
+      "identifier": "s3_method:print.fastbw",
+      "kind": "s3_method",
+      "python_entry_point": null,
+      "r_symbol": "print.fastbw"
+    },
+    {
+      "disposition": "unsupported",
+      "guidance": "Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md).",
+      "identifier": "s3_method:print.gIndex",
+      "kind": "s3_method",
+      "python_entry_point": null,
+      "r_symbol": "print.gIndex"
+    },
+    {
+      "disposition": "unsupported",
+      "guidance": "Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md).",
+      "identifier": "s3_method:print.impactPO",
+      "kind": "s3_method",
+      "python_entry_point": null,
+      "r_symbol": "print.impactPO"
+    },
+    {
+      "disposition": "mapped",
+      "guidance": "Build a typed binary-lrm summary TableSpec and choose a renderer explicitly. Ordinal lrm and R console formatting are unsupported.",
+      "identifier": "s3_method:print.lrm",
+      "kind": "s3_method",
+      "python_entry_point": "holocron.reporting.model_summary_table",
+      "r_symbol": "print.lrm"
+    },
+    {
+      "disposition": "unsupported",
+      "guidance": "Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md).",
+      "identifier": "s3_method:print.lrtest",
+      "kind": "s3_method",
+      "python_entry_point": null,
+      "r_symbol": "print.lrtest"
+    },
+    {
+      "disposition": "mapped",
+      "guidance": "Render owned nomogram geometry as accessible SVG. R console summaries, device state, and geometry parity are unsupported.",
+      "identifier": "s3_method:print.nomogram",
+      "kind": "s3_method",
+      "python_entry_point": "holocron.graphics.render_nomogram_svg",
+      "r_symbol": "print.nomogram"
+    },
+    {
+      "disposition": "mapped",
+      "guidance": "Build a typed OLS summary TableSpec and choose a renderer explicitly. R console layout and print options are unsupported.",
+      "identifier": "s3_method:print.ols",
+      "kind": "s3_method",
+      "python_entry_point": "holocron.reporting.model_summary_table",
+      "r_symbol": "print.ols"
+    },
+    {
+      "disposition": "unsupported",
+      "guidance": "Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md).",
+      "identifier": "s3_method:print.orm",
+      "kind": "s3_method",
+      "python_entry_point": null,
+      "r_symbol": "print.orm"
+    },
+    {
+      "disposition": "mapped",
+      "guidance": "Build a typed diagnostic TableSpec from a bounded penalty trace. R console formatting and multidimensional penalty summaries are unsupported.",
+      "identifier": "s3_method:print.pentrace",
+      "kind": "s3_method",
+      "python_entry_point": "holocron.reporting.diagnostic_table",
+      "r_symbol": "print.pentrace"
+    },
+    {
+      "disposition": "unsupported",
+      "guidance": "Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md).",
+      "identifier": "s3_method:print.pphsm",
+      "kind": "s3_method",
+      "python_entry_point": null,
+      "r_symbol": "print.pphsm"
+    },
+    {
+      "disposition": "unsupported",
+      "guidance": "Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md).",
+      "identifier": "s3_method:print.psm",
+      "kind": "s3_method",
+      "python_entry_point": null,
+      "r_symbol": "print.psm"
+    },
+    {
+      "disposition": "unsupported",
+      "guidance": "Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md).",
+      "identifier": "s3_method:print.rexVar",
+      "kind": "s3_method",
+      "python_entry_point": null,
+      "r_symbol": "print.rexVar"
+    },
+    {
+      "disposition": "unsupported",
+      "guidance": "Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md).",
+      "identifier": "s3_method:print.specs.rms",
+      "kind": "s3_method",
+      "python_entry_point": null,
+      "r_symbol": "print.specs.rms"
+    },
+    {
+      "disposition": "mapped",
+      "guidance": "Build a typed inference or contrast TableSpec and choose a renderer explicitly. Automatic effects, adjustment grids, and R console layout are unsupported.",
+      "identifier": "s3_method:print.summary.rms",
+      "kind": "s3_method",
+      "python_entry_point": "holocron.reporting.contrast_table",
+      "r_symbol": "print.summary.rms"
+    },
+    {
+      "disposition": "unsupported",
+      "guidance": "Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md).",
+      "identifier": "s3_method:print.summary.survreg2",
+      "kind": "s3_method",
+      "python_entry_point": null,
+      "r_symbol": "print.summary.survreg2"
+    },
+    {
+      "disposition": "unsupported",
+      "guidance": "Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md).",
+      "identifier": "s3_method:print.survest.psm",
+      "kind": "s3_method",
+      "python_entry_point": null,
+      "r_symbol": "print.survest.psm"
+    },
+    {
+      "disposition": "mapped",
+      "guidance": "Build a typed probability-validation TableSpec and choose a renderer explicitly. R console layout and print options are unsupported.",
+      "identifier": "s3_method:print.val.prob",
+      "kind": "s3_method",
+      "python_entry_point": "holocron.reporting.validation_table",
+      "r_symbol": "print.val.prob"
+    },
+    {
+      "disposition": "mapped",
+      "guidance": "Build a typed survival-validation TableSpec and choose a renderer explicitly. R console layout and print options are unsupported.",
+      "identifier": "s3_method:print.val.survh",
+      "kind": "s3_method",
+      "python_entry_point": "holocron.reporting.validation_table",
+      "r_symbol": "print.val.survh"
+    },
+    {
+      "disposition": "mapped",
+      "guidance": "Build a typed optimism-corrected validation TableSpec and choose a renderer explicitly. R console layout and broad validate-object dispatch are unsupported.",
+      "identifier": "s3_method:print.validate",
+      "kind": "s3_method",
+      "python_entry_point": "holocron.reporting.validation_table",
+      "r_symbol": "print.validate"
+    },
+    {
+      "disposition": "unsupported",
+      "guidance": "Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md).",
+      "identifier": "s3_method:print.validate.rpart",
+      "kind": "s3_method",
+      "python_entry_point": null,
+      "r_symbol": "print.validate.rpart"
+    },
+    {
+      "disposition": "mapped",
+      "guidance": "Use explicit homogeneous Holocron result collections; no fit.mult.impute class, R S3 dispatch, stacked-data construction, or implicit refitting is reproduced.",
+      "identifier": "s3_method:processMI.fit.mult.impute",
+      "kind": "s3_method",
+      "python_entry_point": "holocron.validation.process_multiple_imputation",
+      "r_symbol": "processMI.fit.mult.impute"
+    },
+    {
+      "disposition": "unsupported",
+      "guidance": "Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md).",
+      "identifier": "s3_method:rbind.Predict",
+      "kind": "s3_method",
+      "python_entry_point": null,
+      "r_symbol": "rbind.Predict"
+    },
+    {
+      "disposition": "experimental",
+      "guidance": "Supports ordinary, Pearson, and deviance residuals for binomial Glm; score, working, partial, influence, and other-family residuals remain deferred.",
+      "identifier": "s3_method:residuals.Glm",
+      "kind": "s3_method",
+      "python_entry_point": "holocron.models.residuals",
+      "r_symbol": "residuals.Glm"
+    },
+    {
+      "disposition": "mapped",
+      "guidance": "Read stored transformed-scale training residuals from the typed fit. R residual types, censoring plots, and influence diagnostics are unsupported.",
+      "identifier": "s3_method:residuals.bj",
+      "kind": "s3_method",
+      "python_entry_point": "holocron.models.BuckleyJamesResult.residuals",
+      "r_symbol": "residuals.bj"
+    },
+    {
+      "disposition": "experimental",
+      "guidance": "Supports martingale and deviance residuals for the explicit fitted response, entry times, and strata; score, Schoenfeld, influence, partial, and robust variants remain deferred.",
+      "identifier": "s3_method:residuals.cph",
+      "kind": "s3_method",
+      "python_entry_point": "holocron.models.survival_residuals",
+      "r_symbol": "residuals.cph"
+    },
+    {
+      "disposition": "experimental",
+      "guidance": "Supports ordinary, Pearson, and deviance residuals for binary lrm with an explicitly supplied response; score, partial, influence, GOF, and ordinal residuals remain deferred.",
+      "identifier": "s3_method:residuals.lrm",
+      "kind": "s3_method",
+      "python_entry_point": "holocron.models.residuals",
+      "r_symbol": "residuals.lrm"
+    },
+    {
+      "disposition": "experimental",
+      "guidance": "Supports ordinary and residual-scale-standardized values; leverage-adjusted studentized, score, influence, DFBETA, DFFIT, and hat diagnostics remain deferred.",
+      "identifier": "s3_method:residuals.ols",
+      "kind": "s3_method",
+      "python_entry_point": "holocron.models.residuals",
+      "r_symbol": "residuals.ols"
+    },
+    {
+      "disposition": "unsupported",
+      "guidance": "Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md).",
+      "identifier": "s3_method:residuals.orm",
+      "kind": "s3_method",
+      "python_entry_point": null,
+      "r_symbol": "residuals.orm"
+    },
+    {
+      "disposition": "experimental",
+      "guidance": "Supports response, normalized, martingale, and deviance residuals for the explicit fitted response and strata; censored-normalized plotting and influence variants remain deferred.",
+      "identifier": "s3_method:residuals.psm",
+      "kind": "s3_method",
+      "python_entry_point": "holocron.models.survival_residuals",
+      "r_symbol": "residuals.psm"
+    },
+    {
+      "disposition": "mapped",
+      "guidance": "Inspect the immutable DesignSpec and generated-column metadata directly. R console formatting and inferred Design attributes are unsupported.",
+      "identifier": "s3_method:specs.rms",
+      "kind": "s3_method",
+      "python_entry_point": "holocron.design.DesignSpec",
+      "r_symbol": "specs.rms"
+    },
+    {
+      "disposition": "mapped",
+      "guidance": "Use typed coefficient and likelihood summaries for supported OLS or binary-logistic fits, and explicit contrast for chosen effects. Automatic adjustment grids and broad rms dispatch are unsupported.",
+      "identifier": "s3_method:summary.rms",
+      "kind": "s3_method",
+      "python_entry_point": "holocron.models.summarize",
+      "r_symbol": "summary.rms"
+    },
+    {
+      "disposition": "experimental",
+      "guidance": "Returns typed survival curves for explicit feature rows and a requested or fitted event-time grid; confidence intervals, individual time-dependent paths, and standard errors remain deferred.",
+      "identifier": "s3_method:survest.cph",
+      "kind": "s3_method",
+      "python_entry_point": "holocron.models.CoxResult.predict_curve",
+      "r_symbol": "survest.cph"
+    },
+    {
+      "disposition": "mapped",
+      "guidance": "Use explicit ordinal exceedance probabilities as the supported discrete-survival result. Time interpolation, confidence intervals, and R function dispatch are unsupported.",
+      "identifier": "s3_method:survest.orm",
+      "kind": "s3_method",
+      "python_entry_point": "holocron.models.OrdinalResult.predict_exceedance",
+      "r_symbol": "survest.orm"
+    },
+    {
+      "disposition": "experimental",
+      "guidance": "Returns typed survival curves on an explicit positive time grid; confidence intervals, transformations, and parallel-time mode remain deferred.",
+      "identifier": "s3_method:survest.psm",
+      "kind": "s3_method",
+      "python_entry_point": "holocron.models.ParametricSurvivalResult.predict_curve",
+      "r_symbol": "survest.psm"
+    },
+    {
+      "disposition": "experimental",
+      "guidance": "Covers fixed-covariate survival curves from the owned baseline; standard errors, confidence bands, individual time-dependent paths, and survfit object compatibility remain deferred.",
+      "identifier": "s3_method:survfit.cph",
+      "kind": "s3_method",
+      "python_entry_point": "holocron.models.CoxResult.predict_curve",
+      "r_symbol": "survfit.cph"
+    },
+    {
+      "disposition": "mapped",
+      "guidance": "Adapt explicit nonparametric survival curves to a PlotSpec. Confidence bands, risk tables, and R graphics options are unsupported.",
+      "identifier": "s3_method:survplot.npsurv",
+      "kind": "s3_method",
+      "python_entry_point": "holocron.graphics.survival_plot_spec",
+      "r_symbol": "survplot.npsurv"
+    },
+    {
+      "disposition": "unsupported",
+      "guidance": "Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md).",
+      "identifier": "s3_method:survplot.orm",
+      "kind": "s3_method",
+      "python_entry_point": null,
+      "r_symbol": "survplot.orm"
+    },
+    {
+      "disposition": "unsupported",
+      "guidance": "Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md).",
+      "identifier": "s3_method:survplot.residuals.psm.censored.normalized",
+      "kind": "s3_method",
+      "python_entry_point": null,
+      "r_symbol": "survplot.residuals.psm.censored.normalized"
+    },
+    {
+      "disposition": "mapped",
+      "guidance": "Adapt an explicit typed survival curve to backend-neutral geometry. Automatic prediction, broad rms dispatch, and R graphics options are unsupported.",
+      "identifier": "s3_method:survplot.rms",
+      "kind": "s3_method",
+      "python_entry_point": "holocron.graphics.survival_plot_spec",
+      "r_symbol": "survplot.rms"
+    },
+    {
+      "disposition": "mapped",
+      "guidance": "Render an explicit nonparametric survival PlotSpec as accessible SVG. plotly widgets and interactivity are unsupported.",
+      "identifier": "s3_method:survplotp.npsurv",
+      "kind": "s3_method",
+      "python_entry_point": "holocron.graphics.render_svg",
+      "r_symbol": "survplotp.npsurv"
+    },
+    {
+      "disposition": "unsupported",
+      "guidance": "Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md).",
+      "identifier": "s3_method:validate.Rq",
+      "kind": "s3_method",
+      "python_entry_point": null,
+      "r_symbol": "validate.Rq"
+    },
+    {
+      "disposition": "unsupported",
+      "guidance": "Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md).",
+      "identifier": "s3_method:validate.bj",
+      "kind": "s3_method",
+      "python_entry_point": null,
+      "r_symbol": "validate.bj"
+    },
+    {
+      "disposition": "mapped",
+      "guidance": "Validate explicit fixed-horizon right-censored survival predictions. Whole-model Cox refitting, Dxy-only methods, and rms resampling options are unsupported.",
+      "identifier": "s3_method:validate.cph",
+      "kind": "s3_method",
+      "python_entry_point": "holocron.validation.validate_survival_predictions",
+      "r_symbol": "validate.cph"
+    },
+    {
+      "disposition": "mapped",
+      "guidance": "Use a declared exact resample plan with fresh binary-lrm refits and separate optimism correction. Ordinal lrm and rms method aliases are unsupported.",
+      "identifier": "s3_method:validate.lrm",
+      "kind": "s3_method",
+      "python_entry_point": "holocron.validation.validate_model",
+      "r_symbol": "validate.lrm"
+    },
+    {
+      "disposition": "mapped",
+      "guidance": "Use a declared exact resample plan with fresh OLS refits and separate optimism correction. rms method aliases and hidden learned-design rebuilding are unsupported.",
+      "identifier": "s3_method:validate.ols",
+      "kind": "s3_method",
+      "python_entry_point": "holocron.validation.validate_model",
+      "r_symbol": "validate.ols"
+    },
+    {
+      "disposition": "unsupported",
+      "guidance": "Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md).",
+      "identifier": "s3_method:validate.orm",
+      "kind": "s3_method",
+      "python_entry_point": null,
+      "r_symbol": "validate.orm"
+    },
+    {
+      "disposition": "mapped",
+      "guidance": "Validate explicit fixed-horizon right-censored survival predictions. Whole-model psm refitting and rms resampling options are unsupported.",
+      "identifier": "s3_method:validate.psm",
+      "kind": "s3_method",
+      "python_entry_point": "holocron.validation.validate_survival_predictions",
+      "r_symbol": "validate.psm"
+    },
+    {
+      "disposition": "unsupported",
+      "guidance": "Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md).",
+      "identifier": "s3_method:validate.rpart",
+      "kind": "s3_method",
+      "python_entry_point": null,
+      "r_symbol": "validate.rpart"
+    },
+    {
+      "disposition": "experimental",
+      "guidance": "Returns the full named covariance matrix or a named principal submatrix for the supported Glm envelope.",
+      "identifier": "s3_method:vcov.Glm",
+      "kind": "s3_method",
+      "python_entry_point": "holocron.models.covariance",
+      "r_symbol": "vcov.Glm"
+    },
+    {
+      "disposition": "mapped",
+      "guidance": "Read the stored fixed-covariance GLS coefficient covariance. Named submatrices, robust variants, and estimated correlation structures are unsupported.",
+      "identifier": "s3_method:vcov.Gls",
+      "kind": "s3_method",
+      "python_entry_point": "holocron.models.GeneralizedLeastSquaresResult.covariance",
+      "r_symbol": "vcov.Gls"
+    },
+    {
+      "disposition": "mapped",
+      "guidance": "Read the fitted Cox coefficient covariance. Named submatrices, robust covariance, and cluster corrections are unsupported.",
+      "identifier": "s3_method:vcov.cph",
+      "kind": "s3_method",
+      "python_entry_point": "holocron.models.CoxResult.covariance",
+      "r_symbol": "vcov.cph"
+    },
+    {
+      "disposition": "experimental",
+      "guidance": "Returns the full named covariance matrix or a named principal submatrix for binary lrm; ordinal intercept selection remains deferred.",
+      "identifier": "s3_method:vcov.lrm",
+      "kind": "s3_method",
+      "python_entry_point": "holocron.models.covariance",
+      "r_symbol": "vcov.lrm"
+    },
+    {
+      "disposition": "experimental",
+      "guidance": "Returns the classical full-rank covariance matrix or a named principal submatrix; robust and bootstrap estimates use the separate explicit covariance APIs.",
+      "identifier": "s3_method:vcov.ols",
+      "kind": "s3_method",
+      "python_entry_point": "holocron.models.covariance",
+      "r_symbol": "vcov.ols"
+    },
+    {
+      "disposition": "mapped",
+      "guidance": "Read the full ordered intercept-and-slope covariance. Intercept filtering, named submatrices, and robust variants are unsupported.",
+      "identifier": "s3_method:vcov.orm",
+      "kind": "s3_method",
+      "python_entry_point": "holocron.models.OrdinalResult.covariance",
+      "r_symbol": "vcov.orm"
+    },
+    {
+      "disposition": "mapped",
+      "guidance": "Read the covariance conditional on fitted AFT scale from the typed PH conversion. Joint scale uncertainty and named submatrices are unsupported.",
+      "identifier": "s3_method:vcov.pphsm",
+      "kind": "s3_method",
+      "python_entry_point": "holocron.models.ProportionalHazardsParametricResult.conditional_covariance",
+      "r_symbol": "vcov.pphsm"
+    },
+    {
+      "disposition": "mapped",
+      "guidance": "Read the fitted parametric-survival covariance in stored parameter order. Named submatrices, robust variants, and alternate scale handling are unsupported.",
+      "identifier": "s3_method:vcov.psm",
+      "kind": "s3_method",
+      "python_entry_point": "holocron.models.ParametricSurvivalResult.covariance",
+      "r_symbol": "vcov.psm"
+    },
+    {
+      "disposition": "experimental",
+      "guidance": "Mapped only for the currently supported OLS, Gaussian Glm, binomial Glm, and binary lrm result types.",
+      "identifier": "s3_method:vcov.rms",
+      "kind": "s3_method",
+      "python_entry_point": "holocron.models.covariance",
+      "r_symbol": "vcov.rms"
+    }
+  ],
+  "reference": {
+    "commit": "a4e4a305a029090e737562fb4d35bdb705db7d63",
+    "namespace_sha256": "db1cc94792cceaca300e00e38229580349b3d93ee18493f6097d7ae91f63ef6b",
+    "package": "rms",
+    "version": "8.2-0"
+  },
+  "schema_version": "holocron-migration-catalog/v1",
+  "source_sha256": {
+    "compatibility_manifest": "547f89500f278f88fa666d2dee593c8050a78fa8f4283be4f664962342441d86",
+    "deprecation_policy": "a7736de619891846974e87eef054fe1c224cf1fa7692b05717f6d50ab23fc444"
+  }
+}

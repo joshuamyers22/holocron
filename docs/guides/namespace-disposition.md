@@ -15,6 +15,9 @@ mean that Holocron implements or reproduces it.
 
 There are no deferred or unreviewed namespace entries. The generated
 [compatibility inventory](../compatibility.md) is the symbol-level authority.
+Use the typed planner described in the
+[migration and deprecation guide](migration-and-deprecation.md) to query this
+inventory from an installed artifact and retain a digest-bound assessment.
 
 ## Common migrations
 

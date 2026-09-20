@@ -40,6 +40,7 @@ from holocron.graphics import (
     render_nomogram_svg,
     render_svg,
 )
+from holocron.migration import MigrationPlan, plan_rms_migration
 from holocron.models import (
     BinaryLogisticResult,
     BuckleyJamesResult,
@@ -465,6 +466,11 @@ assert schema_root.joinpath("parametric-survival-result.schema.json").is_file()
 assert schema_root.joinpath("parametric-survival-result-v2.schema.json").is_file()
 assert schema_root.joinpath("nonparametric-survival-result.schema.json").is_file()
 assert schema_root.joinpath("nonparametric-survival-result-v2.schema.json").is_file()
+migration_plan = plan_rms_migration(("ols", "Gls", "Newlabels"))
+assert not migration_plan.ready
+assert len(migration_plan.matches) == 3
+assert MigrationPlan.from_json(migration_plan.to_json()) == migration_plan
+assert schema_root.joinpath("migration-plan.schema.json").is_file()
 print(f"artifact smoke passed: {module_path}")
 """
 
