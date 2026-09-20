@@ -6,7 +6,7 @@
 
 **Checklist status:** complete
 
-**Release decision:** blocked — 8 passed, 8 blocked, 4 not applicable
+**Release decision:** blocked — 9 passed, 7 blocked, 4 not applicable
 
 “Checklist complete” means every required control has an evidence-backed
 disposition. It does not mean the release is ready. The machine-readable source
@@ -48,6 +48,11 @@ and a readiness claim while any blocker remains.
 - **Agent-assisted work:** repository policy requires requirement linkage,
   verification evidence, stop/rollback rules, and accountable ownership.
 
+<!-- readiness:independent-reviews -->
+- **Independent reviews:** Ron Mexico independently approved the statistical,
+  numerical, security, API, and documentation scopes for revision
+  `ae43ffeb5a08c7aac508563a3e48657c53c99eed` with no unresolved findings.
+
 ## Blocked
 
 <!-- readiness:stable-release-scope -->
@@ -57,11 +62,6 @@ and a readiness claim while any blocker remains.
 <!-- readiness:candidate-beta -->
 - **Candidate and beta program:** no approved candidates or genuine external
   feedback are recorded.
-
-<!-- readiness:independent-reviews -->
-- **Independent reviews:** execution has been reported complete, but durable
-  Phase 9 statistical, numerical, security, API, and documentation decisions
-  tied to the reviewed scope and revision are not present in the repository.
 
 <!-- readiness:version-tag-identity -->
 - **Version/tag identity:** enforcement exists, but metadata remains 0.1.0 and

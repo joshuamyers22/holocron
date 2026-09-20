@@ -48,8 +48,8 @@ class PhaseNineReleaseReadinessTests(unittest.TestCase):
         summary = check()
 
         self.assertEqual(summary.status, "blocked")
-        self.assertEqual(summary.passed, 8)
-        self.assertEqual(summary.blocked, 8)
+        self.assertEqual(summary.passed, 9)
+        self.assertEqual(summary.blocked, 7)
         self.assertEqual(summary.not_applicable, 4)
         self.assertFalse(summary.release_ready)
         self.assertEqual(
@@ -57,7 +57,6 @@ class PhaseNineReleaseReadinessTests(unittest.TestCase):
             (
                 "stable-release-scope",
                 "candidate-beta",
-                "independent-reviews",
                 "version-tag-identity",
                 "artifact-matrix",
                 "artifact-sbom-provenance",
@@ -95,7 +94,7 @@ class PhaseNineReleaseReadinessTests(unittest.TestCase):
     def test_stale_summary_is_rejected(self) -> None:
         assessment = _assessment()
         summary = require_object(assessment["summary"], name="summary")
-        summary["passed"] = 9
+        summary["passed"] = 10
 
         with self.assertRaisesRegex(ValueError, "summary passed differs"):
             evaluate_assessment(assessment)

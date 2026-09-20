@@ -8,11 +8,16 @@ triage owner for the compatibility inventory.
 
 Ron Mexico serves as the independent statistical reviewer for the Phase 3
 alpha, Phase 4 private experimental, and Phase 5 private experimental scopes
-and approved all three scoped reviews on 2026-09-18. The accountable maintainer
-closed the Phase 6, Phase 7, and Phase 8 technical exit gates on 2026-09-19.
-No independent Phase 6, Phase 7, or Phase 8 approval is claimed. Independent
-verification and legal/license reviewer roles remain unfilled; numerical review
-remains a separate promotion gate outside the approved Phase 5 scope.
+and approved all three scoped reviews on 2026-09-18. On 2026-09-20 Ron also
+independently approved the Phase 9 statistical, numerical, security, API, and
+documentation scopes for exact revision
+`ae43ffeb5a08c7aac508563a3e48657c53c99eed`, with no unresolved findings. The
+accountable maintainer closed the Phase 6, Phase 7, and Phase 8 technical exit
+gates on 2026-09-19.
+No independent Phase 6, Phase 7, or Phase 8 approval is claimed. The qualified
+legal/license reviewer role remains unfilled; Ron's Phase 9 technical approval
+does not authorize licensing, provenance, external distribution, or capability
+promotion beyond its recorded scope.
 The Phase 9 release-candidate evidence process is defined, but candidate and
 external-beta execution remains blocked by ADR-010, qualified distribution
 approval, and external cohort recruitment.
@@ -20,7 +25,7 @@ The Phase 9 clean artifact matrix is defined and enforced across four OS/Python
 cells, but its deliverable remains open until a single pushed clean revision
 produces all four retained reports and the aggregation gate accepts them.
 The Phase 9 readiness checklist is complete as an assessment but records a
-blocked release decision: every control is dispositioned, while eight controls
+blocked release decision: every control is dispositioned, while seven controls
 still prohibit a stable release.
 Until those qualified reviewers are appointed and their applicable gates pass:
 

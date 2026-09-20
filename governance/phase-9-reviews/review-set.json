@@ -1,0 +1,102 @@
+{
+  "schema_version": "holocron-phase-9-review-set/v1",
+  "review_set_id": "phase-9-technical-reviews-v1",
+  "reviewed_revision": "ae43ffeb5a08c7aac508563a3e48657c53c99eed",
+  "reviewed_on": "2026-09-20",
+  "reviewer": {
+    "reviewer_id": "ron-mexico",
+    "display_name": "Ron Mexico",
+    "independence_attested": true
+  },
+  "decision": "approved",
+  "unresolved_findings": [],
+  "reviews": [
+    {
+      "domain": "statistical",
+      "record_path": "governance/phase-9-reviews/statistical.md",
+      "decision": "approved",
+      "scope": "Statistical capability claims, estimands, inference boundaries, validation/calibration behavior, simulations, parity evidence, and stated experimental limitations at the reviewed revision.",
+      "evidence": [
+        "compatibility/rms-8.2.0.yaml",
+        "governance/PHASE_5_COMPLETION.md",
+        "governance/PHASE_6_COMPLETION.md",
+        "docs/interpretation-and-limitations.md"
+      ],
+      "exclusions": [
+        "license or provenance approval",
+        "external distribution authorization",
+        "clinical or consequential-use approval"
+      ]
+    },
+    {
+      "domain": "numerical",
+      "record_path": "governance/phase-9-reviews/numerical.md",
+      "decision": "approved",
+      "scope": "Numerical algorithms, tolerance policies, platform envelope, rank and convergence handling, edge cases, simulations, and retained performance-regression evidence at the reviewed revision.",
+      "evidence": [
+        "docs/adr/ADR-007-numerical-backends.md",
+        "docs/adr/ADR-009-supported-numerical-envelope.md",
+        "governance/PHASE_3_SIMULATION_EDGES.md",
+        "governance/PHASE_8_PERFORMANCE_TUNING.md"
+      ],
+      "exclusions": [
+        "platforms outside ADR-009",
+        "a production latency service-level objective",
+        "license or distribution approval"
+      ]
+    },
+    {
+      "domain": "security",
+      "record_path": "governance/phase-9-reviews/security.md",
+      "decision": "approved",
+      "scope": "Formula and serialization boundaries, resource limits, dependency and action controls, secret handling, threat model, vulnerability intake, and fail-closed release controls at the reviewed revision.",
+      "evidence": [
+        "SECURITY.md",
+        "governance/THREAT_MODEL.md",
+        "governance/RISK_REGISTER.md",
+        ".github/workflows/security.yml",
+        ".github/workflows/release.yml"
+      ],
+      "exclusions": [
+        "penetration-test certification",
+        "hosted-service controls because no service exists",
+        "license or provenance approval"
+      ]
+    },
+    {
+      "domain": "api",
+      "record_path": "governance/phase-9-reviews/api.md",
+      "decision": "approved",
+      "scope": "Public namespaces, typed results, strict serialization contracts, namespace dispositions, migration mappings, deprecation policy, and documented failure boundaries at the reviewed revision.",
+      "evidence": [
+        "governance/PHASE_8_NAMESPACE_DISPOSITION.md",
+        "governance/PHASE_8_MIGRATION_DEPRECATION.md",
+        "docs/guides/namespace-disposition.md",
+        "docs/guides/r-migration.md"
+      ],
+      "exclusions": [
+        "approval of a stable 1.0 API before ADR-010",
+        "R drop-in compatibility",
+        "license or distribution approval"
+      ]
+    },
+    {
+      "domain": "documentation",
+      "record_path": "governance/phase-9-reviews/documentation.md",
+      "decision": "approved",
+      "scope": "Installation, task guides, generated API references, tested galleries, release guidance, evidence claims, limitations, and accessibility/visual-regression documentation at the reviewed revision.",
+      "evidence": [
+        "docs/index.md",
+        "docs/installation.md",
+        "docs/releases.md",
+        "governance/PHASE_7_DOCUMENTATION_GALLERIES.md",
+        "governance/PHASE_7_SVG_ASSURANCE.md"
+      ],
+      "exclusions": [
+        "external beta usability evidence",
+        "browser or assistive-technology certification",
+        "license or distribution approval"
+      ]
+    }
+  ]
+}

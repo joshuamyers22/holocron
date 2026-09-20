@@ -110,7 +110,9 @@ parity claim.
 `make phase-9-readiness-check` validates the completed 20-control assessment,
 including its exact inventory, evidence paths, counts, applicability decisions,
 blocker resolutions, and human checklist coverage. The current assessment has
-8 passed, 8 blocked, and 4 not-applicable controls.
+9 passed, 7 blocked, and 4 not-applicable controls. The five-domain Phase 9
+technical review set is checked by `make phase-9-review-check` and is bound to
+its exact reviewed revision.
 
 `make phase-9-readiness-exit-gate` is intentionally stronger: it fails while
 any blocker remains and is required for a final release tag. Checklist

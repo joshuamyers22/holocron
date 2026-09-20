@@ -9,13 +9,12 @@
   "assessment_status": "blocked",
   "summary": {
     "total": 20,
-    "passed": 8,
-    "blocked": 8,
+    "passed": 9,
+    "blocked": 7,
     "not_applicable": 4,
     "blocking_control_ids": [
       "stable-release-scope",
       "candidate-beta",
-      "independent-reviews",
       "version-tag-identity",
       "artifact-matrix",
       "artifact-sbom-provenance",
@@ -82,15 +81,15 @@
     {
       "control_id": "independent-reviews",
       "requirement": "Independent statistical, numerical, security, API, and documentation reviews have retained exact-scope decisions.",
-      "disposition": "blocked",
+      "disposition": "passed",
       "applicable": true,
       "evidence": [
-        "governance/GOVERNANCE.md",
-        "PROJECT_MEMORY.md"
+        "governance/PHASE_9_REVIEWS.md",
+        "governance/phase-9-reviews/review-set.json"
       ],
-      "rationale": "Review execution has been reported complete, but the repository contains no durable Phase 9 records identifying the reviewed scope, findings, dispositions, reviewers, dates, and exact source revision. Existing Phase 3-5 approvals do not approve Phase 9.",
+      "rationale": "Ron Mexico independently approved the statistical, numerical, security, API, and documentation domains for revision ae43ffeb5a08c7aac508563a3e48657c53c99eed on 2026-09-20 with no unresolved findings. Domain records retain scopes, evidence boundaries, and exclusions.",
       "owner": "joshuamyers22",
-      "resolution_condition": "Retain the five Phase 9 review decisions and resolve every blocking finding."
+      "resolution_condition": null
     },
     {
       "control_id": "version-tag-identity",

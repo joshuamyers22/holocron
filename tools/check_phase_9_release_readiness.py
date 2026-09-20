@@ -14,6 +14,7 @@ from reference.contracts import (
     require_object,
     validate_document,
 )
+from tools.check_phase_9_reviews import check as check_reviews
 
 ROOT = Path(__file__).resolve().parents[1]
 ASSESSMENT = ROOT / "governance/phase-9-release-readiness.json"
@@ -150,6 +151,7 @@ def check_checklist_document(path: Path = CHECKLIST) -> None:
 
 
 def check(path: Path = ASSESSMENT) -> ReadinessSummary:
+    check_reviews()
     value = load_json(path)
     validate_document(value, SCHEMA)
     assessment = require_object(value, name="release-readiness assessment")

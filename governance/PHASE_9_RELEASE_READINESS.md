@@ -12,8 +12,8 @@ required checklist control has an explicit `passed`, `blocked`, or `not-
 applicable` disposition, evidence, rationale, owner, and—when blocked—a concrete
 resolution condition. The checklist has no unanswered item.
 
-Completing an assessment is not an assertion that a release is ready. Eight of
-twenty controls pass, eight block release, and four do not apply because
+Completing an assessment is not an assertion that a release is ready. Nine of
+twenty controls pass, seven block release, and four do not apply because
 Holocron is an offline package with no hosted service or telemetry system. The
 machine gate derives the decision from item dispositions and rejects a `ready`
 claim while any blocker remains.
@@ -22,19 +22,16 @@ claim while any blocker remains.
 
 1. ADR-010 has not defined the stable 1.0 scope.
 2. The required candidate series and external beta evidence do not exist.
-3. Independent review execution has been reported complete, but no durable
-   Phase 9 review records bind scope, findings, dispositions, reviewers, dates,
-   and source revision.
-4. Package metadata and an approved tag do not yet identify a 1.0 candidate or
+3. Package metadata and an approved tag do not yet identify a 1.0 candidate or
    final release.
-5. The four-cell artifact matrix has no aggregated same-revision CI evidence.
-6. No approved exact-tag artifact/SBOM/signature/provenance set exists.
-7. The stable support and compatibility-response policy is undefined.
-8. Incident, vulnerability, rollback/yank, and compatibility-response
+4. The four-cell artifact matrix has no aggregated same-revision CI evidence.
+5. No approved exact-tag artifact/SBOM/signature/provenance set exists.
+6. The stable support and compatibility-response policy is undefined.
+7. Incident, vulnerability, rollback/yank, and compatibility-response
    procedures are incomplete.
 
-The first five overlap earlier Phase 9 work or release execution. The last
-three are explicitly addressed by the fifth and sixth Phase 9 deliverables.
+The first five overlap earlier Phase 9 work or release execution. The last two
+are explicitly addressed by the fifth and sixth Phase 9 deliverables.
 
 ## Enforcement
 

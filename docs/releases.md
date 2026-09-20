@@ -22,9 +22,10 @@ set cannot qualify a candidate. This does not expand ADR-009 numerical parity.
 
 The release-readiness assessment is complete but its decision is blocked. Run
 `make phase-9-readiness-check` to validate all 20 dispositions. The final-only
-`make phase-9-readiness-exit-gate` fails until the eight recorded blockers are
-resolved. Review execution reported outside the repository does not clear its
-review control until durable exact-scope decisions are retained.
+`make phase-9-readiness-exit-gate` fails until the seven recorded blockers are
+resolved. `make phase-9-review-check` validates Ron Mexico's retained approvals
+of the five technical review domains for the exact reviewed revision. These
+approvals do not satisfy qualified license/provenance review.
 
 External distribution has a separate fail-closed prerequisite. A qualified
 license/provenance reviewer must approve each candidate's exact source commit,

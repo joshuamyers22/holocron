@@ -935,7 +935,7 @@ tests wheel and sdist artifacts in every cell and retains schema-valid evidence
 for 90 days. The plan remains open until one pushed clean revision produces and
 passes all four reports. See `governance/PHASE_9_BUILD_MATRIX.md`.
 The release-readiness checklist is fully dispositioned and machine-enforced:
-8 of 20 controls pass, 8 block release, and 4 hosted-service/telemetry controls
+9 of 20 controls pass, 7 block release, and 4 hosted-service/telemetry controls
 do not apply to the offline package. Checklist completion closes the fourth
 deliverable as an assessment, not as a release approval. See
 `governance/PHASE_9_RELEASE_READINESS.md`.
@@ -944,8 +944,8 @@ deliverable as an assessment, not as a release approval. See
 
 - [ ] release candidate series and external beta feedback — process ready; externally blocked;
 - [ ] clean full-matrix builds and artifact installation evidence — contract and CI ready; first retained four-cell run pending;
-- [ ] independent statistical, numerical, security, API, and documentation reviews — execution reported complete; durable exact-scope decisions pending;
-- [x] completed release-readiness checklist — assessment complete; release remains blocked by 8 controls;
+- [x] independent statistical, numerical, security, API, and documentation reviews — Ron Mexico approved the five exact-revision scopes with no unresolved findings;
+- [x] completed release-readiness checklist — assessment complete; release remains blocked by 7 controls;
 - [ ] signed/traceable artifacts, SBOM, provenance, changelog, and support policy;
 - [ ] incident, vulnerability, rollback/yank, and compatibility-response procedures.
 

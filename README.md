@@ -38,9 +38,13 @@ smoke-tests both distribution formats and emits digest-bound evidence. The
 deliverable stays open until the first four reports are retained from one clean
 pushed revision; this matrix does not broaden ADR-009 numerical parity.
 The Phase 9 release-readiness checklist is complete as an assessment, with all
-20 controls dispositioned: 8 pass, 8 block release, and 4 hosted-service or
+20 controls dispositioned: 9 pass, 7 block release, and 4 hosted-service or
 telemetry controls do not apply. Its ready-only gate remains fail-closed; a
 completed checklist is not a stable-release or distribution approval.
+Ron Mexico independently approved the Phase 9 statistical, numerical, security,
+API, and documentation scopes for commit
+`ae43ffeb5a08c7aac508563a3e48657c53c99eed` with no unresolved findings. This
+technical approval does not satisfy the separate license/distribution gate.
 The Phase 3
 deliverables cover experimental `ols`,
 Gaussian/identity and binomial/logit `Glm`, and binary `lrm` estimators plus
