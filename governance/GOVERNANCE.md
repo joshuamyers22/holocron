@@ -19,6 +19,9 @@ approval, and external cohort recruitment.
 The Phase 9 clean artifact matrix is defined and enforced across four OS/Python
 cells, but its deliverable remains open until a single pushed clean revision
 produces all four retained reports and the aggregation gate accepts them.
+The Phase 9 readiness checklist is complete as an assessment but records a
+blocked release decision: every control is dispositioned, while eight controls
+still prohibit a stable release.
 Until those qualified reviewers are appointed and their applicable gates pass:
 
 - implemented capabilities may be marked only `experimental`; `mapped` and

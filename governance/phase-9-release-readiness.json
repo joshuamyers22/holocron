@@ -1,0 +1,295 @@
+{
+  "schema_version": "holocron-phase-9-release-readiness/v1",
+  "assessment_id": "phase-9-release-readiness-2026-09-20",
+  "assessed_on": "2026-09-20",
+  "target_version": "1.0.0",
+  "assessment_scope": "repository-release-readiness",
+  "checklist_complete": true,
+  "release_ready": false,
+  "assessment_status": "blocked",
+  "summary": {
+    "total": 20,
+    "passed": 8,
+    "blocked": 8,
+    "not_applicable": 4,
+    "blocking_control_ids": [
+      "stable-release-scope",
+      "candidate-beta",
+      "independent-reviews",
+      "version-tag-identity",
+      "artifact-matrix",
+      "artifact-sbom-provenance",
+      "support-policy",
+      "response-procedures"
+    ]
+  },
+  "items": [
+    {
+      "control_id": "critical-journeys",
+      "requirement": "Critical journeys, invariants, and failure paths have evidence.",
+      "disposition": "passed",
+      "applicable": true,
+      "evidence": [
+        "governance/PHASE_8_COMPLETION.md",
+        "PROJECT_MEMORY.md",
+        ".github/workflows/ci.yml"
+      ],
+      "rationale": "Phase completion records, the compatibility inventory, simulations, parity cases, failure tests, documentation examples, and the full repository gate cover the current experimental surface.",
+      "owner": "joshuamyers22",
+      "resolution_condition": null
+    },
+    {
+      "control_id": "dependency-integrity",
+      "requirement": "Dependencies are locked, audited, and licensed appropriately.",
+      "disposition": "passed",
+      "applicable": true,
+      "evidence": [
+        "uv.lock",
+        "tools/check_licenses.py",
+        ".github/workflows/ci.yml",
+        "docs/adr/ADR-012-frozen-environment-contract.md"
+      ],
+      "rationale": "The exact uv lock is enforced; the 2026-09-20 runtime audit found no known vulnerabilities and the repository license-policy check passed. CI and release workflows rerun both controls.",
+      "owner": "joshuamyers22",
+      "resolution_condition": null
+    },
+    {
+      "control_id": "stable-release-scope",
+      "requirement": "The stable 1.0 scope and compatibility meaning are approved.",
+      "disposition": "blocked",
+      "applicable": true,
+      "evidence": [
+        "PROJECT_PLAN.md",
+        "governance/PHASE_9_RELEASE_CANDIDATES.md"
+      ],
+      "rationale": "ADR-010 does not exist, so the stable API and precise meaning of 1.0 are not approved.",
+      "owner": "joshuamyers22",
+      "resolution_condition": "Approve ADR-010 with the exact stable core, compatibility claim, and change policy."
+    },
+    {
+      "control_id": "candidate-beta",
+      "requirement": "The required candidate series and external beta program are complete.",
+      "disposition": "blocked",
+      "applicable": true,
+      "evidence": [
+        "governance/phase-9-beta-program.json",
+        "governance/PHASE_9_RELEASE_CANDIDATES.md"
+      ],
+      "rationale": "The fail-closed registry contains zero candidates and zero external feedback and retains three program blockers.",
+      "owner": "joshuamyers22",
+      "resolution_condition": "Pass the Phase 9 candidate/beta exit gate with genuine approved candidates and external feedback."
+    },
+    {
+      "control_id": "independent-reviews",
+      "requirement": "Independent statistical, numerical, security, API, and documentation reviews have retained exact-scope decisions.",
+      "disposition": "blocked",
+      "applicable": true,
+      "evidence": [
+        "governance/GOVERNANCE.md",
+        "PROJECT_MEMORY.md"
+      ],
+      "rationale": "Review execution has been reported complete, but the repository contains no durable Phase 9 records identifying the reviewed scope, findings, dispositions, reviewers, dates, and exact source revision. Existing Phase 3-5 approvals do not approve Phase 9.",
+      "owner": "joshuamyers22",
+      "resolution_condition": "Retain the five Phase 9 review decisions and resolve every blocking finding."
+    },
+    {
+      "control_id": "version-tag-identity",
+      "requirement": "The semantic-version tag exactly matches approved project metadata.",
+      "disposition": "blocked",
+      "applicable": true,
+      "evidence": [
+        "pyproject.toml",
+        "tools/verify_release.py",
+        ".github/workflows/release.yml"
+      ],
+      "rationale": "The check is enforced, but project metadata remains 0.1.0 and no approved 1.0 release tag exists.",
+      "owner": "joshuamyers22",
+      "resolution_condition": "Set approved candidate/final metadata and pass tag verification on the exact tagged commit."
+    },
+    {
+      "control_id": "artifact-matrix",
+      "requirement": "Clean full-matrix builds and isolated wheel/sdist installations pass on one revision.",
+      "disposition": "blocked",
+      "applicable": true,
+      "evidence": [
+        "governance/PHASE_9_BUILD_MATRIX.md",
+        "governance/phase-9-build-matrix.json",
+        ".github/workflows/ci.yml"
+      ],
+      "rationale": "The four-cell contract is implemented, but its first retained same-revision evidence set has not been aggregated.",
+      "owner": "joshuamyers22",
+      "resolution_condition": "Retain and aggregate passing Ubuntu/macOS by Python 3.11/3.12 reports from one clean revision."
+    },
+    {
+      "control_id": "artifact-sbom-provenance",
+      "requirement": "Build artifacts, checksums, SBOM, signatures/provenance, and changelog are traceable to the exact release commit.",
+      "disposition": "blocked",
+      "applicable": true,
+      "evidence": [
+        ".github/workflows/release.yml",
+        "CHANGELOG.md",
+        "governance/PROVENANCE.md"
+      ],
+      "rationale": "The release workflow builds artifacts and a CycloneDX SBOM, but no approved release artifact set, signature/attestation, or exact-tag provenance record exists.",
+      "owner": "joshuamyers22",
+      "resolution_condition": "Complete the Phase 9 signed/traceable-artifact deliverable for the exact approved tag."
+    },
+    {
+      "control_id": "secrets-private-data",
+      "requirement": "Secrets and private or restricted data are absent from source, evidence, and artifacts.",
+      "disposition": "passed",
+      "applicable": true,
+      "evidence": [
+        ".github/workflows/security.yml",
+        "SECURITY.md",
+        "PROJECT_BRIEF.md"
+      ],
+      "rationale": "Full-history secret scanning is mandatory, fixtures are synthetic or public, and evidence contracts prohibit personal and restricted fields.",
+      "owner": "joshuamyers22",
+      "resolution_condition": null
+    },
+    {
+      "control_id": "project-memory",
+      "requirement": "Project memory is current, evidence-linked, deduplicated, and free of restricted material.",
+      "disposition": "passed",
+      "applicable": true,
+      "evidence": [
+        "PROJECT_MEMORY.md",
+        "PROJECT_BRIEF.md"
+      ],
+      "rationale": "Memory records identify durable decisions and open threads without credentials, personal data, raw telemetry, or hidden reasoning.",
+      "owner": "joshuamyers22",
+      "resolution_condition": null
+    },
+    {
+      "control_id": "tracked-work",
+      "requirement": "Tracked work notes are closed or current and contain no raw telemetry.",
+      "disposition": "passed",
+      "applicable": true,
+      "evidence": [
+        "notes/README.md",
+        "PROJECT_MEMORY.md"
+      ],
+      "rationale": "The notes directory contains policy only; current unresolved work is maintained in the project-memory open-thread registry.",
+      "owner": "joshuamyers22",
+      "resolution_condition": null
+    },
+    {
+      "control_id": "threat-migration-compatibility",
+      "requirement": "Threats, migrations, compatibility, and recovery boundaries were reviewed.",
+      "disposition": "passed",
+      "applicable": true,
+      "evidence": [
+        "governance/THREAT_MODEL.md",
+        "governance/RISK_REGISTER.md",
+        "governance/PHASE_8_MIGRATION_DEPRECATION.md",
+        "compatibility/rms-8.2.0.yaml"
+      ],
+      "rationale": "The threat model, risk register, complete namespace disposition, migration planner, and deprecation contract identify current boundaries and owners. Operational response procedures remain a separate blocked control.",
+      "owner": "joshuamyers22",
+      "resolution_condition": null
+    },
+    {
+      "control_id": "operational-observability",
+      "requirement": "Logs, metrics, alerts, capacity, and operational ownership are adequate.",
+      "disposition": "not-applicable",
+      "applicable": false,
+      "evidence": [
+        "governance/THREAT_MODEL.md",
+        "SECURITY.md"
+      ],
+      "rationale": "Holocron is an offline library with no hosted service, daemon, production data store, or operational control plane.",
+      "owner": "joshuamyers22",
+      "resolution_condition": null
+    },
+    {
+      "control_id": "performance-capacity",
+      "requirement": "Applicable production latency, overload, replay, and regression budgets have evidence.",
+      "disposition": "not-applicable",
+      "applicable": false,
+      "evidence": [
+        "governance/PHASE_8_PERFORMANCE_TUNING.md"
+      ],
+      "rationale": "The library declares no production latency or hosted-capacity SLA. Retained deterministic call and memory profiles remain regression diagnostics, not a production SLO.",
+      "owner": "joshuamyers22",
+      "resolution_condition": null
+    },
+    {
+      "control_id": "remaining-risks",
+      "requirement": "Remaining material risks have owners and response triggers.",
+      "disposition": "passed",
+      "applicable": true,
+      "evidence": [
+        "governance/RISK_REGISTER.md",
+        "PROJECT_MEMORY.md"
+      ],
+      "rationale": "Material statistical, numerical, provenance, security, naming, continuity, and scope risks have named owners or explicitly vacant required roles and stop conditions.",
+      "owner": "joshuamyers22",
+      "resolution_condition": null
+    },
+    {
+      "control_id": "agent-assisted-work",
+      "requirement": "Material agent-assisted work has requirements, evidence-changing verification, stop rules, and accountable risk ownership.",
+      "disposition": "passed",
+      "applicable": true,
+      "evidence": [
+        "AGENTS.md",
+        "CONTRIBUTING.md",
+        "templates/AGENTIC_VERIFICATION_LOOP.md"
+      ],
+      "rationale": "Repository policy requires requirement linkage, independent checks, declared stop/rollback conditions, evidence-backed handoff, and maintainer accountability.",
+      "owner": "joshuamyers22",
+      "resolution_condition": null
+    },
+    {
+      "control_id": "telemetry-events",
+      "requirement": "Applicable telemetry and error events use a versioned schema and reproducible improvement review.",
+      "disposition": "not-applicable",
+      "applicable": false,
+      "evidence": [
+        "governance/THREAT_MODEL.md"
+      ],
+      "rationale": "The package emits no remote telemetry and has no telemetry event pipeline.",
+      "owner": "joshuamyers22",
+      "resolution_condition": null
+    },
+    {
+      "control_id": "telemetry-systems",
+      "requirement": "Telemetry storage, shipping, and query systems have fault, capacity, privacy, recovery, and rollback evidence.",
+      "disposition": "not-applicable",
+      "applicable": false,
+      "evidence": [
+        "governance/THREAT_MODEL.md"
+      ],
+      "rationale": "No telemetry collector, store, shipper, or query service exists.",
+      "owner": "joshuamyers22",
+      "resolution_condition": null
+    },
+    {
+      "control_id": "support-policy",
+      "requirement": "Supported versions, compatibility response, lifecycle, and user support ownership are approved.",
+      "disposition": "blocked",
+      "applicable": true,
+      "evidence": [
+        "PROJECT_PLAN.md",
+        "SECURITY.md"
+      ],
+      "rationale": "The security contact is named, but the Phase 9 support policy and stable compatibility-response commitments do not yet exist.",
+      "owner": "joshuamyers22",
+      "resolution_condition": "Approve the support policy and compatibility-response commitments for the stable scope."
+    },
+    {
+      "control_id": "response-procedures",
+      "requirement": "Incident, vulnerability, rollback/yank, and compatibility-response procedures are executable and owned.",
+      "disposition": "blocked",
+      "applicable": true,
+      "evidence": [
+        "SECURITY.md",
+        "PROJECT_PLAN.md"
+      ],
+      "rationale": "Vulnerability intake targets exist, but complete release incident, artifact yank, rollback, and compatibility-response runbooks remain a later Phase 9 deliverable.",
+      "owner": "joshuamyers22",
+      "resolution_condition": "Complete and exercise the Phase 9 response procedures."
+    }
+  ]
+}

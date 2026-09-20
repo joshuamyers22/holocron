@@ -1,22 +1,108 @@
-# Release Readiness
+# Phase 9 release-readiness assessment
 
-- [ ] Critical journeys, invariants, and failure paths have evidence.
-- [ ] Dependencies are locked, audited, and licensed appropriately.
-- [ ] The semantic-version tag exactly matches project metadata.
-- [ ] Build artifacts and SBOM are traceable to the commit.
-- [ ] Secrets and private data are absent from source and artifacts.
-- [ ] `PROJECT_MEMORY.md` is evidence-linked, deduplicated, current, and contains
-      no secrets, private data, hidden reasoning, or restricted material.
-- [ ] Tracked work notes are closed or current and contain no raw telemetry.
-- [ ] Threats, migrations, compatibility, rollback, and recovery were reviewed.
-- [ ] Logs, metrics, alerts, capacity, and operational ownership are adequate.
-- [ ] Applicable latency budgets have production-like percentile, overload,
-      replay, and regression evidence.
-- [ ] Remaining risks have owners and dates.
-- [ ] Material agent-assisted work has a requirement-linked rubric, evidence-changing
-      verification passes, declared stop rules, and accountable risk approval.
-- [ ] Applicable telemetry/error events conform to the versioned schema and feed
-      a reproducible, owned improvement review with guardrails.
-- [ ] Any telemetry storage/shipping/query component has target-host fault, capacity,
-      health-export, privacy, recovery, and rollback evidence; scaffolding alone is
-      not production approval.
+**Assessed:** 2026-09-20
+
+**Target:** Holocron 1.0.0
+
+**Checklist status:** complete
+
+**Release decision:** blocked — 8 passed, 8 blocked, 4 not applicable
+
+“Checklist complete” means every required control has an evidence-backed
+disposition. It does not mean the release is ready. The machine-readable source
+is `governance/phase-9-release-readiness.json`; the repository gate rejects
+missing controls, stale counts, nonexistent evidence, invalid applicability,
+and a readiness claim while any blocker remains.
+
+## Passed
+
+<!-- readiness:critical-journeys -->
+- **Critical journeys and failure paths:** Phase completion records, parity and
+  simulation evidence, examples, and CI cover the experimental surface.
+
+<!-- readiness:dependency-integrity -->
+- **Dependency integrity:** the frozen lock, current vulnerability audit,
+  license-policy check, CI, and release workflow pass.
+
+<!-- readiness:secrets-private-data -->
+- **Secrets and private data:** full-history secret scanning and synthetic/
+  public-only evidence policies are enforced.
+
+<!-- readiness:project-memory -->
+- **Project memory:** durable decisions and open threads are current and contain
+  no credentials, personal data, raw telemetry, or hidden reasoning.
+
+<!-- readiness:tracked-work -->
+- **Tracked work:** the notes directory contains policy only; open work is in
+  the owned project-memory registry.
+
+<!-- readiness:threat-migration-compatibility -->
+- **Threats, migration, and compatibility:** the threat model, risk register,
+  namespace disposition, migration planner, and deprecation policy are current.
+
+<!-- readiness:remaining-risks -->
+- **Remaining risks:** material risks have owners or explicitly vacant required
+  roles plus response triggers.
+
+<!-- readiness:agent-assisted-work -->
+- **Agent-assisted work:** repository policy requires requirement linkage,
+  verification evidence, stop/rollback rules, and accountable ownership.
+
+## Blocked
+
+<!-- readiness:stable-release-scope -->
+- **Stable scope:** ADR-010 must approve the exact stable core and meaning of
+  1.0.
+
+<!-- readiness:candidate-beta -->
+- **Candidate and beta program:** no approved candidates or genuine external
+  feedback are recorded.
+
+<!-- readiness:independent-reviews -->
+- **Independent reviews:** execution has been reported complete, but durable
+  Phase 9 statistical, numerical, security, API, and documentation decisions
+  tied to the reviewed scope and revision are not present in the repository.
+
+<!-- readiness:version-tag-identity -->
+- **Version/tag identity:** enforcement exists, but metadata remains 0.1.0 and
+  no approved 1.0 tag exists.
+
+<!-- readiness:artifact-matrix -->
+- **Artifact matrix:** the four-cell gate exists but has no aggregated retained
+  same-revision run yet.
+
+<!-- readiness:artifact-sbom-provenance -->
+- **Artifacts, SBOM, and provenance:** workflow scaffolding exists, but no
+  approved exact-tag artifact set, signature/attestation, or provenance record
+  exists.
+
+<!-- readiness:support-policy -->
+- **Support policy:** stable supported-version, lifecycle, support, and
+  compatibility-response commitments remain undefined.
+
+<!-- readiness:response-procedures -->
+- **Response procedures:** vulnerability intake exists, but incident,
+  rollback/yank, and compatibility-response runbooks are incomplete.
+
+## Not applicable to the current package
+
+<!-- readiness:operational-observability -->
+- **Hosted-service observability:** Holocron has no service, daemon, production
+  data store, or operational control plane.
+
+<!-- readiness:performance-capacity -->
+- **Production latency/capacity:** no production SLA is claimed; retained
+  profiles are regression diagnostics rather than an SLO.
+
+<!-- readiness:telemetry-events -->
+- **Telemetry events:** the package emits no remote telemetry.
+
+<!-- readiness:telemetry-systems -->
+- **Telemetry systems:** no collector, store, shipper, or query service exists.
+
+## Commands
+
+```sh
+make phase-9-readiness-check
+make phase-9-readiness-exit-gate  # intentionally fails while blockers remain
+```

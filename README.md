@@ -37,6 +37,10 @@ macOS 15 on CPython 3.11 and 3.12. Every cell builds, inspects, installs, and
 smoke-tests both distribution formats and emits digest-bound evidence. The
 deliverable stays open until the first four reports are retained from one clean
 pushed revision; this matrix does not broaden ADR-009 numerical parity.
+The Phase 9 release-readiness checklist is complete as an assessment, with all
+20 controls dispositioned: 8 pass, 8 block release, and 4 hosted-service or
+telemetry controls do not apply. Its ready-only gate remains fail-closed; a
+completed checklist is not a stable-release or distribution approval.
 The Phase 3
 deliverables cover experimental `ols`,
 Gaussian/identity and binomial/logit `Glm`, and binary `lrm` estimators plus

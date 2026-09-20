@@ -1,0 +1,77 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/joshuamyers22/holocron/schemas/phase-9-release-readiness.schema.json",
+  "type": "object",
+  "properties": {
+    "schema_version": {"const": "holocron-phase-9-release-readiness/v1"},
+    "assessment_id": {"type": "string", "pattern": "^phase-9-release-readiness-[0-9]{4}-[0-9]{2}-[0-9]{2}$"},
+    "assessed_on": {"type": "string", "format": "date"},
+    "target_version": {"const": "1.0.0"},
+    "assessment_scope": {"const": "repository-release-readiness"},
+    "checklist_complete": {"const": true},
+    "release_ready": {"type": "boolean"},
+    "assessment_status": {"enum": ["ready", "blocked"]},
+    "summary": {
+      "type": "object",
+      "properties": {
+        "total": {"type": "integer", "minimum": 1},
+        "passed": {"type": "integer", "minimum": 0},
+        "blocked": {"type": "integer", "minimum": 0},
+        "not_applicable": {"type": "integer", "minimum": 0},
+        "blocking_control_ids": {
+          "type": "array",
+          "items": {"type": "string", "minLength": 1},
+          "uniqueItems": true
+        }
+      },
+      "required": ["total", "passed", "blocked", "not_applicable", "blocking_control_ids"],
+      "additionalProperties": false
+    },
+    "items": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "properties": {
+          "control_id": {"type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"},
+          "requirement": {"type": "string", "minLength": 1},
+          "disposition": {"enum": ["passed", "blocked", "not-applicable"]},
+          "applicable": {"type": "boolean"},
+          "evidence": {
+            "type": "array",
+            "minItems": 1,
+            "items": {"type": "string", "minLength": 1},
+            "uniqueItems": true
+          },
+          "rationale": {"type": "string", "minLength": 1},
+          "owner": {"type": "string", "minLength": 1},
+          "resolution_condition": {"type": ["string", "null"]}
+        },
+        "required": [
+          "control_id",
+          "requirement",
+          "disposition",
+          "applicable",
+          "evidence",
+          "rationale",
+          "owner",
+          "resolution_condition"
+        ],
+        "additionalProperties": false
+      }
+    }
+  },
+  "required": [
+    "schema_version",
+    "assessment_id",
+    "assessed_on",
+    "target_version",
+    "assessment_scope",
+    "checklist_complete",
+    "release_ready",
+    "assessment_status",
+    "summary",
+    "items"
+  ],
+  "additionalProperties": false
+}

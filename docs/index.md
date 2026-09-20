@@ -86,6 +86,9 @@ Its clean artifact matrix now covers Ubuntu 24.04 and macOS 15 on CPython 3.11
 and 3.12 with isolated wheel/sdist installation evidence. Completion awaits the
 first retained four-cell run from one clean pushed revision, and this
 installability matrix does not broaden ADR-009 numerical parity.
+The release-readiness checklist is also complete as a fully dispositioned
+assessment: 8 controls pass, 8 block release, and 4 hosted-service/telemetry
+controls are not applicable. Its final-release gate remains closed.
 Capability promotion,
 consequential use, and external distribution remain separately blocked.
 

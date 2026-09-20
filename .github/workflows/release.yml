@@ -44,6 +44,8 @@ jobs:
         env:
           RELEASE_TAG: ${{ github.ref_name }}
         run: uv run python tools/verify_release.py --tag "$RELEASE_TAG"
+      - name: Verify completed release-readiness checklist
+        run: make phase-9-readiness-check
       - name: Verify release-candidate program records
         if: ${{ contains(github.ref_name, 'rc') }}
         env:
@@ -51,7 +53,7 @@ jobs:
         run: uv run --frozen python -m tools.check_phase_9_release_candidates --release-tag "$RELEASE_TAG"
       - name: Require completed external beta evidence for a final release
         if: ${{ !contains(github.ref_name, 'rc') }}
-        run: make phase-9-rc-exit-gate
+        run: make phase-9-rc-exit-gate phase-9-readiness-exit-gate
       - run: make check phase-1-exit-gate phase-2-exit-gate audit clean-build
       - name: Verify release-candidate artifact hashes
         if: ${{ contains(github.ref_name, 'rc') }}

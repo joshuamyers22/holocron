@@ -20,6 +20,12 @@ bytes plus a plan- and revision-bound JSON report for 90 days. Run
 downloading all four reports from one CI revision. A partial or mixed-revision
 set cannot qualify a candidate. This does not expand ADR-009 numerical parity.
 
+The release-readiness assessment is complete but its decision is blocked. Run
+`make phase-9-readiness-check` to validate all 20 dispositions. The final-only
+`make phase-9-readiness-exit-gate` fails until the eight recorded blockers are
+resolved. Review execution reported outside the repository does not clear its
+review control until durable exact-scope decisions are retained.
+
 External distribution has a separate fail-closed prerequisite. A qualified
 license/provenance reviewer must approve each candidate's exact source commit,
 license, provenance process, package name, and notices in writing. The

@@ -105,6 +105,18 @@ The aggregator rejects partial, mixed-revision, wrong-environment, or plan-
 drifted evidence. This is installability evidence, not a broader numerical-
 parity claim.
 
+## Phase 9 release-readiness workflow
+
+`make phase-9-readiness-check` validates the completed 20-control assessment,
+including its exact inventory, evidence paths, counts, applicability decisions,
+blocker resolutions, and human checklist coverage. The current assessment has
+8 passed, 8 blocked, and 4 not-applicable controls.
+
+`make phase-9-readiness-exit-gate` is intentionally stronger: it fails while
+any blocker remains and is required for a final release tag. Checklist
+completion means there are no unanswered controls; it does not mean the release
+is ready.
+
 ## Phase 1 evidence workflow
 
 `make phase-1-e2e` executes the accepted RCS-design, OLS-fit, and prediction case,

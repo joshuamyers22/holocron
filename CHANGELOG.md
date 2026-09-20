@@ -4,6 +4,11 @@ Notable changes are recorded here using semantic versioning.
 
 ## Unreleased
 
+- Completed the Phase 9 release-readiness checklist as a fail-closed 20-control
+  assessment: 8 controls pass, 8 block release, and 4 hosted-service/telemetry
+  controls do not apply to the offline package. Schema and semantic gates bind
+  evidence, applicability, counts, resolutions, and the human checklist; final
+  tags additionally require the currently failing ready-only gate.
 - Added the fail-closed Phase 9 artifact-installability matrix for Ubuntu 24.04
   and macOS 15 across CPython 3.11 and 3.12. Every clean cell builds and inspects
   wheel/sdist, independently installs both formats, runs dependency and broad
