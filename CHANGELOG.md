@@ -4,6 +4,12 @@ Notable changes are recorded here using semantic versioning.
 
 ## Unreleased
 
+- Completed the first Phase 8 deliverable with bounded Python-native mapped
+  replacements for fixed-covariance `Gls`, single-quantile `Rq`, right-censored
+  Buckley–James `bj`, and one-scale Weibull/exponential `pphsm`; added immutable
+  typed results, strict canonical schemas, prediction and failure-mode tests,
+  and approved mappings or unsupported rationales for the remaining Phase 8
+  exports while retaining `processMI`/`prmiInfo` for the next deliverable.
 - Created the production repository scaffold for Holocron.
 - Added the independent Python implementation project plan.
 - Completed the private-development Phase 0 governance, threat, risk, and

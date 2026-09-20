@@ -34,6 +34,7 @@ nav:
       - Penalties and alternative covariance: guides/regularization-and-covariance.md
       - Ordinal regression and censoring: guides/ordinal-censoring.md
       - Survival models: guides/survival-models.md
+      - Extended model replacements: guides/extended-models.md
       - Simulation and numerical edges: guides/simulation-and-edge-evidence.md
       - Exact resample plans: guides/resampling.md
       - Probability and survival validation: guides/validation-metrics.md

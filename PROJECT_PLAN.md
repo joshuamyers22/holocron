@@ -1,6 +1,6 @@
 # Independent Python Implementation of `rms`: Production Project Plan
 
-**Status:** Active — Phases 0–7 complete for private experimental development; Phase 8 is next
+**Status:** Active — Phases 0–7 complete for private experimental development; Phase 8 is underway
 **Plan date:** 2026-09-17  
 **Reference implementation:** Frank Harrell's R package `rms`  
 **Project name:** `holocron`  
@@ -874,9 +874,21 @@ Plot source data passes parity; renderers pass semantic and accessibility checks
 
 ### Phase 8 — Extended models and namespace completion (24–40 weeks)
 
+**Implementation progress:** The first deliverable is complete within a bounded
+Python-native replacement envelope. Fixed-covariance `fit_gls`, weighted
+single-quantile `fit_quantile_regression`, right-censored
+`fit_buckley_james`, and one-scale Weibull/exponential
+`to_proportional_hazards` provide typed results, strict schemas, deterministic
+tests, and explicit failure boundaries. All 42 Phase 8 manifest exports now
+have a reviewed disposition; `processMI` and its `prmiInfo` companion are the
+only two intentionally retained as one deferred unit for the next
+multiple-imputation adapter deliverable. The new model mappings are not
+R-parity claims. See
+`governance/PHASE_8_EXTENDED_MODELS_NAMESPACE.md`.
+
 **Deliverables**
 
-- `Gls`, `Rq`, `bj`, `pphsm`, and remaining exported helpers or approved replacements;
+- [x] `Gls`, `Rq`, `bj`, `pphsm`, and remaining exported helpers or approved replacements;
 - multiple-imputation adapter;
 - complete namespace disposition;
 - performance tuning driven by retained profiles;

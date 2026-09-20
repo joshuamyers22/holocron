@@ -16,6 +16,16 @@ from holocron.models.diagnostics import (
     trace_penalty,
     variance_inflation_factors,
 )
+from holocron.models.extended import (
+    BuckleyJamesResult,
+    GeneralizedLeastSquaresResult,
+    ProportionalHazardsParametricResult,
+    QuantileRegressionResult,
+    fit_buckley_james,
+    fit_gls,
+    fit_quantile_regression,
+    to_proportional_hazards,
+)
 from holocron.models.glm import fit_glm, fit_lrm
 from holocron.models.linear import OlsResult, fit_ols
 from holocron.models.logistic import BinaryLogisticResult
@@ -82,11 +92,13 @@ __all__ = [
     "AnovaTest",
     "BackwardSelectionResult",
     "BinaryLogisticResult",
+    "BuckleyJamesResult",
     "CensoredResponse",
     "CovarianceEstimate",
     "CovarianceResult",
     "CoefficientRobustness",
     "CoxResult",
+    "GeneralizedLeastSquaresResult",
     "InferenceEstimate",
     "InfluenceObservation",
     "InfluenceResult",
@@ -102,6 +114,8 @@ __all__ = [
     "PenaltyTraceResult",
     "ParametricSurvivalResult",
     "PredictionResult",
+    "ProportionalHazardsParametricResult",
+    "QuantileRegressionResult",
     "RandomEffectsOrdinalResult",
     "ResidualResult",
     "RobustnessDiagnostics",
@@ -120,8 +134,10 @@ __all__ = [
     "bootstrap_covariance",
     "contrast",
     "covariance",
+    "fit_buckley_james",
     "fit_cph",
     "fit_glm",
+    "fit_gls",
     "fit_lrm",
     "fit_npsurv",
     "fit_ols",
@@ -130,6 +146,7 @@ __all__ = [
     "fit_penalized_lrm",
     "fit_penalized_ols",
     "fit_psm",
+    "fit_quantile_regression",
     "fit_random_intercept_orm",
     "influence_diagnostics",
     "likelihood",
@@ -140,6 +157,7 @@ __all__ = [
     "summarize",
     "survival_residuals",
     "trace_penalty",
+    "to_proportional_hazards",
     "validate_survival_predictions",
     "variance_inflation_factors",
 ]

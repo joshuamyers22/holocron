@@ -23,9 +23,9 @@ an implementation claim, and an experimental capability is not production-ready.
 | --- | ---: | --- |
 | implemented | 0 | Implemented and accepted under the capability contract. |
 | experimental | 50 | Implemented narrowly with parity evidence; not production-ready. |
-| mapped | 5 | Mapped to a Python design, without an accepted implementation claim. |
-| unsupported | 0 | Intentionally excluded from the compatibility target. |
-| deferred | 226 | Catalogued for a later phase; no current implementation claim. |
+| mapped | 28 | Mapped to a Python design, without an accepted implementation claim. |
+| unsupported | 15 | Intentionally excluded from the compatibility target. |
+| deferred | 188 | Catalogued for a later phase; no current implementation claim. |
 
 ## Evidence-backed experimental surface
 
@@ -200,69 +200,69 @@ in the pinned namespace. Counts by tier are A: 32, B: 33, C: 26, D: 190.
 
 | R symbol | Kind | Python entry point | Status | Milestone | Oracle cases | Tolerance profile | Known differences |
 | --- | --- | --- | --- | --- | ---: | --- | --- |
-| `Gls` | export | — | deferred | Phase 8 | 0 | — | Not yet implemented. |
-| `LRupdate` | export | — | deferred | Phase 8 | 0 | — | Not yet implemented. |
+| `Gls` | export | `holocron.models.fit_gls` | mapped | Phase 8 | 0 | — | Approved bounded replacement for a fixed caller-supplied positive-definite relative observation covariance with ML or REML scale estimation. Correlation/variance-structure estimation, grouped formulas, bootstrap fitting, and nlme/rms method parity are unsupported. |
+| `LRupdate` | export | — | unsupported | Phase 8 | 0 | — | No direct replacement is approved. Use holocron.validation.calibrate_model or validate_probabilities for explicit calibration assessment; in-place mutation of an rms fit is intentionally unsupported. |
 | `Penalty.matrix` | export | `holocron.models.fit_penalized_ols` | experimental | Phase 8 | 2 | `regularization-covariance-v1` | Python accepts a non-negative scalar or named diagonal slope penalties directly in fit_penalized_ols and fit_penalized_lrm; categorical off-diagonal matrices and arbitrary dense penalty matrices remain deferred. |
 | `Penalty.setup` | export | `holocron.models.fit_penalized_lrm` | experimental | Phase 8 | 2 | `regularization-covariance-v1` | Penalty setup is explicit by generated coefficient name rather than inferred from rms assume codes; only diagonal slope penalties are supported. |
-| `Rq` | export | — | deferred | Phase 8 | 0 | — | Not yet implemented. |
-| `Surv` | export | — | deferred | Phase 8 | 0 | — | Not yet implemented. |
+| `Rq` | export | `holocron.models.fit_quantile_regression` | mapped | Phase 8 | 0 | — | Approved bounded replacement fits one weighted conditional quantile by deterministic ADMM and reports kernel-density sandwich covariance. Multiple tau fits, quantreg algorithm selection, bootstrap inference, and R method parity are unsupported. |
+| `Surv` | export | `holocron.models.SurvivalResponse` | mapped | Phase 8 | 0 | — | Use the explicit SurvivalResponse interval contract. It supports exact, left-, right-, interval-, and mixed censoring without R attributes, formula evaluation, counting-process construction, or arbitrary Surv types. |
 | `annotateAnova` | export | — | deferred | Phase 7 | 0 | — | Not yet implemented. |
-| `bj` | export | — | deferred | Phase 8 | 0 | — | Not yet implemented. |
+| `bj` | export | `holocron.models.fit_buckley_james` | mapped | Phase 8 | 0 | — | Approved bounded right-censored Buckley-James AFT replacement with identity or log time, Kaplan-Meier residual-tail imputation, fail-closed convergence, and an event-only working OLS covariance. Formula/link breadth, cycle averaging, bootstrap covariance, and rms inference parity are unsupported. |
 | `bjplot` | export | — | deferred | Phase 7 | 0 | — | Not yet implemented. |
 | `bootplot` | export | — | deferred | Phase 7 | 0 | — | Not yet implemented. |
 | `bplot` | export | — | deferred | Phase 7 | 0 | — | Not yet implemented. |
 | `cluster` | export | `holocron.models.fit_random_intercept_orm` | mapped | Phase 4-5 | 1 | `ordinal-random-v1` | Maps formula-level cluster marking to the explicit fit_random_intercept_orm API. One Gaussian grouping effect is supported; multiple, crossed, correlated, and random-slope structures are deferred. |
-| `combineRelatedPredictors` | export | — | deferred | Phase 8 | 0 | — | Not yet implemented. |
+| `combineRelatedPredictors` | export | — | unsupported | Phase 8 | 0 | — | Automatic predictor-cluster combination is not approved because it changes the estimand and design identity. Encode a reviewed transformation explicitly in DesignSpec instead. |
 | `confplot` | export | — | deferred | Phase 7 | 0 | — | Not yet implemented. |
-| `corFloorExp` | export | — | deferred | Phase 8 | 0 | — | Not yet implemented. |
-| `coxphFit` | export | — | deferred | Phase 8 | 0 | — | Not yet implemented. |
-| `cr.setup` | export | — | deferred | Phase 8 | 0 | — | Not yet implemented. |
-| `dxy.cens` | export | — | deferred | Phase 8 | 0 | — | Not yet implemented. |
-| `formatNP` | export | — | deferred | Phase 8 | 0 | — | Not yet implemented. |
-| `gIndex` | export | — | deferred | Phase 8 | 0 | — | Not yet implemented. |
-| `gendata` | export | — | deferred | Phase 8 | 0 | — | Not yet implemented. |
+| `corFloorExp` | export | — | unsupported | Phase 8 | 0 | — | Correlation-structure estimation is not implemented. Construct and review the relative covariance explicitly, then pass it to holocron.models.fit_gls. |
+| `coxphFit` | export | `holocron.models.fit_cph` | mapped | Phase 8 | 0 | — | Use the owned fit_cph estimator; this does not expose the rms internal coxphFit adapter or arbitrary survival-package controls. |
+| `cr.setup` | export | — | unsupported | Phase 8 | 0 | — | Internal continuation-ratio setup mutation is not a public contract. Use the explicit ordinal response and fit_orm APIs; continuation-ratio modeling itself is unsupported. |
+| `dxy.cens` | export | `holocron.models.validate_survival_predictions` | mapped | Phase 8 | 0 | — | Use validate_survival_predictions for explicit horizon-specific concordance, Brier, log-loss, and calibration metrics. The standalone rank-correlation return contract and R missing-value semantics are not reproduced. |
+| `formatNP` | export | — | unsupported | Phase 8 | 0 | — | R-specific N/P text formatting is not a statistical API. Build typed holocron.reporting.TableSpec cells and use render_latex or application-native presentation formatting. |
+| `gIndex` | export | — | unsupported | Phase 8 | 0 | — | The rms g-index bundle is not reproduced. Use holocron.validation.validate_model or validate_probabilities and select an explicitly named supported metric. |
+| `gendata` | export | `holocron.design.DesignSpec.transform` | mapped | Phase 8 | 0 | — | Use an explicit fitted DesignSpec and transform reviewed predictor rows. Interactive datadist prompting, formula evaluation, and implicit adjustment-value generation are unsupported. |
 | `ggplot` | export | — | deferred | Phase 7 | 0 | — | Not yet implemented. |
-| `groupkm` | export | — | deferred | Phase 8 | 0 | — | Not yet implemented. |
+| `groupkm` | export | `holocron.models.validate_survival_predictions` | mapped | Phase 8 | 0 | — | Grouped Kaplan-Meier calibration is available through validate_survival_predictions at explicit horizons. The standalone R object and plotting side effects are not reproduced. |
 | `hazard.ratio.plot` | export | — | deferred | Phase 7 | 0 | — | Not yet implemented. |
 | `histdensity` | export | — | deferred | Phase 7 | 0 | — | Not yet implemented. |
-| `ie.setup` | export | — | deferred | Phase 8 | 0 | — | Not yet implemented. |
-| `impactPO` | export | — | deferred | Phase 8 | 0 | — | Not yet implemented. |
-| `infoMxop` | export | — | deferred | Phase 8 | 0 | — | Not yet implemented. |
-| `intCalibration` | export | — | deferred | Phase 8 | 0 | — | Not yet implemented. |
+| `ie.setup` | export | — | unsupported | Phase 8 | 0 | — | This internal information-expansion setup helper has no approved public replacement; model fitting owns its information matrices. |
+| `impactPO` | export | `holocron.models.OrdinalResult.diagnostics` | mapped | Phase 8 | 0 | — | Use OrdinalResult.diagnostics for explicit proportional-odds diagnostics. Simulation, plotting, and the impactPO report layout are unsupported. |
+| `infoMxop` | export | — | unsupported | Phase 8 | 0 | — | Direct mutation and partitioning of internal information matrices is not public. Use owned model covariance results or holocron.models.covariance. |
+| `intCalibration` | export | `holocron.validation.validate_probabilities` | mapped | Phase 8 | 0 | — | Use validate_probabilities for explicit binary calibration intercept, slope, error, and grouped estimates. R plotting and formula dispatch are not reproduced. |
 | `legend.nomabbrev` | export | — | deferred | Phase 7 | 0 | — | Not yet implemented. |
-| `lm.pfit` | export | — | deferred | Phase 8 | 0 | — | Not yet implemented. |
-| `lrtest` | export | — | deferred | Phase 8 | 0 | — | Not yet implemented. |
-| `matinv` | export | — | deferred | Phase 8 | 0 | — | Not yet implemented. |
+| `lm.pfit` | export | `holocron.models.fit_penalized_ols` | mapped | Phase 8 | 0 | — | Use fit_penalized_ols with explicit scalar or named diagonal slope penalties. Low-level matrix inputs and arbitrary dense penalty matrices are unsupported. |
+| `lrtest` | export | `holocron.models.likelihood` | mapped | Phase 8 | 0 | — | Use the typed likelihood operation on supported fitted results. Automatic arbitrary nested-model comparison and R print behavior are not reproduced. |
+| `matinv` | export | — | unsupported | Phase 8 | 0 | — | A public statistical matrix-inversion helper is not approved. Use numpy.linalg.solve for explicit linear systems; owned estimators translate rank failures at their API boundary. |
 | `nomogram` | export | — | deferred | Phase 7 | 0 | — | An owned additive OLS/logit geometry builder exists, but it is not mapped to rms::nomogram because conditional interactions, broader model families, custom transforms, and pinned-R parity remain absent. |
-| `pantext` | export | — | deferred | Phase 8 | 0 | — | Not yet implemented. |
-| `perimeter` | export | — | deferred | Phase 8 | 0 | — | Not yet implemented. |
+| `pantext` | export | `holocron.graphics.TextAnnotation` | mapped | Phase 8 | 0 | — | Use backend-neutral TextAnnotation within PlotSpec. Graphics-device coordinate lookup and side-effectful R drawing are unsupported. |
+| `perimeter` | export | — | unsupported | Phase 8 | 0 | — | The specialized two-dimensional data-perimeter algorithm is not implemented. Supply reviewed plot-domain bounds explicitly in PlotSpec. |
 | `perlcode` | export | — | deferred | Phase 7 | 0 | — | Not yet implemented. |
 | `plot.contrast.rms` | export | — | deferred | Phase 7 | 0 | — | Not yet implemented. |
 | `plot.lrm.partial` | export | — | deferred | Phase 7 | 0 | — | Not yet implemented. |
 | `plot.xmean.ordinaly` | export | — | deferred | Phase 7 | 0 | — | Not yet implemented. |
 | `plotIntercepts` | export | — | deferred | Phase 7 | 0 | — | Not yet implemented. |
 | `plotmathAnova` | export | — | deferred | Phase 7 | 0 | — | Not yet implemented. |
-| `poma` | export | — | deferred | Phase 8 | 0 | — | Not yet implemented. |
-| `pphsm` | export | — | deferred | Phase 8 | 0 | — | Not yet implemented. |
-| `prModFit` | export | — | deferred | Phase 8 | 0 | — | Not yet implemented. |
-| `prModItem` | export | — | deferred | Phase 8 | 0 | — | Not yet implemented. |
-| `prmiInfo` | export | — | deferred | Phase 8 | 0 | — | Not yet implemented. |
-| `probabilityFamilies` | export | — | deferred | Phase 8 | 0 | — | Not yet implemented. |
-| `processMI` | export | — | deferred | Phase 8 | 0 | — | Not yet implemented. |
-| `reListclean` | export | — | deferred | Phase 8 | 0 | — | Not yet implemented. |
-| `recode2integer` | export | — | deferred | Phase 8 | 0 | — | Not yet implemented. |
-| `related.predictors` | export | — | deferred | Phase 8 | 0 | — | Not yet implemented. |
-| `rexVar` | export | — | deferred | Phase 8 | 0 | — | Not yet implemented. |
+| `poma` | export | `holocron.models.OrdinalResult.diagnostics` | mapped | Phase 8 | 0 | — | Use OrdinalResult.diagnostics for the supported proportional-odds assessment. The R poma report and broader model dispatch are not reproduced. |
+| `pphsm` | export | `holocron.models.to_proportional_hazards` | mapped | Phase 8 | 0 | — | Approved exact Weibull/exponential one-scale AFT-to-PH transformation with survival prediction equivalence. Covariance is explicitly conditional on fitted scale; scale-stratified fits and R object mutation are rejected. |
+| `prModFit` | export | `holocron.reporting.model_summary_table` | mapped | Phase 8 | 0 | — | Use typed model-summary table adapters and an explicit renderer. The R console formatting helper and global output options are not reproduced. |
+| `prModItem` | export | `holocron.reporting.TableSpec` | mapped | Phase 8 | 0 | — | Represent model-report items as explicit typed TableSpec cells. R console width, markup, and global formatting state are unsupported. |
+| `prmiInfo` | export | — | deferred | Phase 8 | 0 | — | Reserved for the next Phase 8 multiple-imputation adapter deliverable; no interim replacement is approved. |
+| `probabilityFamilies` | export | `holocron.models.fit_glm` | mapped | Phase 8 | 0 | — | Choose the supported Gaussian/identity or binomial/logit family explicitly in fit_glm. Runtime family discovery and arbitrary R family objects are unsupported. |
+| `processMI` | export | — | deferred | Phase 8 | 0 | — | Reserved for the next Phase 8 multiple-imputation adapter deliverable; pooled fit, validation, calibration, and ANOVA contracts remain deferred together. |
+| `reListclean` | export | — | unsupported | Phase 8 | 0 | — | This R recursive-list cleanup helper has no statistical public contract. Use ordinary typed Python collections at application boundaries. |
+| `recode2integer` | export | `holocron.design.DesignSpec` | mapped | Phase 8 | 0 | — | Use an explicit categorical or ordered term in DesignSpec; learned levels and generated-column identity are retained instead of returning anonymous integer codes. |
+| `related.predictors` | export | — | unsupported | Phase 8 | 0 | — | Automatic related-predictor discovery is not approved because thresholds and clustering choices are analysis decisions. Compute and review such diagnostics outside the fit, then encode the chosen DesignSpec explicitly. |
+| `rexVar` | export | `holocron.models.fit_random_intercept_orm` | mapped | Phase 8 | 0 | — | Use the bounded random-intercept ordinal fit and its variance-component result. General random-effect extraction, covariance structures, and report formatting are unsupported. |
 | `sascode` | export | — | deferred | Phase 7 | 0 | — | Not yet implemented. |
-| `sensuc` | export | — | deferred | Phase 8 | 0 | — | Not yet implemented. |
-| `setPb` | export | — | deferred | Phase 8 | 0 | — | Not yet implemented. |
-| `show.influence` | export | — | deferred | Phase 8 | 0 | — | Not yet implemented. |
+| `sensuc` | export | — | unsupported | Phase 8 | 0 | — | Unmeasured-confounding sensitivity analysis is not implemented; no numerical substitute is approved. Report an externally reviewed sensitivity analysis separately. |
+| `setPb` | export | — | unsupported | Phase 8 | 0 | — | Progress-bar mutation is presentation infrastructure, not a statistical capability. Applications should supply their own progress reporting around bounded Holocron calls. |
+| `show.influence` | export | `holocron.models.influence_diagnostics` | mapped | Phase 8 | 0 | — | Use the typed InfluenceResult and reporting/plot adapters. Interactive identification and R console side effects are unsupported. |
 | `survdiffplot` | export | — | deferred | Phase 7 | 0 | — | Not yet implemented. |
 | `survplot` | export | — | deferred | Phase 7 | 0 | — | Not yet implemented. |
 | `survplotp` | export | — | deferred | Phase 7 | 0 | — | Not yet implemented. |
-| `survreg.auxinfo` | export | — | deferred | Phase 8 | 0 | — | Not yet implemented. |
-| `univarLR` | export | — | deferred | Phase 8 | 0 | — | Not yet implemented. |
-| `which.influence` | export | — | deferred | Phase 8 | 0 | — | Not yet implemented. |
+| `survreg.auxinfo` | export | `holocron.models.ParametricSurvivalResult` | mapped | Phase 8 | 0 | — | Distribution, coefficient, scale, likelihood, and prediction information is carried explicitly by ParametricSurvivalResult. R survreg object introspection is unsupported. |
+| `univarLR` | export | — | unsupported | Phase 8 | 0 | — | Automated univariable likelihood-ratio screening is not approved because it encourages implicit selection. Fit prespecified models with fit_lrm and inspect typed likelihood results explicitly. |
+| `which.influence` | export | `holocron.models.influence_diagnostics` | mapped | Phase 8 | 0 | — | Use InfluenceResult observations and explicit application thresholds. Interactive R selection and hidden cutoff defaults are unsupported. |
 | `AIC.rms` | s3_method | — | deferred | Phase 8 | 0 | — | Not yet implemented. |
 | `Function.cph` | s3_method | — | deferred | Phase 7 | 0 | — | Not yet implemented. |
 | `Function.rms` | s3_method | — | deferred | Phase 7 | 0 | — | Not yet implemented. |

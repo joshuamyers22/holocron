@@ -48,6 +48,9 @@ The current experimental surface supports only:
   validation/calibration, survival, diagnostics, and nomogram/reporting tasks.
 - deterministic structural SVG accessibility audits and exact golden fixtures
   for every supported plot layer, axis-scale kind, orientation, and nomogram.
+- bounded mapped replacements for fixed-covariance GLS, weighted
+  single-quantile regression, right-censored Buckley–James AFT, and one-scale
+  Weibull/exponential AFT-to-PH conversion, each with strict typed results.
 
 The core estimator envelope is also checked by seven seeded simulation
 scenarios totaling 2,620 outer replications and a 16-case numerical edge corpus.
@@ -63,8 +66,8 @@ All six Phase 7 deliverables are implemented within their experimental
 envelopes: plot specifications, typed result adapters/SVG, additive nomogram
 geometry/rendering, structured table/LaTeX reporting, five tested galleries,
 and deterministic SVG assurance. Its accountable technical exit review passes
-without claiming independent approval or R presentation-method parity. Phase 8
-is next.
+without claiming independent approval or R presentation-method parity. The
+first Phase 8 deliverable is complete; its multiple-imputation adapter is next.
 Capability promotion,
 consequential use, and external distribution remain separately blocked.
 
@@ -94,6 +97,7 @@ surface and evidence links.
 - [Fit the supported generalized and logistic models](guides/generalized-models.md).
 - [Fit ordinal and censored-response models](guides/ordinal-censoring.md).
 - [Fit supported survival models](guides/survival-models.md).
+- [Use the bounded extended-model replacements](guides/extended-models.md).
 - [Use the supported post-estimation operations](guides/post-estimation.md).
 - [Use penalties and alternative covariance estimators](guides/regularization-and-covariance.md).
 - [Inspect and reproduce simulation and numerical-edge evidence](guides/simulation-and-edge-evidence.md).

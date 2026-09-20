@@ -115,6 +115,57 @@ Return the versioned binary-logistic result document.
 
 Serialize this result as canonical non-executable JSON.
 
+## `BuckleyJamesResult`
+
+```python
+class holocron.models.extended.BuckleyJamesResult(link: Literal['identity', 'log'], coefficient_names: tuple[str, ...], coefficients: tuple[float, ...], covariance: tuple[tuple[float, ...], ...], fitted_values: tuple[float, ...], residuals: tuple[float, ...], imputed_response: tuple[float, ...], residual_scale: float, iterations: int, event_count: int, n_observations: int, n_features: int, includes_intercept: bool, design_fingerprint: str | None = None) -> None
+```
+
+Immutable right-censored Buckley–James accelerated-time fit.
+
+### Attributes
+
+| Name | Type |
+| --- | --- |
+| `link` | `BuckleyJamesLink` |
+| `coefficient_names` | `tuple[str, ...]` |
+| `coefficients` | `tuple[float, ...]` |
+| `covariance` | `tuple[tuple[float, ...], ...]` |
+| `fitted_values` | `tuple[float, ...]` |
+| `residuals` | `tuple[float, ...]` |
+| `imputed_response` | `tuple[float, ...]` |
+| `residual_scale` | `float` |
+| `iterations` | `int` |
+| `event_count` | `int` |
+| `n_observations` | `int` |
+| `n_features` | `int` |
+| `includes_intercept` | `bool` |
+| `design_fingerprint` | `str | None` |
+
+### `fingerprint`
+
+Return the SHA-256 identity of the canonical document.
+
+### `from_dict(document: object) -> holocron.models.extended.BuckleyJamesResult`
+
+Reconstruct a Buckley–James result from an exact-version document.
+
+### `from_json(value: str) -> holocron.models.extended.BuckleyJamesResult`
+
+Reconstruct a Buckley–James result from strict bounded JSON.
+
+### `predict(self, features: collections.abc.Iterable[collections.abc.Iterable[float]], *, scale: Literal['link', 'response'] = 'response') -> tuple[float, ...]`
+
+Predict on the transformed-time or original response scale.
+
+### `to_dict(self) -> dict[str, None | bool | int | float | str | list['JsonValue'] | dict[str, 'JsonValue']]`
+
+Return the strict versioned Buckley–James document.
+
+### `to_json(self) -> str`
+
+Serialize the Buckley–James result as canonical non-executable JSON.
+
 ## `CensoredResponse`
 
 ```python
@@ -274,6 +325,55 @@ Return the strict versioned result document.
 ### `to_json(self) -> str`
 
 Serialize the fit as canonical non-executable JSON.
+
+## `GeneralizedLeastSquaresResult`
+
+```python
+class holocron.models.extended.GeneralizedLeastSquaresResult(method: Literal['ml', 'reml'], coefficient_names: tuple[str, ...], coefficients: tuple[float, ...], covariance: tuple[tuple[float, ...], ...], fitted_values: tuple[float, ...], residuals: tuple[float, ...], residual_scale: float, log_likelihood: float, n_observations: int, n_features: int, includes_intercept: bool, design_fingerprint: str | None = None) -> None
+```
+
+Immutable GLS fit for a caller-supplied positive-definite covariance.
+
+### Attributes
+
+| Name | Type |
+| --- | --- |
+| `method` | `GlsMethod` |
+| `coefficient_names` | `tuple[str, ...]` |
+| `coefficients` | `tuple[float, ...]` |
+| `covariance` | `tuple[tuple[float, ...], ...]` |
+| `fitted_values` | `tuple[float, ...]` |
+| `residuals` | `tuple[float, ...]` |
+| `residual_scale` | `float` |
+| `log_likelihood` | `float` |
+| `n_observations` | `int` |
+| `n_features` | `int` |
+| `includes_intercept` | `bool` |
+| `design_fingerprint` | `str | None` |
+
+### `fingerprint`
+
+Return the SHA-256 identity of the canonical document.
+
+### `from_dict(document: object) -> holocron.models.extended.GeneralizedLeastSquaresResult`
+
+Reconstruct a GLS result from an exact-version document.
+
+### `from_json(value: str) -> holocron.models.extended.GeneralizedLeastSquaresResult`
+
+Reconstruct a GLS result from strict bounded JSON.
+
+### `predict(self, features: collections.abc.Iterable[collections.abc.Iterable[float]]) -> tuple[float, ...]`
+
+Predict the conditional mean for explicit feature rows.
+
+### `to_dict(self) -> dict[str, None | bool | int | float | str | list['JsonValue'] | dict[str, 'JsonValue']]`
+
+Return the strict versioned GLS document.
+
+### `to_json(self) -> str`
+
+Serialize the GLS result as canonical non-executable JSON.
 
 ## `InferenceEstimate`
 
@@ -780,6 +880,103 @@ Predictions with model-based standard errors and confidence limits.
 | `lower` | `tuple[float, ...]` |
 | `upper` | `tuple[float, ...]` |
 
+## `ProportionalHazardsParametricResult`
+
+```python
+class holocron.models.extended.ProportionalHazardsParametricResult(distribution: Literal['weibull', 'exponential'], coefficient_names: tuple[str, ...], coefficients: tuple[float, ...], conditional_covariance: tuple[tuple[float, ...], ...], shape: float, source_fingerprint: str, n_observations: int) -> None
+```
+
+Weibull/exponential AFT fit represented on proportional-hazards scale.
+
+### Attributes
+
+| Name | Type |
+| --- | --- |
+| `distribution` | `Literal['weibull', 'exponential']` |
+| `coefficient_names` | `tuple[str, ...]` |
+| `coefficients` | `tuple[float, ...]` |
+| `conditional_covariance` | `tuple[tuple[float, ...], ...]` |
+| `shape` | `float` |
+| `source_fingerprint` | `str` |
+| `n_observations` | `int` |
+
+### `fingerprint`
+
+Return the SHA-256 identity of the canonical document.
+
+### `from_dict(document: object) -> holocron.models.extended.ProportionalHazardsParametricResult`
+
+Reconstruct a PH conversion from an exact-version document.
+
+### `from_json(value: str) -> holocron.models.extended.ProportionalHazardsParametricResult`
+
+Reconstruct a PH conversion from strict bounded JSON.
+
+### `predict_log_relative_hazard(self, features: collections.abc.Iterable[collections.abc.Iterable[float]]) -> tuple[float, ...]`
+
+Predict the slope-only log relative hazard.
+
+### `predict_survival(self, features: collections.abc.Iterable[collections.abc.Iterable[float]], times: collections.abc.Iterable[float]) -> tuple[tuple[float, ...], ...]`
+
+Predict survival from the proportional-hazards parameterization.
+
+### `to_dict(self) -> dict[str, None | bool | int | float | str | list['JsonValue'] | dict[str, 'JsonValue']]`
+
+Return the strict versioned proportional-hazards document.
+
+### `to_json(self) -> str`
+
+Serialize the PH conversion as canonical non-executable JSON.
+
+## `QuantileRegressionResult`
+
+```python
+class holocron.models.extended.QuantileRegressionResult(quantile: float, coefficient_names: tuple[str, ...], coefficients: tuple[float, ...], covariance: tuple[tuple[float, ...], ...], fitted_values: tuple[float, ...], residuals: tuple[float, ...], objective: float, iterations: int, n_observations: int, n_features: int, includes_intercept: bool, design_fingerprint: str | None = None) -> None
+```
+
+Immutable single-quantile linear regression fit.
+
+### Attributes
+
+| Name | Type |
+| --- | --- |
+| `quantile` | `float` |
+| `coefficient_names` | `tuple[str, ...]` |
+| `coefficients` | `tuple[float, ...]` |
+| `covariance` | `tuple[tuple[float, ...], ...]` |
+| `fitted_values` | `tuple[float, ...]` |
+| `residuals` | `tuple[float, ...]` |
+| `objective` | `float` |
+| `iterations` | `int` |
+| `n_observations` | `int` |
+| `n_features` | `int` |
+| `includes_intercept` | `bool` |
+| `design_fingerprint` | `str | None` |
+
+### `fingerprint`
+
+Return the SHA-256 identity of the canonical document.
+
+### `from_dict(document: object) -> holocron.models.extended.QuantileRegressionResult`
+
+Reconstruct a quantile result from an exact-version document.
+
+### `from_json(value: str) -> holocron.models.extended.QuantileRegressionResult`
+
+Reconstruct a quantile result from strict bounded JSON.
+
+### `predict(self, features: collections.abc.Iterable[collections.abc.Iterable[float]]) -> tuple[float, ...]`
+
+Predict the fitted conditional quantile for explicit feature rows.
+
+### `to_dict(self) -> dict[str, None | bool | int | float | str | list['JsonValue'] | dict[str, 'JsonValue']]`
+
+Return the strict versioned quantile-regression document.
+
+### `to_json(self) -> str`
+
+Serialize the quantile result as canonical non-executable JSON.
+
 ## `RandomEffectsOrdinalResult`
 
 ```python
@@ -1056,6 +1253,15 @@ Evaluate one linear coefficient contrast with model-based uncertainty.
 
 Return the full covariance matrix or a named principal submatrix.
 
+## `fit_buckley_james(times: collections.abc.Iterable[float], events: collections.abc.Iterable[int | bool], features: collections.abc.Iterable[collections.abc.Iterable[float]] | holocron.design.formula.DesignMatrix, *, link: Literal['identity', 'log'] = 'log', feature_names: collections.abc.Iterable[str] | None = None, include_intercept: bool | None = None, design_fingerprint: str | None = None, max_iterations: int = 100, tolerance: float = 1e-07) -> holocron.models.extended.BuckleyJamesResult`
+
+Fit a right-censored Buckley–James accelerated-time model.
+
+Only identity and log time links are supported. The implementation uses
+Kaplan–Meier residual-tail imputation and rejects nonconvergence rather than
+returning cycle-averaged coefficients. The reported covariance is an
+event-only working OLS covariance, not bootstrap or rms inference parity.
+
 ## `fit_cph(times: collections.abc.Iterable[float], events: collections.abc.Iterable[int | bool], features: collections.abc.Iterable[collections.abc.Iterable[float]], *, method: Literal['efron', 'breslow'] = 'efron', feature_names: collections.abc.Iterable[str] | None = None, entry_times: collections.abc.Iterable[float] | None = None, strata: collections.abc.Iterable[str] | None = None, weights: collections.abc.Iterable[float] | None = None, offsets: collections.abc.Iterable[float] | None = None, max_iterations: int = 100, tolerance: float = 1e-09) -> holocron.models.survival.CoxResult`
 
 Fit a weighted counting-process Cox model with optional strata/offsets.
@@ -1063,6 +1269,15 @@ Fit a weighted counting-process Cox model with optional strata/offsets.
 ## `fit_glm(response: collections.abc.Iterable[float], features: collections.abc.Iterable[collections.abc.Iterable[float]] | holocron.design.formula.DesignMatrix, *, family: Literal['gaussian', 'binomial'] = 'gaussian', link: Optional[Literal['identity', 'logit']] = None, feature_names: collections.abc.Iterable[str] | None = None, include_intercept: bool | None = None, design_fingerprint: str | None = None, max_iterations: int = 100, tolerance: float = 1e-08) -> holocron.models.linear.OlsResult | holocron.models.logistic.BinaryLogisticResult`
 
 Fit the supported Gaussian/identity or binomial/logit GLM envelope.
+
+## `fit_gls(response: collections.abc.Iterable[float], features: collections.abc.Iterable[collections.abc.Iterable[float]] | holocron.design.formula.DesignMatrix, *, observation_covariance: collections.abc.Iterable[collections.abc.Iterable[float]] | None = None, method: Literal['ml', 'reml'] = 'reml', feature_names: collections.abc.Iterable[str] | None = None, include_intercept: bool | None = None, design_fingerprint: str | None = None) -> holocron.models.extended.GeneralizedLeastSquaresResult`
+
+Fit GLS for a fixed caller-supplied relative observation covariance.
+
+The covariance must be symmetric positive definite and is treated as known
+up to one residual scale. Correlation/variance-structure estimation,
+grouping formulas, and bootstrap fitting are intentionally outside this
+bounded replacement for ``rms::Gls``.
 
 ## `fit_lrm(response: collections.abc.Iterable[float], features: collections.abc.Iterable[collections.abc.Iterable[float]] | holocron.design.formula.DesignMatrix, *, feature_names: collections.abc.Iterable[str] | None = None, include_intercept: bool | None = None, design_fingerprint: str | None = None, max_iterations: int = 100, tolerance: float = 1e-10) -> holocron.models.logistic.BinaryLogisticResult`
 
@@ -1100,6 +1315,14 @@ Fit diagonal quadratic-penalty OLS with the rms variance choices.
 ## `fit_psm(times: collections.abc.Iterable[float] | holocron.models.survival.SurvivalResponse, events: collections.abc.Iterable[int | bool] | collections.abc.Iterable[collections.abc.Iterable[float]], features: collections.abc.Iterable[collections.abc.Iterable[float]] | None = None, *, distribution: Literal['weibull', 'exponential'] = 'weibull', feature_names: collections.abc.Iterable[str] | None = None, strata: collections.abc.Iterable[str] | None = None, weights: collections.abc.Iterable[float] | None = None, offsets: collections.abc.Iterable[float] | None = None, max_iterations: int = 100, tolerance: float = 1e-10) -> holocron.models.survival.ParametricSurvivalResult`
 
 Fit a weighted exact/right or general interval-censored AFT model.
+
+## `fit_quantile_regression(response: collections.abc.Iterable[float], features: collections.abc.Iterable[collections.abc.Iterable[float]] | holocron.design.formula.DesignMatrix, *, quantile: float = 0.5, weights: collections.abc.Iterable[float] | None = None, feature_names: collections.abc.Iterable[str] | None = None, include_intercept: bool | None = None, design_fingerprint: str | None = None, max_iterations: int = 50000, tolerance: float = 1e-07) -> holocron.models.extended.QuantileRegressionResult`
+
+Fit one weighted linear quantile by deterministic convex ADMM.
+
+This replacement does not expose the algorithm choices, sparsity methods,
+or inference modes of ``rms::Rq``/``quantreg``. Its covariance is a bounded
+kernel-density sandwich approximation and is labelled experimental.
 
 ## `fit_random_intercept_orm(response: collections.abc.Iterable[int | float] | holocron.models.ordinal.CensoredResponse, features: collections.abc.Iterable[collections.abc.Iterable[float]] | holocron.design.formula.DesignMatrix, clusters: collections.abc.Iterable[collections.abc.Hashable], *, family: Literal['logistic', 'probit', 'loglog', 'cloglog', 'cauchit'] = 'logistic', feature_names: collections.abc.Iterable[str] | None = None, design_fingerprint: str | None = None, mix_re: collections.abc.Iterable[float] | None = None, quadrature_grid: collections.abc.Iterable[int] = (7, 11, 15, 21, 31, 45, 63), quadrature_tolerance: float = 1e-06, max_iterations: int = 80, tolerance: float = 1e-06) -> holocron.models.random_ordinal.RandomEffectsOrdinalResult`
 
@@ -1144,6 +1367,14 @@ Compute supported survival residuals in original training-row order.
 ## `trace_penalty(result: holocron.models.linear.OlsResult | holocron.models.logistic.BinaryLogisticResult, response: collections.abc.Iterable[int | float], features: collections.abc.Iterable[collections.abc.Iterable[float]] | holocron.design.formula.DesignMatrix, penalties: collections.abc.Iterable[float], *, criterion: Literal['aic', 'bic'] = 'aic', ols_variance: Literal['simple', 'sandwich'] = 'simple', max_iterations: int = 100, tolerance: float = 1e-10) -> holocron.models.diagnostics.PenaltyTraceResult`
 
 Refit an explicit scalar-penalty grid and select minimum AIC or BIC.
+
+## `to_proportional_hazards(result: holocron.models.survival.ParametricSurvivalResult) -> holocron.models.extended.ProportionalHazardsParametricResult`
+
+Convert a one-scale Weibull/exponential AFT fit to PH parameters.
+
+The covariance transformation conditions on the fitted scale because the
+current parametric result intentionally retains only coefficient covariance.
+Scale-stratified Weibull fits therefore fail closed.
 
 ## `validate_survival_predictions(times: collections.abc.Iterable[float], events: collections.abc.Iterable[int | bool], predicted_survival: collections.abc.Iterable[collections.abc.Iterable[float]], horizons: collections.abc.Iterable[float], *, weights: collections.abc.Iterable[float] | None = None, calibration_groups: int = 10, risk_thresholds: collections.abc.Iterable[float] = (0.5,)) -> holocron.models.survival_validation.SurvivalValidationResult`
 

@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/joshuamyers22/holocron/schemas/proportional-hazards-result.schema.json",
+  "title": "Holocron parametric proportional-hazards representation",
+  "type": "object",
+  "properties": {
+    "schema_version": {"const": "holocron-proportional-hazards-result/v1"},
+    "distribution": {"enum": ["weibull", "exponential"]},
+    "coefficient_names": {"$ref": "#/$defs/names"},
+    "coefficients": {"$ref": "#/$defs/parameters"},
+    "conditional_covariance": {"$ref": "#/$defs/matrix"},
+    "shape": {"type": "number", "exclusiveMinimum": 0},
+    "source_fingerprint": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "n_observations": {"type": "integer", "minimum": 1, "maximum": 1000000}
+  },
+  "required": [
+    "schema_version", "distribution", "coefficient_names", "coefficients",
+    "conditional_covariance", "shape", "source_fingerprint", "n_observations"
+  ],
+  "additionalProperties": false,
+  "$defs": {
+    "names": {"type": "array", "minItems": 2, "maxItems": 257, "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
+    "parameters": {"type": "array", "minItems": 2, "maxItems": 257, "items": {"type": "number"}},
+    "matrix": {"type": "array", "minItems": 2, "maxItems": 257, "items": {"$ref": "#/$defs/parameters"}}
+  }
+}

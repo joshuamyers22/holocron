@@ -91,14 +91,14 @@
       "id": "export:Gls",
       "r_symbol": "Gls",
       "kind": "export",
-      "python_entry_point": null,
+      "python_entry_point": "holocron.models.fit_gls",
       "tier": "D",
       "milestone": "Phase 8",
-      "status": "deferred",
+      "status": "mapped",
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "known_differences": "Approved bounded replacement for a fixed caller-supplied positive-definite relative observation covariance with ML or REML scale estimation. Correlation/variance-structure estimation, grouped formulas, bootstrap fitting, and nlme/rms method parity are unsupported."
     },
     {
       "id": "export:Hazard",
@@ -120,11 +120,11 @@
       "python_entry_point": null,
       "tier": "D",
       "milestone": "Phase 8",
-      "status": "deferred",
+      "status": "unsupported",
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "known_differences": "No direct replacement is approved. Use holocron.validation.calibrate_model or validate_probabilities for explicit calibration assessment; in-place mutation of an rms fit is intentionally unsupported."
     },
     {
       "id": "export:Newlabels",
@@ -247,27 +247,27 @@
       "id": "export:Rq",
       "r_symbol": "Rq",
       "kind": "export",
-      "python_entry_point": null,
+      "python_entry_point": "holocron.models.fit_quantile_regression",
       "tier": "D",
       "milestone": "Phase 8",
-      "status": "deferred",
+      "status": "mapped",
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "known_differences": "Approved bounded replacement fits one weighted conditional quantile by deterministic ADMM and reports kernel-density sandwich covariance. Multiple tau fits, quantreg algorithm selection, bootstrap inference, and R method parity are unsupported."
     },
     {
       "id": "export:Surv",
       "r_symbol": "Surv",
       "kind": "export",
-      "python_entry_point": null,
+      "python_entry_point": "holocron.models.SurvivalResponse",
       "tier": "D",
       "milestone": "Phase 8",
-      "status": "deferred",
+      "status": "mapped",
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "known_differences": "Use the explicit SurvivalResponse interval contract. It supports exact, left-, right-, interval-, and mixed censoring without R attributes, formula evaluation, counting-process construction, or arbitrary Surv types."
     },
     {
       "id": "export:Survival",
@@ -340,14 +340,14 @@
       "id": "export:bj",
       "r_symbol": "bj",
       "kind": "export",
-      "python_entry_point": null,
+      "python_entry_point": "holocron.models.fit_buckley_james",
       "tier": "D",
       "milestone": "Phase 8",
-      "status": "deferred",
+      "status": "mapped",
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "known_differences": "Approved bounded right-censored Buckley-James AFT replacement with identity or log time, Kaplan-Meier residual-tail imputation, fail-closed convergence, and an event-only working OLS covariance. Formula/link breadth, cycle averaging, bootstrap covariance, and rms inference parity are unsupported."
     },
     {
       "id": "export:bjplot",
@@ -460,11 +460,11 @@
       "python_entry_point": null,
       "tier": "D",
       "milestone": "Phase 8",
-      "status": "deferred",
+      "status": "unsupported",
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "known_differences": "Automatic predictor-cluster combination is not approved because it changes the estimand and design identity. Encode a reviewed transformation explicitly in DesignSpec instead."
     },
     {
       "id": "export:confplot",
@@ -499,24 +499,24 @@
       "python_entry_point": null,
       "tier": "D",
       "milestone": "Phase 8",
-      "status": "deferred",
+      "status": "unsupported",
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "known_differences": "Correlation-structure estimation is not implemented. Construct and review the relative covariance explicitly, then pass it to holocron.models.fit_gls."
     },
     {
       "id": "export:coxphFit",
       "r_symbol": "coxphFit",
       "kind": "export",
-      "python_entry_point": null,
+      "python_entry_point": "holocron.models.fit_cph",
       "tier": "D",
       "milestone": "Phase 8",
-      "status": "deferred",
+      "status": "mapped",
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "known_differences": "Use the owned fit_cph estimator; this does not expose the rms internal coxphFit adapter or arbitrary survival-package controls."
     },
     {
       "id": "export:cph",
@@ -543,11 +543,11 @@
       "python_entry_point": null,
       "tier": "D",
       "milestone": "Phase 8",
-      "status": "deferred",
+      "status": "unsupported",
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "known_differences": "Internal continuation-ratio setup mutation is not a public contract. Use the explicit ordinal response and fit_orm APIs; continuation-ratio modeling itself is unsupported."
     },
     {
       "id": "export:datadist",
@@ -571,14 +571,14 @@
       "id": "export:dxy.cens",
       "r_symbol": "dxy.cens",
       "kind": "export",
-      "python_entry_point": null,
+      "python_entry_point": "holocron.models.validate_survival_predictions",
       "tier": "D",
       "milestone": "Phase 8",
-      "status": "deferred",
+      "status": "mapped",
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "known_differences": "Use validate_survival_predictions for explicit horizon-specific concordance, Brier, log-loss, and calibration metrics. The standalone rank-correlation return contract and R missing-value semantics are not reproduced."
     },
     {
       "id": "export:effective.df",
@@ -613,11 +613,11 @@
       "python_entry_point": null,
       "tier": "D",
       "milestone": "Phase 8",
-      "status": "deferred",
+      "status": "unsupported",
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "known_differences": "R-specific N/P text formatting is not a statistical API. Build typed holocron.reporting.TableSpec cells and use render_latex or application-native presentation formatting."
     },
     {
       "id": "export:gIndex",
@@ -626,11 +626,11 @@
       "python_entry_point": null,
       "tier": "D",
       "milestone": "Phase 8",
-      "status": "deferred",
+      "status": "unsupported",
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "known_differences": "The rms g-index bundle is not reproduced. Use holocron.validation.validate_model or validate_probabilities and select an explicitly named supported metric."
     },
     {
       "id": "export:gTrans",
@@ -649,14 +649,14 @@
       "id": "export:gendata",
       "r_symbol": "gendata",
       "kind": "export",
-      "python_entry_point": null,
+      "python_entry_point": "holocron.design.DesignSpec.transform",
       "tier": "D",
       "milestone": "Phase 8",
-      "status": "deferred",
+      "status": "mapped",
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "known_differences": "Use an explicit fitted DesignSpec and transform reviewed predictor rows. Interactive datadist prompting, formula evaluation, and implicit adjustment-value generation are unsupported."
     },
     {
       "id": "export:ggplot",
@@ -675,14 +675,14 @@
       "id": "export:groupkm",
       "r_symbol": "groupkm",
       "kind": "export",
-      "python_entry_point": null,
+      "python_entry_point": "holocron.models.validate_survival_predictions",
       "tier": "D",
       "milestone": "Phase 8",
-      "status": "deferred",
+      "status": "mapped",
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "known_differences": "Grouped Kaplan-Meier calibration is available through validate_survival_predictions at explicit horizons. The standalone R object and plotting side effects are not reproduced."
     },
     {
       "id": "export:hazard.ratio.plot",
@@ -717,24 +717,24 @@
       "python_entry_point": null,
       "tier": "D",
       "milestone": "Phase 8",
-      "status": "deferred",
+      "status": "unsupported",
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "known_differences": "This internal information-expansion setup helper has no approved public replacement; model fitting owns its information matrices."
     },
     {
       "id": "export:impactPO",
       "r_symbol": "impactPO",
       "kind": "export",
-      "python_entry_point": null,
+      "python_entry_point": "holocron.models.OrdinalResult.diagnostics",
       "tier": "D",
       "milestone": "Phase 8",
-      "status": "deferred",
+      "status": "mapped",
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "known_differences": "Use OrdinalResult.diagnostics for explicit proportional-odds diagnostics. Simulation, plotting, and the impactPO report layout are unsupported."
     },
     {
       "id": "export:infoMxop",
@@ -743,24 +743,24 @@
       "python_entry_point": null,
       "tier": "D",
       "milestone": "Phase 8",
-      "status": "deferred",
+      "status": "unsupported",
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "known_differences": "Direct mutation and partitioning of internal information matrices is not public. Use owned model covariance results or holocron.models.covariance."
     },
     {
       "id": "export:intCalibration",
       "r_symbol": "intCalibration",
       "kind": "export",
-      "python_entry_point": null,
+      "python_entry_point": "holocron.validation.validate_probabilities",
       "tier": "D",
       "milestone": "Phase 8",
-      "status": "deferred",
+      "status": "mapped",
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "known_differences": "Use validate_probabilities for explicit binary calibration intercept, slope, error, and grouped estimates. R plotting and formula dispatch are not reproduced."
     },
     {
       "id": "export:interactions.containing",
@@ -792,14 +792,14 @@
       "id": "export:lm.pfit",
       "r_symbol": "lm.pfit",
       "kind": "export",
-      "python_entry_point": null,
+      "python_entry_point": "holocron.models.fit_penalized_ols",
       "tier": "D",
       "milestone": "Phase 8",
-      "status": "deferred",
+      "status": "mapped",
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "known_differences": "Use fit_penalized_ols with explicit scalar or named diagonal slope penalties. Low-level matrix inputs and arbitrary dense penalty matrices are unsupported."
     },
     {
       "id": "export:lrm",
@@ -836,14 +836,14 @@
       "id": "export:lrtest",
       "r_symbol": "lrtest",
       "kind": "export",
-      "python_entry_point": null,
+      "python_entry_point": "holocron.models.likelihood",
       "tier": "D",
       "milestone": "Phase 8",
-      "status": "deferred",
+      "status": "mapped",
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "known_differences": "Use the typed likelihood operation on supported fitted results. Automatic arbitrary nested-model comparison and R print behavior are not reproduced."
     },
     {
       "id": "export:lsp",
@@ -865,11 +865,11 @@
       "python_entry_point": null,
       "tier": "D",
       "milestone": "Phase 8",
-      "status": "deferred",
+      "status": "unsupported",
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "known_differences": "A public statistical matrix-inversion helper is not approved. Use numpy.linalg.solve for explicit linear systems; owned estimators translate rank failures at their API boundary."
     },
     {
       "id": "export:matrx",
@@ -1048,14 +1048,14 @@
       "id": "export:pantext",
       "r_symbol": "pantext",
       "kind": "export",
-      "python_entry_point": null,
+      "python_entry_point": "holocron.graphics.TextAnnotation",
       "tier": "D",
       "milestone": "Phase 8",
-      "status": "deferred",
+      "status": "mapped",
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "known_differences": "Use backend-neutral TextAnnotation within PlotSpec. Graphics-device coordinate lookup and side-effectful R drawing are unsupported."
     },
     {
       "id": "export:pentrace",
@@ -1077,11 +1077,11 @@
       "python_entry_point": null,
       "tier": "D",
       "milestone": "Phase 8",
-      "status": "deferred",
+      "status": "unsupported",
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "known_differences": "The specialized two-dimensional data-perimeter algorithm is not implemented. Supply reviewed plot-domain bounds explicitly in PlotSpec."
     },
     {
       "id": "export:perlcode",
@@ -1178,53 +1178,53 @@
       "id": "export:poma",
       "r_symbol": "poma",
       "kind": "export",
-      "python_entry_point": null,
+      "python_entry_point": "holocron.models.OrdinalResult.diagnostics",
       "tier": "D",
       "milestone": "Phase 8",
-      "status": "deferred",
+      "status": "mapped",
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "known_differences": "Use OrdinalResult.diagnostics for the supported proportional-odds assessment. The R poma report and broader model dispatch are not reproduced."
     },
     {
       "id": "export:pphsm",
       "r_symbol": "pphsm",
       "kind": "export",
-      "python_entry_point": null,
+      "python_entry_point": "holocron.models.to_proportional_hazards",
       "tier": "D",
       "milestone": "Phase 8",
-      "status": "deferred",
+      "status": "mapped",
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "known_differences": "Approved exact Weibull/exponential one-scale AFT-to-PH transformation with survival prediction equivalence. Covariance is explicitly conditional on fitted scale; scale-stratified fits and R object mutation are rejected."
     },
     {
       "id": "export:prModFit",
       "r_symbol": "prModFit",
       "kind": "export",
-      "python_entry_point": null,
+      "python_entry_point": "holocron.reporting.model_summary_table",
       "tier": "D",
       "milestone": "Phase 8",
-      "status": "deferred",
+      "status": "mapped",
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "known_differences": "Use typed model-summary table adapters and an explicit renderer. The R console formatting helper and global output options are not reproduced."
     },
     {
       "id": "export:prModItem",
       "r_symbol": "prModItem",
       "kind": "export",
-      "python_entry_point": null,
+      "python_entry_point": "holocron.reporting.TableSpec",
       "tier": "D",
       "milestone": "Phase 8",
-      "status": "deferred",
+      "status": "mapped",
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "known_differences": "Represent model-report items as explicit typed TableSpec cells. R console width, markup, and global formatting state are unsupported."
     },
     {
       "id": "export:predab.resample",
@@ -1263,20 +1263,20 @@
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "known_differences": "Reserved for the next Phase 8 multiple-imputation adapter deliverable; no interim replacement is approved."
     },
     {
       "id": "export:probabilityFamilies",
       "r_symbol": "probabilityFamilies",
       "kind": "export",
-      "python_entry_point": null,
+      "python_entry_point": "holocron.models.fit_glm",
       "tier": "D",
       "milestone": "Phase 8",
-      "status": "deferred",
+      "status": "mapped",
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "known_differences": "Choose the supported Gaussian/identity or binomial/logit family explicitly in fit_glm. Runtime family discovery and arbitrary R family objects are unsupported."
     },
     {
       "id": "export:processMI",
@@ -1289,7 +1289,7 @@
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "known_differences": "Reserved for the next Phase 8 multiple-imputation adapter deliverable; pooled fit, validation, calibration, and ANOVA contracts remain deferred together."
     },
     {
       "id": "export:psm",
@@ -1338,24 +1338,24 @@
       "python_entry_point": null,
       "tier": "D",
       "milestone": "Phase 8",
-      "status": "deferred",
+      "status": "unsupported",
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "known_differences": "This R recursive-list cleanup helper has no statistical public contract. Use ordinary typed Python collections at application boundaries."
     },
     {
       "id": "export:recode2integer",
       "r_symbol": "recode2integer",
       "kind": "export",
-      "python_entry_point": null,
+      "python_entry_point": "holocron.design.DesignSpec",
       "tier": "D",
       "milestone": "Phase 8",
-      "status": "deferred",
+      "status": "mapped",
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "known_differences": "Use an explicit categorical or ordered term in DesignSpec; learned levels and generated-column identity are retained instead of returning anonymous integer codes."
     },
     {
       "id": "export:related.predictors",
@@ -1364,24 +1364,24 @@
       "python_entry_point": null,
       "tier": "D",
       "milestone": "Phase 8",
-      "status": "deferred",
+      "status": "unsupported",
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "known_differences": "Automatic related-predictor discovery is not approved because thresholds and clustering choices are analysis decisions. Compute and review such diagnostics outside the fit, then encode the chosen DesignSpec explicitly."
     },
     {
       "id": "export:rexVar",
       "r_symbol": "rexVar",
       "kind": "export",
-      "python_entry_point": null,
+      "python_entry_point": "holocron.models.fit_random_intercept_orm",
       "tier": "D",
       "milestone": "Phase 8",
-      "status": "deferred",
+      "status": "mapped",
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "known_differences": "Use the bounded random-intercept ordinal fit and its variance-component result. General random-effect extraction, covariance structures, and report formatting are unsupported."
     },
     {
       "id": "export:robcov",
@@ -1429,11 +1429,11 @@
       "python_entry_point": null,
       "tier": "D",
       "milestone": "Phase 8",
-      "status": "deferred",
+      "status": "unsupported",
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "known_differences": "Unmeasured-confounding sensitivity analysis is not implemented; no numerical substitute is approved. Report an externally reviewed sensitivity analysis separately."
     },
     {
       "id": "export:setPb",
@@ -1442,24 +1442,24 @@
       "python_entry_point": null,
       "tier": "D",
       "milestone": "Phase 8",
-      "status": "deferred",
+      "status": "unsupported",
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "known_differences": "Progress-bar mutation is presentation infrastructure, not a statistical capability. Applications should supply their own progress reporting around bounded Holocron calls."
     },
     {
       "id": "export:show.influence",
       "r_symbol": "show.influence",
       "kind": "export",
-      "python_entry_point": null,
+      "python_entry_point": "holocron.models.influence_diagnostics",
       "tier": "D",
       "milestone": "Phase 8",
-      "status": "deferred",
+      "status": "mapped",
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "known_differences": "Use the typed InfluenceResult and reporting/plot adapters. Interactive identification and R console side effects are unsupported."
     },
     {
       "id": "export:specs",
@@ -1543,14 +1543,14 @@
       "id": "export:survreg.auxinfo",
       "r_symbol": "survreg.auxinfo",
       "kind": "export",
-      "python_entry_point": null,
+      "python_entry_point": "holocron.models.ParametricSurvivalResult",
       "tier": "D",
       "milestone": "Phase 8",
-      "status": "deferred",
+      "status": "mapped",
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "known_differences": "Distribution, coefficient, scale, likelihood, and prediction information is carried explicitly by ParametricSurvivalResult. R survreg object introspection is unsupported."
     },
     {
       "id": "export:univarLR",
@@ -1559,11 +1559,11 @@
       "python_entry_point": null,
       "tier": "D",
       "milestone": "Phase 8",
-      "status": "deferred",
+      "status": "unsupported",
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "known_differences": "Automated univariable likelihood-ratio screening is not approved because it encourages implicit selection. Fit prespecified models with fit_lrm and inspect typed likelihood results explicitly."
     },
     {
       "id": "export:val.prob",
@@ -1636,14 +1636,14 @@
       "id": "export:which.influence",
       "r_symbol": "which.influence",
       "kind": "export",
-      "python_entry_point": null,
+      "python_entry_point": "holocron.models.influence_diagnostics",
       "tier": "D",
       "milestone": "Phase 8",
-      "status": "deferred",
+      "status": "mapped",
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "known_differences": "Use InfluenceResult observations and explicit application thresholds. Interactive R selection and hidden cutoff defaults are unsupported."
     },
     {
       "id": "s3_method:AIC.rms",

@@ -42,12 +42,16 @@ from holocron.graphics import (
 )
 from holocron.models import (
     BinaryLogisticResult,
+    BuckleyJamesResult,
     CensoredResponse,
     CoxResult,
+    GeneralizedLeastSquaresResult,
     NonparametricSurvivalResult,
     OlsResult,
     OrdinalResult,
     ParametricSurvivalResult,
+    ProportionalHazardsParametricResult,
+    QuantileRegressionResult,
     SurvivalResponse,
     anova,
     backward_select,
@@ -55,7 +59,9 @@ from holocron.models import (
     contrast,
     covariance,
     fit_cph,
+    fit_buckley_james,
     fit_lrm,
+    fit_gls,
     fit_npsurv,
     fit_ols,
     fit_ordinal_lrm,
@@ -63,6 +69,7 @@ from holocron.models import (
     fit_penalized_lrm,
     fit_penalized_ols,
     fit_psm,
+    fit_quantile_regression,
     influence_diagnostics,
     likelihood,
     predict,
@@ -72,6 +79,7 @@ from holocron.models import (
     summarize,
     survival_residuals,
     trace_penalty,
+    to_proportional_hazards,
     validate_survival_predictions,
     variance_inflation_factors,
 )
@@ -108,6 +116,18 @@ assert importlib.resources.files("holocron").joinpath(
 ).is_file()
 assert importlib.resources.files("holocron").joinpath(
     "schemas/table-spec.schema.json"
+).is_file()
+assert importlib.resources.files("holocron").joinpath(
+    "schemas/gls-result.schema.json"
+).is_file()
+assert importlib.resources.files("holocron").joinpath(
+    "schemas/quantile-regression-result.schema.json"
+).is_file()
+assert importlib.resources.files("holocron").joinpath(
+    "schemas/buckley-james-result.schema.json"
+).is_file()
+assert importlib.resources.files("holocron").joinpath(
+    "schemas/proportional-hazards-result.schema.json"
 ).is_file()
 
 x = (-2.0, -1.0, 0.0, 1.0, 2.0, 3.0)
@@ -149,6 +169,10 @@ assert len(prediction_result.values) == len(y)
 linear_spec = DesignSpec.from_formula("y ~ x")
 linear_design = linear_spec.transform({"x": x})
 linear_fit = fit_ols(y, linear_design)
+gls_fit = fit_gls(y, linear_design)
+quantile_fit = fit_quantile_regression(y, linear_design)
+assert GeneralizedLeastSquaresResult.from_json(gls_fit.to_json()) == gls_fit
+assert QuantileRegressionResult.from_json(quantile_fit.to_json()) == quantile_fit
 penalized_linear = fit_penalized_ols(y, linear_design, penalty=1.0)
 robust = robust_covariance(
     linear_fit, y, linear_design, clusters=("a", "a", "b", "b", "c", "c")
@@ -316,12 +340,24 @@ censored_response = SurvivalResponse.from_intervals(
 censored_psm_fit = fit_psm(
     censored_response, survival_x[:12], feature_names=("x",)
 )
+bj_fit = fit_buckley_james(
+    (1.1, 1.7, 2.4, 3.0, 4.8, 5.5, 7.2, 8.0, 9.5, 11.0),
+    (1, 1, 1, 1, 1, 0, 1, 0, 1, 0),
+    tuple((float(value),) for value in range(-3, 7)),
+    feature_names=("x",),
+)
+exponential_fit = fit_psm(
+    survival_time, survival_event, survival_x, distribution="exponential"
+)
+ph_fit = to_proportional_hazards(exponential_fit)
 km_fit = fit_npsurv(
     survival_time, survival_event, entry_times=survival_entry,
     strata=survival_strata, weights=survival_weights,
 )
 assert CoxResult.from_json(cox_fit.to_json()) == cox_fit
 assert ParametricSurvivalResult.from_json(psm_fit.to_json()) == psm_fit
+assert BuckleyJamesResult.from_json(bj_fit.to_json()) == bj_fit
+assert ProportionalHazardsParametricResult.from_json(ph_fit.to_json()) == ph_fit
 assert censored_psm_fit.log_likelihood[1] > censored_psm_fit.log_likelihood[0]
 assert NonparametricSurvivalResult.from_json(km_fit.to_json()) == km_fit
 assert len(cox_fit.predict_survival(

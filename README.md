@@ -13,7 +13,12 @@ The project is distributed internally as `holocron-rms` and imported as
 Holocron is experimental and incomplete. Do not use it for consequential
 analysis, inference, prediction, or clinical decisions.
 
-Phases 0–7 are complete for private experimental development. The Phase 3
+Phases 0–7 are complete and Phase 8 is underway for private experimental
+development. The first Phase 8 deliverable adds bounded mapped replacements for
+fixed-covariance `Gls`, single-quantile `Rq`, right-censored Buckley–James
+`bj`, and one-scale Weibull/exponential `pphsm`, plus reviewed dispositions for
+the other Phase 8 exports. These mappings are owned Python contracts, not R
+parity claims; the multiple-imputation adapter is next. The Phase 3
 deliverables cover experimental `ols`,
 Gaussian/identity and binomial/logit `Glm`, and binary `lrm` estimators plus
 their covariance,

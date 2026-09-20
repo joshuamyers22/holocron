@@ -31,12 +31,14 @@ packages = ["src/holocron"]
 
 [tool.hatch.build.targets.wheel.force-include]
 "schemas/binary-logistic-result.schema.json" = "holocron/schemas/binary-logistic-result.schema.json"
+"schemas/buckley-james-result.schema.json" = "holocron/schemas/buckley-james-result.schema.json"
 "schemas/cox-result.schema.json" = "holocron/schemas/cox-result.schema.json"
 "schemas/cox-result-v2.schema.json" = "holocron/schemas/cox-result-v2.schema.json"
 "schemas/data-distribution.schema.json" = "holocron/schemas/data-distribution.schema.json"
 "schemas/design-matrix.schema.json" = "holocron/schemas/design-matrix.schema.json"
 "schemas/design-spec.schema.json" = "holocron/schemas/design-spec.schema.json"
 "schemas/formula.schema.json" = "holocron/schemas/formula.schema.json"
+"schemas/gls-result.schema.json" = "holocron/schemas/gls-result.schema.json"
 "schemas/ols-result.schema.json" = "holocron/schemas/ols-result.schema.json"
 "schemas/nonparametric-survival-result.schema.json" = "holocron/schemas/nonparametric-survival-result.schema.json"
 "schemas/nonparametric-survival-result-v2.schema.json" = "holocron/schemas/nonparametric-survival-result-v2.schema.json"
@@ -45,6 +47,8 @@ packages = ["src/holocron"]
 "schemas/parametric-survival-result.schema.json" = "holocron/schemas/parametric-survival-result.schema.json"
 "schemas/parametric-survival-result-v2.schema.json" = "holocron/schemas/parametric-survival-result-v2.schema.json"
 "schemas/plot-spec.schema.json" = "holocron/schemas/plot-spec.schema.json"
+"schemas/proportional-hazards-result.schema.json" = "holocron/schemas/proportional-hazards-result.schema.json"
+"schemas/quantile-regression-result.schema.json" = "holocron/schemas/quantile-regression-result.schema.json"
 "schemas/resample-plan.schema.json" = "holocron/schemas/resample-plan.schema.json"
 "schemas/table-spec.schema.json" = "holocron/schemas/table-spec.schema.json"
 "schemas/serialization-manifest.json" = "holocron/schemas/serialization-manifest.json"
@@ -57,12 +61,14 @@ include = [
     "README.md",
     "pyproject.toml",
     "schemas/binary-logistic-result.schema.json",
+    "schemas/buckley-james-result.schema.json",
     "schemas/cox-result.schema.json",
     "schemas/cox-result-v2.schema.json",
     "schemas/data-distribution.schema.json",
     "schemas/design-matrix.schema.json",
     "schemas/design-spec.schema.json",
     "schemas/formula.schema.json",
+    "schemas/gls-result.schema.json",
     "schemas/ols-result.schema.json",
     "schemas/nonparametric-survival-result.schema.json",
     "schemas/nonparametric-survival-result-v2.schema.json",
@@ -71,6 +77,8 @@ include = [
     "schemas/parametric-survival-result.schema.json",
     "schemas/parametric-survival-result-v2.schema.json",
     "schemas/plot-spec.schema.json",
+    "schemas/proportional-hazards-result.schema.json",
+    "schemas/quantile-regression-result.schema.json",
     "schemas/resample-plan.schema.json",
     "schemas/table-spec.schema.json",
     "schemas/serialization-manifest.json",
