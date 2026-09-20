@@ -1,0 +1,40 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://holocron.dev/schemas/pooled-calibration-result.schema.json",
+  "title": "Holocron pooled multiple-imputation calibration result",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version", "model_family", "scale", "prediction_grid",
+    "apparent_curve", "mean_training_curve", "mean_assessment_curve",
+    "optimism_curve", "corrected_curve", "n_imputations",
+    "contributing_resamples", "source_statuses", "source_failure_rates"
+  ],
+  "properties": {
+    "schema_version": {"const": "holocron-pooled-calibration-result/v1"},
+    "model_family": {"enum": ["ols", "binary-logistic"]},
+    "scale": {"enum": ["response", "probability"]},
+    "prediction_grid": {"$ref": "#/$defs/curve"},
+    "apparent_curve": {"$ref": "#/$defs/curve"},
+    "mean_training_curve": {"$ref": "#/$defs/curve"},
+    "mean_assessment_curve": {"$ref": "#/$defs/curve"},
+    "optimism_curve": {"$ref": "#/$defs/curve"},
+    "corrected_curve": {"$ref": "#/$defs/curve"},
+    "n_imputations": {"type": "integer", "minimum": 2, "maximum": 1000},
+    "contributing_resamples": {"type": "integer", "minimum": 2, "maximum": 10000000},
+    "source_statuses": {
+      "type": "array", "minItems": 2, "maxItems": 1000,
+      "items": {"enum": ["complete", "partial", "failed"]}
+    },
+    "source_failure_rates": {
+      "type": "array", "minItems": 2, "maxItems": 1000,
+      "items": {"type": "number", "minimum": 0, "maximum": 1}
+    }
+  },
+  "$defs": {
+    "curve": {
+      "type": "array", "minItems": 2, "maxItems": 1000,
+      "items": {"type": "number"}
+    }
+  }
+}

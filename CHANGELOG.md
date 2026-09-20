@@ -4,6 +4,11 @@ Notable changes are recorded here using semantic versioning.
 
 ## Unreleased
 
+- Completed the Phase 8 multiple-imputation adapter with Rubin pooling for OLS
+  and binary-logistic fits, pooled optimism-corrected validation and calibration,
+  explicit Chan–Meng likelihood-ratio adjustment, typed information tables,
+  strict schemas, and packaged artifact smoke coverage; mapped `processMI`,
+  `prmiInfo`, and `processMI.fit.mult.impute` to the bounded Python contracts.
 - Completed the first Phase 8 deliverable with bounded Python-native mapped
   replacements for fixed-covariance `Gls`, single-quantile `Rq`, right-censored
   Buckley–James `bj`, and one-scale Weibull/exponential `pphsm`; added immutable

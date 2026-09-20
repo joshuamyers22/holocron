@@ -23,9 +23,9 @@ an implementation claim, and an experimental capability is not production-ready.
 | --- | ---: | --- |
 | implemented | 0 | Implemented and accepted under the capability contract. |
 | experimental | 50 | Implemented narrowly with parity evidence; not production-ready. |
-| mapped | 28 | Mapped to a Python design, without an accepted implementation claim. |
+| mapped | 31 | Mapped to a Python design, without an accepted implementation claim. |
 | unsupported | 15 | Intentionally excluded from the compatibility target. |
-| deferred | 188 | Catalogued for a later phase; no current implementation claim. |
+| deferred | 185 | Catalogued for a later phase; no current implementation claim. |
 
 ## Evidence-backed experimental surface
 
@@ -246,9 +246,9 @@ in the pinned namespace. Counts by tier are A: 32, B: 33, C: 26, D: 190.
 | `pphsm` | export | `holocron.models.to_proportional_hazards` | mapped | Phase 8 | 0 | — | Approved exact Weibull/exponential one-scale AFT-to-PH transformation with survival prediction equivalence. Covariance is explicitly conditional on fitted scale; scale-stratified fits and R object mutation are rejected. |
 | `prModFit` | export | `holocron.reporting.model_summary_table` | mapped | Phase 8 | 0 | — | Use typed model-summary table adapters and an explicit renderer. The R console formatting helper and global output options are not reproduced. |
 | `prModItem` | export | `holocron.reporting.TableSpec` | mapped | Phase 8 | 0 | — | Represent model-report items as explicit typed TableSpec cells. R console width, markup, and global formatting state are unsupported. |
-| `prmiInfo` | export | — | deferred | Phase 8 | 0 | — | Reserved for the next Phase 8 multiple-imputation adapter deliverable; no interim replacement is approved. |
+| `prmiInfo` | export | `holocron.validation.imputation_information_table` | mapped | Phase 8 | 0 | — | Returns a typed TableSpec for Chan–Meng missing-information diagnostics. R console formatting, side effects, and arbitrary processMI object inspection are not reproduced. |
 | `probabilityFamilies` | export | `holocron.models.fit_glm` | mapped | Phase 8 | 0 | — | Choose the supported Gaussian/identity or binomial/logit family explicitly in fit_glm. Runtime family discovery and arbitrary R family objects are unsupported. |
-| `processMI` | export | — | deferred | Phase 8 | 0 | — | Reserved for the next Phase 8 multiple-imputation adapter deliverable; pooled fit, validation, calibration, and ANOVA contracts remain deferred together. |
+| `processMI` | export | `holocron.validation.process_multiple_imputation` | mapped | Phase 8 | 0 | — | Bounded Python replacement: Rubin pooling supports homogeneous OLS and binary-logistic results; validation and calibration accept already optimism-corrected Holocron results; ANOVA requires explicit per-imputation and stacked LR tables. It does not consume fit.mult.impute objects, refit models, delegate to R, or claim numerical parity. |
 | `reListclean` | export | — | unsupported | Phase 8 | 0 | — | This R recursive-list cleanup helper has no statistical public contract. Use ordinary typed Python collections at application boundaries. |
 | `recode2integer` | export | `holocron.design.DesignSpec` | mapped | Phase 8 | 0 | — | Use an explicit categorical or ordered term in DesignSpec; learned levels and generated-column identity are retained instead of returning anonymous integer codes. |
 | `related.predictors` | export | — | unsupported | Phase 8 | 0 | — | Automatic related-predictor discovery is not approved because thresholds and clustering choices are analysis decisions. Compute and review such diagnostics outside the fit, then encode the chosen DesignSpec explicitly. |
@@ -367,7 +367,7 @@ in the pinned namespace. Counts by tier are A: 32, B: 33, C: 26, D: 190.
 | `print.val.survh` | s3_method | — | deferred | Phase 8 | 0 | — | Not yet implemented. |
 | `print.validate` | s3_method | — | deferred | Phase 8 | 0 | — | Not yet implemented. |
 | `print.validate.rpart` | s3_method | — | deferred | Phase 8 | 0 | — | Not yet implemented. |
-| `processMI.fit.mult.impute` | s3_method | — | deferred | Phase 8 | 0 | — | Not yet implemented. |
+| `processMI.fit.mult.impute` | s3_method | `holocron.validation.process_multiple_imputation` | mapped | Phase 8 | 0 | — | Use explicit homogeneous Holocron result collections; no fit.mult.impute class, R S3 dispatch, stacked-data construction, or implicit refitting is reproduced. |
 | `rbind.Predict` | s3_method | — | deferred | Phase 8 | 0 | — | Not yet implemented. |
 | `residuals.Glm` | s3_method | `holocron.models.residuals` | experimental | Phase 8 | 1 | `postfit-inference-v1` | Supports ordinary, Pearson, and deviance residuals for binomial Glm; score, working, partial, influence, and other-family residuals remain deferred. |
 | `residuals.bj` | s3_method | — | deferred | Phase 8 | 0 | — | Not yet implemented. |

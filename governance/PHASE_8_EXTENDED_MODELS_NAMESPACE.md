@@ -35,6 +35,10 @@ contracts. `processMI` and `prmiInfo` remain intentionally deferred together to
 the next Phase 8 deliverable; separating them would create a misleading partial
 multiple-imputation contract.
 
+That time-bounded deferral was subsequently resolved by
+`PHASE_8_MULTIPLE_IMPUTATION.md`; the compatibility manifest now records both
+exports as mapped.
+
 | R export(s) | Decision | Approved Python path or rationale |
 | --- | --- | --- |
 | `Gls` | mapped | `holocron.models.fit_gls` |
@@ -83,6 +87,6 @@ Python tests. No new pinned-R oracle cases or tolerance profiles were added, so
 the new model entries remain `mapped` and must not be described as
 `experimental` parity capabilities.
 
-This decision does not complete Phase 8. Multiple imputation, the full
-namespace disposition (including methods), retained-profile tuning, migration
-tooling, and the Phase 8 exit review remain open.
+This decision did not complete Phase 8. Multiple imputation was completed by
+the next decision; full method-level namespace disposition, retained-profile
+tuning, migration tooling, and the Phase 8 exit review remain open.

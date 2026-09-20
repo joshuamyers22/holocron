@@ -35,6 +35,7 @@ nav:
       - Ordinal regression and censoring: guides/ordinal-censoring.md
       - Survival models: guides/survival-models.md
       - Extended model replacements: guides/extended-models.md
+      - Multiple-imputation pooling: guides/multiple-imputation.md
       - Simulation and numerical edges: guides/simulation-and-edge-evidence.md
       - Exact resample plans: guides/resampling.md
       - Probability and survival validation: guides/validation-metrics.md

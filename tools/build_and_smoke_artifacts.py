@@ -85,10 +85,20 @@ from holocron.models import (
 )
 from holocron.reporting import TableSpec, model_summary_table, render_latex
 from holocron.validation import (
+    LikelihoodRatioAnova,
+    LikelihoodRatioTest,
+    MultipleImputationAnovaResult,
+    PooledCalibrationResult,
+    PooledModelResult,
+    PooledValidationResult,
     ResamplePlan,
     calibrate_model,
     optimism_correct_calibration,
     optimism_correct_validation,
+    pool_imputation_calibration,
+    pool_imputation_likelihood_ratio,
+    pool_imputation_models,
+    pool_imputation_validation,
     report_resample_execution,
     run_resample_plan,
     take_rows,
@@ -129,6 +139,15 @@ assert importlib.resources.files("holocron").joinpath(
 assert importlib.resources.files("holocron").joinpath(
     "schemas/proportional-hazards-result.schema.json"
 ).is_file()
+for pooled_schema in (
+    "pooled-model-result.schema.json",
+    "pooled-validation-result.schema.json",
+    "pooled-calibration-result.schema.json",
+    "pooled-anova-result.schema.json",
+):
+    assert importlib.resources.files("holocron").joinpath(
+        "schemas", pooled_schema
+    ).is_file()
 
 x = (-2.0, -1.0, 0.0, 1.0, 2.0, 3.0)
 y = (0.2, 0.8, 1.1, 1.7, 2.5, 3.6)
@@ -257,6 +276,22 @@ assert model_calibration.status == "complete"
 assert len(model_calibration.apparent_curve) == 5
 corrected_validation = optimism_correct_validation(model_validation)
 corrected_calibration = optimism_correct_calibration(model_calibration)
+pooled_fit = pool_imputation_models((linear_fit, linear_fit))
+pooled_validation = pool_imputation_validation(
+    (corrected_validation, corrected_validation)
+)
+pooled_calibration = pool_imputation_calibration(
+    (corrected_calibration, corrected_calibration)
+)
+pooled_anova = pool_imputation_likelihood_ratio(
+    (
+        LikelihoodRatioAnova((LikelihoodRatioTest("x", ("asis(x)",), 2.0, 1),)),
+        LikelihoodRatioAnova((LikelihoodRatioTest("x", ("asis(x)",), 3.0, 1),)),
+    ),
+    stacked=LikelihoodRatioAnova(
+        (LikelihoodRatioTest("x", ("asis(x)",), 4.0, 1),)
+    ),
+)
 resample_report = report_resample_execution(
     corrected_validation.resamples,
     metric_contributors={
@@ -268,6 +303,16 @@ assert corrected_validation.status == "complete"
 assert corrected_validation.metric("mean_squared_error").corrected is not None
 assert corrected_calibration.status == "complete"
 assert len(corrected_calibration.corrected_curve) == 5
+assert PooledModelResult.from_json(pooled_fit.to_json()) == pooled_fit
+assert (
+    PooledValidationResult.from_json(pooled_validation.to_json())
+    == pooled_validation
+)
+assert (
+    PooledCalibrationResult.from_json(pooled_calibration.to_json())
+    == pooled_calibration
+)
+assert MultipleImputationAnovaResult.from_json(pooled_anova.to_json()) == pooled_anova
 assert resample_report.aggregation_permitted
 assert resample_report.failure_rate == 0.0
 assert len(resample_report.metric_coverage) == 4

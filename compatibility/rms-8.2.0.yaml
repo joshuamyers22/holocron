@@ -1256,14 +1256,14 @@
       "id": "export:prmiInfo",
       "r_symbol": "prmiInfo",
       "kind": "export",
-      "python_entry_point": null,
+      "python_entry_point": "holocron.validation.imputation_information_table",
       "tier": "D",
       "milestone": "Phase 8",
-      "status": "deferred",
+      "status": "mapped",
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Reserved for the next Phase 8 multiple-imputation adapter deliverable; no interim replacement is approved."
+      "known_differences": "Returns a typed TableSpec for Chan–Meng missing-information diagnostics. R console formatting, side effects, and arbitrary processMI object inspection are not reproduced."
     },
     {
       "id": "export:probabilityFamilies",
@@ -1282,14 +1282,14 @@
       "id": "export:processMI",
       "r_symbol": "processMI",
       "kind": "export",
-      "python_entry_point": null,
+      "python_entry_point": "holocron.validation.process_multiple_imputation",
       "tier": "D",
       "milestone": "Phase 8",
-      "status": "deferred",
+      "status": "mapped",
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Reserved for the next Phase 8 multiple-imputation adapter deliverable; pooled fit, validation, calibration, and ANOVA contracts remain deferred together."
+      "known_differences": "Bounded Python replacement: Rubin pooling supports homogeneous OLS and binary-logistic results; validation and calibration accept already optimism-corrected Holocron results; ANOVA requires explicit per-imputation and stacked LR tables. It does not consume fit.mult.impute objects, refit models, delegate to R, or claim numerical parity."
     },
     {
       "id": "export:psm",
@@ -3248,14 +3248,14 @@
       "id": "s3_method:processMI.fit.mult.impute",
       "r_symbol": "processMI.fit.mult.impute",
       "kind": "s3_method",
-      "python_entry_point": null,
+      "python_entry_point": "holocron.validation.process_multiple_imputation",
       "tier": "D",
       "milestone": "Phase 8",
-      "status": "deferred",
+      "status": "mapped",
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "known_differences": "Use explicit homogeneous Holocron result collections; no fit.mult.impute class, R S3 dispatch, stacked-data construction, or implicit refitting is reproduced."
     },
     {
       "id": "s3_method:rbind.Predict",

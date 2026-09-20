@@ -43,6 +43,37 @@ Intercept and slope for one model-family recalibration fit.
 
 Evaluate the fitted recalibration relationship.
 
+## `LikelihoodRatioAnova`
+
+```python
+class holocron.validation.imputation.LikelihoodRatioAnova(tests: tuple[holocron.validation.imputation.LikelihoodRatioTest, ...]) -> None
+```
+
+An ordered explicit likelihood-ratio table for one data realization.
+
+### Attributes
+
+| Name | Type |
+| --- | --- |
+| `tests` | `tuple[LikelihoodRatioTest, ...]` |
+
+## `LikelihoodRatioTest`
+
+```python
+class holocron.validation.imputation.LikelihoodRatioTest(term: str, coefficient_names: tuple[str, ...], chi_square: float, degrees_of_freedom: int) -> None
+```
+
+One explicit completed-data or stacked likelihood-ratio test.
+
+### Attributes
+
+| Name | Type |
+| --- | --- |
+| `term` | `str` |
+| `coefficient_names` | `tuple[str, ...]` |
+| `chi_square` | `float` |
+| `degrees_of_freedom` | `int` |
+
 ## `ModelCalibrationResult`
 
 ```python
@@ -127,6 +158,72 @@ Training and assessment indices from one freshly refitted model.
 | --- | --- |
 | `training` | `ValidationIndices` |
 | `assessment` | `ValidationIndices` |
+
+## `MultipleImputationAnovaResult`
+
+```python
+class holocron.validation.imputation.MultipleImputationAnovaResult(tests: tuple[holocron.validation.imputation.MultipleImputationAnovaTest, ...], n_imputations: int) -> None
+```
+
+Chan–Meng likelihood-ratio adjustments over multiple imputations.
+
+### Attributes
+
+| Name | Type |
+| --- | --- |
+| `tests` | `tuple[MultipleImputationAnovaTest, ...]` |
+| `n_imputations` | `int` |
+
+### `fingerprint`
+
+No public documentation is available.
+
+### `from_dict(document: object) -> holocron.validation.imputation.MultipleImputationAnovaResult`
+
+No public documentation is available.
+
+### `from_json(value: str) -> holocron.validation.imputation.MultipleImputationAnovaResult`
+
+No public documentation is available.
+
+### `to_dict(self) -> dict[str, None | bool | int | float | str | list['JsonValue'] | dict[str, 'JsonValue']]`
+
+Return the strict versioned pooled-ANOVA document.
+
+### `to_json(self) -> str`
+
+No public documentation is available.
+
+## `MultipleImputationAnovaTest`
+
+```python
+class holocron.validation.imputation.MultipleImputationAnovaTest(term: str, coefficient_names: tuple[str, ...], degrees_of_freedom: int, mean_imputation_chi_square: float, stacked_chi_square: float, adjusted_chi_square: float, p_value: float, missing_information_fraction: float, denominator_degrees_of_freedom: float | None, chi_square_discount: float) -> None
+```
+
+One Chan–Meng-adjusted likelihood-ratio test.
+
+### Attributes
+
+| Name | Type |
+| --- | --- |
+| `term` | `str` |
+| `coefficient_names` | `tuple[str, ...]` |
+| `degrees_of_freedom` | `int` |
+| `mean_imputation_chi_square` | `float` |
+| `stacked_chi_square` | `float` |
+| `adjusted_chi_square` | `float` |
+| `p_value` | `float` |
+| `missing_information_fraction` | `float` |
+| `denominator_degrees_of_freedom` | `float | None` |
+| `chi_square_discount` | `float` |
+
+### `from_dict(document: object) -> holocron.validation.imputation.MultipleImputationAnovaTest`
+
+No public documentation is available.
+
+### `to_dict(self) -> dict[str, None | bool | int | float | str | list['JsonValue'] | dict[str, 'JsonValue']]`
+
+No public documentation is available.
 
 ## `OlsValidationIndices`
 
@@ -316,6 +413,180 @@ Weighted discrimination, accuracy, and calibration for binary risk.
 | `threshold_metrics` | `tuple[ProbabilityThresholdMetrics, ...]` |
 | `n_observations` | `int` |
 | `total_weight` | `float` |
+
+## `PooledCalibrationResult`
+
+```python
+class holocron.validation.imputation.PooledCalibrationResult(model_family: Literal['ols', 'binary-logistic'], scale: Literal['response', 'probability'], prediction_grid: tuple[float, ...], apparent_curve: tuple[float, ...], mean_training_curve: tuple[float, ...], mean_assessment_curve: tuple[float, ...], optimism_curve: tuple[float, ...], corrected_curve: tuple[float, ...], n_imputations: int, contributing_resamples: int, source_statuses: tuple[typing.Literal['complete', 'partial', 'failed'], ...], source_failure_rates: tuple[float, ...]) -> None
+```
+
+Pointwise calibration curves averaged across imputations.
+
+### Attributes
+
+| Name | Type |
+| --- | --- |
+| `model_family` | `Literal['ols', 'binary-logistic']` |
+| `scale` | `Literal['response', 'probability']` |
+| `prediction_grid` | `tuple[float, ...]` |
+| `apparent_curve` | `tuple[float, ...]` |
+| `mean_training_curve` | `tuple[float, ...]` |
+| `mean_assessment_curve` | `tuple[float, ...]` |
+| `optimism_curve` | `tuple[float, ...]` |
+| `corrected_curve` | `tuple[float, ...]` |
+| `n_imputations` | `int` |
+| `contributing_resamples` | `int` |
+| `source_statuses` | `tuple[SourceStatus, ...]` |
+| `source_failure_rates` | `tuple[float, ...]` |
+
+### `fingerprint`
+
+No public documentation is available.
+
+### `from_dict(document: object) -> holocron.validation.imputation.PooledCalibrationResult`
+
+No public documentation is available.
+
+### `from_json(value: str) -> holocron.validation.imputation.PooledCalibrationResult`
+
+No public documentation is available.
+
+### `to_dict(self) -> dict[str, None | bool | int | float | str | list['JsonValue'] | dict[str, 'JsonValue']]`
+
+Return the strict versioned pooled-calibration document.
+
+### `to_json(self) -> str`
+
+No public documentation is available.
+
+## `PooledModelResult`
+
+```python
+class holocron.validation.imputation.PooledModelResult(model_family: Literal['ols', 'glm-binomial', 'lrm-binary'], coefficient_names: tuple[str, ...], coefficients: tuple[float, ...], within_covariance: tuple[tuple[float, ...], ...], between_covariance: tuple[tuple[float, ...], ...], total_covariance: tuple[tuple[float, ...], ...], standard_errors: tuple[float, ...], degrees_of_freedom: tuple[float, ...], fraction_missing_information: tuple[float, ...], relative_increase_variance: tuple[float, ...], n_imputations: int, n_observations: int, n_features: int, includes_intercept: bool, complete_data_degrees_of_freedom: int, design_fingerprint: str | None, source_fingerprints: tuple[str, ...]) -> None
+```
+
+Rubin-pooled coefficients and covariance for completed-data fits.
+
+### Attributes
+
+| Name | Type |
+| --- | --- |
+| `model_family` | `PooledModelFamily` |
+| `coefficient_names` | `tuple[str, ...]` |
+| `coefficients` | `tuple[float, ...]` |
+| `within_covariance` | `tuple[tuple[float, ...], ...]` |
+| `between_covariance` | `tuple[tuple[float, ...], ...]` |
+| `total_covariance` | `tuple[tuple[float, ...], ...]` |
+| `standard_errors` | `tuple[float, ...]` |
+| `degrees_of_freedom` | `tuple[float, ...]` |
+| `fraction_missing_information` | `tuple[float, ...]` |
+| `relative_increase_variance` | `tuple[float, ...]` |
+| `n_imputations` | `int` |
+| `n_observations` | `int` |
+| `n_features` | `int` |
+| `includes_intercept` | `bool` |
+| `complete_data_degrees_of_freedom` | `int` |
+| `design_fingerprint` | `str | None` |
+| `source_fingerprints` | `tuple[str, ...]` |
+
+### `fingerprint`
+
+Return the SHA-256 identity of the canonical document.
+
+### `from_dict(document: object) -> holocron.validation.imputation.PooledModelResult`
+
+Reconstruct a pooled model from an exact-version document.
+
+### `from_json(value: str) -> holocron.validation.imputation.PooledModelResult`
+
+Reconstruct a pooled model from strict bounded JSON.
+
+### `predict_linear(self, features: collections.abc.Iterable[collections.abc.Iterable[float]]) -> tuple[float, ...]`
+
+Predict from the Rubin-pooled coefficient vector.
+
+### `predict_response(self, features: collections.abc.Iterable[collections.abc.Iterable[float]]) -> tuple[float, ...]`
+
+Predict means for OLS or probabilities for binary logistic fits.
+
+### `to_dict(self) -> dict[str, None | bool | int | float | str | list['JsonValue'] | dict[str, 'JsonValue']]`
+
+Return the strict versioned pooled-model document.
+
+### `to_json(self) -> str`
+
+Serialize the pooled model as canonical non-executable JSON.
+
+## `PooledValidationMetric`
+
+```python
+class holocron.validation.imputation.PooledValidationMetric(name: Literal['r_squared', 'mean_squared_error', 'dxy', 'brier_score', 'calibration_intercept', 'calibration_slope'], apparent: float | None, mean_training: float | None, mean_assessment: float | None, optimism: float | None, corrected: float | None, contributing_imputations: int, contributing_resamples: int) -> None
+```
+
+One validation metric averaged over completed-data analyses.
+
+### Attributes
+
+| Name | Type |
+| --- | --- |
+| `name` | `ValidationMetricName` |
+| `apparent` | `float | None` |
+| `mean_training` | `float | None` |
+| `mean_assessment` | `float | None` |
+| `optimism` | `float | None` |
+| `corrected` | `float | None` |
+| `contributing_imputations` | `int` |
+| `contributing_resamples` | `int` |
+
+### `from_dict(document: object) -> holocron.validation.imputation.PooledValidationMetric`
+
+No public documentation is available.
+
+### `to_dict(self) -> dict[str, None | bool | int | float | str | list['JsonValue'] | dict[str, 'JsonValue']]`
+
+No public documentation is available.
+
+## `PooledValidationResult`
+
+```python
+class holocron.validation.imputation.PooledValidationResult(model_family: Literal['ols', 'binary-logistic'], metrics: tuple[holocron.validation.imputation.PooledValidationMetric, ...], n_imputations: int, source_statuses: tuple[typing.Literal['complete', 'partial', 'failed'], ...], source_failure_rates: tuple[float, ...]) -> None
+```
+
+Validation indices averaged across completed-data analyses.
+
+### Attributes
+
+| Name | Type |
+| --- | --- |
+| `model_family` | `Literal['ols', 'binary-logistic']` |
+| `metrics` | `tuple[PooledValidationMetric, ...]` |
+| `n_imputations` | `int` |
+| `source_statuses` | `tuple[SourceStatus, ...]` |
+| `source_failure_rates` | `tuple[float, ...]` |
+
+### `fingerprint`
+
+No public documentation is available.
+
+### `from_dict(document: object) -> holocron.validation.imputation.PooledValidationResult`
+
+No public documentation is available.
+
+### `from_json(value: str) -> holocron.validation.imputation.PooledValidationResult`
+
+No public documentation is available.
+
+### `metric(self, name: Literal['r_squared', 'mean_squared_error', 'dxy', 'brier_score', 'calibration_intercept', 'calibration_slope']) -> holocron.validation.imputation.PooledValidationMetric`
+
+Return one named pooled metric.
+
+### `to_dict(self) -> dict[str, None | bool | int | float | str | list['JsonValue'] | dict[str, 'JsonValue']]`
+
+Return the strict versioned pooled-validation document.
+
+### `to_json(self) -> str`
+
+No public documentation is available.
 
 ## `ResampleExecution`
 
@@ -595,6 +866,10 @@ Censoring-adjusted discrimination, accuracy, and calibration by horizon.
 
 Estimate apparent and per-split parametric recalibration relationships.
 
+## `imputation_information_table(result: 'MultipleImputationAnovaResult', *, table_id: 'str' = 'imputation-information', title: 'str' = 'Imputation penalties') -> 'TableSpec'`
+
+Return the typed `prmiInfo` replacement without rendering side effects.
+
 ## `optimism_correct_calibration(result: holocron.validation.models.ModelCalibrationResult, *, allow_partial: bool = False) -> holocron.validation.optimism.OptimismCorrectedCalibrationResult`
 
 Correct a parametric calibration curve pointwise for mean optimism.
@@ -606,6 +881,26 @@ Subtract the mean training-assessment gap from apparent performance.
 Metrics that are undefined on either side of a successful split are omitted
 from that metric's pairwise mean. The contributing count therefore belongs
 to each metric rather than to the result as a whole.
+
+## `pool_imputation_calibration(results: collections.abc.Iterable[holocron.validation.optimism.OptimismCorrectedCalibrationResult], *, prediction_grid: collections.abc.Iterable[float] | None = None, grid_points: int | None = None, allow_partial: bool = False) -> holocron.validation.imputation.PooledCalibrationResult`
+
+Interpolate and average corrected calibration curves by imputation.
+
+## `pool_imputation_likelihood_ratio(results: collections.abc.Iterable[holocron.validation.imputation.LikelihoodRatioAnova], *, stacked: holocron.validation.imputation.LikelihoodRatioAnova) -> holocron.validation.imputation.MultipleImputationAnovaResult`
+
+Apply the rms 8.2-0 Chan–Meng chi-square adjustment explicitly.
+
+## `pool_imputation_models(results: collections.abc.Iterable[holocron.models.linear.OlsResult | holocron.models.logistic.BinaryLogisticResult]) -> holocron.validation.imputation.PooledModelResult`
+
+Pool compatible OLS or binary-logistic fits using Rubin's rules.
+
+## `pool_imputation_validation(results: collections.abc.Iterable[holocron.validation.optimism.OptimismCorrectedValidationResult], *, allow_partial: bool = False) -> holocron.validation.imputation.PooledValidationResult`
+
+Average optimism-corrected validation outputs across imputations.
+
+## `process_multiple_imputation(results: collections.abc.Iterable[object], *, stacked: holocron.validation.imputation.LikelihoodRatioAnova | None = None, prediction_grid: collections.abc.Iterable[float] | None = None, grid_points: int | None = None, allow_partial: bool = False) -> holocron.validation.imputation.PooledModelResult | holocron.validation.imputation.PooledValidationResult | holocron.validation.imputation.PooledCalibrationResult | holocron.validation.imputation.MultipleImputationAnovaResult`
+
+Dispatch one homogeneous completed-data result collection explicitly.
 
 ## `report_resample_execution(execution: holocron.validation.resampling.ResampleExecution[~ReportT], *, allow_partial: bool = False, metric_contributors: collections.abc.Mapping[str, int] | None = None) -> holocron.validation.reporting.ResampleReport`
 

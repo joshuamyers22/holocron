@@ -85,8 +85,8 @@ jobs:
         run: uv run --frozen python -m unittest tests.test_resampling tests.test_model_validation tests.test_probability_validation tests.test_survival_validation tests.test_optimism_correction tests.test_diagnostics_selection tests.test_resample_reporting
       - name: Exercise Phase 7 graphics and reporting on the platform matrix
         run: uv run --frozen python -m unittest tests.test_plot_specifications tests.test_plot_adapters_renderers tests.test_nomograms tests.test_structured_reporting tests.test_svg_accessibility_regression
-      - name: Exercise Phase 8 extended-model replacements on the platform matrix
-        run: uv run --frozen python -m unittest tests.test_extended_models
+      - name: Exercise Phase 8 adapters on the platform matrix
+        run: uv run --frozen python -m unittest tests.test_extended_models tests.test_multiple_imputation
       - name: Exercise Phase 3 simulation thresholds on the platform matrix
         run: uv run --frozen python -m tools.run_phase_3_evidence --simulation-output ".work/phase-3-platform/simulation-report.json" --edge-output ".work/phase-3-platform/numerical-edge-report.json"
       - name: Exercise Phase 4 evidence on the platform matrix

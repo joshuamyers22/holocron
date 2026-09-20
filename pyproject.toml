@@ -47,6 +47,10 @@ packages = ["src/holocron"]
 "schemas/parametric-survival-result.schema.json" = "holocron/schemas/parametric-survival-result.schema.json"
 "schemas/parametric-survival-result-v2.schema.json" = "holocron/schemas/parametric-survival-result-v2.schema.json"
 "schemas/plot-spec.schema.json" = "holocron/schemas/plot-spec.schema.json"
+"schemas/pooled-anova-result.schema.json" = "holocron/schemas/pooled-anova-result.schema.json"
+"schemas/pooled-calibration-result.schema.json" = "holocron/schemas/pooled-calibration-result.schema.json"
+"schemas/pooled-model-result.schema.json" = "holocron/schemas/pooled-model-result.schema.json"
+"schemas/pooled-validation-result.schema.json" = "holocron/schemas/pooled-validation-result.schema.json"
 "schemas/proportional-hazards-result.schema.json" = "holocron/schemas/proportional-hazards-result.schema.json"
 "schemas/quantile-regression-result.schema.json" = "holocron/schemas/quantile-regression-result.schema.json"
 "schemas/resample-plan.schema.json" = "holocron/schemas/resample-plan.schema.json"
@@ -77,6 +81,10 @@ include = [
     "schemas/parametric-survival-result.schema.json",
     "schemas/parametric-survival-result-v2.schema.json",
     "schemas/plot-spec.schema.json",
+    "schemas/pooled-anova-result.schema.json",
+    "schemas/pooled-calibration-result.schema.json",
+    "schemas/pooled-model-result.schema.json",
+    "schemas/pooled-validation-result.schema.json",
     "schemas/proportional-hazards-result.schema.json",
     "schemas/quantile-regression-result.schema.json",
     "schemas/resample-plan.schema.json",

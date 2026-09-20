@@ -1,0 +1,45 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://holocron.dev/schemas/pooled-anova-result.schema.json",
+  "title": "Holocron pooled multiple-imputation likelihood-ratio ANOVA result",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "tests", "n_imputations"],
+  "properties": {
+    "schema_version": {"const": "holocron-pooled-anova-result/v1"},
+    "tests": {
+      "type": "array", "minItems": 1, "maxItems": 1000,
+      "items": {"$ref": "#/$defs/test"}
+    },
+    "n_imputations": {"type": "integer", "minimum": 2, "maximum": 1000}
+  },
+  "$defs": {
+    "test": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "term", "coefficient_names", "degrees_of_freedom",
+        "mean_imputation_chi_square", "stacked_chi_square",
+        "adjusted_chi_square", "p_value", "missing_information_fraction",
+        "denominator_degrees_of_freedom", "chi_square_discount"
+      ],
+      "properties": {
+        "term": {"type": "string", "minLength": 1, "maxLength": 4096},
+        "coefficient_names": {
+          "type": "array", "minItems": 1, "maxItems": 257, "uniqueItems": true,
+          "items": {"type": "string", "minLength": 1}
+        },
+        "degrees_of_freedom": {"type": "integer", "minimum": 1, "maximum": 257},
+        "mean_imputation_chi_square": {"type": "number", "minimum": 0},
+        "stacked_chi_square": {"type": "number", "minimum": 0},
+        "adjusted_chi_square": {"type": "number", "minimum": 0},
+        "p_value": {"type": "number", "minimum": 0, "maximum": 1},
+        "missing_information_fraction": {"type": "number", "minimum": 0, "maximum": 1},
+        "denominator_degrees_of_freedom": {
+          "oneOf": [{"type": "null"}, {"type": "number", "exclusiveMinimum": 0}]
+        },
+        "chi_square_discount": {"type": "number", "minimum": 0, "maximum": 1}
+      }
+    }
+  }
+}

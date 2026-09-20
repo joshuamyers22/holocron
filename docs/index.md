@@ -51,6 +51,8 @@ The current experimental surface supports only:
 - bounded mapped replacements for fixed-covariance GLS, weighted
   single-quantile regression, right-censored Buckley–James AFT, and one-scale
   Weibull/exponential AFT-to-PH conversion, each with strict typed results.
+- bounded multiple-imputation pooling for compatible OLS/binary-logistic fits,
+  corrected validation and calibration, and explicit LR-ANOVA information.
 
 The core estimator envelope is also checked by seven seeded simulation
 scenarios totaling 2,620 outer replications and a 16-case numerical edge corpus.
@@ -67,7 +69,8 @@ envelopes: plot specifications, typed result adapters/SVG, additive nomogram
 geometry/rendering, structured table/LaTeX reporting, five tested galleries,
 and deterministic SVG assurance. Its accountable technical exit review passes
 without claiming independent approval or R presentation-method parity. The
-first Phase 8 deliverable is complete; its multiple-imputation adapter is next.
+first two Phase 8 deliverables are complete; method-level namespace disposition
+is next.
 Capability promotion,
 consequential use, and external distribution remain separately blocked.
 
@@ -98,6 +101,7 @@ surface and evidence links.
 - [Fit ordinal and censored-response models](guides/ordinal-censoring.md).
 - [Fit supported survival models](guides/survival-models.md).
 - [Use the bounded extended-model replacements](guides/extended-models.md).
+- [Pool supported multiple-imputation results](guides/multiple-imputation.md).
 - [Use the supported post-estimation operations](guides/post-estimation.md).
 - [Use penalties and alternative covariance estimators](guides/regularization-and-covariance.md).
 - [Inspect and reproduce simulation and numerical-edge evidence](guides/simulation-and-edge-evidence.md).

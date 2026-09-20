@@ -874,22 +874,24 @@ Plot source data passes parity; renderers pass semantic and accessibility checks
 
 ### Phase 8 — Extended models and namespace completion (24–40 weeks)
 
-**Implementation progress:** The first deliverable is complete within a bounded
-Python-native replacement envelope. Fixed-covariance `fit_gls`, weighted
+**Implementation progress:** The first two deliverables are complete within
+bounded Python-native replacement envelopes. Fixed-covariance `fit_gls`, weighted
 single-quantile `fit_quantile_regression`, right-censored
 `fit_buckley_james`, and one-scale Weibull/exponential
 `to_proportional_hazards` provide typed results, strict schemas, deterministic
-tests, and explicit failure boundaries. All 42 Phase 8 manifest exports now
-have a reviewed disposition; `processMI` and its `prmiInfo` companion are the
-only two intentionally retained as one deferred unit for the next
-multiple-imputation adapter deliverable. The new model mappings are not
-R-parity claims. See
-`governance/PHASE_8_EXTENDED_MODELS_NAMESPACE.md`.
+tests, and explicit failure boundaries. The multiple-imputation adapter adds
+Rubin pooling for OLS and binary-logistic fits, averaging of corrected
+validation results, interpolation and averaging of corrected calibration
+curves, explicit Chan–Meng LR-ANOVA adjustment, and typed imputation-information
+tables. All 42 Phase 8 manifest exports now have reviewed dispositions. These
+mappings are not R-parity claims. See
+`governance/PHASE_8_EXTENDED_MODELS_NAMESPACE.md` and
+`governance/PHASE_8_MULTIPLE_IMPUTATION.md`.
 
 **Deliverables**
 
 - [x] `Gls`, `Rq`, `bj`, `pphsm`, and remaining exported helpers or approved replacements;
-- multiple-imputation adapter;
+- [x] multiple-imputation adapter;
 - complete namespace disposition;
 - performance tuning driven by retained profiles;
 - migration tooling and deprecation policy.
