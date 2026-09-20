@@ -36,6 +36,8 @@ nav:
       - Survival models: guides/survival-models.md
       - Extended model replacements: guides/extended-models.md
       - Multiple-imputation pooling: guides/multiple-imputation.md
+      - Namespace disposition: guides/namespace-disposition.md
+      - Performance profiles: guides/performance-profiles.md
       - Simulation and numerical edges: guides/simulation-and-edge-evidence.md
       - Exact resample plans: guides/resampling.md
       - Probability and survival validation: guides/validation-metrics.md

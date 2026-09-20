@@ -14,6 +14,12 @@
     "deferred"
   ],
   "default_owner": "joshuamyers22",
+  "namespace_disposition": {
+    "completed_on": "2026-09-19",
+    "decision": "complete",
+    "reviewed_capabilities": 281,
+    "governance_record": "governance/PHASE_8_NAMESPACE_DISPOSITION.md"
+  },
   "capability_count": 281,
   "capabilities": [
     {
@@ -48,14 +54,14 @@
       "id": "export:DesignAssign",
       "r_symbol": "DesignAssign",
       "kind": "export",
-      "python_entry_point": null,
+      "python_entry_point": "holocron.design.DesignSpec",
       "tier": "A",
       "milestone": "Phase 2-3",
-      "status": "deferred",
+      "status": "mapped",
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Complete R assignment behavior remains deferred; the experimental DesignSpec exposes narrower generated-column ownership and term slices."
+      "known_differences": "Use immutable DesignSpec term metadata and generated-column ownership. R assignment vectors, mutable attributes, and arbitrary design objects are not reproduced."
     },
     {
       "id": "export:ExProb",
@@ -104,14 +110,14 @@
       "id": "export:Hazard",
       "r_symbol": "Hazard",
       "kind": "export",
-      "python_entry_point": null,
+      "python_entry_point": "holocron.models.ParametricSurvivalResult.predict_hazard",
       "tier": "B",
       "milestone": "Phase 4-5",
-      "status": "deferred",
+      "status": "mapped",
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "known_differences": "Use explicit parametric-survival hazard prediction. R function factories and broader model dispatch are unsupported."
     },
     {
       "id": "export:LRupdate",
@@ -133,11 +139,11 @@
       "python_entry_point": null,
       "tier": "A",
       "milestone": "Phase 2-3",
-      "status": "deferred",
+      "status": "unsupported",
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "known_differences": "Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md)."
     },
     {
       "id": "export:Newlevels",
@@ -146,11 +152,11 @@
       "python_entry_point": null,
       "tier": "A",
       "milestone": "Phase 2-3",
-      "status": "deferred",
+      "status": "unsupported",
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "known_differences": "Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md)."
     },
     {
       "id": "export:Ocens",
@@ -169,14 +175,14 @@
       "id": "export:Ocens2Surv",
       "r_symbol": "Ocens2Surv",
       "kind": "export",
-      "python_entry_point": null,
+      "python_entry_point": "holocron.models.SurvivalResponse.from_intervals",
       "tier": "B",
       "milestone": "Phase 4-5",
-      "status": "deferred",
+      "status": "mapped",
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "known_differences": "Construct an explicit SurvivalResponse from censoring endpoints. R Surv objects, attribute mutation, and implicit type inference are not reproduced."
     },
     {
       "id": "export:Ocens2ord",
@@ -195,14 +201,14 @@
       "id": "export:Olinks",
       "r_symbol": "Olinks",
       "kind": "export",
-      "python_entry_point": null,
+      "python_entry_point": "holocron.models.fit_orm",
       "tier": "B",
       "milestone": "Phase 4-5",
-      "status": "deferred",
+      "status": "mapped",
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "known_differences": "Select one supported ordinal link explicitly in fit_orm. Runtime discovery and R link-function objects are unsupported."
     },
     {
       "id": "export:Penalty.matrix",
@@ -234,14 +240,14 @@
       "id": "export:Predict",
       "r_symbol": "Predict",
       "kind": "export",
-      "python_entry_point": null,
+      "python_entry_point": "holocron.models.predict",
       "tier": "A",
       "milestone": "Phase 2-3",
-      "status": "deferred",
+      "status": "mapped",
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "known_differences": "Use explicit realized design rows with the supported postfit predictor, or family-specific ordinal/survival prediction methods. Automatic adjustment grids, R formulas, and data-frame assembly are unsupported."
     },
     {
       "id": "export:Rq",
@@ -273,27 +279,27 @@
       "id": "export:Survival",
       "r_symbol": "Survival",
       "kind": "export",
-      "python_entry_point": null,
+      "python_entry_point": "holocron.models.CoxResult.predict_survival",
       "tier": "B",
       "milestone": "Phase 4-5",
-      "status": "deferred",
+      "status": "mapped",
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "known_differences": "Use typed Cox, parametric, or nonparametric survival prediction methods. R function factories and arbitrary fit dispatch are unsupported."
     },
     {
       "id": "export:Xcontrast",
       "r_symbol": "Xcontrast",
       "kind": "export",
-      "python_entry_point": null,
+      "python_entry_point": "holocron.models.contrast",
       "tier": "A",
       "milestone": "Phase 2-3",
-      "status": "deferred",
+      "status": "mapped",
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "known_differences": "Use one explicit named linear contrast on a supported OLS or binary-logistic fit. Design-row generation and simultaneous or nonlinear contrasts are unsupported."
     },
     {
       "id": "export:adapt_orm",
@@ -302,24 +308,24 @@
       "python_entry_point": null,
       "tier": "B",
       "milestone": "Phase 4-5",
-      "status": "deferred",
+      "status": "unsupported",
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "known_differences": "Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md)."
     },
     {
       "id": "export:annotateAnova",
       "r_symbol": "annotateAnova",
       "kind": "export",
-      "python_entry_point": null,
+      "python_entry_point": "holocron.graphics.TextAnnotation",
       "tier": "D",
       "milestone": "Phase 7",
-      "status": "deferred",
+      "status": "mapped",
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "known_differences": "Add explicit TextAnnotation values to an owned PlotSpec. Automatic ANOVA parsing and graphics-device mutation are unsupported."
     },
     {
       "id": "export:asis",
@@ -356,11 +362,11 @@
       "python_entry_point": null,
       "tier": "D",
       "milestone": "Phase 7",
-      "status": "deferred",
+      "status": "unsupported",
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "known_differences": "Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md)."
     },
     {
       "id": "export:bootBCa",
@@ -369,11 +375,11 @@
       "python_entry_point": null,
       "tier": "C",
       "milestone": "Phase 6",
-      "status": "deferred",
+      "status": "unsupported",
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "known_differences": "Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md)."
     },
     {
       "id": "export:bootcov",
@@ -395,11 +401,11 @@
       "python_entry_point": null,
       "tier": "D",
       "milestone": "Phase 7",
-      "status": "deferred",
+      "status": "unsupported",
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "known_differences": "Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md)."
     },
     {
       "id": "export:bplot",
@@ -408,24 +414,24 @@
       "python_entry_point": null,
       "tier": "D",
       "milestone": "Phase 7",
-      "status": "deferred",
+      "status": "unsupported",
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "known_differences": "Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md)."
     },
     {
       "id": "export:calibrate",
       "r_symbol": "calibrate",
       "kind": "export",
-      "python_entry_point": null,
+      "python_entry_point": "holocron.validation.calibrate_model",
       "tier": "C",
       "milestone": "Phase 6",
-      "status": "deferred",
+      "status": "mapped",
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "known_differences": "Use explicit exact resample plans for supported OLS or binary-logistic parametric calibration. Other families, boot-method aliases, and implicit refitting are unsupported."
     },
     {
       "id": "export:catg",
@@ -470,14 +476,14 @@
       "id": "export:confplot",
       "r_symbol": "confplot",
       "kind": "export",
-      "python_entry_point": null,
+      "python_entry_point": "holocron.graphics.effect_plot_spec",
       "tier": "D",
       "milestone": "Phase 7",
-      "status": "deferred",
+      "status": "mapped",
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "known_differences": "Use a typed prediction result and effect_plot_spec for interval geometry. R graphics state and arbitrary confidence-band inputs are unsupported."
     },
     {
       "id": "export:contrast",
@@ -584,27 +590,27 @@
       "id": "export:effective.df",
       "r_symbol": "effective.df",
       "kind": "export",
-      "python_entry_point": null,
+      "python_entry_point": "holocron.models.PenalizedResult",
       "tier": "C",
       "milestone": "Phase 6",
-      "status": "deferred",
+      "status": "mapped",
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "known_differences": "Read effective_degrees_of_freedom from a supported PenalizedResult or penalty-trace point. General penalty-matrix decomposition is unsupported."
     },
     {
       "id": "export:fastbw",
       "r_symbol": "fastbw",
       "kind": "export",
-      "python_entry_point": null,
+      "python_entry_point": "holocron.models.backward_select",
       "tier": "C",
       "milestone": "Phase 6",
-      "status": "deferred",
+      "status": "mapped",
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "known_differences": "Use bounded fresh-refit Wald elimination over a complete caller-declared coefficient partition. AIC/rule variants and rms object mutation are unsupported."
     },
     {
       "id": "export:formatNP",
@@ -639,11 +645,11 @@
       "python_entry_point": null,
       "tier": "A",
       "milestone": "Phase 2-3",
-      "status": "deferred",
+      "status": "unsupported",
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "known_differences": "Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md)."
     },
     {
       "id": "export:gendata",
@@ -662,14 +668,14 @@
       "id": "export:ggplot",
       "r_symbol": "ggplot",
       "kind": "export",
-      "python_entry_point": null,
+      "python_entry_point": "holocron.graphics.render_svg",
       "tier": "D",
       "milestone": "Phase 7",
-      "status": "deferred",
+      "status": "mapped",
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "known_differences": "Render an explicit backend-neutral PlotSpec to dependency-free SVG. ggplot2 objects, themes, layers, and extension dispatch are unsupported."
     },
     {
       "id": "export:groupkm",
@@ -691,11 +697,11 @@
       "python_entry_point": null,
       "tier": "D",
       "milestone": "Phase 7",
-      "status": "deferred",
+      "status": "unsupported",
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "known_differences": "Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md)."
     },
     {
       "id": "export:histdensity",
@@ -704,11 +710,11 @@
       "python_entry_point": null,
       "tier": "D",
       "milestone": "Phase 7",
-      "status": "deferred",
+      "status": "unsupported",
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "known_differences": "Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md)."
     },
     {
       "id": "export:ie.setup",
@@ -782,11 +788,11 @@
       "python_entry_point": null,
       "tier": "D",
       "milestone": "Phase 7",
-      "status": "deferred",
+      "status": "unsupported",
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "known_differences": "Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md)."
     },
     {
       "id": "export:lm.pfit",
@@ -823,14 +829,14 @@
       "id": "export:lrm.fit",
       "r_symbol": "lrm.fit",
       "kind": "export",
-      "python_entry_point": null,
+      "python_entry_point": "holocron.models.fit_lrm",
       "tier": "A",
       "milestone": "Phase 2-3",
-      "status": "deferred",
+      "status": "mapped",
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "known_differences": "Use the public bounded binary fit_lrm estimator. Low-level R fitter controls, ordinal dispatch, and mutable work arrays are unsupported."
     },
     {
       "id": "export:lrtest",
@@ -878,11 +884,11 @@
       "python_entry_point": null,
       "tier": "A",
       "milestone": "Phase 2-3",
-      "status": "deferred",
+      "status": "unsupported",
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "known_differences": "Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md)."
     },
     {
       "id": "export:mix_re",
@@ -901,27 +907,27 @@
       "id": "export:modelData",
       "r_symbol": "modelData",
       "kind": "export",
-      "python_entry_point": null,
+      "python_entry_point": "holocron.design.DesignMatrix",
       "tier": "A",
       "milestone": "Phase 2-3",
-      "status": "deferred",
+      "status": "mapped",
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "known_differences": "Retain the immutable realized DesignMatrix and source data explicitly. R call evaluation and environment lookup are unsupported."
     },
     {
       "id": "export:nomogram",
       "r_symbol": "nomogram",
       "kind": "export",
-      "python_entry_point": null,
+      "python_entry_point": "holocron.graphics.build_nomogram",
       "tier": "D",
       "milestone": "Phase 7",
-      "status": "deferred",
+      "status": "mapped",
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "An owned additive OLS/logit geometry builder exists, but it is not mapped to rms::nomogram because conditional interactions, broader model families, custom transforms, and pinned-R parity remain absent."
+      "known_differences": "Build strict additive identity-bound OLS/logit nomogram geometry. Conditional interactions, broader model families, custom transforms, and R geometry parity are unsupported."
     },
     {
       "id": "export:npsurv",
@@ -966,14 +972,14 @@
       "id": "export:ols.influence",
       "r_symbol": "ols.influence",
       "kind": "export",
-      "python_entry_point": null,
+      "python_entry_point": "holocron.models.influence_diagnostics",
       "tier": "A",
       "milestone": "Phase 2-3",
-      "status": "deferred",
+      "status": "mapped",
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "known_differences": "Use typed exact OLS case-deletion influence diagnostics. R print/plot side effects and additional deletion summaries are unsupported."
     },
     {
       "id": "export:oos.loglik",
@@ -982,11 +988,11 @@
       "python_entry_point": null,
       "tier": "C",
       "milestone": "Phase 6",
-      "status": "deferred",
+      "status": "unsupported",
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "known_differences": "Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md)."
     },
     {
       "id": "export:ordESS",
@@ -995,24 +1001,24 @@
       "python_entry_point": null,
       "tier": "B",
       "milestone": "Phase 4-5",
-      "status": "deferred",
+      "status": "unsupported",
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "known_differences": "Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md)."
     },
     {
       "id": "export:ordParallel",
       "r_symbol": "ordParallel",
       "kind": "export",
-      "python_entry_point": null,
+      "python_entry_point": "holocron.models.OrdinalResult.diagnostics",
       "tier": "B",
       "milestone": "Phase 4-5",
-      "status": "deferred",
+      "status": "mapped",
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "known_differences": "Use the bounded proportional-odds diagnostic carried by OrdinalResult. Bootstrap, plotting, and broader ordinal model dispatch are unsupported."
     },
     {
       "id": "export:orm",
@@ -1035,14 +1041,14 @@
       "id": "export:orm.fit",
       "r_symbol": "orm.fit",
       "kind": "export",
-      "python_entry_point": null,
+      "python_entry_point": "holocron.models.fit_orm",
       "tier": "B",
       "milestone": "Phase 4-5",
-      "status": "deferred",
+      "status": "mapped",
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "known_differences": "Use the public bounded fit_orm estimator. Low-level R work arrays, arbitrary optimization controls, and object mutation are unsupported."
     },
     {
       "id": "export:pantext",
@@ -1061,14 +1067,14 @@
       "id": "export:pentrace",
       "r_symbol": "pentrace",
       "kind": "export",
-      "python_entry_point": null,
+      "python_entry_point": "holocron.models.trace_penalty",
       "tier": "C",
       "milestone": "Phase 6",
-      "status": "deferred",
+      "status": "mapped",
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "known_differences": "Use a bounded explicit scalar penalty grid with AIC or BIC selection for OLS or binary lrm. Multidimensional penalties and rms optimization shortcuts are unsupported."
     },
     {
       "id": "export:perimeter",
@@ -1090,24 +1096,24 @@
       "python_entry_point": null,
       "tier": "D",
       "milestone": "Phase 7",
-      "status": "deferred",
+      "status": "unsupported",
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "known_differences": "Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md)."
     },
     {
       "id": "export:plot.contrast.rms",
       "r_symbol": "plot.contrast.rms",
       "kind": "export",
-      "python_entry_point": null,
+      "python_entry_point": "holocron.graphics.contrast_plot_spec",
       "tier": "D",
       "milestone": "Phase 7",
-      "status": "deferred",
+      "status": "mapped",
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "known_differences": "Build a backend-neutral contrast PlotSpec from typed estimates. R graphics arguments and contrast-object dispatch are unsupported."
     },
     {
       "id": "export:plot.lrm.partial",
@@ -1116,11 +1122,11 @@
       "python_entry_point": null,
       "tier": "D",
       "milestone": "Phase 7",
-      "status": "deferred",
+      "status": "unsupported",
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "known_differences": "Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md)."
     },
     {
       "id": "export:plot.xmean.ordinaly",
@@ -1129,11 +1135,11 @@
       "python_entry_point": null,
       "tier": "D",
       "milestone": "Phase 7",
-      "status": "deferred",
+      "status": "unsupported",
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "known_differences": "Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md)."
     },
     {
       "id": "export:plotIntercepts",
@@ -1142,24 +1148,24 @@
       "python_entry_point": null,
       "tier": "D",
       "milestone": "Phase 7",
-      "status": "deferred",
+      "status": "unsupported",
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "known_differences": "Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md)."
     },
     {
       "id": "export:plotmathAnova",
       "r_symbol": "plotmathAnova",
       "kind": "export",
-      "python_entry_point": null,
+      "python_entry_point": "holocron.graphics.anova_plot_spec",
       "tier": "D",
       "milestone": "Phase 7",
-      "status": "deferred",
+      "status": "mapped",
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "known_differences": "Use anova_plot_spec for explicit typed term tests. Plotmath expression generation and device annotation are unsupported."
     },
     {
       "id": "export:pol",
@@ -1230,27 +1236,27 @@
       "id": "export:predab.resample",
       "r_symbol": "predab.resample",
       "kind": "export",
-      "python_entry_point": null,
+      "python_entry_point": "holocron.validation.run_resample_plan",
       "tier": "C",
       "milestone": "Phase 6",
-      "status": "deferred",
+      "status": "mapped",
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "known_differences": "Run one caller-owned whole procedure over an exact immutable resample plan. rms method strings, hidden refits, and model-object mutation are unsupported."
     },
     {
       "id": "export:predictrms",
       "r_symbol": "predictrms",
       "kind": "export",
-      "python_entry_point": null,
+      "python_entry_point": "holocron.models.predict",
       "tier": "A",
       "milestone": "Phase 2-3",
-      "status": "deferred",
+      "status": "mapped",
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "known_differences": "Use explicit design rows with the supported postfit predictor or family-specific prediction methods. R formula evaluation, adjustment frames, and broad type dispatch are unsupported."
     },
     {
       "id": "export:prmiInfo",
@@ -1403,11 +1409,11 @@
       "python_entry_point": null,
       "tier": "D",
       "milestone": "Phase 7",
-      "status": "deferred",
+      "status": "unsupported",
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "known_differences": "Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md)."
     },
     {
       "id": "export:scored",
@@ -1465,27 +1471,27 @@
       "id": "export:specs",
       "r_symbol": "specs",
       "kind": "export",
-      "python_entry_point": null,
+      "python_entry_point": "holocron.design.DesignSpec",
       "tier": "A",
       "milestone": "Phase 2-3",
-      "status": "deferred",
+      "status": "mapped",
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "known_differences": "Inspect immutable DesignSpec terms, generated columns, labels, and fingerprints. R console formatting and Design attribute inference are unsupported."
     },
     {
       "id": "export:strat",
       "r_symbol": "strat",
       "kind": "export",
-      "python_entry_point": null,
+      "python_entry_point": "holocron.models.fit_cph",
       "tier": "A",
       "milestone": "Phase 2-3",
-      "status": "deferred",
+      "status": "mapped",
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "known_differences": "Supply explicit stratum labels to supported survival estimators and predictors. Formula-special parsing and interaction with arbitrary R models are unsupported."
     },
     {
       "id": "export:survdiffplot",
@@ -1494,50 +1500,50 @@
       "python_entry_point": null,
       "tier": "D",
       "milestone": "Phase 7",
-      "status": "deferred",
+      "status": "unsupported",
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "known_differences": "Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md)."
     },
     {
       "id": "export:survest",
       "r_symbol": "survest",
       "kind": "export",
-      "python_entry_point": null,
+      "python_entry_point": "holocron.models.CoxResult.predict_survival",
       "tier": "B",
       "milestone": "Phase 4-5",
-      "status": "deferred",
+      "status": "mapped",
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "known_differences": "Use typed Cox or parametric survival and curve prediction methods with explicit rows, times, strata, and offsets. R data-frame dispatch and confidence bands are unsupported."
     },
     {
       "id": "export:survplot",
       "r_symbol": "survplot",
       "kind": "export",
-      "python_entry_point": null,
+      "python_entry_point": "holocron.graphics.survival_plot_spec",
       "tier": "D",
       "milestone": "Phase 7",
-      "status": "deferred",
+      "status": "mapped",
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "known_differences": "Adapt a typed SurvivalCurveResult to backend-neutral plot geometry. Automatic prediction, R graphics state, and broad model dispatch are unsupported."
     },
     {
       "id": "export:survplotp",
       "r_symbol": "survplotp",
       "kind": "export",
-      "python_entry_point": null,
+      "python_entry_point": "holocron.graphics.render_svg",
       "tier": "D",
       "milestone": "Phase 7",
-      "status": "deferred",
+      "status": "mapped",
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "known_differences": "Render an explicit survival PlotSpec as accessible SVG. plotly output, interactive controls, and R widget behavior are unsupported."
     },
     {
       "id": "export:survreg.auxinfo",
@@ -1584,14 +1590,14 @@
       "id": "export:val.probg",
       "r_symbol": "val.probg",
       "kind": "export",
-      "python_entry_point": null,
+      "python_entry_point": "holocron.validation.validate_probabilities",
       "tier": "C",
       "milestone": "Phase 6",
-      "status": "deferred",
+      "status": "mapped",
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "known_differences": "Use explicit grouped probability calibration from validate_probabilities. R plotting, smoothing, and formula interfaces are unsupported."
     },
     {
       "id": "export:val.surv",
@@ -1610,27 +1616,27 @@
       "id": "export:validate",
       "r_symbol": "validate",
       "kind": "export",
-      "python_entry_point": null,
+      "python_entry_point": "holocron.validation.validate_model",
       "tier": "C",
       "milestone": "Phase 6",
-      "status": "deferred",
+      "status": "mapped",
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "known_differences": "Use exact resample plans and fresh OLS or binary-logistic refits, or explicit survival prediction validation. Other model families and rms method dispatch are unsupported."
     },
     {
       "id": "export:vif",
       "r_symbol": "vif",
       "kind": "export",
-      "python_entry_point": null,
+      "python_entry_point": "holocron.models.variance_inflation_factors",
       "tier": "C",
       "milestone": "Phase 6",
-      "status": "deferred",
+      "status": "mapped",
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "known_differences": "Use covariance-correlation VIFs for supported OLS or binary-logistic fits. Generalized VIFs, term aggregation, and other model families are unsupported."
     },
     {
       "id": "export:which.influence",
@@ -1649,27 +1655,27 @@
       "id": "s3_method:AIC.rms",
       "r_symbol": "AIC.rms",
       "kind": "s3_method",
-      "python_entry_point": null,
+      "python_entry_point": "holocron.models.likelihood",
       "tier": "D",
       "milestone": "Phase 8",
-      "status": "deferred",
+      "status": "mapped",
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "known_differences": "Read the constant-inclusive AIC from a supported OLS or binary-logistic LikelihoodResult. Other model families, AIC variants, and arbitrary penalty factors are unsupported."
     },
     {
       "id": "s3_method:ExProb.orm",
       "r_symbol": "ExProb.orm",
       "kind": "s3_method",
-      "python_entry_point": null,
+      "python_entry_point": "holocron.models.OrdinalResult.predict_exceedance",
       "tier": "B",
       "milestone": "Phase 4-5",
-      "status": "deferred",
+      "status": "mapped",
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "known_differences": "Predict exceedance probabilities at explicit observed response levels. R function factories, interpolation, and plotting side effects are unsupported."
     },
     {
       "id": "s3_method:Function.cph",
@@ -1678,11 +1684,11 @@
       "python_entry_point": null,
       "tier": "D",
       "milestone": "Phase 7",
-      "status": "deferred",
+      "status": "unsupported",
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "known_differences": "Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md)."
     },
     {
       "id": "s3_method:Function.rms",
@@ -1691,11 +1697,11 @@
       "python_entry_point": null,
       "tier": "D",
       "milestone": "Phase 7",
-      "status": "deferred",
+      "status": "unsupported",
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "known_differences": "Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md)."
     },
     {
       "id": "s3_method:Hazard.psm",
@@ -1717,11 +1723,11 @@
       "python_entry_point": null,
       "tier": "D",
       "milestone": "Phase 8",
-      "status": "deferred",
+      "status": "unsupported",
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "known_differences": "Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md)."
     },
     {
       "id": "s3_method:Mean.cph",
@@ -1740,27 +1746,27 @@
       "id": "s3_method:Mean.lrm",
       "r_symbol": "Mean.lrm",
       "kind": "s3_method",
-      "python_entry_point": null,
+      "python_entry_point": "holocron.models.BinaryLogisticResult.predict_probability",
       "tier": "B",
       "milestone": "Phase 4-5",
-      "status": "deferred",
+      "status": "mapped",
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "known_differences": "Binary lrm response means are explicit predicted probabilities. Ordinal lrm function factories and R interpolation are unsupported."
     },
     {
       "id": "s3_method:Mean.orm",
       "r_symbol": "Mean.orm",
       "kind": "s3_method",
-      "python_entry_point": null,
+      "python_entry_point": "holocron.models.OrdinalResult.predict_mean",
       "tier": "B",
       "milestone": "Phase 4-5",
-      "status": "deferred",
+      "status": "mapped",
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "known_differences": "Predict numeric means over the fitted ordered response values. R function factories and custom response transformations are unsupported."
     },
     {
       "id": "s3_method:Mean.psm",
@@ -1782,11 +1788,11 @@
       "python_entry_point": null,
       "tier": "A",
       "milestone": "Phase 2-3",
-      "status": "deferred",
+      "status": "unsupported",
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "known_differences": "Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md)."
     },
     {
       "id": "s3_method:Newlevels.rms",
@@ -1795,11 +1801,11 @@
       "python_entry_point": null,
       "tier": "A",
       "milestone": "Phase 2-3",
-      "status": "deferred",
+      "status": "unsupported",
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "known_differences": "Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md)."
     },
     {
       "id": "s3_method:Quantile.cph",
@@ -1818,14 +1824,14 @@
       "id": "s3_method:Quantile.orm",
       "r_symbol": "Quantile.orm",
       "kind": "s3_method",
-      "python_entry_point": null,
+      "python_entry_point": "holocron.models.OrdinalResult.predict_quantile",
       "tier": "B",
       "milestone": "Phase 4-5",
-      "status": "deferred",
+      "status": "mapped",
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "known_differences": "Predict fitted ordinal response quantiles for explicit probabilities and design rows. R function factories and interpolation options are unsupported."
     },
     {
       "id": "s3_method:Quantile.psm",
@@ -1857,14 +1863,14 @@
       "id": "s3_method:Survival.orm",
       "r_symbol": "Survival.orm",
       "kind": "s3_method",
-      "python_entry_point": null,
+      "python_entry_point": "holocron.models.OrdinalResult.predict_exceedance",
       "tier": "B",
       "milestone": "Phase 4-5",
-      "status": "deferred",
+      "status": "mapped",
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "known_differences": "Use explicit ordinal exceedance probabilities as the supported discrete-survival analogue. R survival function factories and time interpolation are unsupported."
     },
     {
       "id": "s3_method:Survival.psm",
@@ -1886,11 +1892,11 @@
       "python_entry_point": null,
       "tier": "D",
       "milestone": "Phase 8",
-      "status": "deferred",
+      "status": "unsupported",
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "known_differences": "Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md)."
     },
     {
       "id": "s3_method:[.rms",
@@ -1899,11 +1905,11 @@
       "python_entry_point": null,
       "tier": "D",
       "milestone": "Phase 8",
-      "status": "deferred",
+      "status": "unsupported",
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "known_differences": "Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md)."
     },
     {
       "id": "s3_method:anova.rms",
@@ -1925,11 +1931,11 @@
       "python_entry_point": null,
       "tier": "D",
       "milestone": "Phase 8",
-      "status": "deferred",
+      "status": "unsupported",
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "known_differences": "Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md)."
     },
     {
       "id": "s3_method:as.data.frame.rms",
@@ -1938,11 +1944,11 @@
       "python_entry_point": null,
       "tier": "D",
       "milestone": "Phase 8",
-      "status": "deferred",
+      "status": "unsupported",
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "known_differences": "Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md)."
     },
     {
       "id": "s3_method:calibrate.cph",
@@ -1951,24 +1957,24 @@
       "python_entry_point": null,
       "tier": "C",
       "milestone": "Phase 6",
-      "status": "deferred",
+      "status": "unsupported",
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "known_differences": "Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md)."
     },
     {
       "id": "s3_method:calibrate.default",
       "r_symbol": "calibrate.default",
       "kind": "s3_method",
-      "python_entry_point": null,
+      "python_entry_point": "holocron.validation.calibrate_model",
       "tier": "C",
       "milestone": "Phase 6",
-      "status": "deferred",
+      "status": "mapped",
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "known_differences": "Use explicit exact resampling for OLS or binary-logistic parametric calibration. Generic R dispatch and nonparametric smooth calibration are unsupported."
     },
     {
       "id": "s3_method:calibrate.orm",
@@ -1977,11 +1983,11 @@
       "python_entry_point": null,
       "tier": "C",
       "milestone": "Phase 6",
-      "status": "deferred",
+      "status": "unsupported",
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "known_differences": "Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md)."
     },
     {
       "id": "s3_method:calibrate.psm",
@@ -1990,11 +1996,11 @@
       "python_entry_point": null,
       "tier": "C",
       "milestone": "Phase 6",
-      "status": "deferred",
+      "status": "unsupported",
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "known_differences": "Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md)."
     },
     {
       "id": "s3_method:coef.corFloorExp",
@@ -2003,11 +2009,11 @@
       "python_entry_point": null,
       "tier": "D",
       "milestone": "Phase 8",
-      "status": "deferred",
+      "status": "unsupported",
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "known_differences": "Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md)."
     },
     {
       "id": "s3_method:coef<-.corFloorExp",
@@ -2016,11 +2022,11 @@
       "python_entry_point": null,
       "tier": "D",
       "milestone": "Phase 8",
-      "status": "deferred",
+      "status": "unsupported",
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "known_differences": "Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md)."
     },
     {
       "id": "s3_method:contrast.rms",
@@ -2042,37 +2048,37 @@
       "python_entry_point": null,
       "tier": "D",
       "milestone": "Phase 8",
-      "status": "deferred",
+      "status": "unsupported",
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "known_differences": "Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md)."
     },
     {
       "id": "s3_method:ggplot.Predict",
       "r_symbol": "ggplot.Predict",
       "kind": "s3_method",
-      "python_entry_point": null,
+      "python_entry_point": "holocron.graphics.effect_plot_spec",
       "tier": "D",
       "milestone": "Phase 7",
-      "status": "deferred",
+      "status": "mapped",
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "known_differences": "Adapt a typed PredictionResult to backend-neutral effect geometry and render separately. ggplot2 objects, faceting grammar, and themes are unsupported."
     },
     {
       "id": "s3_method:ggplot.npsurv",
       "r_symbol": "ggplot.npsurv",
       "kind": "s3_method",
-      "python_entry_point": null,
+      "python_entry_point": "holocron.graphics.survival_plot_spec",
       "tier": "D",
       "milestone": "Phase 7",
-      "status": "deferred",
+      "status": "mapped",
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "known_differences": "Adapt an explicit nonparametric SurvivalCurveResult to a PlotSpec. ggplot2 objects, risk tables, confidence bands, and themes are unsupported."
     },
     {
       "id": "s3_method:html.anova.rms",
@@ -2081,11 +2087,11 @@
       "python_entry_point": null,
       "tier": "D",
       "milestone": "Phase 8",
-      "status": "deferred",
+      "status": "unsupported",
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "known_differences": "Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md)."
     },
     {
       "id": "s3_method:html.naprint.delete",
@@ -2094,11 +2100,11 @@
       "python_entry_point": null,
       "tier": "D",
       "milestone": "Phase 8",
-      "status": "deferred",
+      "status": "unsupported",
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "known_differences": "Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md)."
     },
     {
       "id": "s3_method:html.summary.rms",
@@ -2107,11 +2113,11 @@
       "python_entry_point": null,
       "tier": "D",
       "milestone": "Phase 8",
-      "status": "deferred",
+      "status": "unsupported",
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "known_differences": "Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md)."
     },
     {
       "id": "s3_method:html.validate",
@@ -2120,11 +2126,11 @@
       "python_entry_point": null,
       "tier": "D",
       "milestone": "Phase 8",
-      "status": "deferred",
+      "status": "unsupported",
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "known_differences": "Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md)."
     },
     {
       "id": "s3_method:is.na.Ocens",
@@ -2133,24 +2139,24 @@
       "python_entry_point": null,
       "tier": "D",
       "milestone": "Phase 8",
-      "status": "deferred",
+      "status": "unsupported",
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "known_differences": "Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md)."
     },
     {
       "id": "s3_method:latex.Glm",
       "r_symbol": "latex.Glm",
       "kind": "s3_method",
-      "python_entry_point": null,
+      "python_entry_point": "holocron.reporting.render_latex",
       "tier": "D",
       "milestone": "Phase 7",
-      "status": "deferred",
+      "status": "mapped",
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Owned model-summary tables and safe LaTeX rendering exist for supported Gaussian/identity and binomial/logit summaries, but no rms::latex.Glm layout, option, or oracle parity is claimed."
+      "known_differences": "Render an owned model-summary TableSpec as escaped deterministic LaTeX. rms layout, options, and output parity are unsupported."
     },
     {
       "id": "s3_method:latex.Gls",
@@ -2159,11 +2165,11 @@
       "python_entry_point": null,
       "tier": "D",
       "milestone": "Phase 7",
-      "status": "deferred",
+      "status": "unsupported",
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "known_differences": "Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md)."
     },
     {
       "id": "s3_method:latex.Rq",
@@ -2172,24 +2178,24 @@
       "python_entry_point": null,
       "tier": "D",
       "milestone": "Phase 7",
-      "status": "deferred",
+      "status": "unsupported",
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "known_differences": "Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md)."
     },
     {
       "id": "s3_method:latex.anova.rms",
       "r_symbol": "latex.anova.rms",
       "kind": "s3_method",
-      "python_entry_point": null,
+      "python_entry_point": "holocron.reporting.render_latex",
       "tier": "D",
       "milestone": "Phase 7",
-      "status": "deferred",
+      "status": "mapped",
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Owned structured ANOVA tables and safe LaTeX rendering exist for supported Wald tests, but no rms::latex.anova.rms layout, option, or oracle parity is claimed."
+      "known_differences": "Render an owned ANOVA TableSpec as escaped deterministic LaTeX. rms layout, options, and output parity are unsupported."
     },
     {
       "id": "s3_method:latex.bj",
@@ -2198,11 +2204,11 @@
       "python_entry_point": null,
       "tier": "D",
       "milestone": "Phase 7",
-      "status": "deferred",
+      "status": "unsupported",
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "known_differences": "Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md)."
     },
     {
       "id": "s3_method:latex.cph",
@@ -2211,24 +2217,24 @@
       "python_entry_point": null,
       "tier": "D",
       "milestone": "Phase 7",
-      "status": "deferred",
+      "status": "unsupported",
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "known_differences": "Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md)."
     },
     {
       "id": "s3_method:latex.lrm",
       "r_symbol": "latex.lrm",
       "kind": "s3_method",
-      "python_entry_point": null,
+      "python_entry_point": "holocron.reporting.render_latex",
       "tier": "D",
       "milestone": "Phase 7",
-      "status": "deferred",
+      "status": "mapped",
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Owned model-summary tables and safe LaTeX rendering exist for binary lrm summaries, but no rms::latex.lrm layout, option, or oracle parity is claimed."
+      "known_differences": "Render an owned binary-lrm summary TableSpec as escaped deterministic LaTeX. rms layout, options, and output parity are unsupported."
     },
     {
       "id": "s3_method:latex.naprint.delete",
@@ -2237,24 +2243,24 @@
       "python_entry_point": null,
       "tier": "D",
       "milestone": "Phase 7",
-      "status": "deferred",
+      "status": "unsupported",
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "known_differences": "Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md)."
     },
     {
       "id": "s3_method:latex.ols",
       "r_symbol": "latex.ols",
       "kind": "s3_method",
-      "python_entry_point": null,
+      "python_entry_point": "holocron.reporting.render_latex",
       "tier": "D",
       "milestone": "Phase 7",
-      "status": "deferred",
+      "status": "mapped",
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Owned model-summary tables and safe LaTeX rendering exist for supported OLS summaries, but no rms::latex.ols layout, option, or oracle parity is claimed."
+      "known_differences": "Render an owned OLS summary TableSpec as escaped deterministic LaTeX. rms layout, options, and output parity are unsupported."
     },
     {
       "id": "s3_method:latex.orm",
@@ -2263,11 +2269,11 @@
       "python_entry_point": null,
       "tier": "D",
       "milestone": "Phase 7",
-      "status": "deferred",
+      "status": "unsupported",
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "known_differences": "Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md)."
     },
     {
       "id": "s3_method:latex.pphsm",
@@ -2276,11 +2282,11 @@
       "python_entry_point": null,
       "tier": "D",
       "milestone": "Phase 7",
-      "status": "deferred",
+      "status": "unsupported",
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "known_differences": "Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md)."
     },
     {
       "id": "s3_method:latex.psm",
@@ -2289,37 +2295,37 @@
       "python_entry_point": null,
       "tier": "D",
       "milestone": "Phase 7",
-      "status": "deferred",
+      "status": "unsupported",
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "known_differences": "Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md)."
     },
     {
       "id": "s3_method:latex.summary.rms",
       "r_symbol": "latex.summary.rms",
       "kind": "s3_method",
-      "python_entry_point": null,
+      "python_entry_point": "holocron.reporting.render_latex",
       "tier": "D",
       "milestone": "Phase 7",
-      "status": "deferred",
+      "status": "mapped",
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Owned contrast/inference tables and safe LaTeX rendering exist for supported estimates, but no rms::latex.summary.rms layout, option, or oracle parity is claimed."
+      "known_differences": "Render an owned contrast or inference TableSpec as escaped deterministic LaTeX. rms layout, options, and output parity are unsupported."
     },
     {
       "id": "s3_method:latex.validate",
       "r_symbol": "latex.validate",
       "kind": "s3_method",
-      "python_entry_point": null,
+      "python_entry_point": "holocron.reporting.render_latex",
       "tier": "D",
       "milestone": "Phase 7",
-      "status": "deferred",
+      "status": "mapped",
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Owned probability, survival, optimism, and resample-report tables have safe LaTeX output, but no rms::latex.validate layout, option, or oracle parity is claimed."
+      "known_differences": "Render an owned validation TableSpec as escaped deterministic LaTeX. rms layout, options, and output parity are unsupported."
     },
     {
       "id": "s3_method:lines.residuals.psm.censored.normalized",
@@ -2328,24 +2334,24 @@
       "python_entry_point": null,
       "tier": "D",
       "milestone": "Phase 8",
-      "status": "deferred",
+      "status": "unsupported",
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "known_differences": "Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md)."
     },
     {
       "id": "s3_method:logLik.Gls",
       "r_symbol": "logLik.Gls",
       "kind": "s3_method",
-      "python_entry_point": null,
+      "python_entry_point": "holocron.models.GeneralizedLeastSquaresResult.log_likelihood",
       "tier": "D",
       "milestone": "Phase 8",
-      "status": "deferred",
+      "status": "mapped",
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "known_differences": "Read the stored ML or REML log likelihood from the typed GLS result. R logLik attributes, refitting, and arbitrary nlme structures are unsupported."
     },
     {
       "id": "s3_method:logLik.ols",
@@ -2380,24 +2386,24 @@
       "python_entry_point": null,
       "tier": "D",
       "milestone": "Phase 8",
-      "status": "deferred",
+      "status": "unsupported",
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "known_differences": "Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md)."
     },
     {
       "id": "s3_method:nobs.rms",
       "r_symbol": "nobs.rms",
       "kind": "s3_method",
-      "python_entry_point": null,
+      "python_entry_point": "holocron.models.OlsResult.n_observations",
       "tier": "D",
       "milestone": "Phase 8",
-      "status": "deferred",
+      "status": "mapped",
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "known_differences": "Read n_observations from each supported typed result. Generic S3 dispatch and reconstruction from model frames are unsupported."
     },
     {
       "id": "s3_method:oos.loglik.Glm",
@@ -2406,11 +2412,11 @@
       "python_entry_point": null,
       "tier": "D",
       "milestone": "Phase 8",
-      "status": "deferred",
+      "status": "unsupported",
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "known_differences": "Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md)."
     },
     {
       "id": "s3_method:oos.loglik.cph",
@@ -2419,11 +2425,11 @@
       "python_entry_point": null,
       "tier": "D",
       "milestone": "Phase 8",
-      "status": "deferred",
+      "status": "unsupported",
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "known_differences": "Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md)."
     },
     {
       "id": "s3_method:oos.loglik.lrm",
@@ -2432,11 +2438,11 @@
       "python_entry_point": null,
       "tier": "D",
       "milestone": "Phase 8",
-      "status": "deferred",
+      "status": "unsupported",
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "known_differences": "Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md)."
     },
     {
       "id": "s3_method:oos.loglik.ols",
@@ -2445,11 +2451,11 @@
       "python_entry_point": null,
       "tier": "D",
       "milestone": "Phase 8",
-      "status": "deferred",
+      "status": "unsupported",
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "known_differences": "Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md)."
     },
     {
       "id": "s3_method:oos.loglik.psm",
@@ -2458,11 +2464,11 @@
       "python_entry_point": null,
       "tier": "D",
       "milestone": "Phase 8",
-      "status": "deferred",
+      "status": "unsupported",
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "known_differences": "Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md)."
     },
     {
       "id": "s3_method:plot.ExProb",
@@ -2471,76 +2477,76 @@
       "python_entry_point": null,
       "tier": "D",
       "milestone": "Phase 7",
-      "status": "deferred",
+      "status": "unsupported",
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "known_differences": "Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md)."
     },
     {
       "id": "s3_method:plot.Predict",
       "r_symbol": "plot.Predict",
       "kind": "s3_method",
-      "python_entry_point": null,
+      "python_entry_point": "holocron.graphics.effect_plot_spec",
       "tier": "D",
       "milestone": "Phase 7",
-      "status": "deferred",
+      "status": "mapped",
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "known_differences": "Adapt one typed PredictionResult and explicit predictor coordinates to a PlotSpec. R adjustment grids, panels, and graphics state are unsupported."
     },
     {
       "id": "s3_method:plot.anova.rms",
       "r_symbol": "plot.anova.rms",
       "kind": "s3_method",
-      "python_entry_point": null,
+      "python_entry_point": "holocron.graphics.anova_plot_spec",
       "tier": "D",
       "milestone": "Phase 7",
-      "status": "deferred",
+      "status": "mapped",
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "known_differences": "Adapt supported typed Wald ANOVA tests to backend-neutral geometry. R nonlinear decomposition and plotting options are unsupported."
     },
     {
       "id": "s3_method:plot.calibrate",
       "r_symbol": "plot.calibrate",
       "kind": "s3_method",
-      "python_entry_point": null,
+      "python_entry_point": "holocron.graphics.calibration_plot_spec",
       "tier": "D",
       "milestone": "Phase 7",
-      "status": "deferred",
+      "status": "mapped",
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "known_differences": "Adapt a supported corrected calibration result to a PlotSpec. R smoothing, risk distributions, and graphics options are unsupported."
     },
     {
       "id": "s3_method:plot.calibrate.default",
       "r_symbol": "plot.calibrate.default",
       "kind": "s3_method",
-      "python_entry_point": null,
+      "python_entry_point": "holocron.graphics.calibration_plot_spec",
       "tier": "D",
       "milestone": "Phase 7",
-      "status": "deferred",
+      "status": "mapped",
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "known_differences": "Adapt a supported corrected calibration result to a PlotSpec. Generic R object dispatch and graphics options are unsupported."
     },
     {
       "id": "s3_method:plot.contrast.rms",
       "r_symbol": "plot.contrast.rms",
       "kind": "s3_method",
-      "python_entry_point": null,
+      "python_entry_point": "holocron.graphics.contrast_plot_spec",
       "tier": "D",
       "milestone": "Phase 7",
-      "status": "deferred",
+      "status": "mapped",
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "known_differences": "Adapt typed inference estimates to backend-neutral contrast geometry. R contrast objects, simultaneous bands, and graphics options are unsupported."
     },
     {
       "id": "s3_method:plot.gIndex",
@@ -2549,11 +2555,11 @@
       "python_entry_point": null,
       "tier": "D",
       "milestone": "Phase 7",
-      "status": "deferred",
+      "status": "unsupported",
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "known_differences": "Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md)."
     },
     {
       "id": "s3_method:plot.lrm.partial",
@@ -2562,37 +2568,37 @@
       "python_entry_point": null,
       "tier": "D",
       "milestone": "Phase 7",
-      "status": "deferred",
+      "status": "unsupported",
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "known_differences": "Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md)."
     },
     {
       "id": "s3_method:plot.nomogram",
       "r_symbol": "plot.nomogram",
       "kind": "s3_method",
-      "python_entry_point": null,
+      "python_entry_point": "holocron.graphics.render_nomogram_svg",
       "tier": "D",
       "milestone": "Phase 7",
-      "status": "deferred",
+      "status": "mapped",
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "An owned SVG renderer and canonical Holocron snapshot corpus exist for NomogramGeometry, but it is not mapped to plot.nomogram because R geometry/styling parity and cross-implementation visual-regression evidence remain absent."
+      "known_differences": "Render owned NomogramGeometry as deterministic accessible SVG. R geometry, styling, device behavior, and visual parity are unsupported."
     },
     {
       "id": "s3_method:plot.pentrace",
       "r_symbol": "plot.pentrace",
       "kind": "s3_method",
-      "python_entry_point": null,
+      "python_entry_point": "holocron.graphics.diagnostic_plot_spec",
       "tier": "D",
       "milestone": "Phase 7",
-      "status": "deferred",
+      "status": "mapped",
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "known_differences": "Adapt a bounded PenaltyTraceResult to a PlotSpec. Multi-parameter surfaces and R graphics options are unsupported."
     },
     {
       "id": "s3_method:plot.rexVar",
@@ -2601,11 +2607,11 @@
       "python_entry_point": null,
       "tier": "D",
       "milestone": "Phase 7",
-      "status": "deferred",
+      "status": "unsupported",
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "known_differences": "Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md)."
     },
     {
       "id": "s3_method:plot.sensuc",
@@ -2614,63 +2620,63 @@
       "python_entry_point": null,
       "tier": "D",
       "milestone": "Phase 7",
-      "status": "deferred",
+      "status": "unsupported",
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "known_differences": "Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md)."
     },
     {
       "id": "s3_method:plot.summary.rms",
       "r_symbol": "plot.summary.rms",
       "kind": "s3_method",
-      "python_entry_point": null,
+      "python_entry_point": "holocron.graphics.contrast_plot_spec",
       "tier": "D",
       "milestone": "Phase 7",
-      "status": "deferred",
+      "status": "mapped",
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "known_differences": "Adapt explicit typed estimates to contrast geometry. Automatic summary construction, adjustment grids, and R graphics options are unsupported."
     },
     {
       "id": "s3_method:plot.val.prob",
       "r_symbol": "plot.val.prob",
       "kind": "s3_method",
-      "python_entry_point": null,
+      "python_entry_point": "holocron.graphics.validation_plot_spec",
       "tier": "D",
       "milestone": "Phase 7",
-      "status": "deferred",
+      "status": "mapped",
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "known_differences": "Adapt a typed ProbabilityValidationResult to supported validation geometry. R smoothing, distributions, and graphics options are unsupported."
     },
     {
       "id": "s3_method:plot.val.surv",
       "r_symbol": "plot.val.surv",
       "kind": "s3_method",
-      "python_entry_point": null,
+      "python_entry_point": "holocron.graphics.validation_plot_spec",
       "tier": "D",
       "milestone": "Phase 7",
-      "status": "deferred",
+      "status": "mapped",
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "known_differences": "Adapt typed fixed-horizon survival validation to supported geometry. R smoothing and graphics options are unsupported."
     },
     {
       "id": "s3_method:plot.val.survh",
       "r_symbol": "plot.val.survh",
       "kind": "s3_method",
-      "python_entry_point": null,
+      "python_entry_point": "holocron.graphics.validation_plot_spec",
       "tier": "D",
       "milestone": "Phase 7",
-      "status": "deferred",
+      "status": "mapped",
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "known_differences": "Adapt typed multi-horizon survival validation to supported geometry. R smoothing and graphics options are unsupported."
     },
     {
       "id": "s3_method:plot.validate.rpart",
@@ -2679,11 +2685,11 @@
       "python_entry_point": null,
       "tier": "D",
       "milestone": "Phase 7",
-      "status": "deferred",
+      "status": "unsupported",
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "known_differences": "Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md)."
     },
     {
       "id": "s3_method:plot.xmean.ordinaly",
@@ -2692,24 +2698,24 @@
       "python_entry_point": null,
       "tier": "D",
       "milestone": "Phase 7",
-      "status": "deferred",
+      "status": "unsupported",
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "known_differences": "Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md)."
     },
     {
       "id": "s3_method:plotp.Predict",
       "r_symbol": "plotp.Predict",
       "kind": "s3_method",
-      "python_entry_point": null,
+      "python_entry_point": "holocron.graphics.render_svg",
       "tier": "D",
       "milestone": "Phase 7",
-      "status": "deferred",
+      "status": "mapped",
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "known_differences": "Render an explicit effect PlotSpec as accessible SVG. plotly widgets, interactivity, and R object dispatch are unsupported."
     },
     {
       "id": "s3_method:predict.Glm",
@@ -2728,53 +2734,53 @@
       "id": "s3_method:predict.Gls",
       "r_symbol": "predict.Gls",
       "kind": "s3_method",
-      "python_entry_point": null,
+      "python_entry_point": "holocron.models.GeneralizedLeastSquaresResult.predict",
       "tier": "D",
       "milestone": "Phase 8",
-      "status": "deferred",
+      "status": "mapped",
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "known_differences": "Predict conditional means for explicit feature rows. R terms, intervals, data-frame reconstruction, and correlation-aware prediction are unsupported."
     },
     {
       "id": "s3_method:predict.Rq",
       "r_symbol": "predict.Rq",
       "kind": "s3_method",
-      "python_entry_point": null,
+      "python_entry_point": "holocron.models.QuantileRegressionResult.predict",
       "tier": "D",
       "milestone": "Phase 8",
-      "status": "deferred",
+      "status": "mapped",
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "known_differences": "Predict the fitted conditional quantile for explicit feature rows. Multiple quantiles, intervals, and R model-frame reconstruction are unsupported."
     },
     {
       "id": "s3_method:predict.bj",
       "r_symbol": "predict.bj",
       "kind": "s3_method",
-      "python_entry_point": null,
+      "python_entry_point": "holocron.models.BuckleyJamesResult.predict",
       "tier": "D",
       "milestone": "Phase 8",
-      "status": "deferred",
+      "status": "mapped",
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "known_differences": "Predict transformed or response-scale time for explicit feature rows. Survival curves, intervals, and R model-frame reconstruction are unsupported."
     },
     {
       "id": "s3_method:predict.cph",
       "r_symbol": "predict.cph",
       "kind": "s3_method",
-      "python_entry_point": null,
+      "python_entry_point": "holocron.models.CoxResult",
       "tier": "D",
       "milestone": "Phase 8",
-      "status": "deferred",
+      "status": "mapped",
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "known_differences": "Use explicit Cox linear, cumulative-hazard, survival, curve, quantile, or restricted-mean methods. R terms, intervals, and automatic adjustment frames are unsupported."
     },
     {
       "id": "s3_method:predict.lrm",
@@ -2806,40 +2812,40 @@
       "id": "s3_method:predict.orm",
       "r_symbol": "predict.orm",
       "kind": "s3_method",
-      "python_entry_point": null,
+      "python_entry_point": "holocron.models.OrdinalResult",
       "tier": "D",
       "milestone": "Phase 8",
-      "status": "deferred",
+      "status": "mapped",
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "known_differences": "Use explicit ordinal linear, probability, mean, quantile, or exceedance methods. R type strings, terms, and automatic adjustment frames are unsupported."
     },
     {
       "id": "s3_method:predict.psm",
       "r_symbol": "predict.psm",
       "kind": "s3_method",
-      "python_entry_point": null,
+      "python_entry_point": "holocron.models.ParametricSurvivalResult",
       "tier": "D",
       "milestone": "Phase 8",
-      "status": "deferred",
+      "status": "mapped",
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "known_differences": "Use explicit parametric linear, hazard, survival, curve, quantile, or mean methods. R terms, intervals, and automatic adjustment frames are unsupported."
     },
     {
       "id": "s3_method:print.Glm",
       "r_symbol": "print.Glm",
       "kind": "s3_method",
-      "python_entry_point": null,
+      "python_entry_point": "holocron.reporting.model_summary_table",
       "tier": "D",
       "milestone": "Phase 8",
-      "status": "deferred",
+      "status": "mapped",
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "known_differences": "Build a typed model-summary TableSpec for supported Gaussian or binomial GLM results and choose a renderer explicitly. R console layout and global options are unsupported."
     },
     {
       "id": "s3_method:print.Gls",
@@ -2848,11 +2854,11 @@
       "python_entry_point": null,
       "tier": "D",
       "milestone": "Phase 8",
-      "status": "deferred",
+      "status": "unsupported",
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "known_differences": "Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md)."
     },
     {
       "id": "s3_method:print.Ocens",
@@ -2861,11 +2867,11 @@
       "python_entry_point": null,
       "tier": "D",
       "milestone": "Phase 8",
-      "status": "deferred",
+      "status": "unsupported",
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "known_differences": "Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md)."
     },
     {
       "id": "s3_method:print.Predict",
@@ -2874,11 +2880,11 @@
       "python_entry_point": null,
       "tier": "D",
       "milestone": "Phase 8",
-      "status": "deferred",
+      "status": "unsupported",
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "known_differences": "Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md)."
     },
     {
       "id": "s3_method:print.Rq",
@@ -2887,24 +2893,24 @@
       "python_entry_point": null,
       "tier": "D",
       "milestone": "Phase 8",
-      "status": "deferred",
+      "status": "unsupported",
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "known_differences": "Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md)."
     },
     {
       "id": "s3_method:print.anova.rms",
       "r_symbol": "print.anova.rms",
       "kind": "s3_method",
-      "python_entry_point": null,
+      "python_entry_point": "holocron.reporting.anova_table",
       "tier": "D",
       "milestone": "Phase 8",
-      "status": "deferred",
+      "status": "mapped",
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "known_differences": "Build a typed ANOVA TableSpec and choose a renderer explicitly. R console layout, nonlinear decomposition, and print options are unsupported."
     },
     {
       "id": "s3_method:print.bj",
@@ -2913,11 +2919,11 @@
       "python_entry_point": null,
       "tier": "D",
       "milestone": "Phase 8",
-      "status": "deferred",
+      "status": "unsupported",
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "known_differences": "Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md)."
     },
     {
       "id": "s3_method:print.calibrate",
@@ -2926,24 +2932,24 @@
       "python_entry_point": null,
       "tier": "D",
       "milestone": "Phase 8",
-      "status": "deferred",
+      "status": "unsupported",
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "known_differences": "Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md)."
     },
     {
       "id": "s3_method:print.contrast.rms",
       "r_symbol": "print.contrast.rms",
       "kind": "s3_method",
-      "python_entry_point": null,
+      "python_entry_point": "holocron.reporting.contrast_table",
       "tier": "D",
       "milestone": "Phase 8",
-      "status": "deferred",
+      "status": "mapped",
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "known_differences": "Build a typed contrast TableSpec and choose a renderer explicitly. R console layout, redundant-adjustment text, and print options are unsupported."
     },
     {
       "id": "s3_method:print.corFloorExp",
@@ -2952,11 +2958,11 @@
       "python_entry_point": null,
       "tier": "D",
       "milestone": "Phase 8",
-      "status": "deferred",
+      "status": "unsupported",
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "known_differences": "Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md)."
     },
     {
       "id": "s3_method:print.cph",
@@ -2965,11 +2971,11 @@
       "python_entry_point": null,
       "tier": "D",
       "milestone": "Phase 8",
-      "status": "deferred",
+      "status": "unsupported",
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "known_differences": "Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md)."
     },
     {
       "id": "s3_method:print.datadist",
@@ -2978,11 +2984,11 @@
       "python_entry_point": null,
       "tier": "D",
       "milestone": "Phase 8",
-      "status": "deferred",
+      "status": "unsupported",
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "known_differences": "Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md)."
     },
     {
       "id": "s3_method:print.fastbw",
@@ -2991,11 +2997,11 @@
       "python_entry_point": null,
       "tier": "D",
       "milestone": "Phase 8",
-      "status": "deferred",
+      "status": "unsupported",
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "known_differences": "Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md)."
     },
     {
       "id": "s3_method:print.gIndex",
@@ -3004,11 +3010,11 @@
       "python_entry_point": null,
       "tier": "D",
       "milestone": "Phase 8",
-      "status": "deferred",
+      "status": "unsupported",
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "known_differences": "Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md)."
     },
     {
       "id": "s3_method:print.impactPO",
@@ -3017,24 +3023,24 @@
       "python_entry_point": null,
       "tier": "D",
       "milestone": "Phase 8",
-      "status": "deferred",
+      "status": "unsupported",
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "known_differences": "Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md)."
     },
     {
       "id": "s3_method:print.lrm",
       "r_symbol": "print.lrm",
       "kind": "s3_method",
-      "python_entry_point": null,
+      "python_entry_point": "holocron.reporting.model_summary_table",
       "tier": "D",
       "milestone": "Phase 8",
-      "status": "deferred",
+      "status": "mapped",
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "known_differences": "Build a typed binary-lrm summary TableSpec and choose a renderer explicitly. Ordinal lrm and R console formatting are unsupported."
     },
     {
       "id": "s3_method:print.lrtest",
@@ -3043,37 +3049,37 @@
       "python_entry_point": null,
       "tier": "D",
       "milestone": "Phase 8",
-      "status": "deferred",
+      "status": "unsupported",
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "known_differences": "Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md)."
     },
     {
       "id": "s3_method:print.nomogram",
       "r_symbol": "print.nomogram",
       "kind": "s3_method",
-      "python_entry_point": null,
+      "python_entry_point": "holocron.graphics.render_nomogram_svg",
       "tier": "D",
       "milestone": "Phase 8",
-      "status": "deferred",
+      "status": "mapped",
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "known_differences": "Render owned nomogram geometry as accessible SVG. R console summaries, device state, and geometry parity are unsupported."
     },
     {
       "id": "s3_method:print.ols",
       "r_symbol": "print.ols",
       "kind": "s3_method",
-      "python_entry_point": null,
+      "python_entry_point": "holocron.reporting.model_summary_table",
       "tier": "D",
       "milestone": "Phase 8",
-      "status": "deferred",
+      "status": "mapped",
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "known_differences": "Build a typed OLS summary TableSpec and choose a renderer explicitly. R console layout and print options are unsupported."
     },
     {
       "id": "s3_method:print.orm",
@@ -3082,24 +3088,24 @@
       "python_entry_point": null,
       "tier": "D",
       "milestone": "Phase 8",
-      "status": "deferred",
+      "status": "unsupported",
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "known_differences": "Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md)."
     },
     {
       "id": "s3_method:print.pentrace",
       "r_symbol": "print.pentrace",
       "kind": "s3_method",
-      "python_entry_point": null,
+      "python_entry_point": "holocron.reporting.diagnostic_table",
       "tier": "D",
       "milestone": "Phase 8",
-      "status": "deferred",
+      "status": "mapped",
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "known_differences": "Build a typed diagnostic TableSpec from a bounded penalty trace. R console formatting and multidimensional penalty summaries are unsupported."
     },
     {
       "id": "s3_method:print.pphsm",
@@ -3108,11 +3114,11 @@
       "python_entry_point": null,
       "tier": "D",
       "milestone": "Phase 8",
-      "status": "deferred",
+      "status": "unsupported",
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "known_differences": "Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md)."
     },
     {
       "id": "s3_method:print.psm",
@@ -3121,11 +3127,11 @@
       "python_entry_point": null,
       "tier": "D",
       "milestone": "Phase 8",
-      "status": "deferred",
+      "status": "unsupported",
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "known_differences": "Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md)."
     },
     {
       "id": "s3_method:print.rexVar",
@@ -3134,11 +3140,11 @@
       "python_entry_point": null,
       "tier": "D",
       "milestone": "Phase 8",
-      "status": "deferred",
+      "status": "unsupported",
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "known_differences": "Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md)."
     },
     {
       "id": "s3_method:print.specs.rms",
@@ -3147,24 +3153,24 @@
       "python_entry_point": null,
       "tier": "D",
       "milestone": "Phase 8",
-      "status": "deferred",
+      "status": "unsupported",
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "known_differences": "Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md)."
     },
     {
       "id": "s3_method:print.summary.rms",
       "r_symbol": "print.summary.rms",
       "kind": "s3_method",
-      "python_entry_point": null,
+      "python_entry_point": "holocron.reporting.contrast_table",
       "tier": "D",
       "milestone": "Phase 8",
-      "status": "deferred",
+      "status": "mapped",
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "known_differences": "Build a typed inference or contrast TableSpec and choose a renderer explicitly. Automatic effects, adjustment grids, and R console layout are unsupported."
     },
     {
       "id": "s3_method:print.summary.survreg2",
@@ -3173,11 +3179,11 @@
       "python_entry_point": null,
       "tier": "D",
       "milestone": "Phase 8",
-      "status": "deferred",
+      "status": "unsupported",
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "known_differences": "Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md)."
     },
     {
       "id": "s3_method:print.survest.psm",
@@ -3186,50 +3192,50 @@
       "python_entry_point": null,
       "tier": "D",
       "milestone": "Phase 8",
-      "status": "deferred",
+      "status": "unsupported",
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "known_differences": "Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md)."
     },
     {
       "id": "s3_method:print.val.prob",
       "r_symbol": "print.val.prob",
       "kind": "s3_method",
-      "python_entry_point": null,
+      "python_entry_point": "holocron.reporting.validation_table",
       "tier": "D",
       "milestone": "Phase 8",
-      "status": "deferred",
+      "status": "mapped",
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "known_differences": "Build a typed probability-validation TableSpec and choose a renderer explicitly. R console layout and print options are unsupported."
     },
     {
       "id": "s3_method:print.val.survh",
       "r_symbol": "print.val.survh",
       "kind": "s3_method",
-      "python_entry_point": null,
+      "python_entry_point": "holocron.reporting.validation_table",
       "tier": "D",
       "milestone": "Phase 8",
-      "status": "deferred",
+      "status": "mapped",
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "known_differences": "Build a typed survival-validation TableSpec and choose a renderer explicitly. R console layout and print options are unsupported."
     },
     {
       "id": "s3_method:print.validate",
       "r_symbol": "print.validate",
       "kind": "s3_method",
-      "python_entry_point": null,
+      "python_entry_point": "holocron.reporting.validation_table",
       "tier": "D",
       "milestone": "Phase 8",
-      "status": "deferred",
+      "status": "mapped",
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "known_differences": "Build a typed optimism-corrected validation TableSpec and choose a renderer explicitly. R console layout and broad validate-object dispatch are unsupported."
     },
     {
       "id": "s3_method:print.validate.rpart",
@@ -3238,11 +3244,11 @@
       "python_entry_point": null,
       "tier": "D",
       "milestone": "Phase 8",
-      "status": "deferred",
+      "status": "unsupported",
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "known_differences": "Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md)."
     },
     {
       "id": "s3_method:processMI.fit.mult.impute",
@@ -3264,11 +3270,11 @@
       "python_entry_point": null,
       "tier": "D",
       "milestone": "Phase 8",
-      "status": "deferred",
+      "status": "unsupported",
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "known_differences": "Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md)."
     },
     {
       "id": "s3_method:residuals.Glm",
@@ -3287,14 +3293,14 @@
       "id": "s3_method:residuals.bj",
       "r_symbol": "residuals.bj",
       "kind": "s3_method",
-      "python_entry_point": null,
+      "python_entry_point": "holocron.models.BuckleyJamesResult.residuals",
       "tier": "D",
       "milestone": "Phase 8",
-      "status": "deferred",
+      "status": "mapped",
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "known_differences": "Read stored transformed-scale training residuals from the typed fit. R residual types, censoring plots, and influence diagnostics are unsupported."
     },
     {
       "id": "s3_method:residuals.cph",
@@ -3342,11 +3348,11 @@
       "python_entry_point": null,
       "tier": "D",
       "milestone": "Phase 8",
-      "status": "deferred",
+      "status": "unsupported",
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "known_differences": "Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md)."
     },
     {
       "id": "s3_method:residuals.psm",
@@ -3365,27 +3371,27 @@
       "id": "s3_method:specs.rms",
       "r_symbol": "specs.rms",
       "kind": "s3_method",
-      "python_entry_point": null,
+      "python_entry_point": "holocron.design.DesignSpec",
       "tier": "A",
       "milestone": "Phase 2-3",
-      "status": "deferred",
+      "status": "mapped",
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "known_differences": "Inspect the immutable DesignSpec and generated-column metadata directly. R console formatting and inferred Design attributes are unsupported."
     },
     {
       "id": "s3_method:summary.rms",
       "r_symbol": "summary.rms",
       "kind": "s3_method",
-      "python_entry_point": null,
+      "python_entry_point": "holocron.models.summarize",
       "tier": "A",
       "milestone": "Phase 2-3",
-      "status": "deferred",
+      "status": "mapped",
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "known_differences": "Use typed coefficient and likelihood summaries for supported OLS or binary-logistic fits, and explicit contrast for chosen effects. Automatic adjustment grids and broad rms dispatch are unsupported."
     },
     {
       "id": "s3_method:survest.cph",
@@ -3404,14 +3410,14 @@
       "id": "s3_method:survest.orm",
       "r_symbol": "survest.orm",
       "kind": "s3_method",
-      "python_entry_point": null,
+      "python_entry_point": "holocron.models.OrdinalResult.predict_exceedance",
       "tier": "B",
       "milestone": "Phase 4-5",
-      "status": "deferred",
+      "status": "mapped",
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "known_differences": "Use explicit ordinal exceedance probabilities as the supported discrete-survival result. Time interpolation, confidence intervals, and R function dispatch are unsupported."
     },
     {
       "id": "s3_method:survest.psm",
@@ -3443,14 +3449,14 @@
       "id": "s3_method:survplot.npsurv",
       "r_symbol": "survplot.npsurv",
       "kind": "s3_method",
-      "python_entry_point": null,
+      "python_entry_point": "holocron.graphics.survival_plot_spec",
       "tier": "D",
       "milestone": "Phase 7",
-      "status": "deferred",
+      "status": "mapped",
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "known_differences": "Adapt explicit nonparametric survival curves to a PlotSpec. Confidence bands, risk tables, and R graphics options are unsupported."
     },
     {
       "id": "s3_method:survplot.orm",
@@ -3459,11 +3465,11 @@
       "python_entry_point": null,
       "tier": "D",
       "milestone": "Phase 7",
-      "status": "deferred",
+      "status": "unsupported",
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "known_differences": "Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md)."
     },
     {
       "id": "s3_method:survplot.residuals.psm.censored.normalized",
@@ -3472,37 +3478,37 @@
       "python_entry_point": null,
       "tier": "D",
       "milestone": "Phase 7",
-      "status": "deferred",
+      "status": "unsupported",
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "known_differences": "Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md)."
     },
     {
       "id": "s3_method:survplot.rms",
       "r_symbol": "survplot.rms",
       "kind": "s3_method",
-      "python_entry_point": null,
+      "python_entry_point": "holocron.graphics.survival_plot_spec",
       "tier": "D",
       "milestone": "Phase 7",
-      "status": "deferred",
+      "status": "mapped",
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "known_differences": "Adapt an explicit typed survival curve to backend-neutral geometry. Automatic prediction, broad rms dispatch, and R graphics options are unsupported."
     },
     {
       "id": "s3_method:survplotp.npsurv",
       "r_symbol": "survplotp.npsurv",
       "kind": "s3_method",
-      "python_entry_point": null,
+      "python_entry_point": "holocron.graphics.render_svg",
       "tier": "D",
       "milestone": "Phase 7",
-      "status": "deferred",
+      "status": "mapped",
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "known_differences": "Render an explicit nonparametric survival PlotSpec as accessible SVG. plotly widgets and interactivity are unsupported."
     },
     {
       "id": "s3_method:validate.Rq",
@@ -3511,11 +3517,11 @@
       "python_entry_point": null,
       "tier": "C",
       "milestone": "Phase 6",
-      "status": "deferred",
+      "status": "unsupported",
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "known_differences": "Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md)."
     },
     {
       "id": "s3_method:validate.bj",
@@ -3524,50 +3530,50 @@
       "python_entry_point": null,
       "tier": "C",
       "milestone": "Phase 6",
-      "status": "deferred",
+      "status": "unsupported",
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "known_differences": "Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md)."
     },
     {
       "id": "s3_method:validate.cph",
       "r_symbol": "validate.cph",
       "kind": "s3_method",
-      "python_entry_point": null,
+      "python_entry_point": "holocron.validation.validate_survival_predictions",
       "tier": "C",
       "milestone": "Phase 6",
-      "status": "deferred",
+      "status": "mapped",
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "known_differences": "Validate explicit fixed-horizon right-censored survival predictions. Whole-model Cox refitting, Dxy-only methods, and rms resampling options are unsupported."
     },
     {
       "id": "s3_method:validate.lrm",
       "r_symbol": "validate.lrm",
       "kind": "s3_method",
-      "python_entry_point": null,
+      "python_entry_point": "holocron.validation.validate_model",
       "tier": "C",
       "milestone": "Phase 6",
-      "status": "deferred",
+      "status": "mapped",
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "known_differences": "Use a declared exact resample plan with fresh binary-lrm refits and separate optimism correction. Ordinal lrm and rms method aliases are unsupported."
     },
     {
       "id": "s3_method:validate.ols",
       "r_symbol": "validate.ols",
       "kind": "s3_method",
-      "python_entry_point": null,
+      "python_entry_point": "holocron.validation.validate_model",
       "tier": "C",
       "milestone": "Phase 6",
-      "status": "deferred",
+      "status": "mapped",
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "known_differences": "Use a declared exact resample plan with fresh OLS refits and separate optimism correction. rms method aliases and hidden learned-design rebuilding are unsupported."
     },
     {
       "id": "s3_method:validate.orm",
@@ -3576,24 +3582,24 @@
       "python_entry_point": null,
       "tier": "C",
       "milestone": "Phase 6",
-      "status": "deferred",
+      "status": "unsupported",
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "known_differences": "Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md)."
     },
     {
       "id": "s3_method:validate.psm",
       "r_symbol": "validate.psm",
       "kind": "s3_method",
-      "python_entry_point": null,
+      "python_entry_point": "holocron.validation.validate_survival_predictions",
       "tier": "C",
       "milestone": "Phase 6",
-      "status": "deferred",
+      "status": "mapped",
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "known_differences": "Validate explicit fixed-horizon right-censored survival predictions. Whole-model psm refitting and rms resampling options are unsupported."
     },
     {
       "id": "s3_method:validate.rpart",
@@ -3602,11 +3608,11 @@
       "python_entry_point": null,
       "tier": "C",
       "milestone": "Phase 6",
-      "status": "deferred",
+      "status": "unsupported",
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "known_differences": "Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md)."
     },
     {
       "id": "s3_method:vcov.Glm",
@@ -3625,27 +3631,27 @@
       "id": "s3_method:vcov.Gls",
       "r_symbol": "vcov.Gls",
       "kind": "s3_method",
-      "python_entry_point": null,
+      "python_entry_point": "holocron.models.GeneralizedLeastSquaresResult.covariance",
       "tier": "D",
       "milestone": "Phase 8",
-      "status": "deferred",
+      "status": "mapped",
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "known_differences": "Read the stored fixed-covariance GLS coefficient covariance. Named submatrices, robust variants, and estimated correlation structures are unsupported."
     },
     {
       "id": "s3_method:vcov.cph",
       "r_symbol": "vcov.cph",
       "kind": "s3_method",
-      "python_entry_point": null,
+      "python_entry_point": "holocron.models.CoxResult.covariance",
       "tier": "D",
       "milestone": "Phase 8",
-      "status": "deferred",
+      "status": "mapped",
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "known_differences": "Read the fitted Cox coefficient covariance. Named submatrices, robust covariance, and cluster corrections are unsupported."
     },
     {
       "id": "s3_method:vcov.lrm",
@@ -3677,40 +3683,40 @@
       "id": "s3_method:vcov.orm",
       "r_symbol": "vcov.orm",
       "kind": "s3_method",
-      "python_entry_point": null,
+      "python_entry_point": "holocron.models.OrdinalResult.covariance",
       "tier": "D",
       "milestone": "Phase 8",
-      "status": "deferred",
+      "status": "mapped",
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "known_differences": "Read the full ordered intercept-and-slope covariance. Intercept filtering, named submatrices, and robust variants are unsupported."
     },
     {
       "id": "s3_method:vcov.pphsm",
       "r_symbol": "vcov.pphsm",
       "kind": "s3_method",
-      "python_entry_point": null,
+      "python_entry_point": "holocron.models.ProportionalHazardsParametricResult.conditional_covariance",
       "tier": "D",
       "milestone": "Phase 8",
-      "status": "deferred",
+      "status": "mapped",
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "known_differences": "Read the covariance conditional on fitted AFT scale from the typed PH conversion. Joint scale uncertainty and named submatrices are unsupported."
     },
     {
       "id": "s3_method:vcov.psm",
       "r_symbol": "vcov.psm",
       "kind": "s3_method",
-      "python_entry_point": null,
+      "python_entry_point": "holocron.models.ParametricSurvivalResult.covariance",
       "tier": "D",
       "milestone": "Phase 8",
-      "status": "deferred",
+      "status": "mapped",
       "owner": "joshuamyers22",
       "oracle_cases": [],
       "tolerance_profile": null,
-      "known_differences": "Not yet implemented."
+      "known_differences": "Read the fitted parametric-survival covariance in stored parameter order. Named submatrices, robust variants, and alternate scale handling are unsupported."
     },
     {
       "id": "s3_method:vcov.rms",

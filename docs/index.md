@@ -69,8 +69,10 @@ envelopes: plot specifications, typed result adapters/SVG, additive nomogram
 geometry/rendering, structured table/LaTeX reporting, five tested galleries,
 and deterministic SVG assurance. Its accountable technical exit review passes
 without claiming independent approval or R presentation-method parity. The
-first two Phase 8 deliverables are complete; method-level namespace disposition
-is next.
+first four Phase 8 deliverables are complete. All 281 pinned namespace entries
+have final reviewed dispositions. Five retained cross-platform workloads now
+protect structural call and peak-memory budgets and drove ordinary Cox risk-set
+tuning. Migration tooling and deprecation policy are next.
 Capability promotion,
 consequential use, and external distribution remain separately blocked.
 
@@ -102,6 +104,8 @@ surface and evidence links.
 - [Fit supported survival models](guides/survival-models.md).
 - [Use the bounded extended-model replacements](guides/extended-models.md).
 - [Pool supported multiple-imputation results](guides/multiple-imputation.md).
+- [Interpret namespace mappings and stop boundaries](guides/namespace-disposition.md).
+- [Run and interpret the retained performance profiles](guides/performance-profiles.md).
 - [Use the supported post-estimation operations](guides/post-estimation.md).
 - [Use penalties and alternative covariance estimators](guides/regularization-and-covariance.md).
 - [Inspect and reproduce simulation and numerical-edge evidence](guides/simulation-and-edge-evidence.md).

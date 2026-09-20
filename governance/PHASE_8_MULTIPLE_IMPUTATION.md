@@ -63,6 +63,6 @@ Chan--Meng formulas, interpolation identities, strict round trips, schemas,
 dispatcher boundaries, and artifact installation.
 
 The machine-readable authority is `compatibility/rms-8.2.0.yaml`. This decision
-completes only the second Phase 8 deliverable. Full method-level namespace
-disposition, retained-profile performance work, migration/deprecation policy,
-and the Phase 8 exit review remain open.
+completed only the second Phase 8 deliverable. Full namespace disposition and
+retained-profile performance work were completed by subsequent decisions;
+migration/deprecation policy and the Phase 8 exit review remain open.

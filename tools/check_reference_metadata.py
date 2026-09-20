@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import hashlib
+import importlib
 import json
 from pathlib import Path
 from typing import cast
@@ -76,6 +77,14 @@ def main() -> None:
         *(f"export:{name}" for name in exports),
         *(f"s3_method:{name}" for name in methods),
     }
+    namespace_disposition = compatibility.get("namespace_disposition")
+    if namespace_disposition != {
+        "completed_on": "2026-09-19",
+        "decision": "complete",
+        "reviewed_capabilities": len(expected_ids),
+        "governance_record": "governance/PHASE_8_NAMESPACE_DISPOSITION.md",
+    }:
+        raise ValueError("namespace disposition review is missing or inconsistent")
     capabilities = require_list(compatibility["capabilities"], name="capabilities")
     actual_ids: set[str] = set()
     linked_cases: set[str] = set()
@@ -89,8 +98,41 @@ def main() -> None:
         actual_ids.add(identifier)
         if capability["status"] not in VALID_STATUSES:
             raise ValueError(f"invalid status for {identifier}")
+        if capability["status"] == "deferred":
+            raise ValueError(f"deferred namespace disposition remains: {identifier}")
         if not capability["owner"]:
             raise ValueError(f"missing owner for {identifier}")
+        difference = capability["known_differences"]
+        if (
+            not isinstance(difference, str)
+            or len(difference) < 40
+            or difference == "Not yet implemented."
+        ):
+            raise ValueError(f"unreviewed namespace rationale for {identifier}")
+        if capability["status"] == "mapped":
+            entry_point = capability["python_entry_point"]
+            if not isinstance(entry_point, str) or not entry_point:
+                raise ValueError(f"mapped capability lacks a Python path: {identifier}")
+            parts = entry_point.split(".")
+            if len(parts) < 3 or parts[0] != "holocron":
+                raise ValueError(
+                    f"mapped capability has a non-public path: {identifier}"
+                )
+            resolved: object = importlib.import_module(".".join(parts[:2]))
+            try:
+                for part in parts[2:]:
+                    resolved = getattr(resolved, part)
+            except AttributeError as error:
+                raise ValueError(
+                    f"mapped capability path does not resolve: {identifier}"
+                ) from error
+        if (
+            capability["status"] == "unsupported"
+            and capability["python_entry_point"] is not None
+        ):
+            raise ValueError(
+                f"unsupported capability unexpectedly has a Python path: {identifier}"
+            )
         cases = require_list(capability["oracle_cases"], name=f"{identifier}.cases")
         profiles = {str(capability["tolerance_profile"])}
         additional_profiles = require_list(

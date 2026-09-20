@@ -87,6 +87,6 @@ Python tests. No new pinned-R oracle cases or tolerance profiles were added, so
 the new model entries remain `mapped` and must not be described as
 `experimental` parity capabilities.
 
-This decision did not complete Phase 8. Multiple imputation was completed by
-the next decision; full method-level namespace disposition, retained-profile
-tuning, migration tooling, and the Phase 8 exit review remain open.
+This decision did not complete Phase 8. Multiple imputation, full namespace
+disposition, and retained-profile tuning were completed by subsequent
+decisions; migration tooling and the Phase 8 exit review remain open.

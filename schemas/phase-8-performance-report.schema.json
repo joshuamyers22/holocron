@@ -1,0 +1,78 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/joshuamyers22/holocron/schemas/phase-8-performance-report.schema.json",
+  "type": "object",
+  "properties": {
+    "schema_version": {"const": "holocron-phase-8-performance-report/v1"},
+    "evaluated_at_utc": {"type": "string", "format": "date-time"},
+    "plan_id": {"const": "phase-8-retained-profiles-v1"},
+    "plan_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "source": {"$ref": "#/$defs/source"},
+    "environment": {"$ref": "#/$defs/environment"},
+    "timing_policy": {"type": "string", "minLength": 1},
+    "workloads": {
+      "type": "array",
+      "minItems": 5,
+      "maxItems": 5,
+      "items": {"$ref": "#/$defs/result"}
+    },
+    "technical_status": {"enum": ["pass", "fail"]}
+  },
+  "required": ["schema_version", "evaluated_at_utc", "plan_id", "plan_sha256", "source", "environment", "timing_policy", "workloads", "technical_status"],
+  "additionalProperties": false,
+  "$defs": {
+    "source": {
+      "type": "object",
+      "properties": {
+        "code_revision": {"type": "string", "minLength": 1},
+        "working_tree_dirty": {"type": "boolean"}
+      },
+      "required": ["code_revision", "working_tree_dirty"],
+      "additionalProperties": false
+    },
+    "environment": {
+      "type": "object",
+      "properties": {
+        "python_implementation": {"type": "string", "minLength": 1},
+        "python_version": {"type": "string", "minLength": 1},
+        "numpy_version": {"type": "string", "minLength": 1},
+        "operating_system": {"type": "string", "minLength": 1},
+        "machine": {"type": "string", "minLength": 1}
+      },
+      "required": ["python_implementation", "python_version", "numpy_version", "operating_system", "machine"],
+      "additionalProperties": false
+    },
+    "hotspot": {
+      "type": "object",
+      "properties": {
+        "function": {"type": "string", "minLength": 1},
+        "primitive_calls": {"type": "integer", "minimum": 0},
+        "total_calls": {"type": "integer", "minimum": 0},
+        "own_seconds": {"type": "number", "minimum": 0},
+        "cumulative_seconds": {"type": "number", "minimum": 0}
+      },
+      "required": ["function", "primitive_calls", "total_calls", "own_seconds", "cumulative_seconds"],
+      "additionalProperties": false
+    },
+    "result": {
+      "type": "object",
+      "properties": {
+        "workload_id": {"type": "string", "minLength": 1},
+        "kind": {"enum": ["validation", "survival"]},
+        "sample_size": {"type": "integer", "minimum": 1},
+        "result_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "profile_file": {"type": "string", "pattern": "^[A-Za-z0-9._-]+\\.prof$"},
+        "primitive_calls": {"type": "integer", "minimum": 0},
+        "max_primitive_calls": {"type": "integer", "minimum": 1},
+        "peak_bytes": {"type": "integer", "minimum": 0},
+        "max_peak_bytes": {"type": "integer", "minimum": 1},
+        "median_seconds": {"type": "number", "minimum": 0},
+        "timing_repetitions": {"type": "integer", "minimum": 1},
+        "hotspots": {"type": "array", "minItems": 1, "maxItems": 12, "items": {"$ref": "#/$defs/hotspot"}},
+        "outcome": {"enum": ["passed", "failed"]}
+      },
+      "required": ["workload_id", "kind", "sample_size", "result_sha256", "profile_file", "primitive_calls", "max_primitive_calls", "peak_bytes", "max_peak_bytes", "median_seconds", "timing_repetitions", "hotspots", "outcome"],
+      "additionalProperties": false
+    }
+  }
+}

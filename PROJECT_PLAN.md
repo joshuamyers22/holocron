@@ -874,7 +874,7 @@ Plot source data passes parity; renderers pass semantic and accessibility checks
 
 ### Phase 8 — Extended models and namespace completion (24–40 weeks)
 
-**Implementation progress:** The first two deliverables are complete within
+**Implementation progress:** The first four deliverables are complete within
 bounded Python-native replacement envelopes. Fixed-covariance `fit_gls`, weighted
 single-quantile `fit_quantile_regression`, right-censored
 `fit_buckley_james`, and one-scale Weibull/exponential
@@ -886,14 +886,22 @@ curves, explicit Chan–Meng LR-ANOVA adjustment, and typed imputation-informati
 tables. All 42 Phase 8 manifest exports now have reviewed dispositions. These
 mappings are not R-parity claims. See
 `governance/PHASE_8_EXTENDED_MODELS_NAMESPACE.md` and
-`governance/PHASE_8_MULTIPLE_IMPUTATION.md`.
+`governance/PHASE_8_MULTIPLE_IMPUTATION.md`. The complete 281-entry namespace
+now contains 50 experimental, 125 mapped, and 106 unsupported dispositions,
+with no deferred or generic placeholder entry. See
+`governance/PHASE_8_NAMESPACE_DISPOSITION.md`.
+Five fixed workloads now retain raw deterministic profiles, bounded peak-memory
+measurements, portable primitive-call ceilings, and diagnostic timing medians.
+Those profiles drove bounded suffix aggregates and a nested-risk-set sweep for
+ordinary Cox fits while preserving the general delayed-entry path. See
+`governance/PHASE_8_PERFORMANCE_TUNING.md`.
 
 **Deliverables**
 
 - [x] `Gls`, `Rq`, `bj`, `pphsm`, and remaining exported helpers or approved replacements;
 - [x] multiple-imputation adapter;
-- complete namespace disposition;
-- performance tuning driven by retained profiles;
+- [x] complete namespace disposition;
+- [x] performance tuning driven by retained profiles;
 - migration tooling and deprecation policy.
 
 **Exit gate**

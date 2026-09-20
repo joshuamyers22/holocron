@@ -1,0 +1,39 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/joshuamyers22/holocron/schemas/phase-8-performance-plan.schema.json",
+  "type": "object",
+  "properties": {
+    "schema_version": {"const": "holocron-phase-8-performance-plan/v1"},
+    "plan_id": {"const": "phase-8-retained-profiles-v1"},
+    "approved_for": {"const": "private-experimental-development"},
+    "approved_on": {"type": "string", "format": "date"},
+    "timing_policy": {"type": "string", "minLength": 1},
+    "required_platforms": {"const": ["ubuntu-24.04", "macos-15"]},
+    "workloads": {
+      "type": "array",
+      "minItems": 5,
+      "maxItems": 5,
+      "items": {"$ref": "#/$defs/workload"}
+    }
+  },
+  "required": ["schema_version", "plan_id", "approved_for", "approved_on", "timing_policy", "required_platforms", "workloads"],
+  "additionalProperties": false,
+  "$defs": {
+    "workload": {
+      "type": "object",
+      "properties": {
+        "workload_id": {
+          "enum": ["ols-repeated-validation", "binary-repeated-validation", "cox-standard-risk-sets", "cox-delayed-entry", "psm-mixed-censoring"]
+        },
+        "kind": {"enum": ["validation", "survival"]},
+        "seed": {"type": "integer", "minimum": 1},
+        "sample_size": {"type": "integer", "minimum": 20, "maximum": 100000},
+        "timing_repetitions": {"type": "integer", "minimum": 1, "maximum": 20},
+        "max_primitive_calls": {"type": "integer", "minimum": 1},
+        "max_peak_bytes": {"type": "integer", "minimum": 1}
+      },
+      "required": ["workload_id", "kind", "seed", "sample_size", "timing_repetitions", "max_primitive_calls", "max_peak_bytes"],
+      "additionalProperties": false
+    }
+  }
+}

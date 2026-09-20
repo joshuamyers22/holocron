@@ -63,6 +63,15 @@ jobs:
           if-no-files-found: error
           retention-days: 30
           include-hidden-files: true
+      - name: Retain Phase 8 performance profiles
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: phase-8-performance-${{ github.sha }}
+          path: .work/phase-8-performance/*
+          if-no-files-found: error
+          retention-days: 30
+          include-hidden-files: true
       - run: make audit clean-build
   tolerance-pilot:
     strategy:
@@ -86,7 +95,9 @@ jobs:
       - name: Exercise Phase 7 graphics and reporting on the platform matrix
         run: uv run --frozen python -m unittest tests.test_plot_specifications tests.test_plot_adapters_renderers tests.test_nomograms tests.test_structured_reporting tests.test_svg_accessibility_regression
       - name: Exercise Phase 8 adapters on the platform matrix
-        run: uv run --frozen python -m unittest tests.test_extended_models tests.test_multiple_imputation
+        run: uv run --frozen python -m unittest tests.test_extended_models tests.test_multiple_imputation tests.test_namespace_disposition
+      - name: Exercise and retain Phase 8 performance profiles
+        run: uv run --frozen python -m tools.run_phase_8_profiles --output ".work/phase-8-platform/performance-report.json"
       - name: Exercise Phase 3 simulation thresholds on the platform matrix
         run: uv run --frozen python -m tools.run_phase_3_evidence --simulation-output ".work/phase-3-platform/simulation-report.json" --edge-output ".work/phase-3-platform/numerical-edge-report.json"
       - name: Exercise Phase 4 evidence on the platform matrix
@@ -117,6 +128,15 @@ jobs:
         with:
           name: phase-5-platform-evidence-${{ runner.os }}-${{ runner.arch }}-${{ github.sha }}
           path: .work/phase-5-platform/simulation-report.json
+          if-no-files-found: error
+          retention-days: 30
+          include-hidden-files: true
+      - name: Retain platform Phase 8 performance profiles
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: phase-8-performance-${{ runner.os }}-${{ runner.arch }}-${{ github.sha }}
+          path: .work/phase-8-platform/*
           if-no-files-found: error
           retention-days: 30
           include-hidden-files: true

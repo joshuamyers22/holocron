@@ -1416,6 +1416,17 @@ def _cox_terms(
     log_likelihood = 0.0
     score = np.zeros(width, dtype=np.float64)
     hessian = np.zeros((width, width), dtype=np.float64)
+    if np.all(entry == 0.0):  # pyright: ignore[reportUnknownMemberType]
+        return _cox_terms_without_delayed_entry(
+            predictor,
+            exponential,
+            times,
+            events,
+            features,
+            method,
+            strata,
+            weights,
+        )
     for stratum in range(int(np.max(strata)) + 1):
         stratum_mask = strata == stratum
         event_times = np.unique(  # pyright: ignore[reportUnknownMemberType]
@@ -1452,6 +1463,210 @@ def _cox_terms(
                 denominator = risk_zero - fraction * event_zero
                 first = risk_one - fraction * event_one
                 second = risk_two - fraction * event_two
+                log_likelihood -= multiplier * math.log(denominator)
+                mean = first / denominator
+                score -= multiplier * mean
+                hessian -= multiplier * (second / denominator - np.outer(mean, mean))
+    return log_likelihood, score, hessian
+
+
+def _cox_terms_without_delayed_entry(
+    predictor: FloatVector,
+    exponential: FloatVector,
+    times: FloatVector,
+    events: IntVector,
+    features: FloatMatrix,
+    method: CoxMethod,
+    strata: IntVector,
+    weights: FloatVector,
+) -> tuple[float, FloatVector, FloatMatrix]:
+    """Evaluate Cox terms from nested risk sets with bounded workspace.
+
+    Small risk-moment arrays use vectorized suffix aggregates. Above the fixed
+    workspace limit, a descending sweep keeps memory quadratic in predictor
+    count rather than rows times predictor count squared. Delayed-entry fits
+    retain the general implementation because their risk sets are not nested.
+    """
+    width = features.shape[1]
+    if features.shape[0] * width * width <= 2_048:
+        return _cox_terms_from_suffix_aggregates(
+            predictor,
+            exponential,
+            times,
+            events,
+            features,
+            method,
+            strata,
+            weights,
+        )
+    log_likelihood = 0.0
+    score = np.zeros(width, dtype=np.float64)
+    hessian = np.zeros((width, width), dtype=np.float64)
+    for stratum in range(int(np.max(strata)) + 1):
+        rows = np.flatnonzero(  # pyright: ignore[reportUnknownMemberType]
+            strata == stratum
+        )
+        order = rows[
+            np.argsort(  # pyright: ignore[reportUnknownMemberType]
+                times[rows], kind="stable"
+            )
+        ][::-1]
+        ordered_times = times[order]
+        ordered_features = features[order]
+        ordered_weights = weights[order]
+        ordered_risk = exponential[order] * ordered_weights
+        ordered_events = events[order]
+        ordered_predictor = predictor[order]
+        risk_zero = 0.0
+        risk_one = np.zeros(width, dtype=np.float64)
+        risk_two = np.zeros((width, width), dtype=np.float64)
+        start = 0
+        while start < ordered_times.size:
+            stop = start + 1
+            while (
+                stop < ordered_times.size
+                and ordered_times[stop] == ordered_times[start]
+            ):
+                stop += 1
+            block_features = ordered_features[start:stop]
+            block_risk = ordered_risk[start:stop]
+            risk_zero += float(np.sum(block_risk))
+            risk_one += np.sum(block_risk[:, None] * block_features, axis=0)
+            risk_two += block_features.T @ (block_risk[:, None] * block_features)
+
+            event_mask = ordered_events[start:stop] == 1
+            event_count = int(
+                np.count_nonzero(  # pyright: ignore[reportUnknownMemberType]
+                    event_mask
+                )
+            )
+            if event_count == 0:
+                start = stop
+                continue
+            event_features = block_features[event_mask]
+            event_weights = ordered_weights[start:stop][event_mask]
+            event_risk = block_risk[event_mask]
+            event_one = np.sum(event_risk[:, None] * event_features, axis=0)
+            event_two = event_features.T @ (event_risk[:, None] * event_features)
+            death_weight = float(np.sum(event_weights))
+            event_zero = float(np.sum(event_risk))
+            log_likelihood += float(
+                np.sum(event_weights * ordered_predictor[start:stop][event_mask])
+            )
+            score += np.sum(event_weights[:, None] * event_features, axis=0)
+            steps = event_count if method == "efron" else 1
+            multiplier = (
+                death_weight / event_count if method == "efron" else death_weight
+            )
+            for index in range(steps):
+                fraction = index / event_count if method == "efron" else 0.0
+                denominator = risk_zero - fraction * event_zero
+                first = risk_one - fraction * event_one
+                second = risk_two - fraction * event_two
+                log_likelihood -= multiplier * math.log(denominator)
+                mean = first / denominator
+                score -= multiplier * mean
+                hessian -= multiplier * (second / denominator - np.outer(mean, mean))
+            start = stop
+    return log_likelihood, score, hessian
+
+
+def _cox_terms_from_suffix_aggregates(
+    predictor: FloatVector,
+    exponential: FloatVector,
+    times: FloatVector,
+    events: IntVector,
+    features: FloatMatrix,
+    method: CoxMethod,
+    strata: IntVector,
+    weights: FloatVector,
+) -> tuple[float, FloatVector, FloatMatrix]:
+    """Vectorize nested risk moments within the fixed workspace limit."""
+    width = features.shape[1]
+    log_likelihood = 0.0
+    score = np.zeros(width, dtype=np.float64)
+    hessian = np.zeros((width, width), dtype=np.float64)
+    for stratum in range(int(np.max(strata)) + 1):
+        rows = np.flatnonzero(  # pyright: ignore[reportUnknownMemberType]
+            strata == stratum
+        )
+        order = rows[
+            np.argsort(  # pyright: ignore[reportUnknownMemberType]
+                times[rows], kind="stable"
+            )
+        ]
+        ordered_times = times[order]
+        ordered_features = features[order]
+        ordered_weights = weights[order]
+        ordered_risk = exponential[order] * ordered_weights
+        risk_zero = np.cumsum(  # pyright: ignore[reportUnknownMemberType]
+            ordered_risk[::-1]
+        )[::-1]
+        risk_one = np.cumsum(  # pyright: ignore[reportUnknownMemberType]
+            (ordered_risk[:, None] * ordered_features)[::-1], axis=0
+        )[::-1]
+        weighted_outer = (
+            ordered_risk[:, None, None]
+            * ordered_features[:, :, None]
+            * ordered_features[:, None, :]
+        )
+        risk_two = np.cumsum(  # pyright: ignore[reportUnknownMemberType]
+            weighted_outer[::-1], axis=0
+        )[::-1]
+
+        event_positions = np.flatnonzero(  # pyright: ignore[reportUnknownMemberType]
+            events[order] == 1
+        )
+        event_times, event_groups = np.unique(  # pyright: ignore[reportUnknownMemberType]
+            ordered_times[event_positions], return_inverse=True
+        )
+        group_count = event_times.size
+        event_count = np.bincount(event_groups, minlength=group_count)
+        event_weights = ordered_weights[event_positions]
+        event_risk = ordered_risk[event_positions]
+        event_features = ordered_features[event_positions]
+        death_weight = np.bincount(
+            event_groups, weights=event_weights, minlength=group_count
+        )
+        event_zero = np.bincount(
+            event_groups, weights=event_risk, minlength=group_count
+        )
+        event_one = np.zeros((group_count, width), dtype=np.float64)
+        np.add.at(  # pyright: ignore[reportUnknownMemberType]
+            event_one, event_groups, event_risk[:, None] * event_features
+        )
+        event_two = np.zeros((group_count, width, width), dtype=np.float64)
+        np.add.at(  # pyright: ignore[reportUnknownMemberType]
+            event_two,
+            event_groups,
+            event_risk[:, None, None]
+            * event_features[:, :, None]
+            * event_features[:, None, :],
+        )
+
+        log_likelihood += float(
+            np.sum(event_weights * predictor[order[event_positions]])
+        )
+        score += np.sum(event_weights[:, None] * event_features, axis=0)
+        for group, event_time in enumerate(_vector(event_times)):
+            risk_start = int(
+                np.searchsorted(  # pyright: ignore[reportUnknownMemberType]
+                    ordered_times, event_time, side="left"
+                )
+            )
+            steps = int(event_count[group]) if method == "efron" else 1
+            multiplier = (
+                float(death_weight[group]) / steps
+                if method == "efron"
+                else float(death_weight[group])
+            )
+            for index in range(steps):
+                fraction = index / steps if method == "efron" else 0.0
+                denominator = float(risk_zero[risk_start]) - (
+                    fraction * float(event_zero[group])
+                )
+                first = risk_one[risk_start] - fraction * event_one[group]
+                second = risk_two[risk_start] - fraction * event_two[group]
                 log_likelihood -= multiplier * math.log(denominator)
                 mean = first / denominator
                 score -= multiplier * mean
@@ -1547,6 +1762,67 @@ def _cox_baseline(
     times_out: list[float] = []
     increments: list[float] = []
     cumulative: list[float] = []
+    if np.all(entry == 0.0):  # pyright: ignore[reportUnknownMemberType]
+        for stratum, label in enumerate(strata_levels):
+            rows = np.flatnonzero(  # pyright: ignore[reportUnknownMemberType]
+                strata == stratum
+            )
+            order = rows[
+                np.argsort(  # pyright: ignore[reportUnknownMemberType]
+                    times[rows], kind="stable"
+                )
+            ]
+            ordered_times = times[order]
+            ordered_risk = exponential[order] * weights[order]
+            risk_zero = np.cumsum(  # pyright: ignore[reportUnknownMemberType]
+                ordered_risk[::-1]
+            )[::-1]
+            event_positions = np.flatnonzero(  # pyright: ignore[reportUnknownMemberType]
+                events[order] == 1
+            )
+            event_times, event_groups = np.unique(  # pyright: ignore[reportUnknownMemberType]
+                ordered_times[event_positions], return_inverse=True
+            )
+            event_count = np.bincount(event_groups, minlength=event_times.size)
+            death_weight = np.bincount(
+                event_groups,
+                weights=weights[order[event_positions]],
+                minlength=event_times.size,
+            )
+            event_zero = np.bincount(
+                event_groups,
+                weights=ordered_risk[event_positions],
+                minlength=event_times.size,
+            )
+            total = 0.0
+            for group, event_time in enumerate(_vector(event_times)):
+                risk_start = int(
+                    np.searchsorted(  # pyright: ignore[reportUnknownMemberType]
+                        ordered_times, event_time, side="left"
+                    )
+                )
+                denominator = float(risk_zero[risk_start])
+                deaths = int(event_count[group])
+                if method == "breslow":
+                    increment = float(death_weight[group]) / denominator
+                else:
+                    average_weight = float(death_weight[group]) / deaths
+                    increment = sum(
+                        average_weight
+                        / (denominator - (index / deaths) * float(event_zero[group]))
+                        for index in range(deaths)
+                    )
+                total += increment
+                labels.append(label)
+                times_out.append(float(event_time))
+                increments.append(increment)
+                cumulative.append(total)
+        return (
+            tuple(labels),
+            np.asarray(times_out, dtype=np.float64),
+            np.asarray(increments, dtype=np.float64),
+            np.asarray(cumulative, dtype=np.float64),
+        )
     for stratum, label in enumerate(strata_levels):
         stratum_mask = strata == stratum
         event_times = np.unique(  # pyright: ignore[reportUnknownMemberType]

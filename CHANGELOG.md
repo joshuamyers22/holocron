@@ -4,6 +4,15 @@ Notable changes are recorded here using semantic versioning.
 
 ## Unreleased
 
+- Completed retained-profile performance tuning with five deterministic
+  validation and survival workloads, raw `cProfile` retention, structural call
+  and peak-memory budgets, cross-platform CI evidence, and bounded nested-risk-
+  set acceleration for ordinary Cox fits while preserving delayed-entry behavior.
+- Completed the Phase 8 namespace disposition across all 281 pinned exports and
+  S3 methods: 50 remain evidence-backed experimental capabilities, 125 have
+  approved Python-native mappings, and 106 are explicitly unsupported with
+  family-level alternatives; removed all deferred and generic placeholder
+  entries and added machine-enforced review metadata and public-path checks.
 - Completed the Phase 8 multiple-imputation adapter with Rubin pooling for OLS
   and binary-logistic fits, pooled optimism-corrected validation and calibration,
   explicit Chan–Meng likelihood-ratio adjustment, typed information tables,

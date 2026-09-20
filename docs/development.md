@@ -60,6 +60,15 @@ Use `make clean-build` for release-style evidence. It rejects tracked or
 untracked source changes before building; CI and the gated release workflow use
 this target. Temporary installation environments are removed after the checks.
 
+## Performance profile workflow
+
+`make phase-8-profiles` runs five fixed validation and survival workloads,
+checks structural call and peak-memory budgets, and retains a JSON report plus
+raw `cProfile` files under `.work/phase-8-performance/`. Wall-clock medians are
+diagnostic rather than portable gates. Use `make phase-8-profiles-clean` for
+clean-source review evidence. The [performance profile guide](guides/performance-profiles.md)
+defines the workloads, interpretation, and change policy.
+
 ## Phase 1 evidence workflow
 
 `make phase-1-e2e` executes the accepted RCS-design, OLS-fit, and prediction case,

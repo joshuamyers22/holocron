@@ -14,13 +14,17 @@ Holocron is experimental and incomplete. Do not use it for consequential
 analysis, inference, prediction, or clinical decisions.
 
 Phases 0–7 are complete and Phase 8 is underway for private experimental
-development. Its first two deliverables add bounded mapped replacements for
+development. Its first four deliverables add bounded mapped replacements for
 fixed-covariance `Gls`, single-quantile `Rq`, right-censored Buckley–James
 `bj`, and one-scale Weibull/exponential `pphsm`, plus reviewed dispositions for
 the other Phase 8 exports, plus Rubin model pooling, corrected validation and
 calibration pooling, explicit Chan–Meng LR adjustment, and typed imputation
 information tables. These mappings are owned Python contracts, not R parity
-claims; complete method-level namespace disposition is next. The Phase 3
+claims. All 281 pinned namespace entries now have final reviewed experimental,
+mapped, or unsupported dispositions. Five retained cross-platform workloads
+now gate deterministic call and peak-memory budgets, and their profiles drove
+a faster nested-risk-set path for ordinary Cox fits. Migration tooling and
+deprecation policy are next. The Phase 3
 deliverables cover experimental `ols`,
 Gaussian/identity and binomial/logit `Glm`, and binary `lrm` estimators plus
 their covariance,
@@ -155,7 +159,7 @@ the Phase 7 private-development exit gate without claiming independent approval
 or R presentation-method parity. See the
 [Phase 7 completion record](https://github.com/joshuamyers22/holocron/blob/main/governance/PHASE_7_COMPLETION.md).
 
-The first two Phase 8 deliverables are implemented as mapped Python-native
+The first four Phase 8 deliverables are complete. The first two provide mapped Python-native
 replacements, not R-parity claims. In addition to the bounded GLS, quantile,
 Buckley--James, and AFT-to-PH model paths, `holocron.validation` can Rubin-pool
 compatible OLS and binary-logistic fits, average already corrected validation
@@ -164,6 +168,14 @@ explicit Chan--Meng likelihood-ratio adjustment, and produce typed imputation
 information tables. It does not generate imputations or implement
 `fit.mult.impute`. See the
 [multiple-imputation decision](https://github.com/joshuamyers22/holocron/blob/main/governance/PHASE_8_MULTIPLE_IMPUTATION.md).
+The third reviews every pinned export and S3 method: 50 entries are
+evidence-backed experimental capabilities, 125 are mapped migration paths, and
+106 are explicitly unsupported. No deferred entry remains. See the
+[namespace decision](https://github.com/joshuamyers22/holocron/blob/main/governance/PHASE_8_NAMESPACE_DISPOSITION.md).
+The fourth retains five deterministic validation and survival profiles with
+structural call and peak-memory gates and tunes the ordinary Cox risk-set path.
+See the
+[performance decision](https://github.com/joshuamyers22/holocron/blob/main/governance/PHASE_8_PERFORMANCE_TUNING.md).
 
 ## Library API
 

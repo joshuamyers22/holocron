@@ -23,9 +23,9 @@ an implementation claim, and an experimental capability is not production-ready.
 | --- | ---: | --- |
 | implemented | 0 | Implemented and accepted under the capability contract. |
 | experimental | 50 | Implemented narrowly with parity evidence; not production-ready. |
-| mapped | 31 | Mapped to a Python design, without an accepted implementation claim. |
-| unsupported | 15 | Intentionally excluded from the compatibility target. |
-| deferred | 185 | Catalogued for a later phase; no current implementation claim. |
+| mapped | 125 | Mapped to a Python design, without an accepted implementation claim. |
+| unsupported | 106 | Intentionally excluded from the compatibility target. |
+| deferred | 0 | Catalogued for a later phase; no current implementation claim. |
 
 ## Evidence-backed experimental surface
 
@@ -96,72 +96,72 @@ in the pinned namespace. Counts by tier are A: 32, B: 33, C: 26, D: 190.
 | --- | --- | --- | --- | --- | ---: | --- | --- |
 | `%ia%` | export | `holocron.formula.RestrictedInteractionTerm` | experimental | Phase 2-3 | 1 | `formula-design-v1` | Explicit two-way interactions only; both component main effects are required, doubly nonlinear products are omitted, and nested, self, unrestricted, matrix, and stratification interactions are rejected. |
 | `Design` | export | `holocron.design.DesignSpec` | experimental | Phase 2-3 | 1 | `formula-design-v1` | Owned allowlisted AST with explicit numeric, categorical, scored-ordered, and restricted-interaction terms; automatic parameters, offsets, strata, matrices, and R formula evaluation remain deferred. |
-| `DesignAssign` | export | — | deferred | Phase 2-3 | 0 | — | Complete R assignment behavior remains deferred; the experimental DesignSpec exposes narrower generated-column ownership and term slices. |
+| `DesignAssign` | export | `holocron.design.DesignSpec` | mapped | Phase 2-3 | 0 | — | Use immutable DesignSpec term metadata and generated-column ownership. R assignment vectors, mutable attributes, and arbitrary design objects are not reproduced. |
 | `Glm` | export | `holocron.models.fit_glm` | experimental | Phase 2-3 | 3 | `generalized-linear-v1` | Initial envelope supports Gaussian/identity and binomial/logit only; weights, offsets, other families/links, penalties, dispersion options, formula-level fitting, and the broader R Glm method surface remain deferred. |
-| `Newlabels` | export | — | deferred | Phase 2-3 | 0 | — | Not yet implemented. |
-| `Newlevels` | export | — | deferred | Phase 2-3 | 0 | — | Not yet implemented. |
-| `Predict` | export | — | deferred | Phase 2-3 | 0 | — | Not yet implemented. |
-| `Xcontrast` | export | — | deferred | Phase 2-3 | 0 | — | Not yet implemented. |
+| `Newlabels` | export | — | unsupported | Phase 2-3 | 0 | — | Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md). |
+| `Newlevels` | export | — | unsupported | Phase 2-3 | 0 | — | Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md). |
+| `Predict` | export | `holocron.models.predict` | mapped | Phase 2-3 | 0 | — | Use explicit realized design rows with the supported postfit predictor, or family-specific ordinal/survival prediction methods. Automatic adjustment grids, R formulas, and data-frame assembly are unsupported. |
+| `Xcontrast` | export | `holocron.models.contrast` | mapped | Phase 2-3 | 0 | — | Use one explicit named linear contrast on a supported OLS or binary-logistic fit. Design-row generation and simultaneous or nonlinear contrasts are unsupported. |
 | `asis` | export | `holocron.formula.IdentityTerm` | experimental | Phase 2-3 | 1 | `formula-design-v1` | Numeric one-dimensional predictors only; labels and units are retained separately by DataDistribution. |
 | `catg` | export | `holocron.formula.CategoricalTerm` | experimental | Phase 2-3 | 1 | `formula-design-v1` | Levels and their reference order must be explicit; missing and unseen levels fail closed instead of using ambient factor metadata. |
 | `contrast` | export | `holocron.models.contrast` | experimental | Phase 2-3 | 3 | `postfit-inference-v1` | Supports one declared linear coefficient contrast with model-based uncertainty; rms design-setting expansion, simultaneous intervals, joint contrasts, profile intervals, and Bayesian paths remain deferred. |
 | `datadist` | export | `holocron.design.DataDistribution` | experimental | Phase 2-3 | 4 | `data-distribution-v1` | Python uses immutable explicit metadata instead of R global options; categorical levels must be declared; dataframe/date-time adapters are deferred; ordered factors use the lower middle declared level when the level count is even; and default display probabilities are computed per variable when missingness differs. |
-| `gTrans` | export | — | deferred | Phase 2-3 | 0 | — | Not yet implemented. |
+| `gTrans` | export | — | unsupported | Phase 2-3 | 0 | — | Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md). |
 | `interactions.containing` | export | `holocron.design.DesignSpec.interactions_containing` | experimental | Phase 2-3 | 1 | `formula-design-v1` | Returns zero-based term indices from an immutable DesignSpec; it does not inspect an R Design attribute. |
 | `lrm` | export | `holocron.models.fit_lrm` | experimental | Phase 2-3 | 4 | `binary-logistic-v1` | fit_lrm is binary; the companion fit_ordinal_lrm implements unpenalized full-rank multi-intercept proportional odds. Weights, offsets, ordinal penalties, formula-level fitting, partial proportional odds, and the broader R lrm method surface remain deferred. |
-| `lrm.fit` | export | — | deferred | Phase 2-3 | 0 | — | Not yet implemented. |
+| `lrm.fit` | export | `holocron.models.fit_lrm` | mapped | Phase 2-3 | 0 | — | Use the public bounded binary fit_lrm estimator. Low-level R fitter controls, ordinal dispatch, and mutable work arrays are unsupported. |
 | `lsp` | export | `holocron.formula.LinearSplineTerm` | experimental | Phase 2-3 | 1 | `formula-design-v1` | Explicit finite knots only; automatic parameters remain deferred. |
-| `matrx` | export | — | deferred | Phase 2-3 | 0 | — | Not yet implemented. |
-| `modelData` | export | — | deferred | Phase 2-3 | 0 | — | Not yet implemented. |
+| `matrx` | export | — | unsupported | Phase 2-3 | 0 | — | Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md). |
+| `modelData` | export | `holocron.design.DesignMatrix` | mapped | Phase 2-3 | 0 | — | Retain the immutable realized DesignMatrix and source data explicitly. R call evaluation and environment lookup are unsupported. |
 | `ols` | export | `holocron.models.fit_ols` | experimental | Phase 2-3 | 6 | `well-conditioned-ols-v1` | Initial narrow API; full rms contract remains deferred. |
-| `ols.influence` | export | — | deferred | Phase 2-3 | 0 | — | Not yet implemented. |
+| `ols.influence` | export | `holocron.models.influence_diagnostics` | mapped | Phase 2-3 | 0 | — | Use typed exact OLS case-deletion influence diagnostics. R print/plot side effects and additional deletion summaries are unsupported. |
 | `pol` | export | `holocron.formula.PolynomialTerm` | experimental | Phase 2-3 | 1 | `formula-design-v1` | Raw powers of explicit degree 2 through 10 only; no ambient option supplies a default degree. |
-| `predictrms` | export | — | deferred | Phase 2-3 | 0 | — | Not yet implemented. |
+| `predictrms` | export | `holocron.models.predict` | mapped | Phase 2-3 | 0 | — | Use explicit design rows with the supported postfit predictor or family-specific prediction methods. R formula evaluation, adjustment frames, and broad type dispatch are unsupported. |
 | `rcs` | export | `holocron.design.RestrictedCubicSplineSpec` | experimental | Phase 2-3 | 6 | `deterministic-transform-v1` | Initial narrow API; full rms contract remains deferred. |
 | `scored` | export | `holocron.formula.OrderedTerm` | experimental | Phase 2-3 | 1 | `formula-design-v1` | Three or more strictly increasing numeric levels must be explicit; missing and unseen levels fail closed. |
-| `specs` | export | — | deferred | Phase 2-3 | 0 | — | Not yet implemented. |
-| `strat` | export | — | deferred | Phase 2-3 | 0 | — | Not yet implemented. |
-| `Newlabels.rms` | s3_method | — | deferred | Phase 2-3 | 0 | — | Not yet implemented. |
-| `Newlevels.rms` | s3_method | — | deferred | Phase 2-3 | 0 | — | Not yet implemented. |
+| `specs` | export | `holocron.design.DesignSpec` | mapped | Phase 2-3 | 0 | — | Inspect immutable DesignSpec terms, generated columns, labels, and fingerprints. R console formatting and Design attribute inference are unsupported. |
+| `strat` | export | `holocron.models.fit_cph` | mapped | Phase 2-3 | 0 | — | Supply explicit stratum labels to supported survival estimators and predictors. Formula-special parsing and interaction with arbitrary R models are unsupported. |
+| `Newlabels.rms` | s3_method | — | unsupported | Phase 2-3 | 0 | — | Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md). |
+| `Newlevels.rms` | s3_method | — | unsupported | Phase 2-3 | 0 | — | Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md). |
 | `contrast.rms` | s3_method | `holocron.models.contrast` | experimental | Phase 2-3 | 3 | `postfit-inference-v1` | Python accepts explicit coefficient weights rather than rms data-setting lists; multirow, joint, simultaneous, profile, and Bayesian contrasts remain deferred. |
-| `specs.rms` | s3_method | — | deferred | Phase 2-3 | 0 | — | Not yet implemented. |
-| `summary.rms` | s3_method | — | deferred | Phase 2-3 | 0 | — | Not yet implemented. |
+| `specs.rms` | s3_method | `holocron.design.DesignSpec` | mapped | Phase 2-3 | 0 | — | Inspect the immutable DesignSpec and generated-column metadata directly. R console formatting and inferred Design attributes are unsupported. |
+| `summary.rms` | s3_method | `holocron.models.summarize` | mapped | Phase 2-3 | 0 | — | Use typed coefficient and likelihood summaries for supported OLS or binary-logistic fits, and explicit contrast for chosen effects. Automatic adjustment grids and broad rms dispatch are unsupported. |
 
 ### Tier B (33)
 
 | R symbol | Kind | Python entry point | Status | Milestone | Oracle cases | Tolerance profile | Known differences |
 | --- | --- | --- | --- | --- | ---: | --- | --- |
 | `ExProb` | export | `holocron.models.OrdinalResult.predict_exceedance` | mapped | Phase 4-5 | 0 | — | Returns exceedance probabilities at an observed ordinal response level; rms function factories, interpolation, and survival-model dispatch remain deferred. |
-| `Hazard` | export | — | deferred | Phase 4-5 | 0 | — | Not yet implemented. |
+| `Hazard` | export | `holocron.models.ParametricSurvivalResult.predict_hazard` | mapped | Phase 4-5 | 0 | — | Use explicit parametric-survival hazard prediction. R function factories and broader model dispatch are unsupported. |
 | `Ocens` | export | `holocron.models.CensoredResponse` | mapped | Phase 4-5 | 1 | `ordinal-censored-v1` | Numeric exact, left-, right-, interval-, and mixed-censoring endpoints are supported. Interval-censored fitting passes pinned-R parity; one-sided endpoints retain the documented open-endpoint contract under an explicit pinned-R parity exception. Factor/character inputs, labels, units, missing rows, weights, and Surv conversion remain deferred. |
-| `Ocens2Surv` | export | — | deferred | Phase 4-5 | 0 | — | Not yet implemented. |
+| `Ocens2Surv` | export | `holocron.models.SurvivalResponse.from_intervals` | mapped | Phase 4-5 | 0 | — | Construct an explicit SurvivalResponse from censoring endpoints. R Surv objects, attribute mutation, and implicit type inference are not reproduced. |
 | `Ocens2ord` | export | `holocron.models.CensoredResponse.turnbull` | mapped | Phase 4-5 | 0 | — | Implements rounded exact-grid open one-sided endpoints, maximal intersections, self-consistency, support consolidation, and a right-tail category. Rich R attributes, the deprecated data-changing consolidation mode, weights, and missing-row reinsertion remain deferred. |
-| `Olinks` | export | — | deferred | Phase 4-5 | 0 | — | Not yet implemented. |
-| `Survival` | export | — | deferred | Phase 4-5 | 0 | — | Not yet implemented. |
-| `adapt_orm` | export | — | deferred | Phase 4-5 | 0 | — | Not yet implemented. |
+| `Olinks` | export | `holocron.models.fit_orm` | mapped | Phase 4-5 | 0 | — | Select one supported ordinal link explicitly in fit_orm. Runtime discovery and R link-function objects are unsupported. |
+| `Survival` | export | `holocron.models.CoxResult.predict_survival` | mapped | Phase 4-5 | 0 | — | Use typed Cox, parametric, or nonparametric survival prediction methods. R function factories and arbitrary fit dispatch are unsupported. |
+| `adapt_orm` | export | — | unsupported | Phase 4-5 | 0 | — | Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md). |
 | `cph` | export | `holocron.models.fit_cph` | experimental | Phase 4-5 | 3 | `cox-risk-set-v2`, `cox-model-v1` | Caller-supplied full-rank designs support Efron/Breslow ties, counting-process entry, strata, positive weights, offsets, observed covariance, per-stratum baseline hazard/survival, cumulative-hazard/survival prediction, and martingale/deviance residuals. Formula fitting, robust covariance, and other residual kinds remain deferred. |
 | `mix_re` | export | `holocron.models.fit_random_intercept_orm` | mapped | Phase 4-5 | 1 | `ordinal-random-v1` | The explicit mix_re argument implements the signed dual-scale loading and requires within-cluster variation; formula-level special-term syntax is not exposed. |
 | `npsurv` | export | `holocron.models.fit_npsurv` | experimental | Phase 4-5 | 4 | `nonparametric-survival-risk-set-v2`, `nonparametric-survival-v1`, `nonparametric-survival-prediction-v1` | Right-censored and counting-process Kaplan-Meier curves support strata and positive frequency weights with weighted risk/event/censor counts, log-scale Greenwood intervals, typed curve evaluation, event-time quantiles, and restricted means. Alternate estimators, robust variance, and formula-level fitting remain deferred. |
-| `ordESS` | export | — | deferred | Phase 4-5 | 0 | — | Not yet implemented. |
-| `ordParallel` | export | — | deferred | Phase 4-5 | 0 | — | Not yet implemented. |
+| `ordESS` | export | — | unsupported | Phase 4-5 | 0 | — | Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md). |
+| `ordParallel` | export | `holocron.models.OrdinalResult.diagnostics` | mapped | Phase 4-5 | 0 | — | Use the bounded proportional-odds diagnostic carried by OrdinalResult. Bootstrap, plotting, and broader ordinal model dispatch are unsupported. |
 | `orm` | export | `holocron.models.fit_orm` | experimental | Phase 4-5 | 3 | `ordinal-model-v1` | Exact-response logistic, probit, loglog, cloglog, and cauchit cumulative links plus numeric censoring are implemented. Three exact-response fixtures pass this profile; censored and clustered evidence is linked from Ocens, cluster, and mix_re. Weights, offsets, penalties, y-dependent effects, and formula-level fitting remain deferred. |
-| `orm.fit` | export | — | deferred | Phase 4-5 | 0 | — | Not yet implemented. |
+| `orm.fit` | export | `holocron.models.fit_orm` | mapped | Phase 4-5 | 0 | — | Use the public bounded fit_orm estimator. Low-level R work arrays, arbitrary optimization controls, and object mutation are unsupported. |
 | `psm` | export | `holocron.models.fit_psm` | experimental | Phase 4-5 | 5 | `parametric-survival-risk-set-v2`, `parametric-survival-v1`, `parametric-survival-censoring-v1` | Weibull and exponential AFT fits support exact, left-, right-, and interval-censored responses plus positive weights, offsets, observed covariance, and survival/hazard prediction; Weibull additionally supports scale strata. Residuals are currently defined only for right-censored inputs. Other distributions and formula-level fitting remain deferred. |
-| `survest` | export | — | deferred | Phase 4-5 | 0 | — | Not yet implemented. |
-| `ExProb.orm` | s3_method | — | deferred | Phase 4-5 | 0 | — | Not yet implemented. |
+| `survest` | export | `holocron.models.CoxResult.predict_survival` | mapped | Phase 4-5 | 0 | — | Use typed Cox or parametric survival and curve prediction methods with explicit rows, times, strata, and offsets. R data-frame dispatch and confidence bands are unsupported. |
+| `ExProb.orm` | s3_method | `holocron.models.OrdinalResult.predict_exceedance` | mapped | Phase 4-5 | 0 | — | Predict exceedance probabilities at explicit observed response levels. R function factories, interpolation, and plotting side effects are unsupported. |
 | `Hazard.psm` | s3_method | `holocron.models.ParametricSurvivalResult.predict_hazard` | experimental | Phase 4-5 | 1 | `parametric-survival-risk-set-v2` | Returns Weibull/exponential hazards for explicit feature rows, times, strata, and offsets; rms function-factory and adjustment-grid behavior remain deferred. |
 | `Mean.cph` | s3_method | `holocron.models.CoxResult.predict_mean` | experimental | Phase 4-5 | 1 | `cox-prediction-v1` | Computes the pinned rms exact event-grid restricted mean for explicit feature rows, strata, offsets, and a required finite restriction time; approximate precomputation and an unrestricted lower-limit estimate are intentionally omitted. |
-| `Mean.lrm` | s3_method | — | deferred | Phase 4-5 | 0 | — | Not yet implemented. |
-| `Mean.orm` | s3_method | — | deferred | Phase 4-5 | 0 | — | Not yet implemented. |
+| `Mean.lrm` | s3_method | `holocron.models.BinaryLogisticResult.predict_probability` | mapped | Phase 4-5 | 0 | — | Binary lrm response means are explicit predicted probabilities. Ordinal lrm function factories and R interpolation are unsupported. |
+| `Mean.orm` | s3_method | `holocron.models.OrdinalResult.predict_mean` | mapped | Phase 4-5 | 0 | — | Predict numeric means over the fitted ordered response values. R function factories and custom response transformations are unsupported. |
 | `Mean.psm` | s3_method | `holocron.models.ParametricSurvivalResult.predict_mean` | experimental | Phase 4-5 | 1 | `parametric-survival-prediction-v1` | Computes finite analytic means for the supported Weibull and exponential families with explicit feature rows, strata, and offsets; other psm distributions remain deferred. |
 | `Quantile.cph` | s3_method | `holocron.models.CoxResult.predict_quantile` | experimental | Phase 4-5 | 1 | `cox-prediction-v1` | Accepts conventional event-time CDF probabilities, mapping them to the pinned rms survival-threshold convention; step and linear interpolation are supported and an unobserved quantile is returned as None. |
-| `Quantile.orm` | s3_method | — | deferred | Phase 4-5 | 0 | — | Not yet implemented. |
+| `Quantile.orm` | s3_method | `holocron.models.OrdinalResult.predict_quantile` | mapped | Phase 4-5 | 0 | — | Predict fitted ordinal response quantiles for explicit probabilities and design rows. R function factories and interpolation options are unsupported. |
 | `Quantile.psm` | s3_method | `holocron.models.ParametricSurvivalResult.predict_quantile` | experimental | Phase 4-5 | 1 | `parametric-survival-prediction-v1` | Computes analytic event-time quantiles for CDF probabilities under the supported Weibull and exponential families; other psm distributions remain deferred. |
 | `Survival.cph` | s3_method | `holocron.models.CoxResult.predict_survival` | experimental | Phase 4-5 | 1 | `cox-risk-set-v2` | Predicts survival from the owned per-stratum baseline for explicit feature rows, times, strata, and offsets; rms function-factory and adjustment-grid behavior remain deferred. |
-| `Survival.orm` | s3_method | — | deferred | Phase 4-5 | 0 | — | Not yet implemented. |
+| `Survival.orm` | s3_method | `holocron.models.OrdinalResult.predict_exceedance` | mapped | Phase 4-5 | 0 | — | Use explicit ordinal exceedance probabilities as the supported discrete-survival analogue. R survival function factories and time interpolation are unsupported. |
 | `Survival.psm` | s3_method | `holocron.models.ParametricSurvivalResult.predict_survival` | experimental | Phase 4-5 | 1 | `parametric-survival-risk-set-v2` | Predicts survival for explicit feature rows, times, strata, and offsets; rms function-factory and adjustment-grid behavior remain deferred. |
 | `survest.cph` | s3_method | `holocron.models.CoxResult.predict_curve` | experimental | Phase 4-5 | 1 | `cox-prediction-v1` | Returns typed survival curves for explicit feature rows and a requested or fitted event-time grid; confidence intervals, individual time-dependent paths, and standard errors remain deferred. |
-| `survest.orm` | s3_method | — | deferred | Phase 4-5 | 0 | — | Not yet implemented. |
+| `survest.orm` | s3_method | `holocron.models.OrdinalResult.predict_exceedance` | mapped | Phase 4-5 | 0 | — | Use explicit ordinal exceedance probabilities as the supported discrete-survival result. Time interpolation, confidence intervals, and R function dispatch are unsupported. |
 | `survest.psm` | s3_method | `holocron.models.ParametricSurvivalResult.predict_curve` | experimental | Phase 4-5 | 1 | `parametric-survival-prediction-v1` | Returns typed survival curves on an explicit positive time grid; confidence intervals, transformations, and parallel-time mode remain deferred. |
 | `survfit.cph` | s3_method | `holocron.models.CoxResult.predict_curve` | experimental | Phase 4-5 | 1 | `cox-prediction-v1` | Covers fixed-covariate survival curves from the owned baseline; standard errors, confidence bands, individual time-dependent paths, and survfit object compatibility remain deferred. |
 
@@ -169,32 +169,32 @@ in the pinned namespace. Counts by tier are A: 32, B: 33, C: 26, D: 190.
 
 | R symbol | Kind | Python entry point | Status | Milestone | Oracle cases | Tolerance profile | Known differences |
 | --- | --- | --- | --- | --- | ---: | --- | --- |
-| `bootBCa` | export | — | deferred | Phase 6 | 0 | — | Not yet implemented. |
+| `bootBCa` | export | — | unsupported | Phase 6 | 0 | — | Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md). |
 | `bootcov` | export | `holocron.models.bootstrap_covariance` | experimental | Phase 6 | 1 | `covariance-resampling-v1` | Supports iid row bootstrap covariance for current OLS, binomial Glm, and binary lrm fits, with a fixed NumPy seed or an auditable declared schedule; cluster bootstrap, failed-replicate skipping, coefficient persistence, intervals, and out-of-sample likelihood remain deferred. |
-| `calibrate` | export | — | deferred | Phase 6 | 0 | — | Not yet implemented. |
-| `effective.df` | export | — | deferred | Phase 6 | 0 | — | Not yet implemented. |
-| `fastbw` | export | — | deferred | Phase 6 | 0 | — | Not yet implemented. |
-| `oos.loglik` | export | — | deferred | Phase 6 | 0 | — | Not yet implemented. |
-| `pentrace` | export | — | deferred | Phase 6 | 0 | — | Not yet implemented. |
-| `predab.resample` | export | — | deferred | Phase 6 | 0 | — | Not yet implemented. |
+| `calibrate` | export | `holocron.validation.calibrate_model` | mapped | Phase 6 | 0 | — | Use explicit exact resample plans for supported OLS or binary-logistic parametric calibration. Other families, boot-method aliases, and implicit refitting are unsupported. |
+| `effective.df` | export | `holocron.models.PenalizedResult` | mapped | Phase 6 | 0 | — | Read effective_degrees_of_freedom from a supported PenalizedResult or penalty-trace point. General penalty-matrix decomposition is unsupported. |
+| `fastbw` | export | `holocron.models.backward_select` | mapped | Phase 6 | 0 | — | Use bounded fresh-refit Wald elimination over a complete caller-declared coefficient partition. AIC/rule variants and rms object mutation are unsupported. |
+| `oos.loglik` | export | — | unsupported | Phase 6 | 0 | — | Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md). |
+| `pentrace` | export | `holocron.models.trace_penalty` | mapped | Phase 6 | 0 | — | Use a bounded explicit scalar penalty grid with AIC or BIC selection for OLS or binary lrm. Multidimensional penalties and rms optimization shortcuts are unsupported. |
+| `predab.resample` | export | `holocron.validation.run_resample_plan` | mapped | Phase 6 | 0 | — | Run one caller-owned whole procedure over an exact immutable resample plan. rms method strings, hidden refits, and model-object mutation are unsupported. |
 | `robcov` | export | `holocron.models.robust_covariance` | experimental | Phase 6 | 1 | `covariance-resampling-v1` | Supports the uncorrected Huber cluster sandwich for current unpenalized OLS, binomial Glm, and binary lrm fits; Efron OLS covariance, finite-sample corrections, and penalized fits remain deferred. |
 | `val.prob` | export | `holocron.validation.validate_probabilities` | experimental | Phase 6 | 1 | `probability-validation-v1` | Supports binary discrimination, Brier/log scores, likelihood quality indices, logistic recalibration, Spiegelhalter calibration testing, weighted equal-frequency calibration groups, and declared-threshold classification metrics. Probabilities must be strictly inside (0,1); val.prob plotting, LOWESS errors, missing-value deletion, and val.probg's named group comparison remain deferred. |
-| `val.probg` | export | — | deferred | Phase 6 | 0 | — | Not yet implemented. |
+| `val.probg` | export | `holocron.validation.validate_probabilities` | mapped | Phase 6 | 0 | — | Use explicit grouped probability calibration from validate_probabilities. R plotting, smoothing, and formula interfaces are unsupported. |
 | `val.surv` | export | `holocron.models.validate_survival_predictions` | experimental | Phase 5-6 | 2 | `survival-validation-v1` | Provides model-independent fixed-horizon IPCW Brier scores, cumulative/dynamic AUC and Dxy, Kaplan-Meier observed survival, mean predicted survival, marginal and prediction-grouped Kaplan-Meier calibration, declared-risk-threshold IPCW classification metrics, integrated Brier score, integrated AUC when defined at every horizon, and integrated absolute calibration error. It does not implement val.surv's hare/smoothkm calibration curves, Cox-Snell plots, censoring-time plots, model dispatch, left/interval-censored validation, or resampling validation. |
-| `validate` | export | — | deferred | Phase 6 | 0 | — | Not yet implemented. |
-| `vif` | export | — | deferred | Phase 6 | 0 | — | Not yet implemented. |
-| `calibrate.cph` | s3_method | — | deferred | Phase 6 | 0 | — | Not yet implemented. |
-| `calibrate.default` | s3_method | — | deferred | Phase 6 | 0 | — | Not yet implemented. |
-| `calibrate.orm` | s3_method | — | deferred | Phase 6 | 0 | — | Not yet implemented. |
-| `calibrate.psm` | s3_method | — | deferred | Phase 6 | 0 | — | Not yet implemented. |
-| `validate.Rq` | s3_method | — | deferred | Phase 6 | 0 | — | Not yet implemented. |
-| `validate.bj` | s3_method | — | deferred | Phase 6 | 0 | — | Not yet implemented. |
-| `validate.cph` | s3_method | — | deferred | Phase 6 | 0 | — | Not yet implemented. |
-| `validate.lrm` | s3_method | — | deferred | Phase 6 | 0 | — | Not yet implemented. |
-| `validate.ols` | s3_method | — | deferred | Phase 6 | 0 | — | Not yet implemented. |
-| `validate.orm` | s3_method | — | deferred | Phase 6 | 0 | — | Not yet implemented. |
-| `validate.psm` | s3_method | — | deferred | Phase 6 | 0 | — | Not yet implemented. |
-| `validate.rpart` | s3_method | — | deferred | Phase 6 | 0 | — | Not yet implemented. |
+| `validate` | export | `holocron.validation.validate_model` | mapped | Phase 6 | 0 | — | Use exact resample plans and fresh OLS or binary-logistic refits, or explicit survival prediction validation. Other model families and rms method dispatch are unsupported. |
+| `vif` | export | `holocron.models.variance_inflation_factors` | mapped | Phase 6 | 0 | — | Use covariance-correlation VIFs for supported OLS or binary-logistic fits. Generalized VIFs, term aggregation, and other model families are unsupported. |
+| `calibrate.cph` | s3_method | — | unsupported | Phase 6 | 0 | — | Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md). |
+| `calibrate.default` | s3_method | `holocron.validation.calibrate_model` | mapped | Phase 6 | 0 | — | Use explicit exact resampling for OLS or binary-logistic parametric calibration. Generic R dispatch and nonparametric smooth calibration are unsupported. |
+| `calibrate.orm` | s3_method | — | unsupported | Phase 6 | 0 | — | Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md). |
+| `calibrate.psm` | s3_method | — | unsupported | Phase 6 | 0 | — | Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md). |
+| `validate.Rq` | s3_method | — | unsupported | Phase 6 | 0 | — | Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md). |
+| `validate.bj` | s3_method | — | unsupported | Phase 6 | 0 | — | Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md). |
+| `validate.cph` | s3_method | `holocron.validation.validate_survival_predictions` | mapped | Phase 6 | 0 | — | Validate explicit fixed-horizon right-censored survival predictions. Whole-model Cox refitting, Dxy-only methods, and rms resampling options are unsupported. |
+| `validate.lrm` | s3_method | `holocron.validation.validate_model` | mapped | Phase 6 | 0 | — | Use a declared exact resample plan with fresh binary-lrm refits and separate optimism correction. Ordinal lrm and rms method aliases are unsupported. |
+| `validate.ols` | s3_method | `holocron.validation.validate_model` | mapped | Phase 6 | 0 | — | Use a declared exact resample plan with fresh OLS refits and separate optimism correction. rms method aliases and hidden learned-design rebuilding are unsupported. |
+| `validate.orm` | s3_method | — | unsupported | Phase 6 | 0 | — | Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md). |
+| `validate.psm` | s3_method | `holocron.validation.validate_survival_predictions` | mapped | Phase 6 | 0 | — | Validate explicit fixed-horizon right-censored survival predictions. Whole-model psm refitting and rms resampling options are unsupported. |
+| `validate.rpart` | s3_method | — | unsupported | Phase 6 | 0 | — | Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md). |
 
 ### Tier D (190)
 
@@ -206,14 +206,14 @@ in the pinned namespace. Counts by tier are A: 32, B: 33, C: 26, D: 190.
 | `Penalty.setup` | export | `holocron.models.fit_penalized_lrm` | experimental | Phase 8 | 2 | `regularization-covariance-v1` | Penalty setup is explicit by generated coefficient name rather than inferred from rms assume codes; only diagonal slope penalties are supported. |
 | `Rq` | export | `holocron.models.fit_quantile_regression` | mapped | Phase 8 | 0 | — | Approved bounded replacement fits one weighted conditional quantile by deterministic ADMM and reports kernel-density sandwich covariance. Multiple tau fits, quantreg algorithm selection, bootstrap inference, and R method parity are unsupported. |
 | `Surv` | export | `holocron.models.SurvivalResponse` | mapped | Phase 8 | 0 | — | Use the explicit SurvivalResponse interval contract. It supports exact, left-, right-, interval-, and mixed censoring without R attributes, formula evaluation, counting-process construction, or arbitrary Surv types. |
-| `annotateAnova` | export | — | deferred | Phase 7 | 0 | — | Not yet implemented. |
+| `annotateAnova` | export | `holocron.graphics.TextAnnotation` | mapped | Phase 7 | 0 | — | Add explicit TextAnnotation values to an owned PlotSpec. Automatic ANOVA parsing and graphics-device mutation are unsupported. |
 | `bj` | export | `holocron.models.fit_buckley_james` | mapped | Phase 8 | 0 | — | Approved bounded right-censored Buckley-James AFT replacement with identity or log time, Kaplan-Meier residual-tail imputation, fail-closed convergence, and an event-only working OLS covariance. Formula/link breadth, cycle averaging, bootstrap covariance, and rms inference parity are unsupported. |
-| `bjplot` | export | — | deferred | Phase 7 | 0 | — | Not yet implemented. |
-| `bootplot` | export | — | deferred | Phase 7 | 0 | — | Not yet implemented. |
-| `bplot` | export | — | deferred | Phase 7 | 0 | — | Not yet implemented. |
+| `bjplot` | export | — | unsupported | Phase 7 | 0 | — | Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md). |
+| `bootplot` | export | — | unsupported | Phase 7 | 0 | — | Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md). |
+| `bplot` | export | — | unsupported | Phase 7 | 0 | — | Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md). |
 | `cluster` | export | `holocron.models.fit_random_intercept_orm` | mapped | Phase 4-5 | 1 | `ordinal-random-v1` | Maps formula-level cluster marking to the explicit fit_random_intercept_orm API. One Gaussian grouping effect is supported; multiple, crossed, correlated, and random-slope structures are deferred. |
 | `combineRelatedPredictors` | export | — | unsupported | Phase 8 | 0 | — | Automatic predictor-cluster combination is not approved because it changes the estimand and design identity. Encode a reviewed transformation explicitly in DesignSpec instead. |
-| `confplot` | export | — | deferred | Phase 7 | 0 | — | Not yet implemented. |
+| `confplot` | export | `holocron.graphics.effect_plot_spec` | mapped | Phase 7 | 0 | — | Use a typed prediction result and effect_plot_spec for interval geometry. R graphics state and arbitrary confidence-band inputs are unsupported. |
 | `corFloorExp` | export | — | unsupported | Phase 8 | 0 | — | Correlation-structure estimation is not implemented. Construct and review the relative covariance explicitly, then pass it to holocron.models.fit_gls. |
 | `coxphFit` | export | `holocron.models.fit_cph` | mapped | Phase 8 | 0 | — | Use the owned fit_cph estimator; this does not expose the rms internal coxphFit adapter or arbitrary survival-package controls. |
 | `cr.setup` | export | — | unsupported | Phase 8 | 0 | — | Internal continuation-ratio setup mutation is not a public contract. Use the explicit ordinal response and fit_orm APIs; continuation-ratio modeling itself is unsupported. |
@@ -221,27 +221,27 @@ in the pinned namespace. Counts by tier are A: 32, B: 33, C: 26, D: 190.
 | `formatNP` | export | — | unsupported | Phase 8 | 0 | — | R-specific N/P text formatting is not a statistical API. Build typed holocron.reporting.TableSpec cells and use render_latex or application-native presentation formatting. |
 | `gIndex` | export | — | unsupported | Phase 8 | 0 | — | The rms g-index bundle is not reproduced. Use holocron.validation.validate_model or validate_probabilities and select an explicitly named supported metric. |
 | `gendata` | export | `holocron.design.DesignSpec.transform` | mapped | Phase 8 | 0 | — | Use an explicit fitted DesignSpec and transform reviewed predictor rows. Interactive datadist prompting, formula evaluation, and implicit adjustment-value generation are unsupported. |
-| `ggplot` | export | — | deferred | Phase 7 | 0 | — | Not yet implemented. |
+| `ggplot` | export | `holocron.graphics.render_svg` | mapped | Phase 7 | 0 | — | Render an explicit backend-neutral PlotSpec to dependency-free SVG. ggplot2 objects, themes, layers, and extension dispatch are unsupported. |
 | `groupkm` | export | `holocron.models.validate_survival_predictions` | mapped | Phase 8 | 0 | — | Grouped Kaplan-Meier calibration is available through validate_survival_predictions at explicit horizons. The standalone R object and plotting side effects are not reproduced. |
-| `hazard.ratio.plot` | export | — | deferred | Phase 7 | 0 | — | Not yet implemented. |
-| `histdensity` | export | — | deferred | Phase 7 | 0 | — | Not yet implemented. |
+| `hazard.ratio.plot` | export | — | unsupported | Phase 7 | 0 | — | Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md). |
+| `histdensity` | export | — | unsupported | Phase 7 | 0 | — | Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md). |
 | `ie.setup` | export | — | unsupported | Phase 8 | 0 | — | This internal information-expansion setup helper has no approved public replacement; model fitting owns its information matrices. |
 | `impactPO` | export | `holocron.models.OrdinalResult.diagnostics` | mapped | Phase 8 | 0 | — | Use OrdinalResult.diagnostics for explicit proportional-odds diagnostics. Simulation, plotting, and the impactPO report layout are unsupported. |
 | `infoMxop` | export | — | unsupported | Phase 8 | 0 | — | Direct mutation and partitioning of internal information matrices is not public. Use owned model covariance results or holocron.models.covariance. |
 | `intCalibration` | export | `holocron.validation.validate_probabilities` | mapped | Phase 8 | 0 | — | Use validate_probabilities for explicit binary calibration intercept, slope, error, and grouped estimates. R plotting and formula dispatch are not reproduced. |
-| `legend.nomabbrev` | export | — | deferred | Phase 7 | 0 | — | Not yet implemented. |
+| `legend.nomabbrev` | export | — | unsupported | Phase 7 | 0 | — | Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md). |
 | `lm.pfit` | export | `holocron.models.fit_penalized_ols` | mapped | Phase 8 | 0 | — | Use fit_penalized_ols with explicit scalar or named diagonal slope penalties. Low-level matrix inputs and arbitrary dense penalty matrices are unsupported. |
 | `lrtest` | export | `holocron.models.likelihood` | mapped | Phase 8 | 0 | — | Use the typed likelihood operation on supported fitted results. Automatic arbitrary nested-model comparison and R print behavior are not reproduced. |
 | `matinv` | export | — | unsupported | Phase 8 | 0 | — | A public statistical matrix-inversion helper is not approved. Use numpy.linalg.solve for explicit linear systems; owned estimators translate rank failures at their API boundary. |
-| `nomogram` | export | — | deferred | Phase 7 | 0 | — | An owned additive OLS/logit geometry builder exists, but it is not mapped to rms::nomogram because conditional interactions, broader model families, custom transforms, and pinned-R parity remain absent. |
+| `nomogram` | export | `holocron.graphics.build_nomogram` | mapped | Phase 7 | 0 | — | Build strict additive identity-bound OLS/logit nomogram geometry. Conditional interactions, broader model families, custom transforms, and R geometry parity are unsupported. |
 | `pantext` | export | `holocron.graphics.TextAnnotation` | mapped | Phase 8 | 0 | — | Use backend-neutral TextAnnotation within PlotSpec. Graphics-device coordinate lookup and side-effectful R drawing are unsupported. |
 | `perimeter` | export | — | unsupported | Phase 8 | 0 | — | The specialized two-dimensional data-perimeter algorithm is not implemented. Supply reviewed plot-domain bounds explicitly in PlotSpec. |
-| `perlcode` | export | — | deferred | Phase 7 | 0 | — | Not yet implemented. |
-| `plot.contrast.rms` | export | — | deferred | Phase 7 | 0 | — | Not yet implemented. |
-| `plot.lrm.partial` | export | — | deferred | Phase 7 | 0 | — | Not yet implemented. |
-| `plot.xmean.ordinaly` | export | — | deferred | Phase 7 | 0 | — | Not yet implemented. |
-| `plotIntercepts` | export | — | deferred | Phase 7 | 0 | — | Not yet implemented. |
-| `plotmathAnova` | export | — | deferred | Phase 7 | 0 | — | Not yet implemented. |
+| `perlcode` | export | — | unsupported | Phase 7 | 0 | — | Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md). |
+| `plot.contrast.rms` | export | `holocron.graphics.contrast_plot_spec` | mapped | Phase 7 | 0 | — | Build a backend-neutral contrast PlotSpec from typed estimates. R graphics arguments and contrast-object dispatch are unsupported. |
+| `plot.lrm.partial` | export | — | unsupported | Phase 7 | 0 | — | Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md). |
+| `plot.xmean.ordinaly` | export | — | unsupported | Phase 7 | 0 | — | Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md). |
+| `plotIntercepts` | export | — | unsupported | Phase 7 | 0 | — | Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md). |
+| `plotmathAnova` | export | `holocron.graphics.anova_plot_spec` | mapped | Phase 7 | 0 | — | Use anova_plot_spec for explicit typed term tests. Plotmath expression generation and device annotation are unsupported. |
 | `poma` | export | `holocron.models.OrdinalResult.diagnostics` | mapped | Phase 8 | 0 | — | Use OrdinalResult.diagnostics for the supported proportional-odds assessment. The R poma report and broader model dispatch are not reproduced. |
 | `pphsm` | export | `holocron.models.to_proportional_hazards` | mapped | Phase 8 | 0 | — | Approved exact Weibull/exponential one-scale AFT-to-PH transformation with survival prediction equivalence. Covariance is explicitly conditional on fitted scale; scale-stratified fits and R object mutation are rejected. |
 | `prModFit` | export | `holocron.reporting.model_summary_table` | mapped | Phase 8 | 0 | — | Use typed model-summary table adapters and an explicit renderer. The R console formatting helper and global output options are not reproduced. |
@@ -253,140 +253,140 @@ in the pinned namespace. Counts by tier are A: 32, B: 33, C: 26, D: 190.
 | `recode2integer` | export | `holocron.design.DesignSpec` | mapped | Phase 8 | 0 | — | Use an explicit categorical or ordered term in DesignSpec; learned levels and generated-column identity are retained instead of returning anonymous integer codes. |
 | `related.predictors` | export | — | unsupported | Phase 8 | 0 | — | Automatic related-predictor discovery is not approved because thresholds and clustering choices are analysis decisions. Compute and review such diagnostics outside the fit, then encode the chosen DesignSpec explicitly. |
 | `rexVar` | export | `holocron.models.fit_random_intercept_orm` | mapped | Phase 8 | 0 | — | Use the bounded random-intercept ordinal fit and its variance-component result. General random-effect extraction, covariance structures, and report formatting are unsupported. |
-| `sascode` | export | — | deferred | Phase 7 | 0 | — | Not yet implemented. |
+| `sascode` | export | — | unsupported | Phase 7 | 0 | — | Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md). |
 | `sensuc` | export | — | unsupported | Phase 8 | 0 | — | Unmeasured-confounding sensitivity analysis is not implemented; no numerical substitute is approved. Report an externally reviewed sensitivity analysis separately. |
 | `setPb` | export | — | unsupported | Phase 8 | 0 | — | Progress-bar mutation is presentation infrastructure, not a statistical capability. Applications should supply their own progress reporting around bounded Holocron calls. |
 | `show.influence` | export | `holocron.models.influence_diagnostics` | mapped | Phase 8 | 0 | — | Use the typed InfluenceResult and reporting/plot adapters. Interactive identification and R console side effects are unsupported. |
-| `survdiffplot` | export | — | deferred | Phase 7 | 0 | — | Not yet implemented. |
-| `survplot` | export | — | deferred | Phase 7 | 0 | — | Not yet implemented. |
-| `survplotp` | export | — | deferred | Phase 7 | 0 | — | Not yet implemented. |
+| `survdiffplot` | export | — | unsupported | Phase 7 | 0 | — | Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md). |
+| `survplot` | export | `holocron.graphics.survival_plot_spec` | mapped | Phase 7 | 0 | — | Adapt a typed SurvivalCurveResult to backend-neutral plot geometry. Automatic prediction, R graphics state, and broad model dispatch are unsupported. |
+| `survplotp` | export | `holocron.graphics.render_svg` | mapped | Phase 7 | 0 | — | Render an explicit survival PlotSpec as accessible SVG. plotly output, interactive controls, and R widget behavior are unsupported. |
 | `survreg.auxinfo` | export | `holocron.models.ParametricSurvivalResult` | mapped | Phase 8 | 0 | — | Distribution, coefficient, scale, likelihood, and prediction information is carried explicitly by ParametricSurvivalResult. R survreg object introspection is unsupported. |
 | `univarLR` | export | — | unsupported | Phase 8 | 0 | — | Automated univariable likelihood-ratio screening is not approved because it encourages implicit selection. Fit prespecified models with fit_lrm and inspect typed likelihood results explicitly. |
 | `which.influence` | export | `holocron.models.influence_diagnostics` | mapped | Phase 8 | 0 | — | Use InfluenceResult observations and explicit application thresholds. Interactive R selection and hidden cutoff defaults are unsupported. |
-| `AIC.rms` | s3_method | — | deferred | Phase 8 | 0 | — | Not yet implemented. |
-| `Function.cph` | s3_method | — | deferred | Phase 7 | 0 | — | Not yet implemented. |
-| `Function.rms` | s3_method | — | deferred | Phase 7 | 0 | — | Not yet implemented. |
-| `Initialize.corFloorExp` | s3_method | — | deferred | Phase 8 | 0 | — | Not yet implemented. |
-| `[.Ocens` | s3_method | — | deferred | Phase 8 | 0 | — | Not yet implemented. |
-| `[.rms` | s3_method | — | deferred | Phase 8 | 0 | — | Not yet implemented. |
+| `AIC.rms` | s3_method | `holocron.models.likelihood` | mapped | Phase 8 | 0 | — | Read the constant-inclusive AIC from a supported OLS or binary-logistic LikelihoodResult. Other model families, AIC variants, and arbitrary penalty factors are unsupported. |
+| `Function.cph` | s3_method | — | unsupported | Phase 7 | 0 | — | Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md). |
+| `Function.rms` | s3_method | — | unsupported | Phase 7 | 0 | — | Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md). |
+| `Initialize.corFloorExp` | s3_method | — | unsupported | Phase 8 | 0 | — | Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md). |
+| `[.Ocens` | s3_method | — | unsupported | Phase 8 | 0 | — | Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md). |
+| `[.rms` | s3_method | — | unsupported | Phase 8 | 0 | — | Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md). |
 | `anova.rms` | s3_method | `holocron.models.anova` | experimental | Phase 8 | 3 | `postfit-inference-v1` | Supports formula-term or explicitly grouped joint Wald F/chi-square tests; rms nonlinear/main-effect decomposition, interaction pooling, LR tests, and presentation methods remain deferred. |
-| `as.data.frame.Ocens` | s3_method | — | deferred | Phase 8 | 0 | — | Not yet implemented. |
-| `as.data.frame.rms` | s3_method | — | deferred | Phase 8 | 0 | — | Not yet implemented. |
-| `coef.corFloorExp` | s3_method | — | deferred | Phase 8 | 0 | — | Not yet implemented. |
-| `coef<-.corFloorExp` | s3_method | — | deferred | Phase 8 | 0 | — | Not yet implemented. |
-| `corMatrix.corFloorExp` | s3_method | — | deferred | Phase 8 | 0 | — | Not yet implemented. |
-| `ggplot.Predict` | s3_method | — | deferred | Phase 7 | 0 | — | Not yet implemented. |
-| `ggplot.npsurv` | s3_method | — | deferred | Phase 7 | 0 | — | Not yet implemented. |
-| `html.anova.rms` | s3_method | — | deferred | Phase 8 | 0 | — | Not yet implemented. |
-| `html.naprint.delete` | s3_method | — | deferred | Phase 8 | 0 | — | Not yet implemented. |
-| `html.summary.rms` | s3_method | — | deferred | Phase 8 | 0 | — | Not yet implemented. |
-| `html.validate` | s3_method | — | deferred | Phase 8 | 0 | — | Not yet implemented. |
-| `is.na.Ocens` | s3_method | — | deferred | Phase 8 | 0 | — | Not yet implemented. |
-| `latex.Glm` | s3_method | — | deferred | Phase 7 | 0 | — | Owned model-summary tables and safe LaTeX rendering exist for supported Gaussian/identity and binomial/logit summaries, but no rms::latex.Glm layout, option, or oracle parity is claimed. |
-| `latex.Gls` | s3_method | — | deferred | Phase 7 | 0 | — | Not yet implemented. |
-| `latex.Rq` | s3_method | — | deferred | Phase 7 | 0 | — | Not yet implemented. |
-| `latex.anova.rms` | s3_method | — | deferred | Phase 7 | 0 | — | Owned structured ANOVA tables and safe LaTeX rendering exist for supported Wald tests, but no rms::latex.anova.rms layout, option, or oracle parity is claimed. |
-| `latex.bj` | s3_method | — | deferred | Phase 7 | 0 | — | Not yet implemented. |
-| `latex.cph` | s3_method | — | deferred | Phase 7 | 0 | — | Not yet implemented. |
-| `latex.lrm` | s3_method | — | deferred | Phase 7 | 0 | — | Owned model-summary tables and safe LaTeX rendering exist for binary lrm summaries, but no rms::latex.lrm layout, option, or oracle parity is claimed. |
-| `latex.naprint.delete` | s3_method | — | deferred | Phase 7 | 0 | — | Not yet implemented. |
-| `latex.ols` | s3_method | — | deferred | Phase 7 | 0 | — | Owned model-summary tables and safe LaTeX rendering exist for supported OLS summaries, but no rms::latex.ols layout, option, or oracle parity is claimed. |
-| `latex.orm` | s3_method | — | deferred | Phase 7 | 0 | — | Not yet implemented. |
-| `latex.pphsm` | s3_method | — | deferred | Phase 7 | 0 | — | Not yet implemented. |
-| `latex.psm` | s3_method | — | deferred | Phase 7 | 0 | — | Not yet implemented. |
-| `latex.summary.rms` | s3_method | — | deferred | Phase 7 | 0 | — | Owned contrast/inference tables and safe LaTeX rendering exist for supported estimates, but no rms::latex.summary.rms layout, option, or oracle parity is claimed. |
-| `latex.validate` | s3_method | — | deferred | Phase 7 | 0 | — | Owned probability, survival, optimism, and resample-report tables have safe LaTeX output, but no rms::latex.validate layout, option, or oracle parity is claimed. |
-| `lines.residuals.psm.censored.normalized` | s3_method | — | deferred | Phase 8 | 0 | — | Not yet implemented. |
-| `logLik.Gls` | s3_method | — | deferred | Phase 8 | 0 | — | Not yet implemented. |
+| `as.data.frame.Ocens` | s3_method | — | unsupported | Phase 8 | 0 | — | Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md). |
+| `as.data.frame.rms` | s3_method | — | unsupported | Phase 8 | 0 | — | Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md). |
+| `coef.corFloorExp` | s3_method | — | unsupported | Phase 8 | 0 | — | Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md). |
+| `coef<-.corFloorExp` | s3_method | — | unsupported | Phase 8 | 0 | — | Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md). |
+| `corMatrix.corFloorExp` | s3_method | — | unsupported | Phase 8 | 0 | — | Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md). |
+| `ggplot.Predict` | s3_method | `holocron.graphics.effect_plot_spec` | mapped | Phase 7 | 0 | — | Adapt a typed PredictionResult to backend-neutral effect geometry and render separately. ggplot2 objects, faceting grammar, and themes are unsupported. |
+| `ggplot.npsurv` | s3_method | `holocron.graphics.survival_plot_spec` | mapped | Phase 7 | 0 | — | Adapt an explicit nonparametric SurvivalCurveResult to a PlotSpec. ggplot2 objects, risk tables, confidence bands, and themes are unsupported. |
+| `html.anova.rms` | s3_method | — | unsupported | Phase 8 | 0 | — | Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md). |
+| `html.naprint.delete` | s3_method | — | unsupported | Phase 8 | 0 | — | Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md). |
+| `html.summary.rms` | s3_method | — | unsupported | Phase 8 | 0 | — | Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md). |
+| `html.validate` | s3_method | — | unsupported | Phase 8 | 0 | — | Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md). |
+| `is.na.Ocens` | s3_method | — | unsupported | Phase 8 | 0 | — | Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md). |
+| `latex.Glm` | s3_method | `holocron.reporting.render_latex` | mapped | Phase 7 | 0 | — | Render an owned model-summary TableSpec as escaped deterministic LaTeX. rms layout, options, and output parity are unsupported. |
+| `latex.Gls` | s3_method | — | unsupported | Phase 7 | 0 | — | Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md). |
+| `latex.Rq` | s3_method | — | unsupported | Phase 7 | 0 | — | Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md). |
+| `latex.anova.rms` | s3_method | `holocron.reporting.render_latex` | mapped | Phase 7 | 0 | — | Render an owned ANOVA TableSpec as escaped deterministic LaTeX. rms layout, options, and output parity are unsupported. |
+| `latex.bj` | s3_method | — | unsupported | Phase 7 | 0 | — | Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md). |
+| `latex.cph` | s3_method | — | unsupported | Phase 7 | 0 | — | Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md). |
+| `latex.lrm` | s3_method | `holocron.reporting.render_latex` | mapped | Phase 7 | 0 | — | Render an owned binary-lrm summary TableSpec as escaped deterministic LaTeX. rms layout, options, and output parity are unsupported. |
+| `latex.naprint.delete` | s3_method | — | unsupported | Phase 7 | 0 | — | Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md). |
+| `latex.ols` | s3_method | `holocron.reporting.render_latex` | mapped | Phase 7 | 0 | — | Render an owned OLS summary TableSpec as escaped deterministic LaTeX. rms layout, options, and output parity are unsupported. |
+| `latex.orm` | s3_method | — | unsupported | Phase 7 | 0 | — | Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md). |
+| `latex.pphsm` | s3_method | — | unsupported | Phase 7 | 0 | — | Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md). |
+| `latex.psm` | s3_method | — | unsupported | Phase 7 | 0 | — | Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md). |
+| `latex.summary.rms` | s3_method | `holocron.reporting.render_latex` | mapped | Phase 7 | 0 | — | Render an owned contrast or inference TableSpec as escaped deterministic LaTeX. rms layout, options, and output parity are unsupported. |
+| `latex.validate` | s3_method | `holocron.reporting.render_latex` | mapped | Phase 7 | 0 | — | Render an owned validation TableSpec as escaped deterministic LaTeX. rms layout, options, and output parity are unsupported. |
+| `lines.residuals.psm.censored.normalized` | s3_method | — | unsupported | Phase 8 | 0 | — | Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md). |
+| `logLik.Gls` | s3_method | `holocron.models.GeneralizedLeastSquaresResult.log_likelihood` | mapped | Phase 8 | 0 | — | Read the stored ML or REML log likelihood from the typed GLS result. R logLik attributes, refitting, and arbitrary nlme structures are unsupported. |
 | `logLik.ols` | s3_method | `holocron.models.likelihood` | experimental | Phase 8 | 1 | `postfit-inference-v1` | Returns a typed likelihood record including null likelihood, AIC, and LR test; arbitrary alternative-model comparisons remain deferred. |
 | `logLik.rms` | s3_method | `holocron.models.likelihood` | experimental | Phase 8 | 2 | `postfit-inference-v1` | Supported only for the current Gaussian and binary-logit result types; other rms model families and arbitrary nested-model comparisons remain deferred. |
-| `makepredictcall.rms` | s3_method | — | deferred | Phase 8 | 0 | — | Not yet implemented. |
-| `nobs.rms` | s3_method | — | deferred | Phase 8 | 0 | — | Not yet implemented. |
-| `oos.loglik.Glm` | s3_method | — | deferred | Phase 8 | 0 | — | Not yet implemented. |
-| `oos.loglik.cph` | s3_method | — | deferred | Phase 8 | 0 | — | Not yet implemented. |
-| `oos.loglik.lrm` | s3_method | — | deferred | Phase 8 | 0 | — | Not yet implemented. |
-| `oos.loglik.ols` | s3_method | — | deferred | Phase 8 | 0 | — | Not yet implemented. |
-| `oos.loglik.psm` | s3_method | — | deferred | Phase 8 | 0 | — | Not yet implemented. |
-| `plot.ExProb` | s3_method | — | deferred | Phase 7 | 0 | — | Not yet implemented. |
-| `plot.Predict` | s3_method | — | deferred | Phase 7 | 0 | — | Not yet implemented. |
-| `plot.anova.rms` | s3_method | — | deferred | Phase 7 | 0 | — | Not yet implemented. |
-| `plot.calibrate` | s3_method | — | deferred | Phase 7 | 0 | — | Not yet implemented. |
-| `plot.calibrate.default` | s3_method | — | deferred | Phase 7 | 0 | — | Not yet implemented. |
-| `plot.contrast.rms` | s3_method | — | deferred | Phase 7 | 0 | — | Not yet implemented. |
-| `plot.gIndex` | s3_method | — | deferred | Phase 7 | 0 | — | Not yet implemented. |
-| `plot.lrm.partial` | s3_method | — | deferred | Phase 7 | 0 | — | Not yet implemented. |
-| `plot.nomogram` | s3_method | — | deferred | Phase 7 | 0 | — | An owned SVG renderer and canonical Holocron snapshot corpus exist for NomogramGeometry, but it is not mapped to plot.nomogram because R geometry/styling parity and cross-implementation visual-regression evidence remain absent. |
-| `plot.pentrace` | s3_method | — | deferred | Phase 7 | 0 | — | Not yet implemented. |
-| `plot.rexVar` | s3_method | — | deferred | Phase 7 | 0 | — | Not yet implemented. |
-| `plot.sensuc` | s3_method | — | deferred | Phase 7 | 0 | — | Not yet implemented. |
-| `plot.summary.rms` | s3_method | — | deferred | Phase 7 | 0 | — | Not yet implemented. |
-| `plot.val.prob` | s3_method | — | deferred | Phase 7 | 0 | — | Not yet implemented. |
-| `plot.val.surv` | s3_method | — | deferred | Phase 7 | 0 | — | Not yet implemented. |
-| `plot.val.survh` | s3_method | — | deferred | Phase 7 | 0 | — | Not yet implemented. |
-| `plot.validate.rpart` | s3_method | — | deferred | Phase 7 | 0 | — | Not yet implemented. |
-| `plot.xmean.ordinaly` | s3_method | — | deferred | Phase 7 | 0 | — | Not yet implemented. |
-| `plotp.Predict` | s3_method | — | deferred | Phase 7 | 0 | — | Not yet implemented. |
+| `makepredictcall.rms` | s3_method | — | unsupported | Phase 8 | 0 | — | Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md). |
+| `nobs.rms` | s3_method | `holocron.models.OlsResult.n_observations` | mapped | Phase 8 | 0 | — | Read n_observations from each supported typed result. Generic S3 dispatch and reconstruction from model frames are unsupported. |
+| `oos.loglik.Glm` | s3_method | — | unsupported | Phase 8 | 0 | — | Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md). |
+| `oos.loglik.cph` | s3_method | — | unsupported | Phase 8 | 0 | — | Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md). |
+| `oos.loglik.lrm` | s3_method | — | unsupported | Phase 8 | 0 | — | Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md). |
+| `oos.loglik.ols` | s3_method | — | unsupported | Phase 8 | 0 | — | Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md). |
+| `oos.loglik.psm` | s3_method | — | unsupported | Phase 8 | 0 | — | Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md). |
+| `plot.ExProb` | s3_method | — | unsupported | Phase 7 | 0 | — | Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md). |
+| `plot.Predict` | s3_method | `holocron.graphics.effect_plot_spec` | mapped | Phase 7 | 0 | — | Adapt one typed PredictionResult and explicit predictor coordinates to a PlotSpec. R adjustment grids, panels, and graphics state are unsupported. |
+| `plot.anova.rms` | s3_method | `holocron.graphics.anova_plot_spec` | mapped | Phase 7 | 0 | — | Adapt supported typed Wald ANOVA tests to backend-neutral geometry. R nonlinear decomposition and plotting options are unsupported. |
+| `plot.calibrate` | s3_method | `holocron.graphics.calibration_plot_spec` | mapped | Phase 7 | 0 | — | Adapt a supported corrected calibration result to a PlotSpec. R smoothing, risk distributions, and graphics options are unsupported. |
+| `plot.calibrate.default` | s3_method | `holocron.graphics.calibration_plot_spec` | mapped | Phase 7 | 0 | — | Adapt a supported corrected calibration result to a PlotSpec. Generic R object dispatch and graphics options are unsupported. |
+| `plot.contrast.rms` | s3_method | `holocron.graphics.contrast_plot_spec` | mapped | Phase 7 | 0 | — | Adapt typed inference estimates to backend-neutral contrast geometry. R contrast objects, simultaneous bands, and graphics options are unsupported. |
+| `plot.gIndex` | s3_method | — | unsupported | Phase 7 | 0 | — | Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md). |
+| `plot.lrm.partial` | s3_method | — | unsupported | Phase 7 | 0 | — | Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md). |
+| `plot.nomogram` | s3_method | `holocron.graphics.render_nomogram_svg` | mapped | Phase 7 | 0 | — | Render owned NomogramGeometry as deterministic accessible SVG. R geometry, styling, device behavior, and visual parity are unsupported. |
+| `plot.pentrace` | s3_method | `holocron.graphics.diagnostic_plot_spec` | mapped | Phase 7 | 0 | — | Adapt a bounded PenaltyTraceResult to a PlotSpec. Multi-parameter surfaces and R graphics options are unsupported. |
+| `plot.rexVar` | s3_method | — | unsupported | Phase 7 | 0 | — | Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md). |
+| `plot.sensuc` | s3_method | — | unsupported | Phase 7 | 0 | — | Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md). |
+| `plot.summary.rms` | s3_method | `holocron.graphics.contrast_plot_spec` | mapped | Phase 7 | 0 | — | Adapt explicit typed estimates to contrast geometry. Automatic summary construction, adjustment grids, and R graphics options are unsupported. |
+| `plot.val.prob` | s3_method | `holocron.graphics.validation_plot_spec` | mapped | Phase 7 | 0 | — | Adapt a typed ProbabilityValidationResult to supported validation geometry. R smoothing, distributions, and graphics options are unsupported. |
+| `plot.val.surv` | s3_method | `holocron.graphics.validation_plot_spec` | mapped | Phase 7 | 0 | — | Adapt typed fixed-horizon survival validation to supported geometry. R smoothing and graphics options are unsupported. |
+| `plot.val.survh` | s3_method | `holocron.graphics.validation_plot_spec` | mapped | Phase 7 | 0 | — | Adapt typed multi-horizon survival validation to supported geometry. R smoothing and graphics options are unsupported. |
+| `plot.validate.rpart` | s3_method | — | unsupported | Phase 7 | 0 | — | Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md). |
+| `plot.xmean.ordinaly` | s3_method | — | unsupported | Phase 7 | 0 | — | Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md). |
+| `plotp.Predict` | s3_method | `holocron.graphics.render_svg` | mapped | Phase 7 | 0 | — | Render an explicit effect PlotSpec as accessible SVG. plotly widgets, interactivity, and R object dispatch are unsupported. |
 | `predict.Glm` | s3_method | `holocron.models.predict` | experimental | Phase 8 | 1 | `postfit-inference-v1` | Supports explicit design rows on linear or response scale with mean confidence limits; terms, adjustment-frame, simultaneous, and generated-grid modes remain deferred. |
-| `predict.Gls` | s3_method | — | deferred | Phase 8 | 0 | — | Not yet implemented. |
-| `predict.Rq` | s3_method | — | deferred | Phase 8 | 0 | — | Not yet implemented. |
-| `predict.bj` | s3_method | — | deferred | Phase 8 | 0 | — | Not yet implemented. |
-| `predict.cph` | s3_method | — | deferred | Phase 8 | 0 | — | Not yet implemented. |
+| `predict.Gls` | s3_method | `holocron.models.GeneralizedLeastSquaresResult.predict` | mapped | Phase 8 | 0 | — | Predict conditional means for explicit feature rows. R terms, intervals, data-frame reconstruction, and correlation-aware prediction are unsupported. |
+| `predict.Rq` | s3_method | `holocron.models.QuantileRegressionResult.predict` | mapped | Phase 8 | 0 | — | Predict the fitted conditional quantile for explicit feature rows. Multiple quantiles, intervals, and R model-frame reconstruction are unsupported. |
+| `predict.bj` | s3_method | `holocron.models.BuckleyJamesResult.predict` | mapped | Phase 8 | 0 | — | Predict transformed or response-scale time for explicit feature rows. Survival curves, intervals, and R model-frame reconstruction are unsupported. |
+| `predict.cph` | s3_method | `holocron.models.CoxResult` | mapped | Phase 8 | 0 | — | Use explicit Cox linear, cumulative-hazard, survival, curve, quantile, or restricted-mean methods. R terms, intervals, and automatic adjustment frames are unsupported. |
 | `predict.lrm` | s3_method | `holocron.models.predict` | experimental | Phase 8 | 1 | `postfit-inference-v1` | Supports binary-logit linear predictors and probabilities with mean confidence limits; ordinal, terms, generated-grid, and simultaneous modes remain deferred. |
 | `predict.ols` | s3_method | `holocron.models.predict` | experimental | Phase 8 | 1 | `postfit-inference-v1` | Supports explicit design rows with mean or individual t intervals; terms, adjustment-frame, simultaneous, and generated-grid modes remain deferred. |
-| `predict.orm` | s3_method | — | deferred | Phase 8 | 0 | — | Not yet implemented. |
-| `predict.psm` | s3_method | — | deferred | Phase 8 | 0 | — | Not yet implemented. |
-| `print.Glm` | s3_method | — | deferred | Phase 8 | 0 | — | Not yet implemented. |
-| `print.Gls` | s3_method | — | deferred | Phase 8 | 0 | — | Not yet implemented. |
-| `print.Ocens` | s3_method | — | deferred | Phase 8 | 0 | — | Not yet implemented. |
-| `print.Predict` | s3_method | — | deferred | Phase 8 | 0 | — | Not yet implemented. |
-| `print.Rq` | s3_method | — | deferred | Phase 8 | 0 | — | Not yet implemented. |
-| `print.anova.rms` | s3_method | — | deferred | Phase 8 | 0 | — | Not yet implemented. |
-| `print.bj` | s3_method | — | deferred | Phase 8 | 0 | — | Not yet implemented. |
-| `print.calibrate` | s3_method | — | deferred | Phase 8 | 0 | — | Not yet implemented. |
-| `print.contrast.rms` | s3_method | — | deferred | Phase 8 | 0 | — | Not yet implemented. |
-| `print.corFloorExp` | s3_method | — | deferred | Phase 8 | 0 | — | Not yet implemented. |
-| `print.cph` | s3_method | — | deferred | Phase 8 | 0 | — | Not yet implemented. |
-| `print.datadist` | s3_method | — | deferred | Phase 8 | 0 | — | Not yet implemented. |
-| `print.fastbw` | s3_method | — | deferred | Phase 8 | 0 | — | Not yet implemented. |
-| `print.gIndex` | s3_method | — | deferred | Phase 8 | 0 | — | Not yet implemented. |
-| `print.impactPO` | s3_method | — | deferred | Phase 8 | 0 | — | Not yet implemented. |
-| `print.lrm` | s3_method | — | deferred | Phase 8 | 0 | — | Not yet implemented. |
-| `print.lrtest` | s3_method | — | deferred | Phase 8 | 0 | — | Not yet implemented. |
-| `print.nomogram` | s3_method | — | deferred | Phase 8 | 0 | — | Not yet implemented. |
-| `print.ols` | s3_method | — | deferred | Phase 8 | 0 | — | Not yet implemented. |
-| `print.orm` | s3_method | — | deferred | Phase 8 | 0 | — | Not yet implemented. |
-| `print.pentrace` | s3_method | — | deferred | Phase 8 | 0 | — | Not yet implemented. |
-| `print.pphsm` | s3_method | — | deferred | Phase 8 | 0 | — | Not yet implemented. |
-| `print.psm` | s3_method | — | deferred | Phase 8 | 0 | — | Not yet implemented. |
-| `print.rexVar` | s3_method | — | deferred | Phase 8 | 0 | — | Not yet implemented. |
-| `print.specs.rms` | s3_method | — | deferred | Phase 8 | 0 | — | Not yet implemented. |
-| `print.summary.rms` | s3_method | — | deferred | Phase 8 | 0 | — | Not yet implemented. |
-| `print.summary.survreg2` | s3_method | — | deferred | Phase 8 | 0 | — | Not yet implemented. |
-| `print.survest.psm` | s3_method | — | deferred | Phase 8 | 0 | — | Not yet implemented. |
-| `print.val.prob` | s3_method | — | deferred | Phase 8 | 0 | — | Not yet implemented. |
-| `print.val.survh` | s3_method | — | deferred | Phase 8 | 0 | — | Not yet implemented. |
-| `print.validate` | s3_method | — | deferred | Phase 8 | 0 | — | Not yet implemented. |
-| `print.validate.rpart` | s3_method | — | deferred | Phase 8 | 0 | — | Not yet implemented. |
+| `predict.orm` | s3_method | `holocron.models.OrdinalResult` | mapped | Phase 8 | 0 | — | Use explicit ordinal linear, probability, mean, quantile, or exceedance methods. R type strings, terms, and automatic adjustment frames are unsupported. |
+| `predict.psm` | s3_method | `holocron.models.ParametricSurvivalResult` | mapped | Phase 8 | 0 | — | Use explicit parametric linear, hazard, survival, curve, quantile, or mean methods. R terms, intervals, and automatic adjustment frames are unsupported. |
+| `print.Glm` | s3_method | `holocron.reporting.model_summary_table` | mapped | Phase 8 | 0 | — | Build a typed model-summary TableSpec for supported Gaussian or binomial GLM results and choose a renderer explicitly. R console layout and global options are unsupported. |
+| `print.Gls` | s3_method | — | unsupported | Phase 8 | 0 | — | Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md). |
+| `print.Ocens` | s3_method | — | unsupported | Phase 8 | 0 | — | Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md). |
+| `print.Predict` | s3_method | — | unsupported | Phase 8 | 0 | — | Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md). |
+| `print.Rq` | s3_method | — | unsupported | Phase 8 | 0 | — | Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md). |
+| `print.anova.rms` | s3_method | `holocron.reporting.anova_table` | mapped | Phase 8 | 0 | — | Build a typed ANOVA TableSpec and choose a renderer explicitly. R console layout, nonlinear decomposition, and print options are unsupported. |
+| `print.bj` | s3_method | — | unsupported | Phase 8 | 0 | — | Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md). |
+| `print.calibrate` | s3_method | — | unsupported | Phase 8 | 0 | — | Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md). |
+| `print.contrast.rms` | s3_method | `holocron.reporting.contrast_table` | mapped | Phase 8 | 0 | — | Build a typed contrast TableSpec and choose a renderer explicitly. R console layout, redundant-adjustment text, and print options are unsupported. |
+| `print.corFloorExp` | s3_method | — | unsupported | Phase 8 | 0 | — | Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md). |
+| `print.cph` | s3_method | — | unsupported | Phase 8 | 0 | — | Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md). |
+| `print.datadist` | s3_method | — | unsupported | Phase 8 | 0 | — | Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md). |
+| `print.fastbw` | s3_method | — | unsupported | Phase 8 | 0 | — | Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md). |
+| `print.gIndex` | s3_method | — | unsupported | Phase 8 | 0 | — | Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md). |
+| `print.impactPO` | s3_method | — | unsupported | Phase 8 | 0 | — | Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md). |
+| `print.lrm` | s3_method | `holocron.reporting.model_summary_table` | mapped | Phase 8 | 0 | — | Build a typed binary-lrm summary TableSpec and choose a renderer explicitly. Ordinal lrm and R console formatting are unsupported. |
+| `print.lrtest` | s3_method | — | unsupported | Phase 8 | 0 | — | Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md). |
+| `print.nomogram` | s3_method | `holocron.graphics.render_nomogram_svg` | mapped | Phase 8 | 0 | — | Render owned nomogram geometry as accessible SVG. R console summaries, device state, and geometry parity are unsupported. |
+| `print.ols` | s3_method | `holocron.reporting.model_summary_table` | mapped | Phase 8 | 0 | — | Build a typed OLS summary TableSpec and choose a renderer explicitly. R console layout and print options are unsupported. |
+| `print.orm` | s3_method | — | unsupported | Phase 8 | 0 | — | Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md). |
+| `print.pentrace` | s3_method | `holocron.reporting.diagnostic_table` | mapped | Phase 8 | 0 | — | Build a typed diagnostic TableSpec from a bounded penalty trace. R console formatting and multidimensional penalty summaries are unsupported. |
+| `print.pphsm` | s3_method | — | unsupported | Phase 8 | 0 | — | Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md). |
+| `print.psm` | s3_method | — | unsupported | Phase 8 | 0 | — | Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md). |
+| `print.rexVar` | s3_method | — | unsupported | Phase 8 | 0 | — | Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md). |
+| `print.specs.rms` | s3_method | — | unsupported | Phase 8 | 0 | — | Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md). |
+| `print.summary.rms` | s3_method | `holocron.reporting.contrast_table` | mapped | Phase 8 | 0 | — | Build a typed inference or contrast TableSpec and choose a renderer explicitly. Automatic effects, adjustment grids, and R console layout are unsupported. |
+| `print.summary.survreg2` | s3_method | — | unsupported | Phase 8 | 0 | — | Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md). |
+| `print.survest.psm` | s3_method | — | unsupported | Phase 8 | 0 | — | Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md). |
+| `print.val.prob` | s3_method | `holocron.reporting.validation_table` | mapped | Phase 8 | 0 | — | Build a typed probability-validation TableSpec and choose a renderer explicitly. R console layout and print options are unsupported. |
+| `print.val.survh` | s3_method | `holocron.reporting.validation_table` | mapped | Phase 8 | 0 | — | Build a typed survival-validation TableSpec and choose a renderer explicitly. R console layout and print options are unsupported. |
+| `print.validate` | s3_method | `holocron.reporting.validation_table` | mapped | Phase 8 | 0 | — | Build a typed optimism-corrected validation TableSpec and choose a renderer explicitly. R console layout and broad validate-object dispatch are unsupported. |
+| `print.validate.rpart` | s3_method | — | unsupported | Phase 8 | 0 | — | Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md). |
 | `processMI.fit.mult.impute` | s3_method | `holocron.validation.process_multiple_imputation` | mapped | Phase 8 | 0 | — | Use explicit homogeneous Holocron result collections; no fit.mult.impute class, R S3 dispatch, stacked-data construction, or implicit refitting is reproduced. |
-| `rbind.Predict` | s3_method | — | deferred | Phase 8 | 0 | — | Not yet implemented. |
+| `rbind.Predict` | s3_method | — | unsupported | Phase 8 | 0 | — | Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md). |
 | `residuals.Glm` | s3_method | `holocron.models.residuals` | experimental | Phase 8 | 1 | `postfit-inference-v1` | Supports ordinary, Pearson, and deviance residuals for binomial Glm; score, working, partial, influence, and other-family residuals remain deferred. |
-| `residuals.bj` | s3_method | — | deferred | Phase 8 | 0 | — | Not yet implemented. |
+| `residuals.bj` | s3_method | `holocron.models.BuckleyJamesResult.residuals` | mapped | Phase 8 | 0 | — | Read stored transformed-scale training residuals from the typed fit. R residual types, censoring plots, and influence diagnostics are unsupported. |
 | `residuals.cph` | s3_method | `holocron.models.survival_residuals` | experimental | Phase 8 | 1 | `cox-risk-set-v2` | Supports martingale and deviance residuals for the explicit fitted response, entry times, and strata; score, Schoenfeld, influence, partial, and robust variants remain deferred. |
 | `residuals.lrm` | s3_method | `holocron.models.residuals` | experimental | Phase 8 | 1 | `postfit-inference-v1` | Supports ordinary, Pearson, and deviance residuals for binary lrm with an explicitly supplied response; score, partial, influence, GOF, and ordinal residuals remain deferred. |
 | `residuals.ols` | s3_method | `holocron.models.residuals` | experimental | Phase 8 | 1 | `postfit-inference-v1` | Supports ordinary and residual-scale-standardized values; leverage-adjusted studentized, score, influence, DFBETA, DFFIT, and hat diagnostics remain deferred. |
-| `residuals.orm` | s3_method | — | deferred | Phase 8 | 0 | — | Not yet implemented. |
+| `residuals.orm` | s3_method | — | unsupported | Phase 8 | 0 | — | Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md). |
 | `residuals.psm` | s3_method | `holocron.models.survival_residuals` | experimental | Phase 8 | 1 | `parametric-survival-risk-set-v2` | Supports response, normalized, martingale, and deviance residuals for the explicit fitted response and strata; censored-normalized plotting and influence variants remain deferred. |
-| `survplot.npsurv` | s3_method | — | deferred | Phase 7 | 0 | — | Not yet implemented. |
-| `survplot.orm` | s3_method | — | deferred | Phase 7 | 0 | — | Not yet implemented. |
-| `survplot.residuals.psm.censored.normalized` | s3_method | — | deferred | Phase 7 | 0 | — | Not yet implemented. |
-| `survplot.rms` | s3_method | — | deferred | Phase 7 | 0 | — | Not yet implemented. |
-| `survplotp.npsurv` | s3_method | — | deferred | Phase 7 | 0 | — | Not yet implemented. |
+| `survplot.npsurv` | s3_method | `holocron.graphics.survival_plot_spec` | mapped | Phase 7 | 0 | — | Adapt explicit nonparametric survival curves to a PlotSpec. Confidence bands, risk tables, and R graphics options are unsupported. |
+| `survplot.orm` | s3_method | — | unsupported | Phase 7 | 0 | — | Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md). |
+| `survplot.residuals.psm.censored.normalized` | s3_method | — | unsupported | Phase 7 | 0 | — | Reviewed for Phase 8 namespace completion: no direct Python contract is approved; use the capability-family stop boundary and alternative in the [namespace guide](guides/namespace-disposition.md). |
+| `survplot.rms` | s3_method | `holocron.graphics.survival_plot_spec` | mapped | Phase 7 | 0 | — | Adapt an explicit typed survival curve to backend-neutral geometry. Automatic prediction, broad rms dispatch, and R graphics options are unsupported. |
+| `survplotp.npsurv` | s3_method | `holocron.graphics.render_svg` | mapped | Phase 7 | 0 | — | Render an explicit nonparametric survival PlotSpec as accessible SVG. plotly widgets and interactivity are unsupported. |
 | `vcov.Glm` | s3_method | `holocron.models.covariance` | experimental | Phase 8 | 1 | `postfit-inference-v1` | Returns the full named covariance matrix or a named principal submatrix for the supported Glm envelope. |
-| `vcov.Gls` | s3_method | — | deferred | Phase 8 | 0 | — | Not yet implemented. |
-| `vcov.cph` | s3_method | — | deferred | Phase 8 | 0 | — | Not yet implemented. |
+| `vcov.Gls` | s3_method | `holocron.models.GeneralizedLeastSquaresResult.covariance` | mapped | Phase 8 | 0 | — | Read the stored fixed-covariance GLS coefficient covariance. Named submatrices, robust variants, and estimated correlation structures are unsupported. |
+| `vcov.cph` | s3_method | `holocron.models.CoxResult.covariance` | mapped | Phase 8 | 0 | — | Read the fitted Cox coefficient covariance. Named submatrices, robust covariance, and cluster corrections are unsupported. |
 | `vcov.lrm` | s3_method | `holocron.models.covariance` | experimental | Phase 8 | 1 | `postfit-inference-v1` | Returns the full named covariance matrix or a named principal submatrix for binary lrm; ordinal intercept selection remains deferred. |
 | `vcov.ols` | s3_method | `holocron.models.covariance` | experimental | Phase 8 | 1 | `postfit-inference-v1` | Returns the classical full-rank covariance matrix or a named principal submatrix; robust and bootstrap estimates use the separate explicit covariance APIs. |
-| `vcov.orm` | s3_method | — | deferred | Phase 8 | 0 | — | Not yet implemented. |
-| `vcov.pphsm` | s3_method | — | deferred | Phase 8 | 0 | — | Not yet implemented. |
-| `vcov.psm` | s3_method | — | deferred | Phase 8 | 0 | — | Not yet implemented. |
+| `vcov.orm` | s3_method | `holocron.models.OrdinalResult.covariance` | mapped | Phase 8 | 0 | — | Read the full ordered intercept-and-slope covariance. Intercept filtering, named submatrices, and robust variants are unsupported. |
+| `vcov.pphsm` | s3_method | `holocron.models.ProportionalHazardsParametricResult.conditional_covariance` | mapped | Phase 8 | 0 | — | Read the covariance conditional on fitted AFT scale from the typed PH conversion. Joint scale uncertainty and named submatrices are unsupported. |
+| `vcov.psm` | s3_method | `holocron.models.ParametricSurvivalResult.covariance` | mapped | Phase 8 | 0 | — | Read the fitted parametric-survival covariance in stored parameter order. Named submatrices, robust variants, and alternate scale handling are unsupported. |
 | `vcov.rms` | s3_method | `holocron.models.covariance` | experimental | Phase 8 | 3 | `postfit-inference-v1` | Mapped only for the currently supported OLS, Gaussian Glm, binomial Glm, and binary lrm result types. |

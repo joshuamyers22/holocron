@@ -1,0 +1,55 @@
+{
+  "schema_version": "holocron-phase-8-performance-plan/v1",
+  "plan_id": "phase-8-retained-profiles-v1",
+  "approved_for": "private-experimental-development",
+  "approved_on": "2026-09-19",
+  "timing_policy": "Wall-clock medians are retained for diagnosis only; portable acceptance uses deterministic primitive-call ceilings.",
+  "required_platforms": ["ubuntu-24.04", "macos-15"],
+  "workloads": [
+    {
+      "workload_id": "ols-repeated-validation",
+      "kind": "validation",
+      "seed": 8101,
+      "sample_size": 320,
+      "timing_repetitions": 3,
+      "max_primitive_calls": 350000,
+      "max_peak_bytes": 1048576
+    },
+    {
+      "workload_id": "binary-repeated-validation",
+      "kind": "validation",
+      "seed": 8102,
+      "sample_size": 240,
+      "timing_repetitions": 3,
+      "max_primitive_calls": 700000,
+      "max_peak_bytes": 1048576
+    },
+    {
+      "workload_id": "cox-standard-risk-sets",
+      "kind": "survival",
+      "seed": 813,
+      "sample_size": 400,
+      "timing_repetitions": 5,
+      "max_primitive_calls": 70000,
+      "max_peak_bytes": 1048576
+    },
+    {
+      "workload_id": "cox-delayed-entry",
+      "kind": "survival",
+      "seed": 8104,
+      "sample_size": 180,
+      "timing_repetitions": 3,
+      "max_primitive_calls": 150000,
+      "max_peak_bytes": 1048576
+    },
+    {
+      "workload_id": "psm-mixed-censoring",
+      "kind": "survival",
+      "seed": 8105,
+      "sample_size": 180,
+      "timing_repetitions": 3,
+      "max_primitive_calls": 300000,
+      "max_peak_bytes": 1048576
+    }
+  ]
+}
