@@ -16,6 +16,9 @@ remains a separate promotion gate outside the approved Phase 5 scope.
 The Phase 9 release-candidate evidence process is defined, but candidate and
 external-beta execution remains blocked by ADR-010, qualified distribution
 approval, and external cohort recruitment.
+The Phase 9 clean artifact matrix is defined and enforced across four OS/Python
+cells, but its deliverable remains open until a single pushed clean revision
+produces all four retained reports and the aggregation gate accepts them.
 Until those qualified reviewers are appointed and their applicable gates pass:
 
 - implemented capabilities may be marked only `experimental`; `mapped` and

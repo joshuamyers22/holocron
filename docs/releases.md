@@ -12,6 +12,14 @@ two distinct candidates. Every candidate must retain a clean source revision,
 wheel and source-distribution SHA-256 values, and passing `make check`,
 `make audit`, and clean artifact-installation evidence.
 
+The clean artifact gate is a four-cell installability matrix: Ubuntu 24.04 and
+macOS 15, each on CPython 3.11 and 3.12. Every cell retains wheel and sdist
+bytes plus a plan- and revision-bound JSON report for 90 days. Run
+`make phase-9-build-matrix-check` to check its repository topology, then run
+`make phase-9-build-matrix-evidence EVIDENCE_DIRECTORY=/path/to/reports` after
+downloading all four reports from one CI revision. A partial or mixed-revision
+set cannot qualify a candidate. This does not expand ADR-009 numerical parity.
+
 External distribution has a separate fail-closed prerequisite. A qualified
 license/provenance reviewer must approve each candidate's exact source commit,
 license, provenance process, package name, and notices in writing. The

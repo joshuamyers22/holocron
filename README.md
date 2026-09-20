@@ -32,6 +32,11 @@ Phase 9 stable release qualification is underway. Its candidate/feedback
 registry is fail-closed and currently records zero candidates and zero external
 reviews; ADR-010, qualified license/provenance approval, and an authorized
 external cohort are required before beta execution.
+The clean artifact-installability matrix is also wired for Ubuntu 24.04 and
+macOS 15 on CPython 3.11 and 3.12. Every cell builds, inspects, installs, and
+smoke-tests both distribution formats and emits digest-bound evidence. The
+deliverable stays open until the first four reports are retained from one clean
+pushed revision; this matrix does not broaden ADR-009 numerical parity.
 The Phase 3
 deliverables cover experimental `ols`,
 Gaussian/identity and binomial/logit `Glm`, and binary `lrm` estimators plus

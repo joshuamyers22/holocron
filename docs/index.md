@@ -82,6 +82,10 @@ Phase 9 stable release qualification is underway. Its candidate and feedback
 contracts are implemented, but no candidate or external review is recorded;
 stable-scope definition, qualified distribution approval, and an authorized
 external cohort remain blockers.
+Its clean artifact matrix now covers Ubuntu 24.04 and macOS 15 on CPython 3.11
+and 3.12 with isolated wheel/sdist installation evidence. Completion awaits the
+first retained four-cell run from one clean pushed revision, and this
+installability matrix does not broaden ADR-009 numerical parity.
 Capability promotion,
 consequential use, and external distribution remain separately blocked.
 

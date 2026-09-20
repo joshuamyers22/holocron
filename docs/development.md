@@ -87,6 +87,24 @@ registry without pretending an incomplete program has passed. The stronger
 and fails until genuine candidates, exact distribution approvals, and external
 feedback meet every locked criterion.
 
+## Phase 9 artifact-matrix workflow
+
+`make phase-9-build-matrix-check` validates the exact Ubuntu 24.04/macOS 15 by
+CPython 3.11/3.12 plan and its CI wiring. Each CI cell requires a clean checkout,
+builds and inspects wheel and sdist artifacts, installs each in a distinct fresh
+environment, runs dependency and public-API smoke checks, and retains both
+artifacts plus a schema-valid report for 90 days.
+
+Download the four reports from one revision and run:
+
+```sh
+make phase-9-build-matrix-evidence EVIDENCE_DIRECTORY=/path/to/reports
+```
+
+The aggregator rejects partial, mixed-revision, wrong-environment, or plan-
+drifted evidence. This is installability evidence, not a broader numerical-
+parity claim.
+
 ## Phase 1 evidence workflow
 
 `make phase-1-e2e` executes the accepted RCS-design, OLS-fit, and prediction case,

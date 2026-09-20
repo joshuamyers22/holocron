@@ -4,6 +4,11 @@ Notable changes are recorded here using semantic versioning.
 
 ## Unreleased
 
+- Added the fail-closed Phase 9 artifact-installability matrix for Ubuntu 24.04
+  and macOS 15 across CPython 3.11 and 3.12. Every clean cell builds and inspects
+  wheel/sdist, independently installs both formats, runs dependency and broad
+  public-API smoke checks, and retains schema-valid revision/digest-bound
+  evidence for 90 days. The deliverable awaits its first complete CI run.
 - Added the fail-closed Phase 9 release-candidate and external-beta evidence
   process for a future `1.0.0rcN` series. Strict schemas and semantic checks
   require two distinct candidates, exact per-candidate distribution approval,

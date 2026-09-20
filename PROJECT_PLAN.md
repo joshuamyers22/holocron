@@ -1,6 +1,6 @@
 # Independent Python Implementation of `rms`: Production Project Plan
 
-**Status:** Active — Phases 0–8 complete for private experimental development; Phase 9 is underway with external release-candidate prerequisites blocked
+**Status:** Active — Phases 0–8 complete for private experimental development; Phase 9 candidate prerequisites remain blocked and the clean artifact matrix awaits its first retained run
 **Plan date:** 2026-09-17  
 **Reference implementation:** Frank Harrell's R package `rms`  
 **Project name:** `holocron`  
@@ -929,11 +929,16 @@ blocker/high findings. No candidate or feedback is recorded. Execution remains
 blocked until ADR-010 defines the stable core, a qualified license/provenance
 reviewer authorizes an exact candidate commit, and an external cohort is
 recruited. See `governance/PHASE_9_RELEASE_CANDIDATES.md`.
+The second-deliverable contract now defines Ubuntu 24.04 and macOS 15 across
+CPython 3.11 and 3.12. CI builds, inspects, independently installs, and smoke-
+tests wheel and sdist artifacts in every cell and retains schema-valid evidence
+for 90 days. The plan remains open until one pushed clean revision produces and
+passes all four reports. See `governance/PHASE_9_BUILD_MATRIX.md`.
 
 **Deliverables**
 
 - [ ] release candidate series and external beta feedback — process ready; externally blocked;
-- [ ] clean full-matrix builds and artifact installation evidence;
+- [ ] clean full-matrix builds and artifact installation evidence — contract and CI ready; first retained four-cell run pending;
 - [ ] independent statistical, numerical, security, API, and documentation reviews;
 - [ ] completed release-readiness checklist;
 - [ ] signed/traceable artifacts, SBOM, provenance, changelog, and support policy;

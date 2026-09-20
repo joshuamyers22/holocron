@@ -73,6 +73,50 @@ jobs:
           retention-days: 30
           include-hidden-files: true
       - run: make audit clean-build
+  artifact-matrix:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - id: "ubuntu-24.04-python-3.11"
+            os: "ubuntu-24.04"
+            python: "3.11"
+          - id: "ubuntu-24.04-python-3.12"
+            os: "ubuntu-24.04"
+            python: "3.12"
+          - id: "macos-15-python-3.11"
+            os: "macos-15"
+            python: "3.11"
+          - id: "macos-15-python-3.12"
+            os: "macos-15"
+            python: "3.12"
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: astral-sh/setup-uv@20cfd1bf945f4377ade1205e4dbc17946fc9a30d # v10.0.1
+        with:
+          version: "0.12.7"
+          python-version: ${{ matrix.python }}
+      - run: make setup
+      - name: Build, inspect, and install-test clean artifacts
+        run: >-
+          uv run --frozen python tools/build_and_smoke_artifacts.py
+          --output-directory dist
+          --require-clean
+          --matrix-id "${{ matrix.id }}"
+          --evidence-output ".work/phase-9-build/${{ matrix.id }}.json"
+      - name: Retain artifacts and installation evidence
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: phase-9-build-${{ matrix.id }}-${{ github.sha }}
+          path: |
+            dist/*
+            .work/phase-9-build/${{ matrix.id }}.json
+          if-no-files-found: error
+          retention-days: 90
+          include-hidden-files: true
   tolerance-pilot:
     strategy:
       fail-fast: false

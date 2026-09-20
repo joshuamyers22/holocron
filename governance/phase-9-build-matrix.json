@@ -1,0 +1,50 @@
+{
+  "schema_version": "holocron-phase-9-build-matrix/v1",
+  "plan_id": "phase-9-installability-matrix-v1",
+  "approved_on": "2026-09-20",
+  "scope": "clean-artifact-installability",
+  "retention_days": 90,
+  "required_checks": [
+    "clean-source-checkout",
+    "wheel-build-and-inspection",
+    "sdist-build-and-inspection",
+    "wheel-isolated-install",
+    "sdist-isolated-install",
+    "dependency-consistency",
+    "public-api-smoke"
+  ],
+  "cells": [
+    {
+      "matrix_id": "ubuntu-24.04-python-3.11",
+      "runner": "ubuntu-24.04",
+      "python": "3.11",
+      "system": "Linux",
+      "os_version": "24.04",
+      "machine": "x86_64"
+    },
+    {
+      "matrix_id": "ubuntu-24.04-python-3.12",
+      "runner": "ubuntu-24.04",
+      "python": "3.12",
+      "system": "Linux",
+      "os_version": "24.04",
+      "machine": "x86_64"
+    },
+    {
+      "matrix_id": "macos-15-python-3.11",
+      "runner": "macos-15",
+      "python": "3.11",
+      "system": "Darwin",
+      "os_version": "15",
+      "machine": "arm64"
+    },
+    {
+      "matrix_id": "macos-15-python-3.12",
+      "runner": "macos-15",
+      "python": "3.12",
+      "system": "Darwin",
+      "os_version": "15",
+      "machine": "arm64"
+    }
+  ]
+}

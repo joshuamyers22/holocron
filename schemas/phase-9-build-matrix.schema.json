@@ -1,0 +1,51 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/joshuamyers22/holocron/schemas/phase-9-build-matrix.schema.json",
+  "type": "object",
+  "properties": {
+    "schema_version": {"const": "holocron-phase-9-build-matrix/v1"},
+    "plan_id": {"const": "phase-9-installability-matrix-v1"},
+    "approved_on": {"type": "string", "format": "date"},
+    "scope": {"const": "clean-artifact-installability"},
+    "retention_days": {"type": "integer", "minimum": 90},
+    "required_checks": {
+      "const": [
+        "clean-source-checkout",
+        "wheel-build-and-inspection",
+        "sdist-build-and-inspection",
+        "wheel-isolated-install",
+        "sdist-isolated-install",
+        "dependency-consistency",
+        "public-api-smoke"
+      ]
+    },
+    "cells": {
+      "type": "array",
+      "minItems": 4,
+      "maxItems": 4,
+      "items": {
+        "type": "object",
+        "properties": {
+          "matrix_id": {"type": "string", "minLength": 1},
+          "runner": {"enum": ["ubuntu-24.04", "macos-15"]},
+          "python": {"enum": ["3.11", "3.12"]},
+          "system": {"enum": ["Linux", "Darwin"]},
+          "os_version": {"enum": ["24.04", "15"]},
+          "machine": {"enum": ["x86_64", "arm64"]}
+        },
+        "required": ["matrix_id", "runner", "python", "system", "os_version", "machine"],
+        "additionalProperties": false
+      }
+    }
+  },
+  "required": [
+    "schema_version",
+    "plan_id",
+    "approved_on",
+    "scope",
+    "retention_days",
+    "required_checks",
+    "cells"
+  ],
+  "additionalProperties": false
+}

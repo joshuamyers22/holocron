@@ -1,0 +1,99 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/joshuamyers22/holocron/schemas/phase-9-build-evidence.schema.json",
+  "type": "object",
+  "properties": {
+    "schema_version": {"const": "holocron-phase-9-build-evidence/v1"},
+    "generated_at_utc": {"type": "string", "format": "date-time"},
+    "plan_id": {"const": "phase-9-installability-matrix-v1"},
+    "plan_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "matrix_id": {"type": "string", "minLength": 1},
+    "source": {
+      "type": "object",
+      "properties": {
+        "revision": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+        "clean": {"const": true}
+      },
+      "required": ["revision", "clean"],
+      "additionalProperties": false
+    },
+    "environment": {
+      "type": "object",
+      "properties": {
+        "system": {"type": "string", "minLength": 1},
+        "os_version": {"type": "string", "minLength": 1},
+        "release": {"type": "string", "minLength": 1},
+        "machine": {"type": "string", "minLength": 1},
+        "python_implementation": {"const": "CPython"},
+        "python_version": {"type": "string", "pattern": "^3\\.(11|12)\\.[0-9]+$"},
+        "numpy_version": {"type": "string", "minLength": 1},
+        "uv_version": {"type": "string", "minLength": 1}
+      },
+      "required": [
+        "system",
+        "os_version",
+        "release",
+        "machine",
+        "python_implementation",
+        "python_version",
+        "numpy_version",
+        "uv_version"
+      ],
+      "additionalProperties": false
+    },
+    "project_version": {"type": "string", "minLength": 1},
+    "artifacts": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 2,
+      "items": {
+        "type": "object",
+        "properties": {
+          "kind": {"enum": ["wheel", "sdist"]},
+          "filename": {"type": "string", "minLength": 1},
+          "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+          "size_bytes": {"type": "integer", "minimum": 1}
+        },
+        "required": ["kind", "filename", "sha256", "size_bytes"],
+        "additionalProperties": false
+      }
+    },
+    "checks": {
+      "type": "object",
+      "properties": {
+        "clean-source-checkout": {"const": "passed"},
+        "wheel-build-and-inspection": {"const": "passed"},
+        "sdist-build-and-inspection": {"const": "passed"},
+        "wheel-isolated-install": {"const": "passed"},
+        "sdist-isolated-install": {"const": "passed"},
+        "dependency-consistency": {"const": "passed"},
+        "public-api-smoke": {"const": "passed"}
+      },
+      "required": [
+        "clean-source-checkout",
+        "wheel-build-and-inspection",
+        "sdist-build-and-inspection",
+        "wheel-isolated-install",
+        "sdist-isolated-install",
+        "dependency-consistency",
+        "public-api-smoke"
+      ],
+      "additionalProperties": false
+    },
+    "outcome": {"const": "passed"}
+  },
+  "required": [
+    "schema_version",
+    "generated_at_utc",
+    "plan_id",
+    "plan_sha256",
+    "matrix_id",
+    "source",
+    "environment",
+    "project_version",
+    "artifacts",
+    "checks",
+    "outcome"
+  ],
+  "additionalProperties": false
+}

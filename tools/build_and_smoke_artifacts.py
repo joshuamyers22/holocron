@@ -4,16 +4,25 @@ from __future__ import annotations
 
 import argparse
 import hashlib
+import importlib.metadata
+import json
 import os
+import platform
 import subprocess
 import sys
 import tempfile
 from collections.abc import Mapping, Sequence
+from datetime import UTC, datetime
 from pathlib import Path
+from typing import Any, cast
 
 from check_build_artifacts import inspect_artifacts, project_identity
+from jsonschema import Draft202012Validator, FormatChecker
 
 ROOT = Path(__file__).resolve().parents[1]
+MATRIX_PLAN = ROOT / "governance/phase-9-build-matrix.json"
+MATRIX_SCHEMA = ROOT / "schemas/phase-9-build-matrix.schema.json"
+EVIDENCE_SCHEMA = ROOT / "schemas/phase-9-build-evidence.schema.json"
 SMOKE_PROGRAM = """
 from __future__ import annotations
 
@@ -505,6 +514,152 @@ def sha256(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
+def _load_json(path: Path) -> dict[str, Any]:
+    value = json.loads(path.read_text(encoding="utf-8"))
+    if not isinstance(value, dict):
+        raise ValueError(f"expected a JSON object: {path}")
+    return cast(dict[str, Any], value)
+
+
+def _validate(document: dict[str, Any], schema_path: Path) -> None:
+    schema = _load_json(schema_path)
+    validator = Draft202012Validator(schema, format_checker=FormatChecker())
+    validator.validate(document)  # pyright: ignore[reportUnknownMemberType]
+
+
+def _machine_name(value: str) -> str:
+    normalized = value.lower()
+    if normalized in {"amd64", "x86-64"}:
+        return "x86_64"
+    if normalized in {"aarch64", "arm64"}:
+        return "arm64"
+    return normalized
+
+
+def load_matrix_cell(matrix_id: str) -> tuple[dict[str, Any], dict[str, Any]]:
+    """Load one declared Phase 9 matrix cell and validate the plan."""
+    plan = _load_json(MATRIX_PLAN)
+    _validate(plan, MATRIX_SCHEMA)
+    cells = cast(list[dict[str, Any]], plan["cells"])
+    matches = [cell for cell in cells if cell["matrix_id"] == matrix_id]
+    if len(matches) != 1:
+        raise ValueError(f"unknown Phase 9 build matrix ID: {matrix_id}")
+    return plan, matches[0]
+
+
+def observed_environment() -> dict[str, str]:
+    uv = subprocess.run(
+        ["uv", "--version"],
+        cwd=ROOT,
+        capture_output=True,
+        check=True,
+        text=True,
+    ).stdout.strip()
+    system = platform.system()
+    if system == "Linux":
+        os_version = platform.freedesktop_os_release().get("VERSION_ID", "")
+    elif system == "Darwin":
+        os_version = platform.mac_ver()[0].split(".")[0]
+    else:
+        os_version = ""
+    return {
+        "system": system,
+        "os_version": os_version,
+        "release": platform.release(),
+        "machine": _machine_name(platform.machine()),
+        "python_implementation": platform.python_implementation(),
+        "python_version": platform.python_version(),
+        "numpy_version": importlib.metadata.version("numpy"),
+        "uv_version": uv,
+    }
+
+
+def validate_matrix_environment(
+    cell: Mapping[str, Any], environment: Mapping[str, str]
+) -> None:
+    """Reject a report produced outside its declared runner/Python cell."""
+    expected_python = cast(str, cell["python"])
+    actual_python = ".".join(environment["python_version"].split(".")[:2])
+    expected = {
+        "system": cast(str, cell["system"]),
+        "os_version": cast(str, cell["os_version"]),
+        "machine": cast(str, cell["machine"]),
+        "python": expected_python,
+        "python_implementation": "CPython",
+    }
+    actual = {
+        "system": environment["system"],
+        "os_version": environment["os_version"],
+        "machine": _machine_name(environment["machine"]),
+        "python": actual_python,
+        "python_implementation": environment["python_implementation"],
+    }
+    if actual != expected:
+        raise ValueError(
+            "build environment does not match matrix cell: "
+            f"expected {expected}, observed {actual}"
+        )
+
+
+def source_revision() -> str:
+    return subprocess.run(
+        ["git", "rev-parse", "HEAD"],
+        cwd=ROOT,
+        capture_output=True,
+        check=True,
+        text=True,
+    ).stdout.strip()
+
+
+def build_evidence_document(
+    *,
+    plan: Mapping[str, Any],
+    matrix_id: str,
+    revision: str,
+    environment: Mapping[str, str],
+    version: str,
+    sdist: Path,
+    wheel: Path,
+) -> dict[str, Any]:
+    """Create a schema-valid success report after every check has passed."""
+    checks = {name: "passed" for name in cast(list[str], plan["required_checks"])}
+    document: dict[str, Any] = {
+        "schema_version": "holocron-phase-9-build-evidence/v1",
+        "generated_at_utc": datetime.now(UTC).isoformat().replace("+00:00", "Z"),
+        "plan_id": plan["plan_id"],
+        "plan_sha256": sha256(MATRIX_PLAN),
+        "matrix_id": matrix_id,
+        "source": {"revision": revision, "clean": True},
+        "environment": dict(environment),
+        "project_version": version,
+        "artifacts": [
+            {
+                "kind": "wheel",
+                "filename": wheel.name,
+                "sha256": sha256(wheel),
+                "size_bytes": wheel.stat().st_size,
+            },
+            {
+                "kind": "sdist",
+                "filename": sdist.name,
+                "sha256": sha256(sdist),
+                "size_bytes": sdist.stat().st_size,
+            },
+        ],
+        "checks": checks,
+        "outcome": "passed",
+    }
+    _validate(document, EVIDENCE_SCHEMA)
+    return document
+
+
+def write_evidence(document: Mapping[str, Any], output: Path) -> None:
+    output.parent.mkdir(parents=True, exist_ok=True)
+    output.write_text(
+        json.dumps(document, indent=2, sort_keys=True) + "\n", encoding="utf-8"
+    )
+
+
 def environment_python(environment_root: Path) -> Path:
     if os.name == "nt":
         return environment_root / "Scripts/python.exe"
@@ -603,9 +758,23 @@ def smoke_install(
     )
 
 
-def build_and_smoke(output_directory: Path, *, require_clean: bool) -> None:
+def build_and_smoke(
+    output_directory: Path,
+    *,
+    require_clean: bool,
+    matrix_id: str | None = None,
+    evidence_output: Path | None = None,
+) -> None:
+    plan: dict[str, Any] | None = None
+    environment: dict[str, str] | None = None
+    revision: str | None = None
     if require_clean:
         require_clean_checkout()
+    if matrix_id is not None:
+        plan, cell = load_matrix_cell(matrix_id)
+        environment = observed_environment()
+        validate_matrix_environment(cell, environment)
+        revision = source_revision()
     output_directory.mkdir(parents=True, exist_ok=True)
     run(
         (
@@ -664,6 +833,20 @@ def build_and_smoke(output_directory: Path, *, require_clean: bool) -> None:
             version=version,
         )
     print("artifact installation smoke tests passed: wheel, sdist")
+    if evidence_output is not None:
+        if plan is None or environment is None or revision is None or matrix_id is None:
+            raise ValueError("evidence output requires a matrix ID")
+        evidence = build_evidence_document(
+            plan=plan,
+            matrix_id=matrix_id,
+            revision=revision,
+            environment=environment,
+            version=version,
+            sdist=sdist,
+            wheel=wheel,
+        )
+        write_evidence(evidence, evidence_output)
+        print(f"Phase 9 build evidence written: {evidence_output}")
 
 
 def main() -> None:
@@ -679,8 +862,28 @@ def main() -> None:
         action="store_true",
         help="reject source changes before building",
     )
+    parser.add_argument(
+        "--matrix-id",
+        help="declared Phase 9 build-matrix cell to verify",
+    )
+    parser.add_argument(
+        "--evidence-output",
+        type=Path,
+        help="write schema-valid Phase 9 evidence after a successful matrix build",
+    )
     args = parser.parse_args()
-    build_and_smoke(args.output_directory.resolve(), require_clean=args.require_clean)
+    if (args.matrix_id is None) != (args.evidence_output is None):
+        parser.error("--matrix-id and --evidence-output must be supplied together")
+    if args.evidence_output is not None and not args.require_clean:
+        parser.error("Phase 9 evidence requires --require-clean")
+    build_and_smoke(
+        args.output_directory.resolve(),
+        require_clean=args.require_clean,
+        matrix_id=args.matrix_id,
+        evidence_output=(
+            None if args.evidence_output is None else args.evidence_output.resolve()
+        ),
+    )
 
 
 if __name__ == "__main__":
