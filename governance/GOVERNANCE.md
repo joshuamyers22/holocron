@@ -25,8 +25,12 @@ The Phase 9 clean artifact matrix is defined and enforced across four OS/Python
 cells, but its deliverable remains open until a single pushed clean revision
 produces all four retained reports and the aggregation gate accepts them.
 The Phase 9 readiness checklist is complete as an assessment but records a
-blocked release decision: every control is dispositioned, while seven controls
+blocked release decision: every control is dispositioned, while six controls
 still prohibit a stable release.
+The signed-artifact and support contract is implemented: approved tag builds
+must create and identity-verify the SBOM, provenance manifest, checksum index,
+and keyless signature bundles before publication. No real signed release set
+exists until that protected workflow runs.
 Until those qualified reviewers are appointed and their applicable gates pass:
 
 - implemented capabilities may be marked only `experimental`; `mapped` and

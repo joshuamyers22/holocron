@@ -25,3 +25,12 @@ Python wheel and source distribution.
 Suspected provenance contamination blocks the affected capability and external
 distribution. Preserve the evidence, notify the maintainer privately, and use
 normal incident review before rewriting or removing material.
+
+Release artifact provenance is separate from contribution authorship. An
+authorized tag build records the exact source revision, workflow identity,
+workflow run, distribution-approval record, policy materials, and SHA-256 of
+the wheel, source distribution, and CycloneDX SBOM in
+`release-manifest.json`. The manifest, checksum index, package artifacts, and
+SBOM each receive a keyless Sigstore bundle bound to the release workflow's
+GitHub Actions OIDC identity. A local build or unsigned file is not an official
+release artifact.

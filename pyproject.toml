@@ -21,6 +21,7 @@ classifiers = [
 Repository = "https://github.com/joshuamyers22/holocron"
 Issues = "https://github.com/joshuamyers22/holocron/issues"
 Changelog = "https://github.com/joshuamyers22/holocron/blob/main/CHANGELOG.md"
+Support = "https://github.com/joshuamyers22/holocron/blob/main/SUPPORT.md"
 
 [build-system]
 requires = ["hatchling==1.32.0"]
@@ -64,6 +65,7 @@ include = [
     "CHANGELOG.md",
     "LICENSE",
     "README.md",
+    "SUPPORT.md",
     "pyproject.toml",
     "schemas/binary-logistic-result.schema.json",
     "schemas/buckley-james-result.schema.json",

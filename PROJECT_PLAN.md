@@ -935,18 +935,24 @@ tests wheel and sdist artifacts in every cell and retains schema-valid evidence
 for 90 days. The plan remains open until one pushed clean revision produces and
 passes all four reports. See `governance/PHASE_9_BUILD_MATRIX.md`.
 The release-readiness checklist is fully dispositioned and machine-enforced:
-9 of 20 controls pass, 7 block release, and 4 hosted-service/telemetry controls
+10 of 20 controls pass, 6 block release, and 4 hosted-service/telemetry controls
 do not apply to the offline package. Checklist completion closes the fourth
 deliverable as an assessment, not as a release approval. See
 `governance/PHASE_9_RELEASE_READINESS.md`.
+The fifth-deliverable release contract now creates exact-commit manifests and
+checksums, CycloneDX SBOMs, and identity-bound Sigstore bundles for every
+published asset. The stable lifecycle and compatibility support policy is
+owned and explicit. Its first signed artifact set remains release evidence that
+can exist only after an approved tag build. See
+`governance/PHASE_9_ARTIFACTS_SUPPORT.md`.
 
 **Deliverables**
 
 - [ ] release candidate series and external beta feedback — process ready; externally blocked;
 - [ ] clean full-matrix builds and artifact installation evidence — contract and CI ready; first retained four-cell run pending;
 - [x] independent statistical, numerical, security, API, and documentation reviews — Ron Mexico approved the five exact-revision scopes with no unresolved findings;
-- [x] completed release-readiness checklist — assessment complete; release remains blocked by 7 controls;
-- [ ] signed/traceable artifacts, SBOM, provenance, changelog, and support policy;
+- [x] completed release-readiness checklist — assessment complete; release remains blocked by 6 controls;
+- [x] signed/traceable artifact pipeline, SBOM, provenance, changelog enforcement, and support policy — first approved signed set remains an exact-tag readiness prerequisite;
 - [ ] incident, vulnerability, rollback/yank, and compatibility-response procedures.
 
 **Exit gate**

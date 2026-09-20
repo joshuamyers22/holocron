@@ -96,6 +96,7 @@ def inspect_artifacts(directory: Path) -> tuple[Path, Path]:
     expected_sdist_files = {
         f"{sdist_root}/LICENSE",
         f"{sdist_root}/README.md",
+        f"{sdist_root}/SUPPORT.md",
         f"{sdist_root}/pyproject.toml",
         f"{sdist_root}/src/holocron/__init__.py",
         f"{sdist_root}/src/holocron/migration/_catalog.json",

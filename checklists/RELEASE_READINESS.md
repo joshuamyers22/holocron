@@ -6,7 +6,7 @@
 
 **Checklist status:** complete
 
-**Release decision:** blocked — 9 passed, 7 blocked, 4 not applicable
+**Release decision:** blocked — 10 passed, 6 blocked, 4 not applicable
 
 “Checklist complete” means every required control has an evidence-backed
 disposition. It does not mean the release is ready. The machine-readable source
@@ -53,6 +53,11 @@ and a readiness claim while any blocker remains.
   numerical, security, API, and documentation scopes for revision
   `ae43ffeb5a08c7aac508563a3e48657c53c99eed` with no unresolved findings.
 
+<!-- readiness:support-policy -->
+- **Support policy:** `SUPPORT.md` defines supported release lines and Python
+  versions, ownership, triage targets, compatibility boundaries, deprecation,
+  and lifecycle behavior without claiming support for private 0.1.0.
+
 ## Blocked
 
 <!-- readiness:stable-release-scope -->
@@ -72,13 +77,9 @@ and a readiness claim while any blocker remains.
   same-revision run yet.
 
 <!-- readiness:artifact-sbom-provenance -->
-- **Artifacts, SBOM, and provenance:** workflow scaffolding exists, but no
-  approved exact-tag artifact set, signature/attestation, or provenance record
-  exists.
-
-<!-- readiness:support-policy -->
-- **Support policy:** stable supported-version, lifecycle, support, and
-  compatibility-response commitments remain undefined.
+- **Artifacts, SBOM, and provenance:** the enforced workflow creates checksums,
+  a CycloneDX SBOM, exact-commit manifest, and identity-bound Sigstore bundles;
+  no approved exact-tag artifact set exists yet.
 
 <!-- readiness:response-procedures -->
 - **Response procedures:** vulnerability intake exists, but incident,

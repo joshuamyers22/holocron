@@ -1,8 +1,9 @@
-"""Reject a release tag that does not match project metadata."""
+"""Reject a release tag without matching metadata and changelog identity."""
 
 from __future__ import annotations
 
 import argparse
+import re
 import tomllib
 from collections.abc import Sequence
 from pathlib import Path
@@ -27,17 +28,35 @@ def verify_release(manifest: Path, tag: str) -> None:
         raise ValueError(f"release tag {tag!r} does not match {expected!r}")
 
 
+def verify_changelog(changelog: Path, version: str) -> None:
+    """Require one dated release heading for the exact project version."""
+    text = changelog.read_text(encoding="utf-8")
+    heading = re.compile(
+        rf"^## \[{re.escape(version)}\] - [0-9]{{4}}-[0-9]{{2}}-[0-9]{{2}}$",
+        re.MULTILINE,
+    )
+    matches = heading.findall(text)
+    if len(matches) != 1:
+        raise ValueError(
+            f"{changelog} must contain exactly one dated [{version}] release heading"
+        )
+
+
 def parser() -> argparse.ArgumentParser:
     command = argparse.ArgumentParser(description=__doc__)
     command.add_argument("--tag", required=True)
     command.add_argument("--manifest", type=Path, default=Path("pyproject.toml"))
+    command.add_argument("--changelog", type=Path, default=Path("CHANGELOG.md"))
     return command
 
 
 def main(argv: Sequence[str] | None = None) -> int:
     args = parser().parse_args(argv)
-    verify_release(cast(Path, args.manifest), cast(str, args.tag))
-    print(f"release tag {args.tag} matches project metadata")
+    manifest = cast(Path, args.manifest)
+    version = project_version(manifest)
+    verify_release(manifest, cast(str, args.tag))
+    verify_changelog(cast(Path, args.changelog), version)
+    print(f"release tag {args.tag} matches project metadata and changelog")
     return 0
 
 

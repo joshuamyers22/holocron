@@ -1,0 +1,40 @@
+{
+  "schema_version": "holocron-phase-9-artifact-policy/v1",
+  "policy_id": "phase-9-release-supply-chain-v1",
+  "status": "implemented",
+  "owner": "joshuamyers22",
+  "repository": "https://github.com/joshuamyers22/holocron",
+  "release_workflow": ".github/workflows/release.yml",
+  "artifact_set": [
+    {"role": "wheel", "pattern": "holocron_rms-*.whl", "media_type": "application/zip"},
+    {"role": "sdist", "pattern": "holocron_rms-*.tar.gz", "media_type": "application/gzip"},
+    {"role": "sbom", "pattern": "release-sbom.cdx.json", "media_type": "application/vnd.cyclonedx+json"},
+    {"role": "provenance", "pattern": "release-manifest.json", "media_type": "application/json"},
+    {"role": "checksums", "pattern": "SHA256SUMS", "media_type": "text/plain"}
+  ],
+  "sbom": {
+    "format": "CycloneDX JSON",
+    "minimum_spec_version": "1.4",
+    "generator": "anchore/sbom-action"
+  },
+  "signing": {
+    "method": "sigstore-keyless",
+    "bundle_suffix": ".sigstore.json",
+    "oidc_issuer": "https://token.actions.githubusercontent.com",
+    "certificate_identity": "https://github.com/joshuamyers22/holocron/.github/workflows/release.yml@refs/tags/<release-tag>",
+    "transparency_log": "https://rekor.sigstore.dev",
+    "signed_roles": ["wheel", "sdist", "sbom", "provenance", "checksums"]
+  },
+  "traceability": {
+    "manifest_schema": "schemas/phase-9-release-manifest.schema.json",
+    "changelog": "CHANGELOG.md",
+    "support_policy": "SUPPORT.md",
+    "contribution_provenance": "governance/PROVENANCE.md",
+    "approval_record_required": true,
+    "exact_tag_commit_required": true
+  },
+  "retention": {
+    "channel": "GitHub release assets",
+    "minimum_days": 365
+  }
+}

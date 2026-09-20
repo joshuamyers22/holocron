@@ -87,7 +87,7 @@ and 3.12 with isolated wheel/sdist installation evidence. Completion awaits the
 first retained four-cell run from one clean pushed revision, and this
 installability matrix does not broaden ADR-009 numerical parity.
 The release-readiness checklist is also complete as a fully dispositioned
-assessment: 9 controls pass, 7 block release, and 4 hosted-service/telemetry
+assessment: 10 controls pass, 6 block release, and 4 hosted-service/telemetry
 controls are not applicable. Its final-release gate remains closed.
 Ron Mexico independently approved the exact-revision Phase 9 statistical,
 numerical, security, API, and documentation scopes with no unresolved findings;

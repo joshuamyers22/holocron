@@ -1,0 +1,62 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/joshuamyers22/holocron/schemas/phase-9-release-manifest.schema.json",
+  "type": "object",
+  "properties": {
+    "schema_version": {"const": "holocron-release-manifest/v1"},
+    "distribution": {"const": "holocron-rms"},
+    "version": {"type": "string", "minLength": 1},
+    "release_tag": {"type": "string", "pattern": "^v[0-9]+\\.[0-9]+\\.[0-9]+(?:rc[0-9]+)?$"},
+    "source_repository": {"const": "https://github.com/joshuamyers22/holocron"},
+    "source_revision": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+    "generated_at": {"type": "string", "format": "date-time"},
+    "builder": {
+      "type": "object",
+      "properties": {
+        "workflow": {"const": ".github/workflows/release.yml"},
+        "workflow_ref": {"type": "string", "minLength": 1},
+        "run_url": {"type": ["string", "null"]},
+        "oidc_issuer": {"const": "https://token.actions.githubusercontent.com"}
+      },
+      "required": ["workflow", "workflow_ref", "run_url", "oidc_issuer"],
+      "additionalProperties": false
+    },
+    "authorization": {
+      "type": "object",
+      "properties": {
+        "approval_record": {"type": "string", "minLength": 1}
+      },
+      "required": ["approval_record"],
+      "additionalProperties": false
+    },
+    "materials": {
+      "type": "object",
+      "properties": {
+        "changelog": {"const": "CHANGELOG.md"},
+        "support_policy": {"const": "SUPPORT.md"},
+        "contribution_provenance": {"const": "governance/PROVENANCE.md"},
+        "artifact_policy": {"const": "governance/phase-9-artifact-policy.json"}
+      },
+      "required": ["changelog", "support_policy", "contribution_provenance", "artifact_policy"],
+      "additionalProperties": false
+    },
+    "artifacts": {
+      "type": "array",
+      "minItems": 3,
+      "maxItems": 3,
+      "items": {
+        "type": "object",
+        "properties": {
+          "role": {"enum": ["wheel", "sdist", "sbom"]},
+          "filename": {"type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._+-]*$"},
+          "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+          "size": {"type": "integer", "minimum": 1}
+        },
+        "required": ["role", "filename", "sha256", "size"],
+        "additionalProperties": false
+      }
+    }
+  },
+  "required": ["schema_version", "distribution", "version", "release_tag", "source_repository", "source_revision", "generated_at", "builder", "authorization", "materials", "artifacts"],
+  "additionalProperties": false
+}

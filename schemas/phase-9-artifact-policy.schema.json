@@ -1,0 +1,81 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/joshuamyers22/holocron/schemas/phase-9-artifact-policy.schema.json",
+  "type": "object",
+  "properties": {
+    "schema_version": {"const": "holocron-phase-9-artifact-policy/v1"},
+    "policy_id": {"const": "phase-9-release-supply-chain-v1"},
+    "status": {"const": "implemented"},
+    "owner": {"type": "string", "minLength": 1},
+    "repository": {"type": "string", "format": "uri"},
+    "release_workflow": {"type": "string", "minLength": 1},
+    "artifact_set": {
+      "type": "array",
+      "minItems": 5,
+      "maxItems": 5,
+      "items": {
+        "type": "object",
+        "properties": {
+          "role": {"enum": ["wheel", "sdist", "sbom", "provenance", "checksums"]},
+          "pattern": {"type": "string", "minLength": 1},
+          "media_type": {"type": "string", "minLength": 1}
+        },
+        "required": ["role", "pattern", "media_type"],
+        "additionalProperties": false
+      }
+    },
+    "sbom": {
+      "type": "object",
+      "properties": {
+        "format": {"const": "CycloneDX JSON"},
+        "minimum_spec_version": {"type": "string", "pattern": "^[0-9]+\\.[0-9]+$"},
+        "generator": {"const": "anchore/sbom-action"}
+      },
+      "required": ["format", "minimum_spec_version", "generator"],
+      "additionalProperties": false
+    },
+    "signing": {
+      "type": "object",
+      "properties": {
+        "method": {"const": "sigstore-keyless"},
+        "bundle_suffix": {"const": ".sigstore.json"},
+        "oidc_issuer": {"const": "https://token.actions.githubusercontent.com"},
+        "certificate_identity": {"type": "string", "minLength": 1},
+        "transparency_log": {"type": "string", "format": "uri"},
+        "signed_roles": {
+          "type": "array",
+          "minItems": 5,
+          "maxItems": 5,
+          "items": {"enum": ["wheel", "sdist", "sbom", "provenance", "checksums"]},
+          "uniqueItems": true
+        }
+      },
+      "required": ["method", "bundle_suffix", "oidc_issuer", "certificate_identity", "transparency_log", "signed_roles"],
+      "additionalProperties": false
+    },
+    "traceability": {
+      "type": "object",
+      "properties": {
+        "manifest_schema": {"type": "string", "minLength": 1},
+        "changelog": {"const": "CHANGELOG.md"},
+        "support_policy": {"const": "SUPPORT.md"},
+        "contribution_provenance": {"const": "governance/PROVENANCE.md"},
+        "approval_record_required": {"const": true},
+        "exact_tag_commit_required": {"const": true}
+      },
+      "required": ["manifest_schema", "changelog", "support_policy", "contribution_provenance", "approval_record_required", "exact_tag_commit_required"],
+      "additionalProperties": false
+    },
+    "retention": {
+      "type": "object",
+      "properties": {
+        "channel": {"const": "GitHub release assets"},
+        "minimum_days": {"type": "integer", "minimum": 365}
+      },
+      "required": ["channel", "minimum_days"],
+      "additionalProperties": false
+    }
+  },
+  "required": ["schema_version", "policy_id", "status", "owner", "repository", "release_workflow", "artifact_set", "sbom", "signing", "traceability", "retention"],
+  "additionalProperties": false
+}

@@ -22,7 +22,7 @@ set cannot qualify a candidate. This does not expand ADR-009 numerical parity.
 
 The release-readiness assessment is complete but its decision is blocked. Run
 `make phase-9-readiness-check` to validate all 20 dispositions. The final-only
-`make phase-9-readiness-exit-gate` fails until the seven recorded blockers are
+`make phase-9-readiness-exit-gate` fails until the six recorded blockers are
 resolved. `make phase-9-review-check` validates Ron Mexico's retained approvals
 of the five technical review domains for the exact reviewed revision. These
 approvals do not satisfy qualified license/provenance review.
@@ -35,6 +35,38 @@ tag-triggered workflow also requires the repository variable
 `EXTERNAL_DISTRIBUTION_APPROVED_SHA` to equal the tag commit, and requires a
 nonempty `EXTERNAL_DISTRIBUTION_APPROVAL_RECORD`. Neither CI nor a local build
 satisfies this authorization.
+
+## Signed and traceable release assets
+
+Every authorized tag build produces a wheel, source distribution, CycloneDX
+JSON SBOM, `release-manifest.json`, and `SHA256SUMS`. The manifest binds the
+first three assets to the full commit, tag, workflow run, approval record,
+changelog, support policy, and contribution-provenance policy. The checksum
+index covers those assets and the manifest.
+
+The protected release job uses GitHub Actions OIDC for keyless Sigstore signing
+and creates an adjacent `.sigstore.json` bundle for each of the five assets. It
+verifies the issuer and exact tag-qualified workflow identity before publishing
+anything. The bundles contain the material needed for downstream signature,
+certificate-identity, and transparency-log verification; a checksum alone is
+not an authenticity claim.
+
+Run the repository checks with:
+
+```sh
+make phase-9-supply-chain-check
+make phase-9-supply-chain-evidence ARTIFACT_DIRECTORY=/path/to/release-assets
+```
+
+The first command validates policy and workflow topology. The second checks a
+downloaded release set for exact membership, internal digests, SBOM and manifest
+structure, and all signature bundles. The authoritative policy is
+`governance/phase-9-artifact-policy.json`; supported-version and lifecycle
+commitments are in `SUPPORT.md`.
+
+Before tagging, move the applicable entries from `Unreleased` to exactly one
+dated `## [VERSION] - YYYY-MM-DD` heading. Tag verification fails if that exact
+versioned heading is absent.
 
 Run the structural program check with:
 

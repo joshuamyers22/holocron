@@ -9,8 +9,8 @@
   "assessment_status": "blocked",
   "summary": {
     "total": 20,
-    "passed": 9,
-    "blocked": 7,
+    "passed": 10,
+    "blocked": 6,
     "not_applicable": 4,
     "blocking_control_ids": [
       "stable-release-scope",
@@ -18,7 +18,6 @@
       "version-tag-identity",
       "artifact-matrix",
       "artifact-sbom-provenance",
-      "support-policy",
       "response-procedures"
     ]
   },
@@ -127,11 +126,13 @@
       "evidence": [
         ".github/workflows/release.yml",
         "CHANGELOG.md",
-        "governance/PROVENANCE.md"
+        "governance/PROVENANCE.md",
+        "governance/PHASE_9_ARTIFACTS_SUPPORT.md",
+        "governance/phase-9-artifact-policy.json"
       ],
-      "rationale": "The release workflow builds artifacts and a CycloneDX SBOM, but no approved release artifact set, signature/attestation, or exact-tag provenance record exists.",
+      "rationale": "The enforced pipeline now creates checksums, a CycloneDX SBOM, an exact-commit provenance manifest, and identity-bound Sigstore bundles, but no approved exact-tag release artifact set exists yet.",
       "owner": "joshuamyers22",
-      "resolution_condition": "Complete the Phase 9 signed/traceable-artifact deliverable for the exact approved tag."
+      "resolution_condition": "Run the authorized release workflow for the exact approved tag and retain the complete verified signed artifact set."
     },
     {
       "control_id": "secrets-private-data",
@@ -267,15 +268,16 @@
     {
       "control_id": "support-policy",
       "requirement": "Supported versions, compatibility response, lifecycle, and user support ownership are approved.",
-      "disposition": "blocked",
+      "disposition": "passed",
       "applicable": true,
       "evidence": [
-        "PROJECT_PLAN.md",
-        "SECURITY.md"
+        "SUPPORT.md",
+        "SECURITY.md",
+        "governance/PHASE_9_ARTIFACTS_SUPPORT.md"
       ],
-      "rationale": "The security contact is named, but the Phase 9 support policy and stable compatibility-response commitments do not yet exist.",
+      "rationale": "The support policy defines owned channels, supported release lines and Python versions, triage targets, compatibility boundaries, deprecation and lifecycle behavior, while explicitly making no support claim for private 0.1.0.",
       "owner": "joshuamyers22",
-      "resolution_condition": "Approve the support policy and compatibility-response commitments for the stable scope."
+      "resolution_condition": null
     },
     {
       "control_id": "response-procedures",

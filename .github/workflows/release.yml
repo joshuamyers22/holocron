@@ -34,8 +34,11 @@ jobs:
     permissions:
       actions: read
       contents: write
+      id-token: write
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
       - uses: astral-sh/setup-uv@20cfd1bf945f4377ade1205e4dbc17946fc9a30d # v10.0.1
         with:
           version: "0.12.7"
@@ -45,7 +48,7 @@ jobs:
           RELEASE_TAG: ${{ github.ref_name }}
         run: uv run python tools/verify_release.py --tag "$RELEASE_TAG"
       - name: Verify completed release-readiness checklist
-        run: make phase-9-readiness-check
+        run: make phase-9-readiness-check phase-9-supply-chain-check
       - name: Verify release-candidate program records
         if: ${{ contains(github.ref_name, 'rc') }}
         env:
@@ -67,6 +70,42 @@ jobs:
           output-file: ./dist/release-sbom.cdx.json
           format: cyclonedx-json
           upload-artifact: false
+      - name: Create release manifest and checksums
+        env:
+          APPROVAL_RECORD: ${{ vars.EXTERNAL_DISTRIBUTION_APPROVAL_RECORD }}
+          RELEASE_TAG: ${{ github.ref_name }}
+          WORKFLOW_REF: ${{ github.workflow_ref }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          uv run --frozen python -m tools.prepare_release_artifacts \
+            --directory dist \
+            --source-revision "$GITHUB_SHA" \
+            --release-tag "$RELEASE_TAG" \
+            --approval-record "$APPROVAL_RECORD" \
+            --workflow-ref "$WORKFLOW_REF" \
+            --run-url "$RUN_URL"
+      - name: Sign and verify release assets with Sigstore
+        uses: sigstore/gh-action-sigstore-python@5b79a39c381910c090341a2c9b0bf022c8b387e1 # v3.4.0
+        with:
+          inputs: |
+            dist/*.whl
+            dist/*.tar.gz
+            dist/release-sbom.cdx.json
+            dist/release-manifest.json
+            dist/SHA256SUMS
+          verify: true
+          verify-cert-identity: https://github.com/${{ github.repository }}/.github/workflows/release.yml@${{ github.ref }}
+          verify-oidc-issuer: https://token.actions.githubusercontent.com
+          upload-signing-artifacts: false
+          release-signing-artifacts: false
+      - name: Verify complete signed release set
+        env:
+          RELEASE_TAG: ${{ github.ref_name }}
+        run: |
+          uv run --frozen python -m tools.check_phase_9_supply_chain \
+            --artifact-directory dist \
+            --expected-tag "$RELEASE_TAG" \
+            --expected-revision "$GITHUB_SHA"
       - uses: softprops/action-gh-release@efb35369e0ad2afab669f228072c1b0d510eae64 # v3
         with:
           generate_release_notes: true

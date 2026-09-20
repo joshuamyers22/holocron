@@ -110,7 +110,7 @@ parity claim.
 `make phase-9-readiness-check` validates the completed 20-control assessment,
 including its exact inventory, evidence paths, counts, applicability decisions,
 blocker resolutions, and human checklist coverage. The current assessment has
-9 passed, 7 blocked, and 4 not-applicable controls. The five-domain Phase 9
+10 passed, 6 blocked, and 4 not-applicable controls. The five-domain Phase 9
 technical review set is checked by `make phase-9-review-check` and is bound to
 its exact reviewed revision.
 
@@ -118,6 +118,21 @@ its exact reviewed revision.
 any blocker remains and is required for a final release tag. Checklist
 completion means there are no unanswered controls; it does not mean the release
 is ready.
+
+## Phase 9 release supply-chain workflow
+
+`make phase-9-supply-chain-check` validates the signed-asset policy, referenced
+support and provenance materials, and release-workflow ordering and identity
+controls. After an authorized tag build, download every release asset and run:
+
+```sh
+make phase-9-supply-chain-evidence ARTIFACT_DIRECTORY=/path/to/release-assets
+```
+
+That evidence check requires the exact wheel, sdist, CycloneDX SBOM, provenance
+manifest, SHA-256 index, and five adjacent Sigstore bundles. It validates
+internal hashes and structure; the release job performs cryptographic identity
+verification before publication.
 
 ## Phase 1 evidence workflow
 

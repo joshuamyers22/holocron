@@ -4,12 +4,20 @@ Notable changes are recorded here using semantic versioning.
 
 ## Unreleased
 
+- Completed the Phase 9 signed-artifact and support contract. Authorized tag
+  builds now create a CycloneDX SBOM, exact-commit provenance manifest, and
+  deterministic SHA-256 index; keyless Sigstore bundles bind every wheel,
+  source distribution, SBOM, manifest, and checksum index to the release
+  workflow identity before publication. Added machine validation, enforced
+  dated version changelog headings, and defined supported versions, lifecycle,
+  ownership, triage targets, compatibility boundaries, and end-of-support
+  behavior. The first real signed set still requires an approved tag.
 - Retained Ron Mexico's independent approval of the Phase 9 statistical,
   numerical, security, API, and documentation scopes for exact revision
   `ae43ffeb5a08c7aac508563a3e48657c53c99eed`, with no unresolved findings;
   added strict structured and human records plus a five-domain verification gate.
 - Completed the Phase 9 release-readiness checklist as a fail-closed 20-control
-  assessment: 9 controls pass, 7 block release, and 4 hosted-service/telemetry
+  assessment: 10 controls pass, 6 block release, and 4 hosted-service/telemetry
   controls do not apply to the offline package. Schema and semantic gates bind
   evidence, applicability, counts, resolutions, and the human checklist; final
   tags additionally require the currently failing ready-only gate.
